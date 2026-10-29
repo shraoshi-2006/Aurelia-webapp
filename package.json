@@ -1,0 +1,18 @@
+{
+  "name": "aurelia-hotel-billing",
+  "version": "1.0.0",
+  "description": "Aurelia Luxury Hotel & Restaurant Billing POS with Secure Authentication",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "keywords": [
+    "hotel",
+    "billing",
+    "pos",
+    "authentication"
+  ],
+  "author": "Aurelia Hospitality Systems",
+  "license": "ISC"
+}
