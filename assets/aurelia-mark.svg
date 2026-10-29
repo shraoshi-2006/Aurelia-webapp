@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="100%" height="100%" role="img" aria-label="Aurelia Emblem">
+  <!-- Outer Gold Circle -->
+  <circle cx="100" cy="100" r="95" fill="#FCA311"/>
+  <!-- Concentric Navy Inner Ring -->
+  <circle cx="100" cy="100" r="86" fill="none" stroke="#14213D" stroke-width="2.2"/>
+  <!-- Stylized Navy 'A' -->
+  <path d="M58 162 L100 46 L142 162" fill="none" stroke="#14213D" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- Navy Crossbar -->
+  <line x1="71" y1="126" x2="129" y2="126" stroke="#14213D" stroke-width="6" stroke-linecap="round"/>
+  <!-- White Pearl Dot -->
+  <circle cx="100" cy="104" r="8.5" fill="#FFFFFF"/>
+</svg>
