@@ -383,6 +383,19 @@ const server = http.createServer((req, res) => {
 
   fs.stat(filePath, (err, stats) => {
     if (err || !stats.isFile()) {
+      // Check if file exists inside human-resources folder
+      const hrCandidate = path.join(__dirname, 'human-resources', path.basename(filePath));
+      if (fs.existsSync(hrCandidate) && fs.statSync(hrCandidate).isFile()) {
+        fs.readFile(hrCandidate, (hrErr, hrContent) => {
+          if (!hrErr) {
+            res.writeHead(200, { 'Content-Type': 'text/html; charset=UTF-8' });
+            res.end(hrContent);
+            return;
+          }
+        });
+        return;
+      }
+
       // If HTML route not found, fallback to index.html for SPA support
       const indexPath = path.join(__dirname, 'index.html');
       fs.readFile(indexPath, (indexErr, content) => {

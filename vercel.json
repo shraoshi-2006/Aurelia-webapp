@@ -3,5 +3,11 @@
   "buildCommand": "",
   "installCommand": "",
   "outputDirectory": ".",
-  "cleanUrls": true
+  "cleanUrls": true,
+  "rewrites": [
+    { "source": "/employee-list.html", "destination": "/human-resources/employee-list.html" },
+    { "source": "/add-employee.html", "destination": "/human-resources/add-employee.html" },
+    { "source": "/hr-document-template.html", "destination": "/human-resources/hr-document-template.html" },
+    { "source": "/holiday-list.html", "destination": "/human-resources/holiday-list.html" }
+  ]
 }
