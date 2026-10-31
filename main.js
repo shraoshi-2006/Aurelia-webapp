@@ -678,6 +678,243 @@ $(document).ready(function () {
     showToast(msg, type);
   });
 
+  // =========================================================================
+  // DEPARTMENT SIDEBAR DROPDOWN & MANAGEMENT CONTROLLER
+  // =========================================================================
+  const defaultDepartments = [
+    {
+      id: 'DEPT-FO',
+      name: 'Front Office & Concierge',
+      code: 'DEPT-FO',
+      head: 'Adaline Lively',
+      staffCount: 8,
+      location: 'Ground Floor Main Lobby',
+      shift: '24/7 Continuous (3 Shifts)',
+      desc: 'Guest check-in/out, concierge, VIP arrivals, baggage handling, and reservations.'
+    },
+    {
+      id: 'DEPT-KIT',
+      name: 'Culinary & Kitchen',
+      code: 'DEPT-KIT',
+      head: 'Sous Chef Marco Rossi',
+      staffCount: 12,
+      location: 'Main Kitchen Level -1',
+      shift: 'Morning & Evening (2 Shifts)',
+      desc: 'Fine dining preparation, banquets, buffet management, and culinary inventory.'
+    },
+    {
+      id: 'DEPT-FNB',
+      name: 'Food & Beverage / Restaurant',
+      code: 'DEPT-FNB',
+      head: 'Roberto Rossi',
+      staffCount: 12,
+      location: 'Ground & Terrace Bar',
+      shift: 'Morning & Evening (2 Shifts)',
+      desc: 'Table service, Aurelia Bar & Lounge, in-room dining, and banqueting.'
+    },
+    {
+      id: 'DEPT-HK',
+      name: 'Housekeeping & Laundry',
+      code: 'DEPT-HK',
+      head: 'Maria Santos',
+      staffCount: 10,
+      location: 'Floors 1-5 & Service Wing',
+      shift: 'Morning & Evening (2 Shifts)',
+      desc: 'Guest room sanitization, linen management, floor maintenance, and laundry operations.'
+    },
+    {
+      id: 'DEPT-ENG',
+      name: 'Engineering & Maintenance',
+      code: 'DEPT-ENG',
+      head: 'Rajesh Nair',
+      staffCount: 4,
+      location: 'Basements & Tech Core',
+      shift: '24/7 Continuous (3 Shifts)',
+      desc: 'HVAC systems, electricals, plumbing, elevator maintenance, and safety compliance.'
+    },
+    {
+      id: 'DEPT-SEC',
+      name: 'Security & Operations',
+      code: 'DEPT-SEC',
+      head: 'Vikram Rathore',
+      staffCount: 2,
+      location: 'Surveillance Hub & Gates',
+      shift: '24/7 Continuous (3 Shifts)',
+      desc: 'Perimeter surveillance, CCTV monitoring, access control, and fire safety systems.'
+    }
+  ];
+
+  let hotelDepartments = JSON.parse(localStorage.getItem('aurelia_departments')) || defaultDepartments;
+
+  function saveDepartments() {
+    localStorage.setItem('aurelia_departments', JSON.stringify(hotelDepartments));
+  }
+
+  function renderDepartmentsGrid(filterText = '') {
+    const $grid = $('#modal-dept-grid');
+    if (!$grid.length) return;
+
+    const query = (filterText || '').toLowerCase().trim();
+    const filtered = hotelDepartments.filter(d =>
+      d.name.toLowerCase().includes(query) ||
+      d.code.toLowerCase().includes(query) ||
+      d.head.toLowerCase().includes(query) ||
+      d.location.toLowerCase().includes(query)
+    );
+
+    $('#modal-dept-count-badge').text(`${hotelDepartments.length} Departments`);
+    $('#stat-dept-count').text(`${hotelDepartments.length} Wings`);
+    const totalStaff = hotelDepartments.reduce((acc, d) => acc + (parseInt(d.staffCount) || 0), 0);
+    $('#stat-dept-staff').text(`${totalStaff} Staff`);
+    $('#modal-dept-footer-count').text(`Showing ${filtered.length} of ${hotelDepartments.length} departments`);
+
+    if (filtered.length === 0) {
+      $grid.empty();
+      $('#modal-dept-empty').removeClass('hidden');
+      return;
+    }
+
+    $('#modal-dept-empty').addClass('hidden');
+    let html = '';
+
+    filtered.forEach(dept => {
+      html += `
+        <div class="p-3.5 rounded-2xl bg-white dark:bg-slate-800/80 border border-slate-100 dark:border-slate-700/80 hover:border-[#FCA311] transition-all shadow-xs flex flex-col justify-between space-y-3 group">
+          <div>
+            <div class="flex items-center justify-between mb-1.5">
+              <span class="px-2 py-0.5 rounded-md text-[10px] font-mono font-bold bg-[#14213D] text-[#FCA311]">${dept.code}</span>
+              <span class="inline-flex items-center text-[10px] font-semibold text-emerald-600 dark:text-emerald-400">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 mr-1 animate-pulse"></span>
+                Active
+              </span>
+            </div>
+            <h4 class="text-xs font-bold text-slate-900 dark:text-white group-hover:text-[#FCA311] transition-colors leading-snug">
+              ${dept.name}
+            </h4>
+            <p class="text-[11px] text-slate-400 mt-1 line-clamp-2 leading-relaxed">
+              ${dept.desc || 'No description provided.'}
+            </p>
+          </div>
+
+          <div class="pt-2 border-t border-slate-100 dark:border-slate-700/60 space-y-1.5 text-[11px]">
+            <div class="flex items-center justify-between text-slate-500 dark:text-slate-400">
+              <span class="text-[10px] font-medium uppercase tracking-wider">Head of Dept:</span>
+              <span class="font-bold text-slate-700 dark:text-slate-200">${dept.head}</span>
+            </div>
+            <div class="flex items-center justify-between text-slate-500 dark:text-slate-400">
+              <span class="text-[10px] font-medium uppercase tracking-wider">Staff Roster:</span>
+              <span class="font-bold text-[#14213D] dark:text-amber-400">${dept.staffCount} Members</span>
+            </div>
+            <div class="flex items-center justify-between text-slate-500 dark:text-slate-400">
+              <span class="text-[10px] font-medium uppercase tracking-wider">Station:</span>
+              <span class="text-slate-600 dark:text-slate-300 font-medium truncate max-w-[140px] text-right" title="${dept.location}">${dept.location}</span>
+            </div>
+          </div>
+        </div>
+      `;
+    });
+
+    $grid.html(html);
+  }
+
+  // Toggle Department Dropdown in Sidebar
+  $('#btn-nav-dept').on('click', function (e) {
+    e.preventDefault();
+    e.stopPropagation();
+
+    // If sidebar is collapsed, auto-expand sidebar first
+    if ($('#app-sidebar').hasClass('is-collapsed')) {
+      $('#btn-sidebar-collapse').trigger('click');
+    }
+
+    const $submenu = $('#submenu-department');
+    const $chevron = $('#chevron-nav-dept');
+    const isExpanded = !$submenu.hasClass('hidden');
+
+    if (isExpanded) {
+      $submenu.addClass('hidden');
+      $chevron.removeClass('rotate-180');
+      $(this).removeClass('active');
+    } else {
+      $submenu.removeClass('hidden');
+      $chevron.addClass('rotate-180');
+      $(this).addClass('active');
+    }
+  });
+
+  // Department Sub-items Click Handlers
+  $('.dept-sub-item').on('click', function (e) {
+    e.preventDefault();
+    const action = $(this).data('action');
+
+    $('.dept-sub-item').removeClass('text-sky-400 font-bold active').addClass('text-slate-300');
+    $('.dept-sub-item span.rounded-full').removeClass('border-sky-400 bg-sky-400').addClass('border-slate-400');
+    $(this).addClass('text-sky-400 font-bold active').removeClass('text-slate-300');
+    $(this).find('span.rounded-full').addClass('border-sky-400 bg-sky-400').removeClass('border-slate-400');
+
+    if (action === 'all-department') {
+      renderDepartmentsGrid();
+      $('#modal-all-departments').removeClass('hidden');
+      showToast('Viewing All Hotel Departments', 'info');
+    } else if (action === 'add-department') {
+      $('#modal-add-department').removeClass('hidden');
+      $('#input-dept-name').focus();
+    }
+  });
+
+  // Open Add Department from inside All Department modal
+  $('#btn-open-add-dept-from-list').on('click', function () {
+    $('#modal-all-departments').addClass('hidden');
+    $('#modal-add-department').removeClass('hidden');
+    $('#input-dept-name').focus();
+  });
+
+  // Search Departments
+  $('#modal-dept-search').on('input', function () {
+    renderDepartmentsGrid($(this).val());
+  });
+
+  // Handle Form Submit for Adding Department
+  $('#form-add-department').on('submit', function (e) {
+    e.preventDefault();
+
+    const name = $('#input-dept-name').val().trim();
+    const code = ($('#input-dept-code').val().trim() || ('DEPT-' + name.slice(0, 3).toUpperCase())).toUpperCase();
+    const location = $('#input-dept-location').val().trim() || 'Main Complex';
+    const head = $('#input-dept-head').val().trim() || 'Assigned Supervisor';
+    const staffCount = parseInt($('#input-dept-quota').val()) || 5;
+    const shift = $('#select-dept-shift').val();
+    const desc = $('#input-dept-desc').val().trim() || 'Operational hotel division.';
+
+    if (!name) {
+      showToast('Department name is required.', 'error');
+      return;
+    }
+
+    const newDept = {
+      id: code,
+      name,
+      code,
+      head,
+      staffCount,
+      location,
+      shift,
+      desc
+    };
+
+    hotelDepartments.unshift(newDept);
+    saveDepartments();
+
+    // Reset Form & Close Modal
+    this.reset();
+    $('#modal-add-department').addClass('hidden');
+
+    // Re-render and open All Departments view
+    renderDepartmentsGrid();
+    $('#modal-all-departments').removeClass('hidden');
+    showToast(`Department "${name}" successfully created!`, 'success');
+  });
+
   $(window).on('hashchange', function () {
     const hash = window.location.hash.replace('#', '') || 'dashboard';
     switchSection(hash);
