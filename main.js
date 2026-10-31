@@ -443,16 +443,12 @@ $(document).ready(function () {
 
   function showToast(message, type = 'info') {
     const toastId = 'toast-' + Date.now();
-    let bg = 'bg-white dark:bg-slate-800 text-slate-900 dark:text-white border-slate-200 dark:border-slate-700';
-    if (type === 'success') {
-      bg = 'bg-[#ECFDF3] dark:bg-emerald-950/80 text-[#12B76A] dark:text-emerald-300 border-emerald-200 dark:border-emerald-800';
-    } else if (type === 'error') {
-      bg = 'bg-[#FEF3F2] dark:bg-rose-950/80 text-[#F04438] dark:text-rose-300 border-rose-200 dark:border-rose-800';
-    }
+    const isError = type === 'error';
+    const typeClass = isError ? 'toast-error text-[#DC2626]' : 'toast-default text-black';
 
     const toastHtml = `
-      <div id="${toastId}" class="finset-card ${bg} text-xs px-4 py-3 border shadow-lg flex items-center space-x-2 transition-all duration-200 opacity-0 translate-y-2 pointer-events-auto rounded-2xl">
-        <span class="font-bold">${escapeHtml(message)}</span>
+      <div id="${toastId}" class="aurelia-toast ${typeClass} bg-white text-xs sm:text-sm font-semibold px-5 py-3 border shadow-md flex items-center space-x-2 transition-all duration-200 opacity-0 translate-y-2 pointer-events-auto rounded-full">
+        <span>${escapeHtml(message)}</span>
       </div>
     `;
 
