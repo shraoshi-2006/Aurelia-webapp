@@ -1,0 +1,3086 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Add New Employee (Staff Onboarding) | Aurelia Luxury Hotel & Restaurant</title>
+  <link rel="icon" type="image/svg+xml" href="assets/aurelia-mark.svg">
+  <link rel="icon" type="image/png" href="assets/logo.png">
+  <link rel="apple-touch-icon" href="assets/aurelia-mark.svg">
+  <meta name="description"
+    content="Aurelia Hotel Financial & Billing System - Modern SaaS Dashboard for Front Desk POS and Revenue Operations">
+
+  <!-- Google Fonts: Cormorant Garamond (Brand Serif), Plus Jakarta Sans & Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+
+  <!-- Tailwind CSS CDN with Custom Aurelia Palette -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'Inter', 'system-ui', '-apple-system', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              white: '#FFFFFF',
+              gray: '#E5E5E5',
+              amber: '#FCA311',
+              navy: '#14213D',
+              black: '#000000'
+            },
+            aurelia: {
+              base: '#FFFFFF',
+              neutral: '#E5E5E5',
+              accent: '#FCA311',
+              'accent-hover': '#E5920A',
+              navy: '#14213D',
+              black: '#000000',
+              bg: '#FFFFFF',
+              sidebar: '#FFFFFF',
+              card: '#FFFFFF',
+              border: '#E5E5E5',
+              dark: '#14213D',
+              muted: '#5C677D',
+              sub: '#7D889E',
+              purple: '#FCA311',
+              'purple-hover': '#E5920A',
+              'purple-light': '#FFF5E6',
+              'purple-soft': '#FDF9F2',
+              lilac: '#14213D',
+              lilacLight: '#E8ECF5',
+              green: '#12B76A',
+              'green-bg': '#ECFDF3',
+              red: '#F04438',
+              'red-bg': '#FEF3F2'
+            },
+            Aurelia: {
+              base: '#FFFFFF',
+              neutral: '#E5E5E5',
+              accent: '#FCA311',
+              'accent-hover': '#E5920A',
+              navy: '#14213D',
+              black: '#000000',
+              bg: '#FFFFFF',
+              sidebar: '#FFFFFF',
+              card: '#FFFFFF',
+              border: '#E5E5E5',
+              dark: '#14213D',
+              muted: '#5C677D',
+              sub: '#7D889E',
+              purple: '#FCA311',
+              'purple-hover': '#E5920A',
+              'purple-light': '#FFF5E6',
+              'purple-soft': '#FDF9F2',
+              lilac: '#14213D',
+              lilacLight: '#E8ECF5',
+              green: '#12B76A',
+              'green-bg': '#ECFDF3',
+              red: '#F04438',
+              'red-bg': '#FEF3F2'
+            },
+            finset: {
+              base: '#FFFFFF',
+              neutral: '#E5E5E5',
+              accent: '#FCA311',
+              'accent-hover': '#E5920A',
+              navy: '#14213D',
+              black: '#000000',
+              bg: '#FFFFFF',
+              sidebar: '#FFFFFF',
+              card: '#FFFFFF',
+              border: '#E5E5E5',
+              dark: '#14213D',
+              muted: '#5C677D',
+              sub: '#7D889E',
+              purple: '#FCA311',
+              'purple-hover': '#E5920A',
+              'purple-light': '#FFF5E6',
+              'purple-soft': '#FDF9F2',
+              lilac: '#14213D',
+              lilacLight: '#E8ECF5',
+              green: '#12B76A',
+              'green-bg': '#ECFDF3',
+              red: '#F04438',
+              'red-bg': '#FEF3F2'
+            }
+          },
+          borderRadius: {
+            '3xl': '24px',
+            '4xl': '32px'
+          },
+          boxShadow: {
+            'card': '0 2px 14px 0 rgba(20, 33, 61, 0.04)',
+            'card-hover': '0 8px 30px 0 rgba(20, 33, 61, 0.08)',
+            'purple': '0 4px 16px -2px rgba(252, 163, 17, 0.35)',
+            'amber': '0 4px 16px -2px rgba(252, 163, 17, 0.35)',
+            'navy': '0 4px 16px -2px rgba(20, 33, 61, 0.35)'
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- jQuery CDN -->
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+
+  <!-- jsPDF & AutoTable CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+  <!-- html2canvas for Pine Labs high fidelity receipt rendering -->
+  <script src="assets/html2canvas.min.js"></script>
+
+  <!-- SweetAlert2 Modal Engine -->
+  <script src="assets/sweetalert2.all.min.js"></script>
+  <script>
+    if (typeof Swal === 'undefined') {
+      document.write('<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"><\/script>');
+    }
+  </script>
+
+  <style>
+    :root {
+      --app-bg: #F4F5F7;
+      --sidebar-bg: #E5E5E5;
+      --card-bg: rgba(255, 255, 255, 0.92);
+      --card-border: #E5E5E5;
+      --primary-accent: #FCA311;
+      --primary-accent-hover: #E5920A;
+      --primary-accent-light: rgba(252, 163, 17, 0.16);
+      --contrast-navy: #14213D;
+      --contrast-navy-hover: #0F1A30;
+      --contrast-black: #000000;
+      --neutral-gray: #E5E5E5;
+      --text-main: #14213D;
+      --text-muted: #5C677D;
+      --card-radius: 26px;
+
+      --primary-purple: #FCA311;
+      --primary-purple-hover: #E5920A;
+      --primary-purple-light: rgba(252, 163, 17, 0.16);
+      --lilac-bar: #14213D;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', Inter, system-ui, -apple-system, sans-serif;
+      background-color: #F4F5F7 !important;
+      color: #14213D !important;
+      -webkit-font-smoothing: antialiased;
+      transition: background-color 0.2s ease, color 0.2s ease;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Silky Satin Metallic Slate Canvas Background (Matches 3D Glassmorphism Reference Photo) */
+    #main-app-content {
+      background:
+        radial-gradient(ellipse 90% 60% at 15% 10%, rgba(255, 255, 255, 0.6) 0%, transparent 60%),
+        radial-gradient(ellipse 70% 50% at 85% 85%, rgba(185, 200, 220, 0.45) 0%, transparent 65%),
+        radial-gradient(ellipse 60% 40% at 50% 40%, rgba(255, 255, 255, 0.35) 0%, transparent 70%),
+        linear-gradient(135deg, #CFD8E3 0%, #DCE4ED 35%, #D0D9E4 70%, #CAD4E1 100%) !important;
+      position: relative;
+      min-height: 100vh;
+    }
+
+    /* Reset extra top margins on all view sections to keep spacing tight and clean */
+    #main-app-content section {
+      margin-top: 0 !important;
+    }
+
+    /* ========================================================================= */
+    /* ULTRA-REALISTIC 3D GLASSMORPHISM CARD ENGINE (Matching Reference Photo)   */
+    /* Applied across the whole website dashboard (NOT the sidebar)              */
+    /* ========================================================================= */
+    .Aurelia-card,
+    .aurelia-card,
+    .finset-card,
+    .spatial-card,
+    #section-dashboard .Aurelia-card,
+    #main-app-content .Aurelia-card,
+    .glass-money-flow {
+      position: relative;
+      background: linear-gradient(135deg,
+          rgba(255, 255, 255, 0.68) 0%,
+          rgba(255, 255, 255, 0.32) 45%,
+          rgba(235, 243, 252, 0.45) 100%) !important;
+      backdrop-filter: blur(28px) saturate(180%) !important;
+      -webkit-backdrop-filter: blur(28px) saturate(180%) !important;
+      border: 1.5px solid rgba(255, 255, 255, 0.82) !important;
+      border-radius: 28px !important;
+      box-shadow:
+        /* Specular rim highlight on top & left (mimics light source) */
+        inset 1.5px 1.5px 2px 0px rgba(255, 255, 255, 0.98),
+        /* Subdued bevel refraction rim */
+        inset 0.5px 0.5px 1px 0px rgba(255, 255, 255, 0.9),
+        /* Soft darker refraction depth on bottom & right */
+        inset -1.5px -1.5px 2.5px 0px rgba(15, 23, 42, 0.08),
+        /* Volumetric inner diffusion glow */
+        inset 0 0 32px 0px rgba(255, 255, 255, 0.35),
+        /* Physical floating drop shadow onto satin slate backdrop */
+        0 24px 48px -12px rgba(15, 23, 42, 0.14),
+        0 8px 18px -4px rgba(15, 23, 42, 0.07),
+        /* Crisp outer rim outline */
+        0 0 0 1px rgba(255, 255, 255, 0.4) !important;
+      transition:
+        transform 0.28s cubic-bezier(0.16, 1, 0.3, 1),
+        box-shadow 0.28s cubic-bezier(0.16, 1, 0.3, 1),
+        border-color 0.28s ease !important;
+      overflow: hidden;
+      z-index: 10;
+    }
+
+    /* Double-beveled 3D Rim Specular Light Pseudo-Element */
+    .Aurelia-card::before,
+    .aurelia-card::before,
+    .finset-card::before,
+    .spatial-card::before,
+    #section-dashboard .Aurelia-card::before,
+    #main-app-content .Aurelia-card::before,
+    .glass-money-flow::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      padding: 1.5px;
+      background: linear-gradient(135deg,
+          rgba(255, 255, 255, 1) 0%,
+          rgba(255, 255, 255, 0.5) 30%,
+          rgba(255, 255, 255, 0.1) 65%,
+          rgba(255, 255, 255, 0.75) 100%);
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      pointer-events: none;
+      z-index: 2;
+      transition: background 0.3s ease, opacity 0.3s ease;
+    }
+
+    /* Card Elevation on Hover */
+    .Aurelia-card:hover,
+    .aurelia-card:hover,
+    .finset-card:hover,
+    .spatial-card:hover,
+    #section-dashboard .Aurelia-card:hover,
+    #main-app-content .Aurelia-card:hover,
+    .glass-money-flow:hover {
+      transform: translateY(-3px) !important;
+      border-color: rgba(255, 255, 255, 0.98) !important;
+      box-shadow:
+        inset 1.5px 1.5px 2px 0px rgba(255, 255, 255, 1),
+        inset 0.5px 0.5px 1px 0px rgba(255, 255, 255, 0.95),
+        inset -1.5px -1.5px 2.5px 0px rgba(15, 23, 42, 0.09),
+        inset 0 0 36px 0px rgba(255, 255, 255, 0.45),
+        0 30px 60px -12px rgba(15, 23, 42, 0.18),
+        0 12px 24px -4px rgba(15, 23, 42, 0.09),
+        0 0 0 1px rgba(255, 255, 255, 0.5) !important;
+    }
+
+    .Aurelia-card:hover::before,
+    .aurelia-card:hover::before,
+    .finset-card:hover::before,
+    .spatial-card:hover::before,
+    #section-dashboard .Aurelia-card:hover::before,
+    #main-app-content .Aurelia-card:hover::before,
+    .glass-money-flow:hover::before {
+      background: linear-gradient(135deg,
+          rgba(255, 255, 255, 1) 0%,
+          rgba(255, 255, 255, 0.8) 40%,
+          rgba(252, 163, 17, 0.4) 70%,
+          rgba(255, 255, 255, 1) 100%);
+    }
+
+    /* Circular ↗ Frosted Glass Action Button */
+    .btn-circle-arrow,
+    #section-dashboard .btn-circle-arrow {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.75) !important;
+      backdrop-filter: blur(12px) !important;
+      -webkit-backdrop-filter: blur(12px) !important;
+      border: 1px solid rgba(255, 255, 255, 0.9) !important;
+      box-shadow:
+        inset 1px 1px 1.5px rgba(255, 255, 255, 0.95),
+        0 2px 6px rgba(15, 23, 42, 0.06) !important;
+      color: #14213D !important;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
+      cursor: pointer;
+    }
+
+    .Aurelia-card:hover .btn-circle-arrow {
+      border-color: rgba(255, 255, 255, 1) !important;
+      box-shadow: 0 4px 12px rgba(15, 23, 42, 0.1) !important;
+      transform: translate(1px, -1px);
+    }
+
+    .btn-circle-arrow:hover,
+    #section-dashboard .btn-circle-arrow:hover {
+      background: #FCA311 !important;
+      color: #000000 !important;
+      border-color: #FCA311 !important;
+      box-shadow: 0 4px 14px rgba(252, 163, 17, 0.45) !important;
+      transform: translate(2px, -2px) rotate(12deg) scale(1.08) !important;
+    }
+
+    /* ========================================================================= */
+    /* SIDEBAR NAVIGATION IN SOPHISTICATED DEEP SLATE (#494D5F)                  */
+    /* ========================================================================= */
+    #app-sidebar {
+      background: #494D5F !important;
+      border-right: 1px solid rgba(255, 255, 255, 0.08) !important;
+      box-shadow: 4px 0 24px rgba(15, 23, 42, 0.12) !important;
+      transition: width 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      overflow: visible !important;
+    }
+
+    #app-sidebar #sidebar-brand-wrapper {
+      background: transparent !important;
+      background-image: none !important;
+      border: none !important;
+      border-radius: 0 !important;
+      box-shadow: none !important;
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
+      padding: 0 !important;
+    }
+
+    #sidebar-brand-title h2 {
+      color: #FFFFFF !important;
+    }
+
+    #sidebar-brand-title span {
+      color: #CBD5E1 !important;
+    }
+
+    #sidebar-logo-mark {
+      display: block !important;
+      visibility: visible !important;
+      opacity: 1 !important;
+      width: 42px !important;
+      height: 42px !important;
+      object-fit: contain;
+    }
+
+    .Aurelia-nav-item,
+    .aurelia-nav-item,
+    .finset-nav-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 16px;
+      border-radius: 18px;
+      font-size: 14px;
+      font-weight: 600;
+      color: #E2E8F0 !important;
+      transition: all 0.18s ease;
+      cursor: pointer;
+    }
+
+    .Aurelia-nav-item svg,
+    .aurelia-nav-item svg,
+    .finset-nav-item svg {
+      stroke: rgba(255, 255, 255, 0.75) !important;
+      transition: stroke 0.18s ease;
+    }
+
+    .Aurelia-nav-item:hover,
+    .aurelia-nav-item:hover,
+    .finset-nav-item:hover {
+      color: #FFFFFF !important;
+      background: rgba(255, 255, 255, 0.12) !important;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+    }
+
+    .Aurelia-nav-item:hover svg,
+    .aurelia-nav-item:hover svg,
+    .finset-nav-item:hover svg {
+      stroke: #FCA311 !important;
+    }
+
+    .Aurelia-nav-item.active,
+    .aurelia-nav-item.active,
+    .finset-nav-item.active {
+      background: #1E212D !important;
+      color: #FFFFFF !important;
+      font-weight: 700 !important;
+      box-shadow: 0 4px 16px rgba(15, 23, 42, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.12) !important;
+      border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    }
+
+    .Aurelia-nav-item.active svg,
+    .aurelia-nav-item.active svg,
+    .finset-nav-item.active svg {
+      stroke: #FCA311 !important;
+    }
+
+    /* Sidebar Badge Pills against #494D5F (Uniform amber style matching the "0" order badge) */
+    #app-sidebar .sidebar-badge,
+    #app-sidebar #badge-pending-orders,
+    #app-sidebar #badge-menu-count,
+    #app-sidebar #badge-customers-count {
+      background: #FCA311 !important;
+      border: 1px solid #FCA311 !important;
+      color: #000000 !important;
+      font-weight: 700 !important;
+    }
+
+    /* Primary Filled Amber Pill Button */
+    .btn-Aurelia-primary,
+    .btn-aurelia-primary,
+    .btn-finset-primary {
+      background: #FCA311 !important;
+      color: #000000 !important;
+      border-radius: 9999px;
+      padding: 9px 18px;
+      font-size: 13px;
+      font-weight: 700;
+      box-shadow: 0 4px 14px rgba(252, 163, 17, 0.35) !important;
+      transition: all 0.18s cubic-bezier(0.4, 0, 0.2, 1);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      cursor: pointer;
+      border: 1px solid rgba(0, 0, 0, 0.08) !important;
+    }
+
+    .btn-Aurelia-primary:hover,
+    .btn-aurelia-primary:hover,
+    .btn-finset-primary:hover {
+      background: #E5920A !important;
+      color: #000000 !important;
+      box-shadow: 0 6px 20px rgba(252, 163, 17, 0.45) !important;
+      transform: translateY(-1px);
+    }
+
+    .btn-Aurelia-primary:active,
+    .btn-aurelia-primary:active,
+    .btn-finset-primary:active {
+      transform: translateY(1px);
+    }
+
+    /* Secondary Clean Pill Button */
+    .btn-Aurelia-secondary,
+    .btn-aurelia-secondary,
+    .btn-finset-secondary {
+      background: #FFFFFF !important;
+      color: #14213D !important;
+      border: 1px solid #E5E5E5 !important;
+      border-radius: 9999px;
+      padding: 9px 18px;
+      font-size: 13px;
+      font-weight: 600;
+      transition: all 0.18s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      cursor: pointer;
+      box-shadow: 0 1px 3px rgba(20, 33, 61, 0.05) !important;
+    }
+
+    .btn-Aurelia-secondary:hover,
+    .btn-aurelia-secondary:hover,
+    .btn-finset-secondary:hover {
+      border-color: #FCA311 !important;
+      color: #14213D !important;
+      background: #FDF9F2 !important;
+      box-shadow: 0 2px 8px rgba(252, 163, 17, 0.2) !important;
+    }
+
+    /* Danger Pill Button */
+    .btn-Aurelia-danger,
+    .btn-aurelia-danger,
+    .btn-finset-danger {
+      background: #FEF3F2 !important;
+      color: #F04438 !important;
+      border: 1px solid #FECDCA !important;
+      border-radius: 9999px;
+      padding: 8px 16px;
+      font-size: 12px;
+      font-weight: 600;
+      transition: all 0.18s ease;
+      cursor: pointer;
+    }
+
+    .btn-Aurelia-danger:hover,
+    .btn-aurelia-danger:hover,
+    .btn-finset-danger:hover {
+      background: #F04438 !important;
+      color: #FFFFFF !important;
+      border-color: #F04438 !important;
+    }
+
+    /* Frosted Glass Inputs */
+    .Aurelia-input,
+    .aurelia-input,
+    .finset-input {
+      background: rgba(255, 255, 255, 0.72) !important;
+      backdrop-filter: blur(16px) !important;
+      -webkit-backdrop-filter: blur(16px) !important;
+      border: 1.5px solid rgba(255, 255, 255, 0.85) !important;
+      border-radius: 14px;
+      padding: 10px 14px;
+      font-size: 13px;
+      color: #0F172A !important;
+      box-shadow:
+        inset 1px 1px 1.5px rgba(255, 255, 255, 0.95),
+        0 1px 3px rgba(15, 23, 42, 0.04) !important;
+      transition: all 0.2s ease;
+    }
+
+    .Aurelia-input::placeholder,
+    .aurelia-input::placeholder,
+    .finset-input::placeholder {
+      color: #94A3B8 !important;
+    }
+
+    .Aurelia-input:focus,
+    .aurelia-input:focus,
+    .finset-input:focus {
+      outline: none;
+      border-color: rgba(255, 255, 255, 1) !important;
+      background: rgba(255, 255, 255, 0.9) !important;
+      box-shadow:
+        inset 1px 1px 1.5px rgba(255, 255, 255, 1),
+        0 0 0 3px rgba(252, 163, 17, 0.25),
+        0 4px 12px rgba(15, 23, 42, 0.06) !important;
+    }
+
+    /* Capsule Pill Header for Tables (Frosted Glass) */
+    .Aurelia-table-header,
+    .aurelia-table-header,
+    .finset-table-header {
+      background: rgba(255, 255, 255, 0.55) !important;
+      backdrop-filter: blur(16px) !important;
+      -webkit-backdrop-filter: blur(16px) !important;
+      border: 1px solid rgba(255, 255, 255, 0.75) !important;
+      border-radius: 14px;
+      color: #475569 !important;
+    }
+
+    /* Collapsed Sidebar Mode Styling */
+    #app-sidebar.is-collapsed {
+      width: 5rem !important;
+      overflow: visible !important;
+    }
+
+    #app-sidebar.is-collapsed .sidebar-label,
+    #app-sidebar.is-collapsed #sidebar-brand-title,
+    #app-sidebar.is-collapsed .sidebar-badge,
+    #app-sidebar.is-collapsed .sidebar-submenu {
+      display: none !important;
+    }
+
+    #app-sidebar.is-collapsed .sidebar-pad {
+      padding-left: 0.75rem !important;
+      padding-right: 0.75rem !important;
+    }
+
+    #app-sidebar.is-collapsed .sidebar-section-header {
+      padding: 6px 0 !important;
+      display: flex;
+      justify-content: center;
+    }
+
+    #app-sidebar.is-collapsed .sidebar-section-divider {
+      width: 24px !important;
+      margin: 4px auto !important;
+    }
+
+    #app-sidebar.is-collapsed #sidebar-brand-wrapper {
+      position: static !important;
+      justify-content: center !important;
+      margin-bottom: 2rem !important;
+    }
+
+    #app-sidebar.is-collapsed .Aurelia-nav-item,
+    #app-sidebar.is-collapsed .aurelia-nav-item,
+    #app-sidebar.is-collapsed .finset-nav-item {
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      padding: 0 !important;
+      width: 44px !important;
+      height: 44px !important;
+      margin-left: auto !important;
+      margin-right: auto !important;
+      border-radius: 12px !important;
+    }
+
+    #app-sidebar.is-collapsed .Aurelia-nav-item.active,
+    #app-sidebar.is-collapsed .aurelia-nav-item.active,
+    #app-sidebar.is-collapsed .finset-nav-item.active {
+      background: #1E212D !important;
+      color: #FFFFFF !important;
+      box-shadow: 0 4px 16px rgba(15, 23, 42, 0.35) !important;
+      border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    }
+
+    #app-sidebar.is-collapsed .Aurelia-nav-item.active svg,
+    #app-sidebar.is-collapsed .aurelia-nav-item.active svg,
+    #app-sidebar.is-collapsed .finset-nav-item.active svg {
+      stroke: #FCA311 !important;
+    }
+
+    #app-sidebar.is-collapsed .Aurelia-nav-item>div,
+    #app-sidebar.is-collapsed .aurelia-nav-item>div,
+    #app-sidebar.is-collapsed .finset-nav-item>div {
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      gap: 0 !important;
+      width: 100% !important;
+      height: 100% !important;
+    }
+
+    #app-sidebar.is-collapsed .Aurelia-nav-item svg,
+    #app-sidebar.is-collapsed .aurelia-nav-item svg,
+    #app-sidebar.is-collapsed .finset-nav-item svg {
+      margin: 0 !important;
+      display: block !important;
+    }
+
+    #btn-sidebar-collapse {
+      position: absolute;
+      right: -20px;
+      top: 50% !important;
+      transform: translateY(-50%) !important;
+      z-index: 60;
+      width: 20px;
+      height: 48px;
+      border-radius: 0 16px 16px 0 !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      background: #494D5F !important;
+      border: none !important;
+      color: #FFFFFF !important;
+      box-shadow: none !important;
+      cursor: pointer;
+      transition: background 0.2s cubic-bezier(0.4, 0, 0.2, 1), color 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* Seamless concave fillets so the button flows smoothly out of the sidebar */
+    #btn-sidebar-collapse::before {
+      content: '';
+      position: absolute;
+      top: -12px;
+      left: 0;
+      width: 12px;
+      height: 12px;
+      background: radial-gradient(circle at 100% 0%, transparent 12px, #494D5F 12.5px);
+      pointer-events: none;
+      transition: background 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    #btn-sidebar-collapse::after {
+      content: '';
+      position: absolute;
+      bottom: -12px;
+      left: 0;
+      width: 12px;
+      height: 12px;
+      background: radial-gradient(circle at 100% 100%, transparent 12px, #494D5F 12.5px);
+      pointer-events: none;
+      transition: background 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    #btn-sidebar-collapse:hover {
+      background: #FCA311 !important;
+      color: #000000 !important;
+      border: none !important;
+      box-shadow: none !important;
+    }
+
+    #btn-sidebar-collapse:hover::before {
+      background: radial-gradient(circle at 100% 0%, transparent 12px, #FCA311 12.5px);
+    }
+
+    #btn-sidebar-collapse:hover::after {
+      background: radial-gradient(circle at 100% 100%, transparent 12px, #FCA311 12.5px);
+    }
+
+    #app-sidebar.is-collapsed #btn-sidebar-collapse {
+      position: absolute;
+      right: -20px;
+      top: 50% !important;
+      transform: translateY(-50%) !important;
+      z-index: 60;
+      width: 20px;
+      height: 48px;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      background: #494D5F !important;
+      box-shadow: none !important;
+      border: none !important;
+      border-radius: 0 16px 16px 0 !important;
+      color: #FFFFFF !important;
+      cursor: pointer;
+    }
+
+    #app-sidebar.is-collapsed #btn-sidebar-collapse:hover {
+      background: #FCA311 !important;
+      color: #000000 !important;
+      border: none !important;
+      box-shadow: none !important;
+    }
+
+    #app-sidebar.is-collapsed #btn-sidebar-help,
+    #app-sidebar.is-collapsed #btn-sidebar-logout {
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      padding: 0 !important;
+      width: 44px !important;
+      height: 44px !important;
+      margin-left: auto !important;
+      margin-right: auto !important;
+      border-radius: 12px !important;
+    }
+
+    #btn-sidebar-help,
+    #btn-sidebar-logout {
+      color: #E2E8F0 !important;
+    }
+
+    #btn-sidebar-help svg,
+    #btn-sidebar-logout svg {
+      stroke: rgba(255, 255, 255, 0.75) !important;
+      transition: stroke 0.18s ease;
+    }
+
+    #btn-sidebar-help:hover {
+      color: #FFFFFF !important;
+      background: rgba(255, 255, 255, 0.12) !important;
+    }
+
+    #btn-sidebar-help:hover svg {
+      stroke: #FCA311 !important;
+    }
+
+    #btn-sidebar-logout:hover {
+      color: #FFA39E !important;
+      background: rgba(244, 63, 94, 0.15) !important;
+    }
+
+    #btn-sidebar-logout:hover svg {
+      stroke: #FFA39E !important;
+    }
+
+    /* ========================================================================= */
+    /* DEDICATED SCROLLABLE QUICK LINKS SECTION                                  */
+    /* ========================================================================= */
+    #sidebar-quicklinks-scroll {
+      scrollbar-width: thin;
+      scrollbar-color: rgba(255, 255, 255, 0.22) transparent;
+      overscroll-behavior: contain;
+    }
+
+    #sidebar-quicklinks-scroll::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    #sidebar-quicklinks-scroll::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    #sidebar-quicklinks-scroll::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.22);
+      border-radius: 9999px;
+      transition: background 0.2s ease;
+    }
+
+    #sidebar-quicklinks-scroll::-webkit-scrollbar-thumb:hover {
+      background: #FCA311;
+    }
+
+    #app-sidebar.is-collapsed #sidebar-quicklinks-scroll {
+      padding-left: 0.75rem !important;
+      padding-right: 0.75rem !important;
+    }
+
+    /* Frosted Glass Metric Badge Pills */
+    .stat-badge-pill,
+    #section-dashboard .stat-badge-pill {
+      background: rgba(255, 255, 255, 0.68) !important;
+      backdrop-filter: blur(12px) !important;
+      -webkit-backdrop-filter: blur(12px) !important;
+      border: 1px solid rgba(255, 255, 255, 0.85) !important;
+      box-shadow:
+        inset 1px 1px 1.5px rgba(255, 255, 255, 0.95),
+        0 1px 3px rgba(15, 23, 42, 0.04) !important;
+    }
+
+    /* Progress Bars */
+    .spatial-progress-track,
+    #section-dashboard .spatial-progress-track {
+      background: rgba(229, 231, 235, 0.75) !important;
+      border: 1px solid rgba(255, 255, 255, 0.6) !important;
+      box-shadow: inset 0 1px 2px rgba(20, 33, 61, 0.06) !important;
+    }
+
+    .spatial-progress-bar,
+    #section-dashboard .spatial-progress-bar {
+      box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.4), 0 1px 4px rgba(20, 33, 61, 0.12) !important;
+    }
+
+    /* Floating Tooltip Bubble for Money Flow Graph */
+    .chart-tooltip-badge,
+    .chart-glass-badge {
+      position: absolute;
+      background: #14213D !important;
+      color: #FFFFFF !important;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 9999px;
+      border: 1px solid rgba(255, 255, 255, 0.2) !important;
+      box-shadow: 0 8px 20px -2px rgba(20, 33, 61, 0.3) !important;
+      pointer-events: none;
+      transform: translate(-50%, -120%);
+      transition: all 0.25s ease;
+      z-index: 20;
+    }
+
+    .chart-tooltip-badge::after,
+    .chart-glass-badge::after {
+      content: '';
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      margin-left: -5px;
+      border-width: 5px;
+      border-style: solid;
+      border-color: #14213D transparent transparent transparent;
+    }
+
+    /* ========================================================================= */
+    /* LUXURY NUMBER SCROLLER / ODOMETER DIGIT REEL ENGINE                      */
+    /* ========================================================================= */
+    .num-scroller-wrap {
+      display: inline-flex !important;
+      align-items: baseline;
+      vertical-align: baseline;
+      line-height: 1.18;
+      font-variant-numeric: tabular-nums;
+      -moz-font-feature-settings: "tnum";
+      -webkit-font-feature-settings: "tnum";
+      font-feature-settings: "tnum";
+      position: relative;
+      overflow: hidden;
+      user-select: none;
+    }
+
+    .num-scroller-col {
+      display: inline-block;
+      position: relative;
+      height: 1.18em;
+      line-height: 1.18em;
+      overflow: hidden;
+      vertical-align: baseline;
+      text-align: center;
+      min-width: 0.58em;
+    }
+
+    .num-scroller-strip {
+      display: flex;
+      flex-direction: column;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      will-change: transform;
+      transform: translateY(0%);
+    }
+
+    .num-scroller-digit {
+      height: 1.18em;
+      line-height: 1.18em;
+      display: block;
+      text-align: center;
+    }
+
+    .num-scroller-static {
+      display: inline-block;
+      line-height: 1.18em;
+      vertical-align: baseline;
+      white-space: pre;
+    }
+
+    /* Countable Number Roll Down Animation (from top to bottom) */
+    @keyframes numberRollDown {
+      0% {
+        opacity: 0.35;
+        transform: translateY(-8px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .number-roll-active {
+      display: inline-flex !important;
+      align-items: baseline;
+      animation: numberRollDown 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    /* SweetAlert2 Modal Styling & Viewport Priority */
+    .swal2-container {
+      z-index: 999999 !important;
+      font-family: "Plus Jakarta Sans", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+    }
+    .swal2-popup {
+      border-radius: 1.25rem !important;
+      font-family: inherit !important;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25) !important;
+    }
+    .swal2-title {
+      font-weight: 700 !important;
+      color: #1e293b !important;
+      font-size: 1.35rem !important;
+    }
+    .dark .swal2-popup {
+      background-color: #1e293b !important;
+      color: #f8fafc !important;
+      border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    }
+    .dark .swal2-title {
+      color: #f8fafc !important;
+    }
+    .dark .swal2-html-container {
+      color: #cbd5e1 !important;
+    }
+
+    /* Date Range Calendar Picker Controls (Frosted Glass Capsule) */
+    .date-picker-input {
+      font-family: inherit;
+      font-weight: 700;
+      font-size: 0.75rem;
+      color: #14213D !important;
+      background-color: transparent;
+      border: 0;
+      outline: none;
+      cursor: pointer;
+      padding: 2px 4px;
+    }
+
+    /* Hide 2nd calendar symbol (browser native picker icon) */
+    .date-picker-input::-webkit-calendar-picker-indicator,
+    input[type="date"]::-webkit-calendar-picker-indicator {
+      display: none !important;
+      -webkit-appearance: none !important;
+      opacity: 0 !important;
+      width: 0 !important;
+      height: 0 !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      pointer-events: none !important;
+    }
+
+    /* Live 1st Calendar Symbol Trigger */
+    .calendar-icon-trigger {
+      background: transparent;
+      border: none;
+      outline: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.18s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .calendar-icon-trigger:hover {
+      transform: scale(1.15);
+    }
+
+    .calendar-icon-trigger:active {
+      transform: scale(0.92);
+    }
+
+    .calendar-range-capsule {
+      background: rgba(255, 255, 255, 0.72) !important;
+      backdrop-filter: blur(20px) saturate(180%) !important;
+      -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
+      border: 1.5px solid rgba(255, 255, 255, 0.85) !important;
+      box-shadow:
+        inset 1px 1px 1.5px 0px rgba(255, 255, 255, 0.95),
+        inset -1px -1px 1.5px 0px rgba(15, 23, 42, 0.05),
+        0 4px 14px rgba(15, 23, 42, 0.06) !important;
+      transition: all 0.18s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .calendar-range-capsule:focus-within {
+      border-color: rgba(255, 255, 255, 1) !important;
+      background: rgba(255, 255, 255, 0.9) !important;
+      box-shadow:
+        inset 1px 1px 1.5px 0px rgba(255, 255, 255, 1),
+        0 0 0 3px rgba(252, 163, 17, 0.25),
+        0 6px 18px rgba(15, 23, 42, 0.08) !important;
+    }
+
+    /* Universal Frosted Glass Select & Dropdowns */
+    select.Aurelia-input,
+    #select-money-flow-account,
+    #select-trans-account {
+      background: rgba(255, 255, 255, 0.75) !important;
+      backdrop-filter: blur(16px) !important;
+      -webkit-backdrop-filter: blur(16px) !important;
+      border: 1.5px solid rgba(255, 255, 255, 0.85) !important;
+      color: #0F172A !important;
+      border-radius: 9999px !important;
+      padding: 6px 14px !important;
+      box-shadow:
+        inset 1px 1px 1.5px rgba(255, 255, 255, 0.95),
+        0 2px 6px rgba(15, 23, 42, 0.04) !important;
+    }
+
+    select.Aurelia-input option,
+    #select-money-flow-account option,
+    #select-trans-account option {
+      background: #FFFFFF !important;
+      color: #14213D !important;
+    }
+
+    /* Top Welcome Titles */
+    #topbar-welcome-title {
+      color: #14213D !important;
+    }
+
+    #topbar-welcome-title+p {
+      color: #5C677D !important;
+    }
+
+    /* User Profile Capsule & Top Notifications (Frosted Glass) */
+    #user-profile-capsule,
+    #btn-top-notifications {
+      background: rgba(255, 255, 255, 0.72) !important;
+      backdrop-filter: blur(20px) saturate(180%) !important;
+      -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
+      border: 1.5px solid rgba(255, 255, 255, 0.85) !important;
+      color: #14213D !important;
+      box-shadow:
+        inset 1px 1px 1.5px 0px rgba(255, 255, 255, 0.95),
+        inset -1px -1px 1.5px 0px rgba(15, 23, 42, 0.05),
+        0 4px 14px rgba(15, 23, 42, 0.06) !important;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    #user-profile-capsule:hover,
+    #btn-top-notifications:hover {
+      border-color: rgba(255, 255, 255, 1) !important;
+      background: rgba(255, 255, 255, 0.9) !important;
+      box-shadow:
+        inset 1px 1px 1.5px 0px rgba(255, 255, 255, 1),
+        0 6px 18px rgba(15, 23, 42, 0.1) !important;
+      transform: translateY(-1px);
+    }
+
+    /* Topbar Settings Icon (Transparent background, compact size) */
+    #btn-top-settings {
+      background: transparent !important;
+      border: none !important;
+      box-shadow: none !important;
+      color: #5C677D !important;
+      transition: color 0.2s ease, transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    #btn-top-settings:hover {
+      color: #FCA311 !important;
+      transform: rotate(45deg);
+    }
+
+    #btn-top-settings.active {
+      color: #FCA311 !important;
+    }
+
+    /* Frosted Glass Segmented Tab Controls */
+    #main-app-content .inline-flex.rounded-full.border,
+    #main-app-content .inline-flex.rounded-lg.border {
+      background: rgba(255, 255, 255, 0.65) !important;
+      backdrop-filter: blur(16px) !important;
+      -webkit-backdrop-filter: blur(16px) !important;
+      border-color: rgba(255, 255, 255, 0.8) !important;
+      box-shadow:
+        inset 1px 1px 1.5px rgba(255, 255, 255, 0.95),
+        0 2px 6px rgba(15, 23, 42, 0.04) !important;
+    }
+
+    /* ========================================================================= */
+    /* ALL POPUP MODAL DIALOGS & CARDS (Clean, Solid, Luxury Aurelia Styling)   */
+    /* ========================================================================= */
+    .modal-backdrop-blur,
+    div.fixed.z-50:not(#app-sidebar):not(#toast-container) {
+      backdrop-filter: blur(14px) !important;
+      -webkit-backdrop-filter: blur(14px) !important;
+      background: rgba(15, 23, 42, 0.52) !important;
+    }
+
+    /* Target the modal dialog card itself (direct child card of fixed overlay) */
+    div.fixed.z-50:not(#app-sidebar):not(#toast-container)>.Aurelia-card,
+    div.fixed.z-50:not(#app-sidebar):not(#toast-container)>div[class*="Aurelia-card"],
+    #modal-logout-confirm>div:not([id*="backdrop"]) {
+      position: relative !important;
+      background: #FFFFFF !important;
+      border: 1px solid rgba(226, 232, 240, 0.95) !important;
+      border-radius: 24px !important;
+      box-shadow: 0 25px 60px -15px rgba(15, 23, 42, 0.3), 0 0 0 1px rgba(15, 23, 42, 0.05) !important;
+      color: #0F172A !important;
+      transform: none !important;
+      transition: none !important;
+    }
+
+    /* Completely eliminate gloss overlay pseudo-elements and hover shifts on modals */
+    div.fixed.z-50:not(#app-sidebar):not(#toast-container)>.Aurelia-card::before,
+    div.fixed.z-50:not(#app-sidebar):not(#toast-container)>div::before,
+    #modal-reset-data>.Aurelia-card::before,
+    #modal-confirm-delete>.Aurelia-card::before,
+    #modal-food-sales-budget>.Aurelia-card::before {
+      display: none !important;
+      content: none !important;
+    }
+
+    div.fixed.z-50:not(#app-sidebar):not(#toast-container)>.Aurelia-card:hover,
+    div.fixed.z-50:not(#app-sidebar):not(#toast-container)>div[class*="Aurelia-card"]:hover,
+    #modal-logout-confirm>div:not([id*="backdrop"]):hover {
+      transform: none !important;
+      box-shadow: 0 25px 60px -15px rgba(15, 23, 42, 0.3), 0 0 0 1px rgba(15, 23, 42, 0.05) !important;
+    }
+
+    /* Reset inner children of modals so they don't inherit capsule or backdrop styles */
+    div.fixed.z-50:not(#app-sidebar):not(#toast-container)>.Aurelia-card>div,
+    div.fixed.z-50:not(#app-sidebar):not(#toast-container)>div>div {
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+    }
+
+    /* Dark Mode Popups */
+    .dark div.fixed.z-50:not(#app-sidebar):not(#toast-container)>.Aurelia-card,
+    .dark div.fixed.z-50:not(#app-sidebar):not(#toast-container)>div[class*="Aurelia-card"],
+    .dark #modal-logout-confirm>div:not([id*="backdrop"]) {
+      background: #0F172A !important;
+      border-color: #334155 !important;
+      box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.08) !important;
+      color: #F8FAFC !important;
+    }
+
+    /* ========================================================================= */
+    /* SOLID COLOR TOAST NOTIFICATIONS (Red text for errors, Black for rest)     */
+    /* ========================================================================= */
+    #toast-container {
+      background: transparent !important;
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
+      border: none !important;
+      box-shadow: none !important;
+    }
+
+    .aurelia-toast {
+      position: relative !important;
+      background: #FFFFFF !important;
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
+      border-radius: 9999px !important;
+      box-shadow: 0 4px 16px rgba(15, 23, 42, 0.12), 0 1px 3px rgba(15, 23, 42, 0.06) !important;
+    }
+
+    .aurelia-toast::before {
+      display: none !important;
+      content: none !important;
+    }
+
+    .aurelia-toast.toast-error {
+      color: #DC2626 !important;
+      border: 1.5px solid #FCA5A5 !important;
+    }
+
+    .aurelia-toast.toast-default {
+      color: #000000 !important;
+      border: 1.5px solid #E2E8F0 !important;
+    }
+
+    /* Modal Total Billings Display & Stacking Integrity */
+    #modal-total-billings.hidden {
+      display: none !important;
+    }
+
+    #modal-total-billings:not(.hidden) {
+      display: flex !important;
+    }
+
+    #modal-total-billings>.Aurelia-card {
+      background: #FFFFFF !important;
+      border: 1px solid rgba(226, 232, 240, 0.95) !important;
+      box-shadow: 0 25px 60px -15px rgba(15, 23, 42, 0.35), 0 0 0 1px rgba(15, 23, 42, 0.05) !important;
+      color: #0F172A !important;
+      transform: none !important;
+    }
+
+    .dark #modal-total-billings>.Aurelia-card {
+      background: #0F172A !important;
+      border-color: #334155 !important;
+      box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.08) !important;
+      color: #F8FAFC !important;
+    }
+
+    #modal-total-billings>.Aurelia-card::before {
+      display: none !important;
+      content: none !important;
+    }
+
+    #modal-view-bill {
+      z-index: 70 !important;
+    }
+
+    /* Subtle custom scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #D4D4D8;
+      border-radius: 9999px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: #FCA311;
+    }
+
+    /* Print invoice area rules */
+    @media print {
+      body * {
+        visibility: hidden !important;
+      }
+
+      #print-invoice-area,
+      #print-invoice-area * {
+        visibility: visible !important;
+      }
+
+      #print-invoice-area {
+        position: absolute !important;
+        left: 0 !important;
+        top: 0 !important;
+        width: 100% !important;
+        max-width: 800px !important;
+        margin: 0 auto !important;
+        padding: 24px !important;
+        background: #ffffff !important;
+        color: #000000 !important;
+        display: block !important;
+      }
+    }
+
+    /* ========================================================================= */
+    /* LIGHT THEME SPLIT AUTH & MOVEABLE 3D ORBITAL ANIMATION STYLES              */
+    /* ========================================================================= */
+    #auth-visual-panel {
+      perspective: 1200px;
+      transform-style: preserve-3d;
+    }
+
+    #movable-orb-wrapper {
+      transform-style: preserve-3d;
+      will-change: transform;
+      user-select: none;
+      -webkit-user-select: none;
+      touch-action: none;
+      cursor: grab;
+    }
+
+    #movable-orb-wrapper:active,
+    #movable-orb-wrapper.is-dragging {
+      cursor: grabbing;
+    }
+
+    @keyframes ring-glow-spin {
+      from {
+        transform: rotate(0deg);
+      }
+
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    @keyframes ring-glow-spin-reverse {
+      from {
+        transform: rotate(360deg);
+      }
+
+      to {
+        transform: rotate(0deg);
+      }
+    }
+
+    .animate-spin-slow {
+      animation: ring-glow-spin 25s linear infinite;
+    }
+
+    /* ========================================================================= */
+    /* REEL-INSPIRED SLIDING AUTHENTICATION CARD & CURVED-SHAPE ANIMATION ENGINE */
+    /* (Matches https://www.instagram.com/reel/DR8ujFHD0zs/)                    */
+    /* Deep Navy (#14213d) Theme with Crisp White Card                          */
+    /* ========================================================================= */
+    #auth-container {
+      background: radial-gradient(circle at 50% 50%, #E2E8F0 0%, #CBD5E1 55%, #94A3B8 100%) !important;
+      background-color: #CBD5E1 !important;
+    }
+
+    #auth-card-frame {
+      position: relative !important;
+      overflow: hidden !important;
+      width: 100% !important;
+      max-width: 860px !important;
+      background-color: #FFFFFF !important;
+      border: 2px solid #14213d !important;
+      box-shadow: 0 0 35px rgba(20, 33, 61, 0.35), 0 25px 50px -12px rgba(20, 33, 61, 0.2) !important;
+      border-radius: 24px !important;
+      transition: border-color 0.4s ease, box-shadow 0.4s ease, min-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    #auth-card-frame:hover {
+      border-color: #1f3660 !important;
+      box-shadow: 0 0 45px rgba(20, 33, 61, 0.48), 0 30px 60px -12px rgba(20, 33, 61, 0.25) !important;
+    }
+
+    /* Iconic Sweeping Curved Shapes from the Instagram Reel */
+    .card-curved-shape {
+      position: absolute;
+      right: 0;
+      top: -15%;
+      width: 900px;
+      height: 130%;
+      background: linear-gradient(135deg, #14213d 0%, #1f3660 48%, #0b1324 100%);
+      border-left: 3px solid rgba(255, 255, 255, 0.42);
+      box-shadow: -10px 0 35px rgba(20, 33, 61, 0.55), inset 0 0 45px rgba(0, 0, 0, 0.25);
+      border-radius: 65px;
+      transform: rotate(10deg) skewY(38deg);
+      transform-origin: bottom right;
+      transition: transform 1.25s cubic-bezier(0.65, 0, 0.35, 1);
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    .card-curved-shape2 {
+      position: absolute;
+      left: 0;
+      bottom: -15%;
+      width: 900px;
+      height: 130%;
+      background: linear-gradient(315deg, #14213d 0%, #1f3660 48%, #0b1324 100%);
+      border-right: 3px solid rgba(255, 255, 255, 0.42);
+      box-shadow: 10px 0 35px rgba(20, 33, 61, 0.55), inset 0 0 45px rgba(0, 0, 0, 0.25);
+      border-radius: 65px;
+      transform: rotate(0deg) skewY(0deg) translate(-120%, 0);
+      transform-origin: bottom left;
+      transition: transform 1.25s cubic-bezier(0.65, 0, 0.35, 1);
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    /* Dynamic Sweeping Curve Transition when switching to Register View */
+    #auth-card-frame.view-register .card-curved-shape {
+      transform: rotate(0deg) skewY(0deg) translate(-130%, 35px);
+    }
+
+    #auth-card-frame.view-register .card-curved-shape2 {
+      transform: rotate(-10deg) skewY(-38deg) translate(0, 0);
+    }
+
+    /* In Forgot view, keep curve nicely on the right */
+    #auth-card-frame.view-forgot .card-curved-shape {
+      transform: rotate(10deg) skewY(38deg);
+    }
+    #auth-card-frame.view-forgot .card-curved-shape2 {
+      transform: rotate(0deg) skewY(0deg) translate(-120%, 0);
+    }
+
+    /* Hide large rotated overflow background shapes on small screens to prevent clipping */
+    @media (max-width: 767px) {
+      .card-curved-shape,
+      .card-curved-shape2 {
+        display: none !important;
+      }
+    }
+
+    /* Auth Slider Viewport */
+    .auth-slider-viewport {
+      position: relative;
+      width: 100%;
+      overflow: hidden;
+      min-height: 380px;
+      transition: min-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 4;
+    }
+
+    #auth-card-frame.view-register .auth-slider-viewport {
+      min-height: 410px;
+    }
+
+    #auth-card-frame.view-forgot .auth-slider-viewport {
+      min-height: 260px;
+    }
+
+    /* Slide Views & Transitions */
+    .auth-view-slide {
+      transition: transform 0.75s cubic-bezier(0.65, 0, 0.35, 1),
+                  opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1),
+                  filter 0.6s cubic-bezier(0.4, 0, 0.2, 1),
+                  visibility 0.75s;
+      will-change: transform, opacity, filter;
+    }
+
+    /* Desktop 2-Column Split Specifications */
+    @media (min-width: 768px) {
+      .auth-view-slide {
+        width: 50% !important;
+      }
+
+      /* VIEW A: LOGIN ACTIVE */
+      #auth-card-frame.view-login #auth-card-login {
+        position: relative;
+        left: 0;
+        transform: translateX(0);
+        opacity: 1;
+        filter: blur(0);
+        pointer-events: auto;
+        visibility: visible;
+        z-index: 5;
+      }
+
+      #auth-card-frame.view-login #auth-card-register {
+        position: absolute;
+        top: 0;
+        right: 0;
+        transform: translateX(120%);
+        opacity: 0;
+        filter: blur(10px);
+        pointer-events: none;
+        visibility: hidden;
+        z-index: 1;
+      }
+
+      #auth-card-frame.view-login #auth-card-forgot {
+        position: absolute;
+        top: 0;
+        left: 0;
+        transform: translateX(120%);
+        opacity: 0;
+        filter: blur(10px);
+        pointer-events: none;
+        visibility: hidden;
+        z-index: 1;
+      }
+
+      /* VIEW B: REGISTER ACTIVE */
+      #auth-card-frame.view-register #auth-card-login {
+        position: absolute;
+        top: 0;
+        left: 0;
+        transform: translateX(-120%);
+        opacity: 0;
+        filter: blur(10px);
+        pointer-events: none;
+        visibility: hidden;
+        z-index: 1;
+      }
+
+      #auth-card-frame.view-register #auth-card-register {
+        position: relative;
+        margin-left: 50%;
+        transform: translateX(0);
+        opacity: 1;
+        filter: blur(0);
+        pointer-events: auto;
+        visibility: visible;
+        z-index: 5;
+      }
+
+      #auth-card-frame.view-register #auth-card-forgot {
+        position: absolute;
+        top: 0;
+        left: 0;
+        transform: translateX(120%);
+        opacity: 0;
+        filter: blur(10px);
+        pointer-events: none;
+        visibility: hidden;
+        z-index: 1;
+      }
+
+      /* VIEW C: FORGOT ACTIVE */
+      #auth-card-frame.view-forgot #auth-card-login {
+        position: absolute;
+        top: 0;
+        left: 0;
+        transform: translateX(-120%);
+        opacity: 0;
+        filter: blur(10px);
+        pointer-events: none;
+        visibility: hidden;
+        z-index: 1;
+      }
+
+      #auth-card-frame.view-forgot #auth-card-register {
+        position: absolute;
+        top: 0;
+        right: 0;
+        transform: translateX(120%);
+        opacity: 0;
+        filter: blur(10px);
+        pointer-events: none;
+        visibility: hidden;
+        z-index: 1;
+      }
+
+      #auth-card-frame.view-forgot #auth-card-forgot {
+        position: relative;
+        left: 0;
+        transform: translateX(0);
+        opacity: 1;
+        filter: blur(0);
+        pointer-events: auto;
+        visibility: visible;
+        z-index: 5;
+      }
+    }
+
+    /* Mobile Single-Column Specifications (< 768px) */
+    @media (max-width: 767px) {
+      .auth-view-slide {
+        width: 100% !important;
+      }
+
+      #auth-card-frame.view-login #auth-card-login {
+        position: relative;
+        transform: translateX(0);
+        opacity: 1;
+        filter: blur(0);
+        pointer-events: auto;
+        visibility: visible;
+        z-index: 5;
+      }
+
+      #auth-card-frame.view-login #auth-card-register,
+      #auth-card-frame.view-login #auth-card-forgot {
+        position: absolute;
+        top: 0;
+        left: 0;
+        transform: translateX(110%);
+        opacity: 0;
+        filter: blur(8px);
+        pointer-events: none;
+        visibility: hidden;
+        z-index: 1;
+      }
+
+      #auth-card-frame.view-register #auth-card-login {
+        position: absolute;
+        top: 0;
+        left: 0;
+        transform: translateX(-110%);
+        opacity: 0;
+        filter: blur(8px);
+        pointer-events: none;
+        visibility: hidden;
+        z-index: 1;
+      }
+
+      #auth-card-frame.view-register #auth-card-register {
+        position: relative;
+        transform: translateX(0);
+        opacity: 1;
+        filter: blur(0);
+        pointer-events: auto;
+        visibility: visible;
+        z-index: 5;
+      }
+
+      #auth-card-frame.view-register #auth-card-forgot {
+        position: absolute;
+        top: 0;
+        left: 0;
+        transform: translateX(110%);
+        opacity: 0;
+        filter: blur(8px);
+        pointer-events: none;
+        visibility: hidden;
+        z-index: 1;
+      }
+
+      #auth-card-frame.view-forgot #auth-card-login,
+      #auth-card-frame.view-forgot #auth-card-register {
+        position: absolute;
+        top: 0;
+        left: 0;
+        transform: translateX(-110%);
+        opacity: 0;
+        filter: blur(8px);
+        pointer-events: none;
+        visibility: hidden;
+        z-index: 1;
+      }
+
+      #auth-card-frame.view-forgot #auth-card-forgot {
+        position: relative;
+        transform: translateX(0);
+        opacity: 1;
+        filter: blur(0);
+        pointer-events: auto;
+        visibility: visible;
+        z-index: 5;
+      }
+    }
+
+    /* Side Welcome Text Panels (Instagram Reel Overlay Text) */
+    .side-welcome-panel {
+      transition: transform 0.85s cubic-bezier(0.65, 0, 0.35, 1),
+                  opacity 0.65s ease,
+                  filter 0.65s ease;
+      will-change: transform, opacity, filter;
+    }
+
+    #auth-card-frame.view-login #welcome-panel-login {
+      transform: translateX(0);
+      opacity: 1;
+      filter: blur(0);
+      pointer-events: auto;
+      transition-delay: 0.18s;
+    }
+
+    #auth-card-frame.view-register #welcome-panel-login,
+    #auth-card-frame.view-forgot #welcome-panel-login {
+      transform: translateX(80px);
+      opacity: 0;
+      filter: blur(10px);
+      pointer-events: none;
+      transition-delay: 0s;
+    }
+
+    #auth-card-frame.view-register #welcome-panel-register {
+      transform: translateX(0);
+      opacity: 1;
+      filter: blur(0);
+      pointer-events: auto;
+      transition-delay: 0.18s;
+    }
+
+    #auth-card-frame.view-login #welcome-panel-register,
+    #auth-card-frame.view-forgot #welcome-panel-register {
+      transform: translateX(-80px);
+      opacity: 0;
+      filter: blur(10px);
+      pointer-events: none;
+      transition-delay: 0s;
+    }
+
+    /* Staggered Wave Animations for Form Elements (Reel-style --item-delay cascade) */
+    .reel-anim-item {
+      transition: transform 0.65s cubic-bezier(0.16, 1, 0.3, 1),
+                  opacity 0.55s ease,
+                  filter 0.55s ease;
+      will-change: transform, opacity, filter;
+    }
+
+    #auth-card-frame.view-login #auth-card-login .reel-anim-item {
+      transform: translateX(0);
+      opacity: 1;
+      filter: blur(0);
+      transition-delay: calc(var(--item-delay, 0) * 0.045s + 0.1s);
+    }
+
+    #auth-card-frame.view-login #auth-card-register .reel-anim-item {
+      transform: translateX(45px);
+      opacity: 0;
+      filter: blur(6px);
+      transition-delay: calc((8 - var(--item-delay, 0)) * 0.03s);
+    }
+
+    #auth-card-frame.view-register #auth-card-register .reel-anim-item {
+      transform: translateX(0);
+      opacity: 1;
+      filter: blur(0);
+      transition-delay: calc(var(--item-delay, 0) * 0.045s + 0.1s);
+    }
+
+    #auth-card-frame.view-register #auth-card-login .reel-anim-item {
+      transform: translateX(-45px);
+      opacity: 0;
+      filter: blur(6px);
+      transition-delay: calc((8 - var(--item-delay, 0)) * 0.03s);
+    }
+
+    #auth-card-frame.view-forgot #auth-card-forgot .reel-anim-item {
+      transform: translateX(0);
+      opacity: 1;
+      filter: blur(0);
+      transition-delay: calc(var(--item-delay, 0) * 0.05s + 0.08s);
+    }
+  </style>
+</head>
+
+<body
+  class="bg-[#F4F5F7] text-[#14213D] min-h-screen flex flex-col antialiased relative selection:bg-[#FCA311] selection:text-black">
+
+
+  <!-- =================================================================== -->
+  <!-- 1. AUTHENTICATION CONTAINER (Split 2-Column Light Themed System)     -->
+  <!-- =================================================================== -->
+  <div id="auth-container"
+    class="min-h-screen h-[100dvh] bg-[#CBD5E1] flex flex-col justify-center items-center p-3 sm:p-5 lg:p-6 hidden relative z-30 overflow-y-auto overflow-x-hidden"
+    style="background: radial-gradient(circle at 50% 50%, #D8E0EA 0%, #CBD5E1 55%, #B4C0D0 100%) !important;">
+
+    <!-- Ambient Studio Gray Backdrop Accents -->
+    <div class="absolute -top-32 -left-32 w-96 h-96 bg-slate-400/25 rounded-full blur-3xl pointer-events-none"></div>
+    <div class="absolute -bottom-32 -right-32 w-96 h-96 bg-slate-500/20 rounded-full blur-3xl pointer-events-none">
+    </div>
+    <div
+      class="absolute inset-0 bg-[radial-gradient(#94A3B8_1px,transparent_1px)] [background-size:24px_24px] opacity-25 pointer-events-none">
+    </div>
+
+    <!-- Unified Authentication Card (Light Theme with Reel-style Curved Shape Animation) -->
+    <div id="auth-card-frame"
+      class="my-auto w-full max-w-[860px] bg-white rounded-3xl border-2 border-[#14213d] shadow-2xl shadow-[#14213d]/20 p-4 sm:px-8 sm:py-5 flex flex-col justify-between relative z-10 transition-all duration-300 view-login overflow-hidden">
+
+        <!-- Reel-style Animated Curved Shapes (Deep Navy #14213d) -->
+        <div class="card-curved-shape pointer-events-none" aria-hidden="true"></div>
+        <div class="card-curved-shape2 pointer-events-none" aria-hidden="true"></div>
+
+        <!-- Brand Header Top Bar -->
+        <div class="flex items-center justify-between pb-3 border-b border-[#F1F5F9] mb-3 relative z-20">
+          <div class="flex items-center space-x-2.5">
+            <div
+              class="w-9 h-9 rounded-xl bg-[#F8FAFC] border border-[#E2E8F0] shadow-xs flex items-center justify-center p-1.5">
+              <img src="assets/aurelia-mark.svg" alt="Aurelia Emblem" class="w-full h-full object-contain">
+            </div>
+            <div>
+              <span class="text-sm sm:text-base font-bold text-[#14213D] tracking-[0.2em] uppercase leading-none block"
+                style="font-family: 'Cormorant Garamond', Georgia, serif;">AURELIA</span>
+              <span class="text-[9px] font-semibold text-slate-500 tracking-[0.16em] uppercase">Hotel &amp; Restaurant
+                POS</span>
+            </div>
+          </div>
+          <span
+            class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
+            System Online
+          </span>
+        </div>
+
+        <!-- Animated Forms Viewport Stage (Sliding Animation as in Instagram Reel) -->
+        <div id="auth-stage" class="auth-slider-viewport relative w-full overflow-hidden mt-0.5">
+
+          <!-- Instagram Reel Side Panel: "WELCOME BACK!" (Visible in Login view on right half) -->
+          <div id="welcome-panel-login"
+            class="side-welcome-panel hidden md:flex flex-col justify-center items-center text-center px-4 lg:px-8 py-4 sm:py-6 absolute right-0 top-0 w-1/2 h-full z-10 pointer-events-auto">
+            <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[9px] font-bold tracking-widest uppercase bg-white/15 text-white/95 backdrop-blur-md border border-white/25 mb-2.5 sm:mb-3 shadow-xs">
+              Aurelia Luxury POS
+            </span>
+            <h3 class="text-2xl lg:text-3xl font-black text-white tracking-wider uppercase leading-tight drop-shadow-md" style="font-family: 'Outfit', sans-serif;">
+              WELCOME<br>BACK!
+            </h3>
+            <p class="text-xs text-white/85 mt-2 max-w-[260px] leading-relaxed font-normal">
+              Enter your credentials to access room service billing, kitchen KOT, and guest invoices.
+            </p>
+            <button type="button" id="btn-side-register"
+              class="mt-4 sm:mt-5 px-7 py-2 rounded-full border-2 border-white text-white font-bold text-xs uppercase tracking-wider hover:bg-white hover:text-[#14213d] transition-all duration-300 shadow-lg shadow-black/20 cursor-pointer active:scale-95">
+              Sign Up
+            </button>
+          </div>
+
+          <!-- Instagram Reel Side Panel: "WELCOME!" (Visible in Register view on left half) -->
+          <div id="welcome-panel-register"
+            class="side-welcome-panel hidden md:flex flex-col justify-center items-center text-center px-4 lg:px-8 py-4 sm:py-6 absolute left-0 top-0 w-1/2 h-full z-10 pointer-events-auto">
+            <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[9px] font-bold tracking-widest uppercase bg-white/15 text-white/95 backdrop-blur-md border border-white/25 mb-2.5 sm:mb-3 shadow-xs">
+              Join Aurelia Staff
+            </span>
+            <h3 class="text-2xl lg:text-3xl font-black text-white tracking-wider uppercase leading-tight drop-shadow-md" style="font-family: 'Outfit', sans-serif;">
+              WELCOME!
+            </h3>
+            <p class="text-xs text-white/85 mt-2 max-w-[260px] leading-relaxed font-normal">
+              Create a new staff or manager profile to streamline hotel billing and banquet operations.
+            </p>
+            <button type="button" id="btn-side-login"
+              class="mt-4 sm:mt-5 px-7 py-2 rounded-full border-2 border-white text-white font-bold text-xs uppercase tracking-wider hover:bg-white hover:text-[#14213d] transition-all duration-300 shadow-lg shadow-black/20 cursor-pointer active:scale-95">
+              Sign In
+            </button>
+          </div>
+
+          <!-- ============================================================= -->
+          <!-- VIEW A: SIGN IN (STAFF & ADMIN) - Left Column                  -->
+          <!-- ============================================================= -->
+          <div id="auth-card-login" class="auth-view-slide flex flex-col justify-between">
+            <div class="pr-0 md:pr-6">
+              <!-- Heading & Subtitle -->
+              <div class="mb-2.5 sm:mb-3 reel-anim-item" style="--item-delay: 0;">
+                <h2 class="text-xl sm:text-2xl font-extrabold text-[#0F172A] tracking-tight">Sign In</h2>
+                <p class="text-[11px] sm:text-xs text-slate-500 mt-0.5 font-normal">
+                  Select your staff role and enter your credentials to access the billing dashboard.
+                </p>
+              </div>
+
+              <!-- Role Switcher Tabs (Front Desk Staff / Hotel Manager) -->
+              <div class="flex p-1 bg-[#F1F5F9] rounded-xl border border-[#E2E8F0] mb-2.5 sm:mb-3 reel-anim-item" style="--item-delay: 1;" role="tablist">
+                <button type="button" id="tab-login-staff"
+                  class="role-tab flex-1 py-1.5 px-2.5 rounded-lg text-xs font-semibold flex items-center justify-center gap-1.5 transition-all bg-[#14213d] text-white shadow-sm shadow-[#14213d]/30"
+                  data-role="staff">
+                  <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                  </svg>
+                  <span>Front Desk Staff</span>
+                </button>
+                <button type="button" id="tab-login-admin"
+                  class="role-tab flex-1 py-1.5 px-2.5 rounded-lg text-xs font-semibold flex items-center justify-center gap-1.5 transition-all text-slate-600 hover:text-slate-900"
+                  data-role="admin">
+                  <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                  </svg>
+                  <span>Hotel Manager</span>
+                </button>
+              </div>
+
+              <div id="alert-login" class="hidden"></div>
+
+              <form id="form-login" class="space-y-2.5" novalidate
+                onsubmit="if(window.Auth&&window.Auth.login){window.Auth.login(event);}return false;">
+                <!-- Email Field -->
+                <div class="reel-anim-item" style="--item-delay: 2;">
+                  <label for="login-email" class="block text-[11px] sm:text-xs font-semibold text-slate-700 mb-0.5">Work Email
+                    Address</label>
+                  <div class="relative">
+                    <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+                      <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
+                          d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                      </svg>
+                    </span>
+                    <input type="email" id="login-email" name="email" required autocomplete="email"
+                      placeholder="adalinea@gmail.com" value="adalinea@gmail.com"
+                      class="w-full pl-9 pr-3 py-2 bg-[#F8FAFC] border border-[#CBD5E1] rounded-xl text-xs text-slate-900 placeholder:text-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#14213d]/25 focus:border-[#14213d] transition-all">
+                  </div>
+                </div>
+
+                <!-- Password Field -->
+                <div class="reel-anim-item" style="--item-delay: 3;">
+                  <div class="flex items-center justify-between mb-0.5">
+                    <label for="login-password" class="block text-[11px] sm:text-xs font-semibold text-slate-700">Password</label>
+                    <button type="button" id="btn-goto-forgot"
+                      class="text-[11px] font-semibold text-[#14213d] hover:text-[#1f3660] transition-colors cursor-pointer">
+                      Forgot password?
+                    </button>
+                  </div>
+                  <div class="relative">
+                    <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+                      <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
+                          d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                      </svg>
+                    </span>
+                    <input type="password" id="login-password" name="password" required autocomplete="current-password"
+                      placeholder="Enter your password" value="password123"
+                      class="w-full pl-9 pr-9 py-2 bg-[#F8FAFC] border border-[#CBD5E1] rounded-xl text-xs text-slate-900 placeholder:text-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#14213d]/25 focus:border-[#14213d] transition-all">
+                    <button type="button" data-toggle-password="login-password" aria-label="Toggle password visibility"
+                      class="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-slate-600 transition-colors cursor-pointer">
+                      <svg class="w-4 h-4 eye-open" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
+                          d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
+                          d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                      </svg>
+                      <svg class="w-4 h-4 eye-closed hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
+                          d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l18 18" />
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Remember Me Checkbox -->
+                <div class="flex items-center justify-between reel-anim-item" style="--item-delay: 4;">
+                  <label class="flex items-center space-x-2 cursor-pointer">
+                    <input type="checkbox" id="login-remember" checked
+                      class="w-3.5 h-3.5 rounded border-[#CBD5E1] text-[#14213d] focus:ring-[#14213d]/25 accent-[#14213d]">
+                    <span class="text-xs text-slate-600 font-medium">Keep me signed in</span>
+                  </label>
+                </div>
+
+                <!-- Primary Submit Button with Arrow -->
+                <div class="reel-anim-item" style="--item-delay: 5;">
+                  <button type="submit" id="btn-login-submit"
+                    class="w-full py-2.5 px-4 rounded-xl bg-gradient-to-r from-[#14213d] via-[#1f3660] to-[#14213d] hover:brightness-110 active:scale-[0.99] text-white text-xs sm:text-sm font-semibold tracking-wide transition-all shadow-md shadow-[#14213d]/30 flex items-center justify-center gap-2 group cursor-pointer">
+                    <span>Sign In to Aurelia</span>
+                    <svg class="w-3.5 h-3.5 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24"
+                      stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                    </svg>
+                  </button>
+                </div>
+              </form>
+
+              <!-- Social / Quick Login Options -->
+              <div class="mt-2.5 reel-anim-item" style="--item-delay: 6;">
+                <div class="relative flex py-0.5 items-center">
+                  <div class="flex-grow border-t border-slate-200"></div>
+                  <span class="flex-shrink mx-2.5 text-[10px] font-medium text-slate-400 uppercase tracking-wider">Or sign
+                    in with</span>
+                  <div class="flex-grow border-t border-slate-200"></div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-2 mt-1.5">
+                  <button type="button" id="btn-social-linkedin"
+                    class="py-1.5 px-2.5 bg-white border border-[#CBD5E1] hover:bg-[#F8FAFC] rounded-xl text-xs font-semibold text-slate-700 flex items-center justify-center gap-1.5 transition-colors shadow-2xs cursor-pointer">
+                    <svg class="w-3.5 h-3.5 text-[#0A66C2]" fill="currentColor" viewBox="0 0 24 24">
+                      <path
+                        d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z" />
+                    </svg>
+                    <span>LinkedIn</span>
+                  </button>
+                  <button type="button" id="btn-social-google"
+                    class="py-1.5 px-2.5 bg-white border border-[#CBD5E1] hover:bg-[#F8FAFC] rounded-xl text-xs font-semibold text-slate-700 flex items-center justify-center gap-1.5 transition-colors shadow-2xs cursor-pointer">
+                    <svg class="w-3.5 h-3.5" viewBox="0 0 24 24">
+                      <path fill="#4285F4"
+                        d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
+                      <path fill="#34A853"
+                        d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
+                      <path fill="#FBBC05"
+                        d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" />
+                      <path fill="#EA4335"
+                        d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" />
+                    </svg>
+                    <span>Google</span>
+                  </button>
+                </div>
+
+                <!-- Quick Demo One-Click Access -->
+                <button type="button" id="btn-quick-demo"
+                  class="w-full mt-2 py-1.5 px-2.5 bg-[#F1F5F9] hover:bg-[#E2E8F0] border border-[#CBD5E1] rounded-xl text-[10px] sm:text-[11px] font-semibold text-slate-700 flex items-center justify-center gap-1.5 transition-colors cursor-pointer">
+                  <span class="text-[#14213d]">⚡</span>
+                  <span>Quick Demo: <strong class="text-slate-900">adalinea@gmail.com</strong> / password123</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Bottom Footer Navigation & Disclaimer -->
+            <div class="mt-2.5 pt-2 border-t border-[#F1F5F9] text-center pr-0 md:pr-6 reel-anim-item" style="--item-delay: 7;">
+              <p class="text-xs text-slate-500 font-medium">
+                Don't have an account?
+                <a href="#" id="btn-goto-register"
+                  class="font-bold text-[#14213d] hover:text-[#1f3660] ml-1 transition-colors">
+                  Create Account
+                </a>
+              </p>
+              <p class="text-[9px] text-slate-400 mt-1 leading-relaxed">
+                By clicking Sign In, Google, or LinkedIn, you agree to Aurelia Hotel Management
+                <span class="underline">Terms &amp; Conditions</span> and <span class="underline">Privacy Policy</span>.
+              </p>
+            </div>
+          </div>
+
+          <!-- ============================================================= -->
+          <!-- VIEW B: CREATE ACCOUNT - Right Column                          -->
+          <!-- ============================================================= -->
+          <div id="auth-card-register" class="auth-view-slide flex flex-col justify-between">
+            <div class="pl-0 md:pl-6">
+              <!-- Heading & Subtitle -->
+              <div class="mb-2.5 sm:mb-3 reel-anim-item" style="--item-delay: 0;">
+                <h2 class="text-xl sm:text-2xl font-extrabold text-[#0F172A] tracking-tight">Create Account</h2>
+                <p class="text-[11px] sm:text-xs text-slate-500 mt-0.5 font-normal">
+                  Register a new profile for Aurelia Hotel &amp; Restaurant operations.
+                </p>
+              </div>
+
+              <!-- Role Switcher Tabs (Candidate / Employer) -->
+              <div class="flex p-1 bg-[#F1F5F9] rounded-xl border border-[#E2E8F0] mb-2.5 sm:mb-3 reel-anim-item" style="--item-delay: 1;" role="tablist">
+                <button type="button" id="tab-reg-staff"
+                  class="role-tab flex-1 py-1.5 px-2.5 rounded-lg text-xs font-semibold flex items-center justify-center gap-1.5 transition-all bg-[#14213d] text-white shadow-sm shadow-[#14213d]/30"
+                  data-role="Candidate">
+                  <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                  </svg>
+                  <span>Candidate</span>
+                </button>
+                <button type="button" id="tab-reg-admin"
+                  class="role-tab flex-1 py-1.5 px-2.5 rounded-lg text-xs font-semibold flex items-center justify-center gap-1.5 transition-all text-slate-600 hover:text-slate-900"
+                  data-role="Employer">
+                  <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                  </svg>
+                  <span>Employer</span>
+                </button>
+              </div>
+
+              <div id="alert-register" class="hidden"></div>
+
+              <form id="form-register" class="space-y-2 sm:space-y-2.5" novalidate
+                onsubmit="if(window.Auth&&window.Auth.register){window.Auth.register(event);}return false;">
+                <!-- 2-Column Row: Name & Username -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 reel-anim-item" style="--item-delay: 2;">
+                  <div>
+                    <label for="reg-name" class="block text-[11px] sm:text-xs font-semibold text-slate-700 mb-0.5">Name</label>
+                    <input type="text" id="reg-name" name="name" required autocomplete="name" placeholder="Full name"
+                      class="w-full px-3 py-1.5 sm:py-2 bg-[#F8FAFC] border border-[#CBD5E1] rounded-xl text-xs text-slate-900 placeholder:text-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#14213d]/25 focus:border-[#14213d] transition-all">
+                  </div>
+                  <div>
+                    <label for="reg-username" class="block text-[11px] sm:text-xs font-semibold text-slate-700 mb-0.5">Username</label>
+                    <input type="text" id="reg-username" name="username" autocomplete="username" placeholder="Username"
+                      class="w-full px-3 py-1.5 sm:py-2 bg-[#F8FAFC] border border-[#CBD5E1] rounded-xl text-xs text-slate-900 placeholder:text-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#14213d]/25 focus:border-[#14213d] transition-all">
+                  </div>
+                </div>
+
+                <!-- Email Address -->
+                <div class="reel-anim-item" style="--item-delay: 3;">
+                  <label for="reg-email" class="block text-[11px] sm:text-xs font-semibold text-slate-700 mb-0.5">Email address</label>
+                  <input type="email" id="reg-email" name="email" required autocomplete="email"
+                    placeholder="Email address"
+                    class="w-full px-3 py-1.5 sm:py-2 bg-[#F8FAFC] border border-[#CBD5E1] rounded-xl text-xs text-slate-900 placeholder:text-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#14213d]/25 focus:border-[#14213d] transition-all">
+                </div>
+
+                <!-- 2-Column Row: Password & Confirm Password -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 reel-anim-item" style="--item-delay: 4;">
+                  <div>
+                    <label for="reg-password" class="block text-[11px] sm:text-xs font-semibold text-slate-700 mb-0.5">Password</label>
+                    <div class="relative">
+                      <input type="password" id="reg-password" name="password" required autocomplete="new-password"
+                        placeholder="Enter password"
+                        class="w-full pl-3 pr-8 py-1.5 sm:py-2 bg-[#F8FAFC] border border-[#CBD5E1] rounded-xl text-xs text-slate-900 placeholder:text-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#14213d]/25 focus:border-[#14213d] transition-all">
+                      <button type="button" data-toggle-password="reg-password" aria-label="Toggle password visibility"
+                        class="absolute inset-y-0 right-0 pr-2.5 flex items-center text-slate-400 hover:text-slate-600 transition-colors cursor-pointer">
+                        <svg class="w-3.5 h-3.5 eye-open" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
+                            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
+                            d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                        </svg>
+                        <svg class="w-3.5 h-3.5 eye-closed hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
+                            d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l18 18" />
+                        </svg>
+                      </button>
+                    </div>
+                  </div>
+                  <div>
+                    <label for="reg-confirm-password" class="block text-[11px] sm:text-xs font-semibold text-slate-700 mb-0.5">Confirm
+                      Password</label>
+                    <div class="relative">
+                      <input type="password" id="reg-confirm-password" name="confirmPassword" required
+                        autocomplete="new-password" placeholder="Enter password again"
+                        class="w-full pl-3 pr-8 py-1.5 sm:py-2 bg-[#F8FAFC] border border-[#CBD5E1] rounded-xl text-xs text-slate-900 placeholder:text-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#14213d]/25 focus:border-[#14213d] transition-all">
+                      <button type="button" data-toggle-password="reg-confirm-password"
+                        aria-label="Toggle password visibility"
+                        class="absolute inset-y-0 right-0 pr-2.5 flex items-center text-slate-400 hover:text-slate-600 transition-colors cursor-pointer">
+                        <svg class="w-3.5 h-3.5 eye-open" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
+                            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
+                            d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                        </svg>
+                        <svg class="w-3.5 h-3.5 eye-closed hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
+                            d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l18 18" />
+                        </svg>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Terms Checkbox -->
+                <div class="pt-0.5 reel-anim-item" style="--item-delay: 5;">
+                  <label class="flex items-start space-x-2 cursor-pointer">
+                    <input type="checkbox" id="reg-terms" required
+                      class="w-3.5 h-3.5 mt-0.5 rounded border-[#CBD5E1] text-[#14213d] focus:ring-[#14213d]/25 accent-[#14213d]">
+                    <span class="text-[11px] sm:text-xs text-slate-600 leading-snug">
+                      I agree to the Aurelia Terms of Service &amp; privacy confidentiality policy.
+                    </span>
+                  </label>
+                </div>
+
+                <!-- Primary Submit Button -->
+                <div class="reel-anim-item" style="--item-delay: 6;">
+                  <button type="submit" id="btn-register-submit"
+                    class="w-full py-2.5 px-4 rounded-xl bg-gradient-to-r from-[#14213d] via-[#1f3660] to-[#14213d] hover:brightness-110 active:scale-[0.99] text-white text-xs sm:text-sm font-semibold tracking-wide transition-all shadow-md shadow-[#14213d]/30 flex items-center justify-center gap-2 group cursor-pointer">
+                    <span>Create Account</span>
+                    <svg class="w-3.5 h-3.5 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24"
+                      stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                    </svg>
+                  </button>
+                </div>
+              </form>
+
+              <!-- Social Options -->
+              <div class="mt-2.5 reel-anim-item" style="--item-delay: 7;">
+                <div class="relative flex py-0.5 items-center">
+                  <div class="flex-grow border-t border-slate-200"></div>
+                  <span class="flex-shrink mx-2.5 text-[10px] font-medium text-slate-400 uppercase tracking-wider">Or sign
+                    up with</span>
+                  <div class="flex-grow border-t border-slate-200"></div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-2 mt-1.5">
+                  <button type="button"
+                    class="py-1.5 px-2.5 bg-white border border-[#CBD5E1] hover:bg-[#F8FAFC] rounded-xl text-xs font-semibold text-slate-700 flex items-center justify-center gap-1.5 transition-colors shadow-2xs cursor-pointer">
+                    <svg class="w-3.5 h-3.5 text-[#0A66C2]" fill="currentColor" viewBox="0 0 24 24">
+                      <path
+                        d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z" />
+                    </svg>
+                    <span>LinkedIn</span>
+                  </button>
+                  <button type="button"
+                    class="py-1.5 px-2.5 bg-white border border-[#CBD5E1] hover:bg-[#F8FAFC] rounded-xl text-xs font-semibold text-slate-700 flex items-center justify-center gap-1.5 transition-colors shadow-2xs cursor-pointer">
+                    <svg class="w-3.5 h-3.5" viewBox="0 0 24 24">
+                      <path fill="#4285F4"
+                        d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
+                      <path fill="#34A853"
+                        d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
+                      <path fill="#FBBC05"
+                        d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" />
+                      <path fill="#EA4335"
+                        d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" />
+                    </svg>
+                    <span>Google</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Bottom Footer Navigation & Disclaimer -->
+            <div class="mt-2.5 pt-2 border-t border-[#F1F5F9] text-center pl-0 md:pl-6 reel-anim-item" style="--item-delay: 8;">
+              <p class="text-xs text-slate-500 font-medium">
+                Already have an account?
+                <a href="#" id="btn-goto-login"
+                  class="font-bold text-[#14213d] hover:text-[#1f3660] ml-1 transition-colors">
+                  Log In
+                </a>
+              </p>
+              <p class="text-[9px] text-slate-400 mt-1 leading-relaxed">
+                By clicking Create Account/Google/LinkedIn above, you acknowledge that you have read and understand, and
+                agree to Jobpilot/Aurelia Terms &amp; Conditions and Privacy Policy.
+              </p>
+            </div>
+          </div>
+
+          <!-- ============================================================= -->
+          <!-- VIEW C: FORGOT PASSWORD                                       -->
+          <!-- ============================================================= -->
+          <div id="auth-card-forgot" class="auth-view-slide flex flex-col justify-between">
+            <div class="pr-0 md:pr-6">
+              <div class="mb-3 reel-anim-item" style="--item-delay: 0;">
+                <h2 class="text-xl sm:text-2xl font-extrabold text-[#0F172A] tracking-tight">Reset Password</h2>
+                <p class="text-[11px] sm:text-xs text-slate-500 mt-0.5 font-normal">
+                  Enter your registered staff email address to receive recovery instructions.
+                </p>
+              </div>
+
+              <div id="alert-forgot" class="hidden"></div>
+
+              <form id="form-forgot" class="space-y-3" novalidate
+                onsubmit="if(window.Auth&&window.Auth.forgotPassword){window.Auth.forgotPassword(event);}return false;">
+                <div class="reel-anim-item" style="--item-delay: 1;">
+                  <label for="forgot-email" class="block text-[11px] sm:text-xs font-semibold text-slate-700 mb-1">Registered Work
+                    Email</label>
+                  <div class="relative">
+                    <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+                      <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
+                          d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                      </svg>
+                    </span>
+                    <input type="email" id="forgot-email" name="email" required autocomplete="email"
+                      placeholder="adalinea@gmail.com"
+                      class="w-full pl-9 pr-3 py-2 bg-[#F8FAFC] border border-[#CBD5E1] rounded-xl text-xs text-slate-900 placeholder:text-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#14213d]/25 focus:border-[#14213d] transition-all">
+                  </div>
+                </div>
+
+                <div class="reel-anim-item" style="--item-delay: 2;">
+                  <button type="submit" id="btn-forgot-submit"
+                    class="w-full py-2.5 px-4 rounded-xl bg-gradient-to-r from-[#14213d] via-[#1f3660] to-[#14213d] hover:brightness-110 active:scale-[0.99] text-white text-xs sm:text-sm font-semibold tracking-wide transition-all shadow-md shadow-[#14213d]/30 flex items-center justify-center gap-2 group cursor-pointer">
+                    <span>Send Reset Instructions</span>
+                    <svg class="w-3.5 h-3.5 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24"
+                      stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                    </svg>
+                  </button>
+                </div>
+              </form>
+            </div>
+
+            <div class="mt-4 pt-3 border-t border-[#F1F5F9] text-center pr-0 md:pr-6 reel-anim-item" style="--item-delay: 3;">
+              <a href="#" id="btn-forgot-back-login"
+                class="text-xs font-semibold text-[#14213d] hover:text-[#1f3660] inline-flex items-center gap-1.5 transition-colors cursor-pointer">
+                <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                </svg>
+                <span>Back to Sign In</span>
+              </a>
+            </div>
+          </div>
+
+        </div> <!-- /#auth-stage -->
+    </div>
+  </div>
+
+  <!-- Mobile Top Bar (< lg) -->
+  <header id="app-mobile-header"
+    class="lg:hidden bg-[#494D5F] border-b border-white/10 px-4 py-3 flex items-center justify-between sticky top-0 z-40 shadow-sm hidden">
+    <div class="flex items-center space-x-3">
+      <!-- Mobile Sidebar Toggle -->
+      <button id="btn-mobile-more" type="button"
+        class="btn-sidebar-trigger w-9 h-9 rounded-full border border-white/20 bg-white/10 flex items-center justify-center text-white cursor-pointer"
+        aria-label="Open sidebar menu">
+        <svg class="w-5 h-5 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+        </svg>
+      </button>
+
+      <!-- Brand Mark -->
+      <div class="flex items-center space-x-2.5 cursor-pointer" onclick="window.location.hash='dashboard'">
+        <img src="assets/aurelia-mark.svg" alt="Aurelia Emblem" class="w-8 h-8 rounded-full shadow-xs object-contain">
+        <div class="flex flex-col">
+          <span class="text-sm font-bold text-white tracking-[0.2em] uppercase leading-none"
+            style="font-family: 'Cormorant Garamond', Georgia, serif;">AURELIA</span>
+          <span class="text-[8px] font-semibold text-slate-300 tracking-[0.2em] uppercase leading-tight">Hotel &amp;
+            Restaurant</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Controls Mobile -->
+    <div class="flex items-center space-x-2">
+      <button type="button" class="quick-nav-bill btn-Aurelia-primary py-1 px-3 text-xs">
+        + New Bill
+      </button>
+    </div>
+  </header>
+
+  <!-- Mobile Drawer Backdrop -->
+  <div id="mobile-drawer-backdrop"
+    class="fixed inset-0 bg-[#14213D]/40 backdrop-blur-sm z-40 hidden transition-opacity duration-300"></div>
+
+  <!-- App Wrapper (Sidebar + Main) -->
+  <div id="app-dashboard-wrapper" class="flex flex-1 min-h-screen bg-[#F4F5F7] relative z-10 hidden">
+
+    <!-- =================================================================== -->
+    <!-- SIDEBAR NAVIGATION (Matches Aurelia layout) -->
+    <!-- =================================================================== -->
+    <aside id="app-sidebar"
+      class="fixed lg:sticky top-0 inset-y-0 left-0 z-50 w-64 lg:w-68 flex flex-col justify-between transform -translate-x-full lg:translate-x-0 transition-all duration-300 ease-in-out h-screen overflow-visible">
+
+      <button id="btn-sidebar-collapse" type="button"
+        class="flex items-center justify-center cursor-pointer flex-shrink-0"
+        aria-label="Toggle sidebar" title="Toggle sidebar">
+        <svg class="w-3.5 h-3.5 stroke-current transition-transform duration-300" fill="none" viewBox="0 0 24 24"
+          stroke-width="2.5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+        </svg>
+      </button>
+
+      <!-- Top Brand Section (Fixed at top) -->
+      <div class="p-6 pb-2 sidebar-pad flex-shrink-0">
+        <div id="sidebar-brand-wrapper" class="flex items-center space-x-3 mb-6 relative">
+          <div class="flex items-center space-x-3 cursor-pointer group" onclick="window.location.hash='dashboard'"
+            title="Aurelia Hotel &amp; Restaurant">
+            <!-- Aurelia Gold Medallion Mark -->
+            <div id="sidebar-logo-container"
+              class="w-11 h-11 rounded-full flex items-center justify-center flex-shrink-0 transition-transform duration-300 group-hover:scale-105 shadow-md shadow-amber-500/25">
+              <img id="sidebar-logo-mark" src="assets/aurelia-mark.svg" alt="Aurelia Emblem"
+                class="w-11 h-11 rounded-full object-contain">
+            </div>
+            <div id="sidebar-brand-title" class="flex flex-col min-w-0">
+              <h2 class="text-xl font-bold text-[#14213D] tracking-[0.22em] leading-none uppercase"
+                style="font-family: 'Cormorant Garamond', Georgia, serif;">AURELIA</h2>
+              <div class="w-8 h-[1.5px] bg-[#FCA311] my-1 shadow-xs"></div>
+              <span
+                class="text-[9px] font-semibold text-[#5C677D] tracking-[0.22em] uppercase leading-tight truncate">Hotel
+                &amp; Restaurant</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 1. Dashboard (Active Pill - Fixed at top) -->
+        <nav class="space-y-1.5 mb-1" aria-label="Main navigation">
+          <a href="index.html#dashboard" data-target="dashboard" class="nav-link Aurelia-nav-item active" title="Dashboard">
+            <div class="flex items-center space-x-3.5">
+              <svg class="w-5 h-5 stroke-current flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.8">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z" />
+              </svg>
+              <span class="sidebar-label">Dashboard</span>
+            </div>
+          </a>
+        </nav>
+
+        <!-- Section Label & Underline: Quick Links (Clean Header) -->
+        <div class="sidebar-section-header pt-2 pb-0 px-1">
+          <div class="sidebar-section-divider w-full h-[1px] bg-white/15 mb-2.5"></div>
+          <div class="flex items-center space-x-2">
+            <span class="sidebar-label text-[10px] font-bold tracking-[0.2em] uppercase text-[#FCA311]">Quick
+              Links</span>
+          </div>
+          <div class="sidebar-label w-7 h-[1.5px] bg-[#FCA311] mt-1 rounded-full shadow-xs"></div>
+        </div>
+      </div>
+
+      <!-- =================================================================== -->
+      <!-- QUICK LINKS SECTION: DEDICATED SCROLLABLE CONTAINER                 -->
+      <!-- =================================================================== -->
+      <div id="sidebar-quicklinks-scroll"
+        class="flex-1 min-h-0 overflow-y-auto px-6 py-1 sidebar-pad custom-sidebar-scroll space-y-1.5"
+        style="scrollbar-width: thin; scrollbar-color: rgba(255, 255, 255, 0.22) transparent;">
+
+        <nav class="space-y-1.5 pb-2 pt-1" aria-label="Quick Links navigation">
+
+          <!-- 2. Transactions (Billing Management) -->
+          <a href="index.html#billing" data-target="billing" class="nav-link Aurelia-nav-item" title="Billing Management">
+            <div class="flex items-center space-x-3.5">
+              <svg class="w-5 h-5 stroke-current flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.8">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5z" />
+              </svg>
+              <span class="sidebar-label">Billing</span>
+            </div>
+          </a>
+
+          <!-- 3. Wallet (Orders / POS Cash Register) -->
+          <a href="index.html#orders" data-target="orders" class="nav-link Aurelia-nav-item" title="Order Management">
+            <div class="flex items-center space-x-3.5">
+              <svg class="w-5 h-5 stroke-current flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.8">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M21 12a2.25 2.25 0 00-2.25-2.25H15a3 3 0 11-6 0H5.25A2.25 2.25 0 003 12m18 0v6a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 18v-6m18 0V9M3 12V9m18 0a2.25 2.25 0 00-2.25-2.25H5.25A2.25 2.25 0 003 9m18 0V6a2.25 2.25 0 00-2.25-2.25H5.25A2.25 2.25 0 003 6v3" />
+              </svg>
+              <span class="sidebar-label">Order</span>
+            </div>
+            <span id="badge-pending-orders"
+              class="sidebar-badge text-[11px] px-2 py-0.5 rounded-full bg-[#FCA311] text-[#000000] font-bold">0</span>
+          </a>
+
+          <!-- 4. Goals (Menu Items & Targets) -->
+          <a href="index.html#menu" data-target="menu" class="nav-link Aurelia-nav-item" title="Menu Management">
+            <div class="flex items-center space-x-3.5">
+              <svg class="w-5 h-5 stroke-current flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.8">
+                <circle cx="12" cy="12" r="9" />
+                <circle cx="12" cy="12" r="5" />
+                <circle cx="12" cy="12" r="2" />
+              </svg>
+              <span class="sidebar-label">Menu</span>
+            </div>
+            <span id="badge-menu-count"
+              class="sidebar-badge text-[11px] px-2 py-0.5 rounded-full bg-[#FCA311] text-[#000000] font-bold">0</span>
+          </a>
+
+          <!-- 5. Budget (Customers & Budgets) -->
+          <a href="index.html#customers" data-target="customers" class="nav-link Aurelia-nav-item" title="Customer Management">
+            <div class="flex items-center space-x-3.5">
+              <svg class="w-5 h-5 stroke-current flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.8">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6a7.5 7.5 0 107.5 7.5h-7.5V6z" />
+                <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 10.5H21A7.5 7.5 0 0013.5 3v7.5z" />
+              </svg>
+              <span class="sidebar-label">Customer</span>
+            </div>
+            <span id="badge-customers-count"
+              class="sidebar-badge text-[11px] px-2 py-0.5 rounded-full bg-[#FCA311] text-[#000000] font-bold">0</span>
+          </a>
+
+          <!-- 6. Human Resource Dropdown Group -->
+          <div class="sidebar-dropdown-group">
+            <button type="button" id="btn-nav-hr"
+              class="w-full Aurelia-nav-item flex items-center justify-between text-left group cursor-pointer transition-all"
+              title="Human Resource">
+              <div class="flex items-center space-x-3.5">
+                <svg class="w-5 h-5 stroke-current flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.8">
+                  <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M18 18.72a9.094 9.094 0 003.741-.479 3 3 0 00-4.682-2.72m.94 3.198l.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0112 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 016 18.719m12 0a5.971 5.971 0 00-.941-3.197m0 0A5.995 5.995 0 0012 12.75a5.995 5.995 0 00-5.058 2.772m0 0a3 3 0 00-4.681 2.72 8.986 8.986 0 003.74.477m.999-3.199a5.971 5.971 0 00-.94 3.197M15 6.75a3 3 0 11-6 0 3 3 0 016 0zm6 3a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0zm-13.5 0a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z" />
+                </svg>
+                <span class="sidebar-label">Human Resource</span>
+              </div>
+              <svg id="chevron-nav-hr"
+                class="sidebar-label w-4 h-4 stroke-current text-white/60 group-hover:text-[#FCA311] transition-transform duration-200 rotate-180"
+                fill="none" viewBox="0 0 24 24" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+              </svg>
+            </button>
+
+            <!-- Human Resource Submenu (Collapsible) -->
+            <div id="submenu-human-resource"
+              class="sidebar-submenu pl-5 pr-2 py-2 space-y-1 text-[13px] font-medium border-l border-white/15 ml-5 mt-1 transition-all">
+
+              <!-- 1. HR Document Templates -->
+              <a href="hr-document-templates.html" class="hr-sub-item flex items-center space-x-2.5 py-1.5 px-2 rounded-lg text-slate-300 hover:text-white hover:bg-white/10 transition-colors group cursor-pointer" data-action="hr-doc-templates">
+                <span
+                  class="w-1.5 h-1.5 rounded-full border border-slate-400 group-hover:border-[#FCA311] group-hover:bg-[#FCA311] transition-all flex-shrink-0"></span>
+                <span>HR Document Templates</span>
+              </a>
+
+              <!-- 2. Add Employee -->
+              <a href="add-employee.html" class="hr-sub-item flex items-center space-x-2.5 py-1.5 px-2 rounded-lg text-slate-300 text-sky-400 font-bold active hover:text-white hover:bg-white/10 transition-colors group cursor-pointer" data-action="add-employee">
+                <span
+                  class="w-1.5 h-1.5 rounded-full border border-sky-400 bg-sky-400 group-hover:border-[#FCA311] group-hover:bg-[#FCA311] transition-all flex-shrink-0"></span>
+                <span>Add Employee</span>
+              </a>
+
+              <!-- 3. Employee List -->
+              <a href="employee-list.html" class="hr-sub-item flex items-center space-x-2.5 py-1.5 px-2 rounded-lg text-slate-300 hover:text-white hover:bg-white/10 transition-colors group cursor-pointer" data-action="employee-list">
+                <span
+                  class="w-1.5 h-1.5 rounded-full border border-slate-400 group-hover:border-[#FCA311] group-hover:bg-[#FCA311] transition-all flex-shrink-0"></span>
+                <span>Employee List</span>
+              </a>
+
+              <!-- 4. Holiday List -->
+              <a href="holiday-list.html" class="hr-sub-item flex items-center space-x-2.5 py-1.5 px-2 rounded-lg text-slate-300 hover:text-white hover:bg-white/10 transition-colors group cursor-pointer" data-action="holiday-list">
+                <span
+                  class="w-1.5 h-1.5 rounded-full border border-slate-400 group-hover:border-[#FCA311] group-hover:bg-[#FCA311] transition-all flex-shrink-0"></span>
+                <span>Holiday List</span>
+              </a>
+
+              <!-- 5. Leave Management (Nested Dropdown) -->
+              <div class="nested-dropdown-group">
+                <button type="button" id="btn-sub-leave-mgmt"
+                  class="w-full flex items-center justify-between py-1.5 px-2 rounded-lg text-slate-300 hover:text-white hover:bg-white/10 transition-colors group cursor-pointer text-left">
+                  <div class="flex items-center space-x-2.5">
+                    <span
+                      class="w-1.5 h-1.5 rounded-full border border-slate-400 group-hover:border-[#FCA311] group-hover:bg-[#FCA311] transition-all flex-shrink-0"></span>
+                    <span>Leave Management</span>
+                  </div>
+                  <svg id="chevron-sub-leave"
+                    class="w-3.5 h-3.5 stroke-current text-white/50 group-hover:text-[#FCA311] transition-transform duration-200"
+                    fill="none" viewBox="0 0 24 24" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                  </svg>
+                </button>
+                <!-- Leave Management Sub-items -->
+                <div id="nested-leave-mgmt-menu"
+                  class="pl-4 pr-1 py-1 space-y-1 text-xs border-l border-white/10 ml-4 mt-0.5">
+                  <a href="javascript:void(0)"
+                    class="hr-sub-item flex items-center space-x-2 py-1 px-2 rounded-lg text-slate-300 hover:text-white hover:bg-white/10 transition-colors group cursor-pointer"
+                    data-action="leave-category">
+                    <span
+                      class="w-1 h-1 rounded-full border border-slate-400 group-hover:border-[#FCA311] group-hover:bg-[#FCA311] transition-all flex-shrink-0"></span>
+                    <span>Leave Category</span>
+                  </a>
+                  <a href="javascript:void(0)"
+                    class="hr-sub-item flex items-center space-x-2 py-1 px-2 rounded-lg text-slate-300 hover:text-white hover:bg-white/10 transition-colors group cursor-pointer"
+                    data-action="leave-assign">
+                    <span
+                      class="w-1 h-1 rounded-full border border-slate-400 group-hover:border-[#FCA311] group-hover:bg-[#FCA311] transition-all flex-shrink-0"></span>
+                    <span>Leave Assign</span>
+                  </a>
+                  <a href="javascript:void(0)"
+                    class="hr-sub-item flex items-center space-x-2 py-1 px-2 rounded-lg text-slate-300 hover:text-white hover:bg-white/10 transition-colors group cursor-pointer text-sky-400 font-semibold"
+                    data-action="leave-request">
+                    <span
+                      class="w-1 h-1 rounded-full border border-sky-400 bg-sky-400 transition-all flex-shrink-0"></span>
+                    <span>Leave Request</span>
+                  </a>
+                </div>
+              </div>
+
+              <!-- 6. Attendance List -->
+              <a href="javascript:void(0)"
+                class="hr-sub-item flex items-center space-x-2.5 py-1.5 px-2 rounded-lg text-slate-300 hover:text-white hover:bg-white/10 transition-colors group cursor-pointer"
+                data-action="attendance-list">
+                <span
+                  class="w-1.5 h-1.5 rounded-full border border-slate-400 group-hover:border-[#FCA311] group-hover:bg-[#FCA311] transition-all flex-shrink-0"></span>
+                <span>Attendance List</span>
+              </a>
+
+              <!-- 7. Attendance Report -->
+              <a href="javascript:void(0)"
+                class="hr-sub-item flex items-center space-x-2.5 py-1.5 px-2 rounded-lg text-slate-300 hover:text-white hover:bg-white/10 transition-colors group cursor-pointer"
+                data-action="attendance-report">
+                <span
+                  class="w-1.5 h-1.5 rounded-full border border-slate-400 group-hover:border-[#FCA311] group-hover:bg-[#FCA311] transition-all flex-shrink-0"></span>
+                <span>Attendance Report</span>
+              </a>
+
+              <!-- 8. Payroll (Nested Dropdown) -->
+              <div class="nested-dropdown-group">
+                <button type="button" id="btn-sub-payroll"
+                  class="w-full flex items-center justify-between py-1.5 px-2 rounded-lg text-slate-300 hover:text-white hover:bg-white/10 transition-colors group cursor-pointer text-left">
+                  <div class="flex items-center space-x-2.5">
+                    <span
+                      class="w-1.5 h-1.5 rounded-full border border-slate-400 group-hover:border-[#FCA311] group-hover:bg-[#FCA311] transition-all flex-shrink-0"></span>
+                    <span>Payroll</span>
+                  </div>
+                  <svg id="chevron-sub-payroll"
+                    class="w-3.5 h-3.5 stroke-current text-white/50 group-hover:text-[#FCA311] transition-transform duration-200"
+                    fill="none" viewBox="0 0 24 24" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+                  </svg>
+                </button>
+                <!-- Payroll Sub-items -->
+                <div id="nested-payroll-menu"
+                  class="hidden pl-4 pr-1 py-1 space-y-1 text-xs border-l border-white/10 ml-4 mt-0.5">
+                  <a href="javascript:void(0)"
+                    class="hr-sub-item flex items-center space-x-2 py-1 px-2 rounded-lg text-slate-300 hover:text-white hover:bg-white/10 transition-colors group cursor-pointer"
+                    data-action="salary-grade">
+                    <span
+                      class="w-1 h-1 rounded-full border border-slate-400 group-hover:border-[#FCA311] group-hover:bg-[#FCA311] transition-all flex-shrink-0"></span>
+                    <span>Salary Grade</span>
+                  </a>
+                  <a href="javascript:void(0)"
+                    class="hr-sub-item flex items-center space-x-2 py-1 px-2 rounded-lg text-slate-300 hover:text-white hover:bg-white/10 transition-colors group cursor-pointer"
+                    data-action="manage-salary">
+                    <span
+                      class="w-1 h-1 rounded-full border border-slate-400 group-hover:border-[#FCA311] group-hover:bg-[#FCA311] transition-all flex-shrink-0"></span>
+                    <span>Manage Salary</span>
+                  </a>
+                  <a href="javascript:void(0)"
+                    class="hr-sub-item flex items-center space-x-2 py-1 px-2 rounded-lg text-slate-300 hover:text-white hover:bg-white/10 transition-colors group cursor-pointer"
+                    data-action="disburse-salary-update">
+                    <span
+                      class="w-1 h-1 rounded-full border border-slate-400 group-hover:border-[#FCA311] group-hover:bg-[#FCA311] transition-all flex-shrink-0"></span>
+                    <span>Disburse Salary Update</span>
+                  </a>
+                  <a href="javascript:void(0)"
+                    class="hr-sub-item flex items-center space-x-2 py-1 px-2 rounded-lg text-slate-300 hover:text-white hover:bg-white/10 transition-colors group cursor-pointer"
+                    data-action="pay-slip">
+                    <span
+                      class="w-1 h-1 rounded-full border border-slate-400 group-hover:border-[#FCA311] group-hover:bg-[#FCA311] transition-all flex-shrink-0"></span>
+                    <span>Pay Slip</span>
+                  </a>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- 6b. Department Dropdown Group -->
+          <div class="sidebar-dropdown-group">
+            <button type="button" id="btn-nav-dept"
+              class="w-full Aurelia-nav-item flex items-center justify-between text-left group cursor-pointer transition-all"
+              title="Department">
+              <div class="flex items-center space-x-3.5">
+                <svg class="w-5 h-5 stroke-current flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.8">
+                  <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M3.75 21h16.5M4.5 3h15M5.25 3v18m13.5-18v18M9 6.75h1.5m-1.5 3h1.5m-1.5 3h1.5m3-6H15m-1.5 3H15m-1.5 3H15M9 21v-3.375c0-.621.504-1.125 1.125-1.125h3.75c.621 0 1.125.504 1.125 1.125V21" />
+                </svg>
+                <span class="sidebar-label">Department</span>
+              </div>
+              <svg id="chevron-nav-dept"
+                class="sidebar-label w-4 h-4 stroke-current text-white/60 group-hover:text-[#FCA311] transition-transform duration-200"
+                fill="none" viewBox="0 0 24 24" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+              </svg>
+            </button>
+
+            <!-- Department Submenu (Collapsible) -->
+            <div id="submenu-department"
+              class="sidebar-submenu hidden pl-5 pr-2 py-2 space-y-1 text-[13px] font-medium border-l border-white/15 ml-5 mt-1 transition-all">
+
+              <!-- 1. All Department -->
+              <a href="javascript:void(0)"
+                class="dept-sub-item flex items-center space-x-2.5 py-1.5 px-2 rounded-lg text-slate-300 hover:text-white hover:bg-white/10 transition-colors group cursor-pointer"
+                data-action="all-department" id="btn-all-department">
+                <span
+                  class="w-1.5 h-1.5 rounded-full border border-slate-400 group-hover:border-[#FCA311] group-hover:bg-[#FCA311] transition-all flex-shrink-0"></span>
+                <span>All Department</span>
+              </a>
+
+              <!-- 2. Add Department -->
+              <a href="javascript:void(0)"
+                class="dept-sub-item flex items-center space-x-2.5 py-1.5 px-2 rounded-lg text-slate-300 hover:text-white hover:bg-white/10 transition-colors group cursor-pointer"
+                data-action="add-department" id="btn-add-department">
+                <span
+                  class="w-1.5 h-1.5 rounded-full border border-slate-400 group-hover:border-[#FCA311] group-hover:bg-[#FCA311] transition-all flex-shrink-0"></span>
+                <span>Add Department</span>
+              </a>
+
+            </div>
+          </div>
+
+          <!-- 6. Analytics (Revenue Analytics) -->
+          <a href="index.html#analytics" data-target="analytics" class="nav-link Aurelia-nav-item" title="Analytics">
+            <div class="flex items-center space-x-3.5">
+              <svg class="w-5 h-5 stroke-current flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.8">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" />
+              </svg>
+              <span class="sidebar-label">Analytics</span>
+            </div>
+          </a>
+        </nav>
+      </div>
+
+      <!-- Bottom Sidebar Controls (Help, Log out - Fixed at bottom) -->
+      <div class="p-6 pt-3 space-y-3 sidebar-pad flex-shrink-0 border-t border-white/10" id="sidebar-bottom-controls">
+
+        <!-- Help Action -->
+        <button type="button" id="btn-sidebar-help"
+          class="w-full flex items-center space-x-3.5 px-4 py-2.5 rounded-xl text-[#14213D] hover:text-[#000000] hover:bg-white text-sm font-semibold transition-all text-left"
+          title="Support">
+          <svg class="w-5 h-5 stroke-current flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.8">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M12 18h.008v.008H12V18z" />
+            <circle cx="12" cy="12" r="9" />
+          </svg>
+          <span class="sidebar-label">Support</span>
+        </button>
+
+        <!-- Log out Action -->
+        <button type="button" id="btn-sidebar-logout"
+          class="w-full flex items-center space-x-3.5 px-4 py-2.5 rounded-xl text-[#14213D] hover:text-[#000000] hover:bg-white text-sm font-semibold transition-all text-left"
+          title="Log out">
+          <svg class="w-5 h-5 stroke-current flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.8">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75" />
+          </svg>
+          <span class="sidebar-label">Log out</span>
+        </button>
+      </div>
+
+    </aside>
+
+    <!-- =================================================================== -->
+    <!-- MAIN CONTENT CONTAINER -->
+    <!-- =================================================================== -->
+    <main id="main-app-content" class="flex-1 min-w-0 flex flex-col min-h-screen">
+
+      <!-- TOP HEADER (Welcome back, Shraoshi / Adaline Lively, Search, Bell, Profile) -->
+      <header
+        class="px-6 sm:px-8 pt-6 pb-4 flex flex-col md:flex-row md:items-center md:justify-between gap-4 relative z-10">
+        <div>
+          <h1 class="text-2xl sm:text-3xl font-extrabold text-[#14213D] dark:text-white tracking-tight" id="topbar-welcome-title">Add New Employee</h1>
+          <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1 font-medium">Register hotel team members, assign operational departments, shifts & payroll profiles</p>
+        </div>
+
+        <!-- Top Right Controls (Notifications, Profile Capsule) -->
+        <div class="flex items-center space-x-3.5 self-start md:self-auto">
+
+          <!-- Notification Bell Button (Circle with 🔔 and badge "1") -->
+          <div class="relative">
+            <button type="button" id="btn-top-notifications"
+              class="w-10 h-10 rounded-full border border-[#E5E5E5] bg-white flex items-center justify-center text-[#14213D] hover:border-[#FCA311] shadow-xs transition-all cursor-pointer relative"
+              aria-label="Notifications">
+              <svg class="w-4 h-4 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0" />
+              </svg>
+              <!-- Red Badge Indicator (1) -->
+              <span
+                class="absolute top-1 right-1 w-4 h-4 rounded-full bg-rose-500 text-white text-[9px] font-extrabold flex items-center justify-center shadow-xs">
+                1
+              </span>
+            </button>
+          </div>
+
+          <!-- Settings Button (Gear Icon between Notification and Avatar) -->
+          <button type="button" id="btn-top-settings" data-target="settings"
+            class="nav-link w-10 h-10 flex items-center justify-center text-[#5C677D] hover:text-[#FCA311] transition-all cursor-pointer relative"
+            title="Settings" aria-label="Settings">
+            <svg class="w-7 h-7 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.324.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 011.37.49l1.296 2.247a1.125 1.125 0 01-.26 1.431l-1.003.827c-.293.24-.438.613-.431.992a6.759 6.759 0 010 .255c-.007.378.138.75.43.99l1.005.828c.424.35.534.954.26 1.43l-1.298 2.247a1.125 1.125 0 01-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.57 6.57 0 01-.22.128c-.331.183-.581.495-.644.869l-.213 1.28c-.09.543-.56.941-1.11.941h-2.594c-.55 0-1.02-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 01-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 01-1.369-.49l-1.297-2.247a1.125 1.125 0 01.26-1.431l1.004-.827c.292-.24.437-.613.43-.992a6.932 6.932 0 010-.255c.007-.378-.138-.75-.43-.99l-1.004-.828a1.125 1.125 0 01-.26-1.43l1.297-2.247a1.125 1.125 0 011.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.087.22-.128.332-.183.582-.495.644-.869l.214-1.281z" />
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+            </svg>
+          </button>
+
+          <!-- User Profile Capsule (Avatar Button) -->
+          <button type="button" id="topbar-user-avatar"
+            class="w-9 h-9 rounded-full bg-[#14213D] text-[#FCA311] font-bold text-xs flex items-center justify-center shadow-xs cursor-pointer hover:ring-2 hover:ring-[#FCA311] hover:scale-105 transition-all overflow-hidden relative group"
+            title="My Profile" aria-label="Open User Profile">
+            <span id="topbar-user-avatar-text">AL</span>
+            <img id="topbar-user-avatar-img" src="" alt="Profile Photo" class="w-full h-full object-cover hidden">
+          </button>
+
+
+        </div>
+      </header>
+
+      <!-- SUB-ACTION BAR: Date Filter Pill & Widgets Action Buttons -->
+      <div
+        class="px-6 sm:px-8 pb-1.5 sm:pb-2 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 relative z-10">
+
+        <!-- Left: Date Range Calendar ("From" this "To" this) -->
+        <div class="flex flex-wrap items-center gap-2.5">
+          <!-- Calendar Range Capsule -->
+          <div
+            class="calendar-range-capsule flex items-center bg-white rounded-full px-3 py-1.5 border border-[#E5E5E5] shadow-xs hover:border-[#FCA311] transition-all cursor-pointer">
+            <!-- First Calendar Symbol (Live, Clickable) -->
+            <button type="button" class="calendar-icon-trigger p-1 mr-1.5 text-[#FCA311] cursor-pointer"
+              title="Choose date">
+              <svg class="w-4 h-4 stroke-current flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.8">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
+              </svg>
+            </button>
+            <!-- From Date Input -->
+            <div class="flex items-center space-x-1">
+              <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">From</span>
+              <input type="date" id="input-global-date-from" value="2026-01-01"
+                class="date-picker-input text-xs font-bold text-[#14213D] bg-transparent border-0 focus:outline-none cursor-pointer"
+                title="Select date">
+            </div>
+            <input type="date" id="input-global-date-to" class="hidden">
+          </div>
+        </div>
+
+        <!-- Right: "+ Add new widget" Button -->
+        <div class="flex items-center space-x-3">
+          <!-- + Add new widget Button (Solid Gold Pill) -->
+          <button type="button" id="btn-add-new-widget"
+            class="btn-Aurelia-primary text-xs py-2 px-4 shadow-md shadow-amber-500/20">
+            <svg class="w-4 h-4 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2.2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+            </svg>
+            <span>Add new Order</span>
+          </button>
+        </div>
+
+      </div>
+
+      <!-- MAIN SCROLLABLE DASHBOARD VIEW CONTAINER -->
+      <div class="px-6 sm:px-8 pb-10 flex-1">
+
+        <!-- ============================================================= -->
+        <!-- 10. ADD EMPLOYEE SECTION (STANDALONE PAGE)                    -->
+        <!-- ============================================================= -->
+        <section id="section-add-employee" class="space-y-6">
+          <!-- Page Header & Breadcrumb -->
+          <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between pb-3 gap-3 border-b border-slate-200 dark:border-slate-800">
+            <div>
+              <div class="flex items-center space-x-2 text-xs text-slate-400 mb-1">
+                <button type="button" class="btn-back-to-employees hover:text-[#FCA311] transition-colors flex items-center space-x-1 font-semibold">
+                  <svg class="w-3.5 h-3.5 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18" />
+                  </svg>
+                  <span>Staff Directory</span>
+                </button>
+                <span>/</span>
+                <span class="text-slate-600 dark:text-slate-300 font-bold">New Onboarding</span>
+              </div>
+              <h2 class="text-lg font-bold text-slate-900 dark:text-white">Add New Employee</h2>
+              <p class="text-xs text-slate-400">Register hotel team members, assign operational departments, shifts & payroll profiles</p>
+            </div>
+            <div class="flex items-center space-x-2.5">
+              <button type="button" class="btn-back-to-employees btn-Aurelia-secondary text-xs py-2 px-4">
+                Cancel
+              </button>
+              <button type="button" id="btn-submit-add-emp-top" class="btn-Aurelia-primary text-xs py-2 px-4 flex items-center space-x-1.5 shadow-sm shadow-[#FCA311]/20">
+                <svg class="w-4 h-4 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                </svg>
+                <span>Save & Onboard</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Add Employee Form Grid -->
+          <form id="form-standalone-add-employee" class="grid grid-cols-1 lg:grid-cols-3 gap-6" onsubmit="return false;">
+            <!-- Left 2 Columns: Main Form Fields -->
+            <div class="lg:col-span-2 space-y-6">
+              <!-- 1. Personal Details Card -->
+              <div class="Aurelia-card p-6 space-y-4">
+                <div class="flex items-center space-x-3 pb-3 border-b border-slate-100 dark:border-slate-800">
+                  <div class="w-8 h-8 rounded-lg bg-[#14213D] text-[#FCA311] flex items-center justify-center font-bold text-xs flex-shrink-0">
+                    01
+                  </div>
+                  <div>
+                    <h3 class="text-sm font-bold text-slate-900 dark:text-white">Personal Information</h3>
+                    <p class="text-[11px] text-slate-400">Basic identification & legal contact credentials</p>
+                  </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+                  <div>
+                    <label class="block font-bold text-slate-700 dark:text-slate-300 mb-1">
+                      Full Legal Name <span class="text-rose-500">*</span>
+                    </label>
+                    <input type="text" id="add-emp-name" required class="Aurelia-input w-full font-medium"
+                      placeholder="e.g. Vikramaditya Roy">
+                  </div>
+                  <div>
+                    <label class="block font-bold text-slate-700 dark:text-slate-300 mb-1">
+                      Employee ID <span class="text-xs text-slate-400">(Auto Generated)</span>
+                    </label>
+                    <input type="text" id="add-emp-id" readonly class="Aurelia-input w-full font-mono bg-slate-50 dark:bg-slate-900/50 text-slate-500"
+                      value="AUR-EMP-2026-049">
+                  </div>
+
+                  <div>
+                    <label class="block font-bold text-slate-700 dark:text-slate-300 mb-1">
+                      Email Address <span class="text-rose-500">*</span>
+                    </label>
+                    <input type="email" id="add-emp-email" required class="Aurelia-input w-full font-medium"
+                      placeholder="e.g. vikram.roy@aureliahotel.com">
+                  </div>
+                  <div>
+                    <label class="block font-bold text-slate-700 dark:text-slate-300 mb-1">
+                      Mobile Phone Number <span class="text-rose-500">*</span>
+                    </label>
+                    <input type="tel" id="add-emp-phone" required class="Aurelia-input w-full font-medium"
+                      placeholder="e.g. +91 98450 11223">
+                  </div>
+
+                  <div>
+                    <label class="block font-bold text-slate-700 dark:text-slate-300 mb-1">
+                      Date of Birth
+                    </label>
+                    <input type="date" id="add-emp-dob" class="Aurelia-input w-full font-medium"
+                      value="1995-05-18">
+                  </div>
+                  <div>
+                    <label class="block font-bold text-slate-700 dark:text-slate-300 mb-1">
+                      Gender
+                    </label>
+                    <select id="add-emp-gender" class="Aurelia-input w-full font-semibold">
+                      <option value="Male">Male</option>
+                      <option value="Female">Female</option>
+                      <option value="Non-Binary">Non-Binary</option>
+                      <option value="Prefer not to say">Prefer not to say</option>
+                    </select>
+                  </div>
+
+                  <div class="sm:col-span-2">
+                    <label class="block font-bold text-slate-700 dark:text-slate-300 mb-1">
+                      Residential Address
+                    </label>
+                    <textarea id="add-emp-address" rows="2" class="Aurelia-input w-full font-medium"
+                      placeholder="Permanent residential address, city, and pincode"></textarea>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 2. Operational Department & Shift Assignment Card -->
+              <div class="Aurelia-card p-6 space-y-4">
+                <div class="flex items-center space-x-3 pb-3 border-b border-slate-100 dark:border-slate-800">
+                  <div class="w-8 h-8 rounded-lg bg-[#14213D] text-[#FCA311] flex items-center justify-center font-bold text-xs flex-shrink-0">
+                    02
+                  </div>
+                  <div>
+                    <h3 class="text-sm font-bold text-slate-900 dark:text-white">Department & Station Assignment</h3>
+                    <p class="text-[11px] text-slate-400">Designation, operational duty desk & rotation shift</p>
+                  </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+                  <div>
+                    <label class="block font-bold text-slate-700 dark:text-slate-300 mb-1">
+                      Department <span class="text-rose-500">*</span>
+                    </label>
+                    <select id="add-emp-dept" class="Aurelia-input w-full font-semibold">
+                      <option value="Front Office">Front Office</option>
+                      <option value="Culinary & Kitchen">Culinary & Kitchen</option>
+                      <option value="Food & Beverage">Food & Beverage</option>
+                      <option value="Housekeeping">Housekeeping</option>
+                      <option value="Engineering & Maintenance">Engineering & Maintenance</option>
+                      <option value="Security & Operations">Security & Operations</option>
+                      <option value="Human Resources & Admin">Human Resources & Admin</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label class="block font-bold text-slate-700 dark:text-slate-300 mb-1">
+                      Job Designation / Title <span class="text-rose-500">*</span>
+                    </label>
+                    <input type="text" id="add-emp-role" required class="Aurelia-input w-full font-medium"
+                      placeholder="e.g. Guest Relations Executive, Sous Chef">
+                  </div>
+
+                  <div>
+                    <label class="block font-bold text-slate-700 dark:text-slate-300 mb-1">
+                      Assigned Station / Location <span class="text-rose-500">*</span>
+                    </label>
+                    <input type="text" id="add-emp-station" required class="Aurelia-input w-full font-medium"
+                      placeholder="e.g. Front Desk Station 2, Main Kitchen Prep Bay">
+                  </div>
+                  <div>
+                    <label class="block font-bold text-slate-700 dark:text-slate-300 mb-1">
+                      Shift Timing <span class="text-rose-500">*</span>
+                    </label>
+                    <select id="add-emp-shift" class="Aurelia-input w-full font-semibold">
+                      <option value="07:00 - 15:30 (Morning)">Morning Shift (07:00 - 15:30)</option>
+                      <option value="11:00 - 19:30 (Day)">Day Shift (11:00 - 19:30)</option>
+                      <option value="15:30 - 00:00 (Evening)">Evening Shift (15:30 - 00:00)</option>
+                      <option value="23:00 - 07:30 (Night)">Night Shift (23:00 - 07:30)</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label class="block font-bold text-slate-700 dark:text-slate-300 mb-1">
+                      Employment Type
+                    </label>
+                    <select id="add-emp-type" class="Aurelia-input w-full font-semibold">
+                      <option value="Full-Time Permanent">Full-Time Permanent</option>
+                      <option value="Probationary (6 Months)">Probationary (6 Months)</option>
+                      <option value="Fixed-Term Contract">Fixed-Term Contract</option>
+                      <option value="Hospitality Trainee">Hospitality Trainee</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label class="block font-bold text-slate-700 dark:text-slate-300 mb-1">
+                      Date of Joining
+                    </label>
+                    <input type="date" id="add-emp-doj" class="Aurelia-input w-full font-medium"
+                      value="2026-10-31">
+                  </div>
+                </div>
+              </div>
+
+              <!-- 3. Emergency Contacts Card -->
+              <div class="Aurelia-card p-6 space-y-4">
+                <div class="flex items-center space-x-3 pb-3 border-b border-slate-100 dark:border-slate-800">
+                  <div class="w-8 h-8 rounded-lg bg-[#14213D] text-[#FCA311] flex items-center justify-center font-bold text-xs flex-shrink-0">
+                    03
+                  </div>
+                  <div>
+                    <h3 class="text-sm font-bold text-slate-900 dark:text-white">Emergency Contacts & Verification</h3>
+                    <p class="text-[11px] text-slate-400">Next of kin & national ID verification</p>
+                  </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
+                  <div>
+                    <label class="block font-bold text-slate-700 dark:text-slate-300 mb-1">
+                      Emergency Contact Name
+                    </label>
+                    <input type="text" id="add-emp-emer-name" class="Aurelia-input w-full font-medium"
+                      placeholder="e.g. Sunita Roy">
+                  </div>
+                  <div>
+                    <label class="block font-bold text-slate-700 dark:text-slate-300 mb-1">
+                      Relationship
+                    </label>
+                    <input type="text" id="add-emp-emer-rel" class="Aurelia-input w-full font-medium"
+                      placeholder="e.g. Spouse / Parent">
+                  </div>
+                  <div>
+                    <label class="block font-bold text-slate-700 dark:text-slate-300 mb-1">
+                      Emergency Phone
+                    </label>
+                    <input type="tel" id="add-emp-emer-phone" class="Aurelia-input w-full font-medium"
+                      placeholder="e.g. +91 98450 99887">
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right Column: Live Badge Preview & Compensation -->
+            <div class="space-y-6">
+              <!-- Live Employee Badge Card -->
+              <div class="Aurelia-card p-6 text-center space-y-4 bg-gradient-to-b from-[#14213D]/5 to-transparent dark:from-slate-800/40">
+                <div class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Digital Hotel ID Badge</div>
+                <div class="relative inline-block mx-auto">
+                  <div id="preview-emp-avatar" class="w-20 h-20 rounded-full bg-[#14213D] text-[#FCA311] font-black text-2xl flex items-center justify-center border-4 border-white dark:border-slate-800 shadow-md mx-auto">
+                    VR
+                  </div>
+                  <span class="absolute bottom-0 right-0 w-5 h-5 rounded-full bg-emerald-500 border-2 border-white dark:border-slate-800" title="Active"></span>
+                </div>
+                <div>
+                  <h4 id="preview-emp-name-display" class="font-bold text-base text-slate-900 dark:text-white">Vikramaditya Roy</h4>
+                  <p id="preview-emp-role-display" class="text-xs text-[#14213D] dark:text-[#FCA311] font-semibold">Guest Relations Executive</p>
+                  <p id="preview-emp-dept-display" class="text-[11px] text-slate-400">Front Office • On Duty</p>
+                </div>
+                <div class="p-3 bg-white dark:bg-slate-800/80 rounded-xl border border-slate-200/60 dark:border-slate-700 text-left text-xs space-y-1.5 font-medium">
+                  <div class="flex justify-between">
+                    <span class="text-slate-400">ID Code:</span>
+                    <span id="preview-emp-id-display" class="font-mono font-bold text-slate-700 dark:text-slate-300">AUR-EMP-2026-049</span>
+                  </div>
+                  <div class="flex justify-between">
+                    <span class="text-slate-400">Shift:</span>
+                    <span id="preview-emp-shift-display" class="font-mono text-slate-700 dark:text-slate-300">Morning (07:00-15:30)</span>
+                  </div>
+                  <div class="flex justify-between">
+                    <span class="text-slate-400">Status:</span>
+                    <span class="text-emerald-600 font-bold">● Active Roster</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Compensation & Compliance Tier Card -->
+              <div class="Aurelia-card p-6 space-y-4">
+                <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400">Remuneration & Status</h4>
+
+                <div class="space-y-3 text-xs">
+                  <div>
+                    <label class="block font-bold text-slate-700 dark:text-slate-300 mb-1">
+                      Monthly Base Salary (₹)
+                    </label>
+                    <div class="relative">
+                      <span class="absolute left-3 top-2.5 font-bold text-slate-400">₹</span>
+                      <input type="number" id="add-emp-salary" class="Aurelia-input w-full pl-7 font-bold text-slate-900 dark:text-white"
+                        value="45000" step="500">
+                    </div>
+                  </div>
+
+                  <div>
+                    <label class="block font-bold text-slate-700 dark:text-slate-300 mb-1">
+                      Initial Duty Status
+                    </label>
+                    <select id="add-emp-status" class="Aurelia-input w-full font-semibold">
+                      <option value="On Duty">● On Duty (Immediate Active)</option>
+                      <option value="On Leave">● On Leave (Scheduled start)</option>
+                    </select>
+                  </div>
+
+                  <div class="pt-3 border-t border-slate-100 dark:border-slate-800 space-y-2">
+                    <label class="flex items-center space-x-2.5 text-xs text-slate-600 dark:text-slate-300 cursor-pointer">
+                      <input type="checkbox" id="add-emp-pf" checked class="rounded text-[#14213D] focus:ring-[#FCA311]">
+                      <span>Enrolled in Provident Fund (PF)</span>
+                    </label>
+                    <label class="flex items-center space-x-2.5 text-xs text-slate-600 dark:text-slate-300 cursor-pointer">
+                      <input type="checkbox" id="add-emp-ins" checked class="rounded text-[#14213D] focus:ring-[#FCA311]">
+                      <span>Group Hospitality Medical Coverage</span>
+                    </label>
+                    <label class="flex items-center space-x-2.5 text-xs text-slate-600 dark:text-slate-300 cursor-pointer">
+                      <input type="checkbox" id="add-emp-bgv" checked class="rounded text-[#14213D] focus:ring-[#FCA311]">
+                      <span>Background Verification Cleared</span>
+                    </label>
+                  </div>
+                </div>
+
+                <div class="pt-2">
+                  <button type="submit" id="btn-submit-add-emp" class="w-full btn-Aurelia-primary py-2.5 text-xs font-bold shadow-md shadow-[#FCA311]/25 flex items-center justify-center space-x-2">
+                    <svg class="w-4 h-4 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                    </svg>
+                    <span>Onboard & Register Staff</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </form>
+        </section>
+
+      </div>
+    </main>
+  </div>
+
+  
+
+  <!-- TOAST NOTIFICATIONS -->
+  <div id="toast-container" class="fixed bottom-5 right-5 z-50 space-y-2 pointer-events-none"></div>
+
+  <!-- PRINT INVOICE AREA -->
+  <div id="print-invoice-area" class="hidden"></div>
+
+  <!-- Authentication Controller -->
+  <script src="auth.js"></script>
+  <!-- Main JavaScript Logic -->
+  <script src="main.js"></script>
+</body>
+
+</html>

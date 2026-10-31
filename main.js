@@ -538,9 +538,25 @@ $(document).ready(function () {
       $activeItem.find('span.rounded-full').addClass('border-sky-400 bg-sky-400').removeClass('border-slate-400');
     }
 
+    // If target section is not present in the current DOM (e.g. cross-navigating between index.html and standalone HR pages)
+    const $targetSec = $('#section-' + target);
+    if ($targetSec.length === 0) {
+      const pageFileMap = {
+        'hr-documents': 'hr-document-templates.html',
+        'add-employee': 'add-employee.html',
+        'employees': 'employee-list.html',
+        'holidays': 'holiday-list.html'
+      };
+      if (pageFileMap[target]) {
+        window.location.href = pageFileMap[target];
+      } else {
+        window.location.href = 'index.html#' + target;
+      }
+      return;
+    }
+
     // Hide all sections, show target
     $('main section').addClass('hidden').attr('hidden', true);
-    const $targetSec = $('#section-' + target);
     $targetSec.removeClass('hidden').removeAttr('hidden');
 
     // Replay smooth glassmorphic entrance animation on cards
@@ -669,8 +685,18 @@ $(document).ready(function () {
 
   // Human Resource Sub-Items Actions
   $('.hr-sub-item').on('click', function (e) {
-    e.preventDefault();
     const action = $(this).data('action');
+    const href = $(this).attr('href');
+
+    if (href && !href.startsWith('#') && !href.startsWith('javascript:')) {
+      const currentFile = window.location.pathname.split('/').pop() || 'index.html';
+      if (currentFile !== href) {
+        // Navigate directly to the standalone page
+        return;
+      }
+    }
+
+    e.preventDefault();
 
     $('.hr-sub-item').removeClass('text-sky-400 font-bold active').addClass('text-slate-300');
     $('.hr-sub-item span.rounded-full').removeClass('border-sky-400 bg-sky-400').addClass('border-slate-400');
@@ -678,29 +704,45 @@ $(document).ready(function () {
     $(this).find('span.rounded-full').addClass('border-sky-400 bg-sky-400').removeClass('border-slate-400');
 
     if (action === 'hr-doc-templates') {
-      window.location.hash = 'hr-documents';
-      switchSection('hr-documents');
+      if ($('#section-hr-documents').length > 0) {
+        window.location.hash = 'hr-documents';
+        switchSection('hr-documents');
+      } else {
+        window.location.href = 'hr-document-templates.html';
+      }
       showToast('Viewing HR Document Templates & Legal Agreements', 'info');
       return;
     }
 
     if (action === 'add-employee') {
-      window.location.hash = 'add-employee';
-      switchSection('add-employee');
+      if ($('#section-add-employee').length > 0) {
+        window.location.hash = 'add-employee';
+        switchSection('add-employee');
+      } else {
+        window.location.href = 'add-employee.html';
+      }
       showToast('Onboard New Employee: Fill registration details', 'info');
       return;
     }
 
     if (action === 'employee-list') {
-      window.location.hash = 'employees';
-      switchSection('employees');
+      if ($('#section-employees').length > 0) {
+        window.location.hash = 'employees';
+        switchSection('employees');
+      } else {
+        window.location.href = 'employee-list.html';
+      }
       showToast('Viewing Employee Directory (48 staff members)', 'info');
       return;
     }
 
     if (action === 'holiday-list') {
-      window.location.hash = 'holidays';
-      switchSection('holidays');
+      if ($('#section-holidays').length > 0) {
+        window.location.hash = 'holidays';
+        switchSection('holidays');
+      } else {
+        window.location.href = 'holiday-list.html';
+      }
       showToast('Viewing Hotel Holiday & Observance Calendar 2026', 'info');
       return;
     }
@@ -2260,8 +2302,7 @@ $(document).ready(function () {
   $('#btn-dashboard-total-staff').on('click', function (e) {
     e.preventDefault();
     $('#modal-total-staff').addClass('hidden').hide();
-    window.location.hash = 'employees';
-    switchSection('employees');
+    window.location.href = 'employee-list.html';
   });
 
   $(document).on('click', '.tab-staff-status', function () {
@@ -5188,11 +5229,19 @@ $(document).ready(function () {
     showToast(`Staff member ${name} onboarded successfully!`, 'success');
 
     // Reset Form
-    $('#form-standalone-add-employee')[0].reset();
+    if ($('#form-standalone-add-employee').length > 0) {
+      $('#form-standalone-add-employee')[0].reset();
+    }
 
     // Redirect to Employee Directory to view newly onboarded staff member
-    window.location.hash = 'employees';
-    switchSection('employees');
+    if ($('#section-employees').length > 0) {
+      window.location.hash = 'employees';
+      switchSection('employees');
+    } else {
+      setTimeout(() => {
+        window.location.href = 'employee-list.html';
+      }, 300);
+    }
   }
 
   $('#btn-submit-add-emp, #btn-submit-add-emp-top').on('click', function (e) {
@@ -5202,8 +5251,22 @@ $(document).ready(function () {
 
   $('.btn-back-to-employees').on('click', function (e) {
     e.preventDefault();
-    window.location.hash = 'employees';
-    switchSection('employees');
+    if ($('#section-employees').length > 0) {
+      window.location.hash = 'employees';
+      switchSection('employees');
+    } else {
+      window.location.href = 'employee-list.html';
+    }
+  });
+
+  $('#btn-page-add-employee').on('click', function (e) {
+    e.preventDefault();
+    if ($('#section-add-employee').length > 0) {
+      window.location.hash = 'add-employee';
+      switchSection('add-employee');
+    } else {
+      window.location.href = 'add-employee.html';
+    }
   });
 
   // =========================================================================
@@ -5304,7 +5367,14 @@ $(document).ready(function () {
   });
 
   // Initial Boot - guarded by authentication
-  const initHash = window.location.hash.replace('#', '') || 'dashboard';
+  const currentPath = (window.location.pathname || '').toLowerCase();
+  let defaultSection = 'dashboard';
+  if (currentPath.includes('employee-list')) defaultSection = 'employees';
+  else if (currentPath.includes('add-employee')) defaultSection = 'add-employee';
+  else if (currentPath.includes('hr-document')) defaultSection = 'hr-documents';
+  else if (currentPath.includes('holiday')) defaultSection = 'holidays';
+
+  const initHash = window.location.hash.replace('#', '') || defaultSection;
   if (!window.Auth || window.Auth.isAuthenticated()) {
     switchSection(initHash);
     renderDashboard();
