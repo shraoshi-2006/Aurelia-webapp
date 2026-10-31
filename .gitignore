@@ -1,0 +1,4 @@
+node_modules/
+auth.db
+auth.db-shm
+auth.db-wal

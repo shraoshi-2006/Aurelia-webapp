@@ -8,10 +8,14 @@
 (function () {
   'use strict';
 
-  // API Base URL: relative when running on port 3000, or http://localhost:3000 otherwise
-  const API_BASE = (window.location.protocol.startsWith('http') && window.location.port === '3000')
+  // API Base URL configuration:
+  // - When running locally via node server.js on port 3000: use relative ''
+  // - When running locally via Live Server (port 5500, etc.) over HTTP: use 'http://localhost:3000'
+  // - When running on live hosts (Vercel, Netlify, custom domain): set to null so it immediately uses localStorage
+  const isLocalHost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+  const API_BASE = (window.location.port === '3000')
     ? ''
-    : 'http://localhost:3000';
+    : (isLocalHost && window.location.protocol === 'http:' ? 'http://localhost:3000' : null);
 
   const STORAGE_KEY_TOKEN = 'aurelia_auth_token';
   const STORAGE_KEY_USER = 'aurelia_auth_user';
@@ -366,34 +370,43 @@
     const token = AuthState.token;
     const cachedUserStr = localStorage.getItem(STORAGE_KEY_USER) || sessionStorage.getItem(STORAGE_KEY_USER);
 
-    // First try backend API if token exists
+    // First try backend API if token exists and API_BASE is configured
     if (token) {
-      try {
-        const response = await fetch(`${API_BASE}/api/auth/me`, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-          },
-          credentials: 'include'
-        });
+      if (API_BASE) {
+        try {
+          const response = await fetch(`${API_BASE}/api/auth/me`, {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`
+            },
+            credentials: 'include'
+          });
 
-        if (response.ok) {
-          const data = await response.json();
-          if (data.authenticated && data.user) {
-            renderAuthenticatedState(data.user);
-            return;
+          if (response.ok) {
+            const data = await response.json();
+            if (data.authenticated && data.user) {
+              renderAuthenticatedState(data.user);
+              return;
+            }
+          }
+        } catch (err) {
+          // Fallback to cached user if server is offline
+          if (cachedUserStr) {
+            try {
+              const cachedUser = JSON.parse(cachedUserStr);
+              renderAuthenticatedState(cachedUser);
+              return;
+            } catch (e) {}
           }
         }
-      } catch (err) {
-        // Fallback to cached user if server is offline
-        if (cachedUserStr) {
-          try {
-            const cachedUser = JSON.parse(cachedUserStr);
-            renderAuthenticatedState(cachedUser);
-            return;
-          } catch (e) {}
-        }
+      } else if (cachedUserStr) {
+        // Pure static mode: validate directly with cached session
+        try {
+          const cachedUser = JSON.parse(cachedUserStr);
+          renderAuthenticatedState(cachedUser);
+          return;
+        } catch (e) {}
       }
     }
 
@@ -441,6 +454,47 @@
 
     setButtonLoading('btn-login-submit', true);
 
+    // Local / Offline authentication helper
+    function loginLocally() {
+      const localUsers = getLocalUsers();
+      const matchedUser = localUsers.find(u => 
+        u.email.toLowerCase() === email.toLowerCase() && 
+        u.password === password
+      );
+
+      if (matchedUser) {
+        const token = 'local-token-' + Date.now();
+        const safeUser = {
+          id: matchedUser.id || ('usr-' + Date.now()),
+          name: matchedUser.name,
+          email: matchedUser.email,
+          role: matchedUser.role || 'Front Desk Supervisor'
+        };
+
+        AuthState.token = token;
+        if (rememberMe) {
+          localStorage.setItem(STORAGE_KEY_TOKEN, token);
+          localStorage.setItem(STORAGE_KEY_USER, JSON.stringify(safeUser));
+        } else {
+          sessionStorage.setItem(STORAGE_KEY_TOKEN, token);
+          sessionStorage.setItem(STORAGE_KEY_USER, JSON.stringify(safeUser));
+        }
+
+        setButtonLoading('btn-login-submit', false);
+        renderAuthenticatedState(safeUser);
+        return false;
+      }
+
+      showAlert('alert-login', 'Invalid email address or password.');
+      setButtonLoading('btn-login-submit', false);
+      return false;
+    }
+
+    // In static mode (e.g. Vercel), authenticate immediately using localStorage
+    if (!API_BASE) {
+      return loginLocally();
+    }
+
     // 1. Try Live Server API
     try {
       const res = await fetch(`${API_BASE}/api/auth/login`, {
@@ -480,40 +534,8 @@
 
     } catch (netErr) {
       // 2. Offline / Local Fallback Mode
-      console.warn('Authentication API unreachable or CORS blocked. Checking local user registry:', netErr);
-
-      const localUsers = getLocalUsers();
-      const matchedUser = localUsers.find(u => 
-        u.email.toLowerCase() === email.toLowerCase() && 
-        u.password === password
-      );
-
-      if (matchedUser) {
-        const token = 'local-token-' + Date.now();
-        const safeUser = {
-          id: matchedUser.id || ('usr-' + Date.now()),
-          name: matchedUser.name,
-          email: matchedUser.email,
-          role: matchedUser.role || 'Front Desk Supervisor'
-        };
-
-        AuthState.token = token;
-        if (rememberMe) {
-          localStorage.setItem(STORAGE_KEY_TOKEN, token);
-          localStorage.setItem(STORAGE_KEY_USER, JSON.stringify(safeUser));
-        } else {
-          sessionStorage.setItem(STORAGE_KEY_TOKEN, token);
-          sessionStorage.setItem(STORAGE_KEY_USER, JSON.stringify(safeUser));
-        }
-
-        setButtonLoading('btn-login-submit', false);
-        renderAuthenticatedState(safeUser);
-        return false;
-      }
-
-      showAlert('alert-login', 'Invalid email address or password.');
-      setButtonLoading('btn-login-submit', false);
-      return false;
+      console.warn('Authentication API unreachable. Using local user registry:', netErr);
+      return loginLocally();
     }
   }
 
@@ -580,24 +602,26 @@
       role: 'Front Desk Supervisor'
     };
 
-    // 1. Try Backend API
-    try {
-      const res = await fetch(`${API_BASE}/api/auth/register`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, email, password }),
-        credentials: 'include'
-      });
+    // 1. Try Backend API if configured
+    if (API_BASE) {
+      try {
+        const res = await fetch(`${API_BASE}/api/auth/register`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, email, password }),
+          credentials: 'include'
+        });
 
-      const data = await res.json().catch(() => ({}));
+        const data = await res.json().catch(() => ({}));
 
-      if (!res.ok) {
-        showAlert('alert-register', data.error || 'Failed to create account.');
-        setButtonLoading('btn-register-submit', false, 'Create Staff Account');
-        return false;
+        if (!res.ok) {
+          showAlert('alert-register', data.error || 'Failed to create account.');
+          setButtonLoading('btn-register-submit', false, 'Create Staff Account');
+          return false;
+        }
+      } catch (err) {
+        console.warn('Server offline during registration, saving to local store:', err);
       }
-    } catch (err) {
-      console.warn('Server offline during registration, saving to local store:', err);
     }
 
     // Always cache locally as well
@@ -637,14 +661,16 @@
 
     setButtonLoading('btn-forgot-submit', true, 'Sending Instructions...');
 
-    try {
-      await fetch(`${API_BASE}/api/auth/forgot-password`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email }),
-        credentials: 'include'
-      });
-    } catch (e) {}
+    if (API_BASE) {
+      try {
+        await fetch(`${API_BASE}/api/auth/forgot-password`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email }),
+          credentials: 'include'
+        });
+      } catch (e) {}
+    }
 
     setButtonLoading('btn-forgot-submit', false, 'Send Reset Instructions');
     showAlert('alert-forgot', 'If an account exists, recovery instructions have been sent.', 'success');
@@ -685,16 +711,18 @@
     hideLogoutConfirmation();
 
     const token = AuthState.token;
-    try {
-      await fetch(`${API_BASE}/api/auth/logout`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          ...(token ? { 'Authorization': `Bearer ${token}` } : {})
-        },
-        credentials: 'include'
-      });
-    } catch (e) {}
+    if (API_BASE && token && !token.startsWith('local-token-')) {
+      try {
+        await fetch(`${API_BASE}/api/auth/logout`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          credentials: 'include'
+        });
+      } catch (e) {}
+    }
 
     localStorage.removeItem(STORAGE_KEY_TOKEN);
     localStorage.removeItem(STORAGE_KEY_USER);
@@ -1041,13 +1069,8 @@
 
     function setActiveRoleTab(activeBtn, inactiveBtn) {
       if (!activeBtn || !inactiveBtn) return;
-<<<<<<< HEAD
       activeBtn.className = 'role-tab flex-1 py-1.5 px-2.5 rounded-lg text-xs font-semibold flex items-center justify-center gap-1.5 transition-all bg-[#14213d] text-white shadow-sm shadow-[#14213d]/30';
       inactiveBtn.className = 'role-tab flex-1 py-1.5 px-2.5 rounded-lg text-xs font-semibold flex items-center justify-center gap-1.5 transition-all text-slate-600 hover:text-slate-900';
-=======
-      activeBtn.className = 'role-tab flex-1 py-2 px-3 rounded-lg text-xs font-semibold flex items-center justify-center gap-2 transition-all bg-[#7C3AED] text-white shadow-sm';
-      inactiveBtn.className = 'role-tab flex-1 py-2 px-3 rounded-lg text-xs font-semibold flex items-center justify-center gap-2 transition-all text-slate-600 hover:text-slate-900';
->>>>>>> 4b40ff5731d5088fe7f040d10fc87d9d3b51ab4b
     }
 
     staffRoleBtn?.addEventListener('click', () => {
@@ -1095,33 +1118,23 @@
       handleLogin(e);
     });
 
-<<<<<<< HEAD
     // View toggle links and side welcome buttons (Instagram Reel sliding toggle)
-=======
-    // View toggle links
->>>>>>> 4b40ff5731d5088fe7f040d10fc87d9d3b51ab4b
     $('btn-goto-register')?.addEventListener('click', (e) => {
       e.preventDefault();
       showView('register');
     });
-<<<<<<< HEAD
     $('btn-side-register')?.addEventListener('click', (e) => {
       e.preventDefault();
       showView('register');
     });
-=======
->>>>>>> 4b40ff5731d5088fe7f040d10fc87d9d3b51ab4b
     $('btn-goto-login')?.addEventListener('click', (e) => {
       e.preventDefault();
       showView('login');
     });
-<<<<<<< HEAD
     $('btn-side-login')?.addEventListener('click', (e) => {
       e.preventDefault();
       showView('login');
     });
-=======
->>>>>>> 4b40ff5731d5088fe7f040d10fc87d9d3b51ab4b
     $('btn-goto-forgot')?.addEventListener('click', (e) => {
       e.preventDefault();
       showView('forgot');
