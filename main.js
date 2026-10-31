@@ -574,6 +574,13 @@ $(document).ready(function () {
     switchSection(target);
   });
 
+  // Topbar Settings Icon Button
+  $('#btn-top-settings').on('click', function (e) {
+    e.preventDefault();
+    window.location.hash = 'settings';
+    switchSection('settings');
+  });
+
   // =========================================================================
   // HUMAN RESOURCE SIDEBAR DROPDOWN CONTROLLER
   // =========================================================================

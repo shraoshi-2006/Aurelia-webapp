@@ -1068,9 +1068,10 @@
       color: #5C677D !important;
     }
 
-    /* User Profile Capsule & Top Notifications (Frosted Glass) */
+    /* User Profile Capsule, Top Notifications & Settings (Frosted Glass) */
     #user-profile-capsule,
-    #btn-top-notifications {
+    #btn-top-notifications,
+    #btn-top-settings {
       background: rgba(255, 255, 255, 0.72) !important;
       backdrop-filter: blur(20px) saturate(180%) !important;
       -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
@@ -1084,13 +1085,20 @@
     }
 
     #user-profile-capsule:hover,
-    #btn-top-notifications:hover {
+    #btn-top-notifications:hover,
+    #btn-top-settings:hover {
       border-color: rgba(255, 255, 255, 1) !important;
       background: rgba(255, 255, 255, 0.9) !important;
       box-shadow:
         inset 1px 1px 1.5px 0px rgba(255, 255, 255, 1),
         0 6px 18px rgba(15, 23, 42, 0.1) !important;
       transform: translateY(-1px);
+    }
+
+    #btn-top-settings.active {
+      border-color: #FCA311 !important;
+      color: #FCA311 !important;
+      background: rgba(252, 163, 17, 0.12) !important;
     }
 
     /* Frosted Glass Segmented Tab Controls */
@@ -2534,18 +2542,6 @@
               <span class="sidebar-label">Analytics</span>
             </div>
           </a>
-
-          <!-- 7. Settings -->
-          <a href="#settings" data-target="settings" class="nav-link Aurelia-nav-item" title="Settings">
-            <div class="flex items-center space-x-3.5">
-              <svg class="w-5 h-5 stroke-current flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.8">
-                <path stroke-linecap="round" stroke-linejoin="round"
-                  d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.324.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 011.37.49l1.296 2.247a1.125 1.125 0 01-.26 1.431l-1.003.827c-.293.24-.438.613-.431.992a6.759 6.759 0 010 .255c-.007.378.138.75.43.99l1.005.828c.424.35.534.954.26 1.43l-1.298 2.247a1.125 1.125 0 01-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.57 6.57 0 01-.22.128c-.331.183-.581.495-.644.869l-.213 1.28c-.09.543-.56.941-1.11.941h-2.594c-.55 0-1.02-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 01-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 01-1.369-.49l-1.297-2.247a1.125 1.125 0 01.26-1.431l1.004-.827c.292-.24.437-.613.43-.992a6.932 6.932 0 010-.255c.007-.378-.138-.75-.43-.99l-1.004-.828a1.125 1.125 0 01-.26-1.43l1.297-2.247a1.125 1.125 0 011.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.087.22-.128.332-.183.582-.495.644-.869l.214-1.281z" />
-                <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-              </svg>
-              <span class="sidebar-label">Settings</span>
-            </div>
-          </a>
         </nav>
       </div>
 
@@ -2615,10 +2611,21 @@
             </button>
           </div>
 
+          <!-- Settings Button (Gear Icon between Notification and Avatar) -->
+          <button type="button" id="btn-top-settings" data-target="settings"
+            class="nav-link w-10 h-10 rounded-full border border-[#E5E5E5] bg-white flex items-center justify-center text-[#14213D] hover:border-[#FCA311] hover:text-[#FCA311] shadow-xs transition-all cursor-pointer relative"
+            title="Settings" aria-label="Settings">
+            <svg class="w-4.5 h-4.5 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="1.8">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.324.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 011.37.49l1.296 2.247a1.125 1.125 0 01-.26 1.431l-1.003.827c-.293.24-.438.613-.431.992a6.759 6.759 0 010 .255c-.007.378.138.75.43.99l1.005.828c.424.35.534.954.26 1.43l-1.298 2.247a1.125 1.125 0 01-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.57 6.57 0 01-.22.128c-.331.183-.581.495-.644.869l-.213 1.28c-.09.543-.56.941-1.11.941h-2.594c-.55 0-1.02-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 01-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 01-1.369-.49l-1.297-2.247a1.125 1.125 0 01.26-1.431l1.004-.827c.292-.24.437-.613.43-.992a6.932 6.932 0 010-.255c.007-.378-.138-.75-.43-.99l-1.004-.828a1.125 1.125 0 01-.26-1.43l1.297-2.247a1.125 1.125 0 011.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.087.22-.128.332-.183.582-.495.644-.869l.214-1.281z" />
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+            </svg>
+          </button>
+
           <!-- User Profile Capsule (Avatar Button) -->
           <button type="button" id="topbar-user-avatar"
             class="w-9 h-9 rounded-full bg-[#14213D] text-[#FCA311] font-bold text-xs flex items-center justify-center shadow-xs cursor-pointer hover:ring-2 hover:ring-[#FCA311] hover:scale-105 transition-all overflow-hidden relative group"
-            title="My Profile & Settings" aria-label="Open User Profile">
+            title="My Profile" aria-label="Open User Profile">
             <span id="topbar-user-avatar-text">AL</span>
             <img id="topbar-user-avatar-img" src="" alt="Profile Photo" class="w-full h-full object-cover hidden">
           </button>
