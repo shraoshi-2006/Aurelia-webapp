@@ -9,13 +9,11 @@
   'use strict';
 
   // API Base URL configuration:
-  // - When running locally via node server.js on port 3000: use relative ''
+  // - When running locally via node server.js on port 3000: use window.location.origin
   // - When running locally via Live Server (port 5500, etc.) over HTTP: use 'http://localhost:3000'
   // - When running on live hosts (Vercel, Netlify, custom domain): set to null so it immediately uses localStorage
   const isLocalHost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-  const API_BASE = (window.location.port === '3000')
-    ? ''
-    : (isLocalHost && window.location.protocol === 'http:' ? 'http://localhost:3000' : null);
+  const API_BASE = isLocalHost ? (window.location.origin || 'http://localhost:3000') : null;
 
   const STORAGE_KEY_TOKEN = 'aurelia_auth_token';
   const STORAGE_KEY_USER = 'aurelia_auth_user';
