@@ -1221,61 +1221,15 @@ $(document).ready(function () {
 
   // =========================================================================
   // SCROLL-DRIVEN NUMBER SCROLLING ENGINE FOR DASHBOARD
-  // (Detects when cards/sections scroll into view & triggers number reel rolls)
+  // (Disabled: Numbers animate strictly on page reload / navigation, NEVER on scroll)
   // =========================================================================
 
-  let dashboardIntersectionObserver = null;
-
   function initDashboardScrollAnimations() {
-    if (!('IntersectionObserver' in window)) return;
-
-    if (dashboardIntersectionObserver) {
-      dashboardIntersectionObserver.disconnect();
+    // Intentionally disabled so numbers stay rock-solid and do not fluctuate when scrolling up/down
+    if (window.dashboardIntersectionObserver) {
+      window.dashboardIntersectionObserver.disconnect();
+      window.dashboardIntersectionObserver = null;
     }
-
-    const cards = document.querySelectorAll(
-      '#section-dashboard .Aurelia-card, #section-dashboard .glass-card-animate'
-    );
-
-    if (!cards.length) return;
-
-    dashboardIntersectionObserver = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          const target = entry.target;
-          if (!target._hasScrolledIn) {
-            target._hasScrolledIn = true;
-            // Trigger number reel roll inside this specific card
-            if (target.id === 'card-dashboard-total-billing') {
-              animateBillingMetrics();
-            } else if (target.querySelector && target.querySelector('#stat-calculated-profit')) {
-              animateProfitMetrics();
-            } else if (target.querySelector && target.querySelector('#stat-total-employee')) {
-              animateStaffMetrics();
-            } else if (target.querySelector && target.querySelector('#chart-money-flow')) {
-              renderMoneyFlowChart();
-            } else if (target.querySelector && target.querySelector('#chart-budget-doughnut')) {
-              renderBudgetDoughnutChart();
-            } else if (target.querySelector && target.querySelector('#dashboard-recent-trans-tbody')) {
-              renderDashboardRecentTransactions(Storage.get(STORAGE_KEYS.BILLS) || []);
-            } else if (target.querySelector && target.querySelector('#goal-val-macbook')) {
-              renderSavingGoals();
-            }
-          }
-        } else {
-          // Reset when scrolled completely out of view so it can animate again when scrolled back
-          entry.target._hasScrolledIn = false;
-        }
-      });
-    }, {
-      root: null,
-      threshold: 0.15
-    });
-
-    cards.forEach(card => {
-      card._hasScrolledIn = false;
-      dashboardIntersectionObserver.observe(card);
-    });
   }
 
   // Range-driven chart generator for Money Flow Area Graph
