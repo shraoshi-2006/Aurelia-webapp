@@ -11,36 +11,12 @@ const crypto = require('node:crypto');
 const { DatabaseSync } = require('node:sqlite');
 
 const PORT = process.env.PORT || 3000;
-const DB_FILE = path.join(__dirname, 'auth.db');
+const isServerless = Boolean(process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME || process.env.LAMBDA_TASK_ROOT);
+const DB_FILE = isServerless ? path.join('/tmp', 'auth.db') : path.join(__dirname, 'auth.db');
 
 // =============================================================================
 // 1. DATABASE INITIALIZATION & SCHEMA
 // =============================================================================
-const db = new DatabaseSync(DB_FILE);
-
-// Enable WAL mode for high concurrency
-db.exec('PRAGMA journal_mode = WAL;');
-
-db.exec(`
-  CREATE TABLE IF NOT EXISTS users (
-    id TEXT PRIMARY KEY,
-    name TEXT NOT NULL,
-    email TEXT UNIQUE NOT NULL,
-    password_hash TEXT NOT NULL,
-    salt TEXT NOT NULL,
-    role TEXT NOT NULL DEFAULT 'Front Desk Supervisor',
-    created_at TEXT NOT NULL
-  );
-
-  CREATE TABLE IF NOT EXISTS sessions (
-    token TEXT PRIMARY KEY,
-    user_id TEXT NOT NULL,
-    expires_at INTEGER NOT NULL,
-    created_at TEXT NOT NULL,
-    FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
-  );
-`);
-
 // Password Hashing Helper (scrypt with salt)
 function hashPassword(password, salt) {
   return crypto.scryptSync(password, salt, 64).toString('hex');
@@ -53,27 +29,57 @@ function verifyPassword(password, salt, expectedHash) {
   return crypto.timingSafeEqual(hash, expected);
 }
 
-// Seed default administrative user if users table is empty
-const countStmt = db.prepare('SELECT COUNT(*) AS total FROM users');
-const { total } = countStmt.get();
+let db = null;
+try {
+  db = new DatabaseSync(DB_FILE);
 
-if (total === 0) {
-  const seedSalt = crypto.randomBytes(16).toString('hex');
-  const seedHash = hashPassword('password123', seedSalt);
-  const insertSeed = db.prepare(`
-    INSERT INTO users (id, name, email, password_hash, salt, role, created_at)
-    VALUES (?, ?, ?, ?, ?, ?, ?)
+  // Enable WAL mode for high concurrency
+  db.exec('PRAGMA journal_mode = WAL;');
+
+  db.exec(`
+    CREATE TABLE IF NOT EXISTS users (
+      id TEXT PRIMARY KEY,
+      name TEXT NOT NULL,
+      email TEXT UNIQUE NOT NULL,
+      password_hash TEXT NOT NULL,
+      salt TEXT NOT NULL,
+      role TEXT NOT NULL DEFAULT 'Front Desk Supervisor',
+      created_at TEXT NOT NULL
+    );
+
+    CREATE TABLE IF NOT EXISTS sessions (
+      token TEXT PRIMARY KEY,
+      user_id TEXT NOT NULL,
+      expires_at INTEGER NOT NULL,
+      created_at TEXT NOT NULL,
+      FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
+    );
   `);
-  insertSeed.run(
-    'usr-adaline',
-    'Adaline Lively',
-    'adalinea@gmail.com',
-    seedHash,
-    seedSalt,
-    'Front Desk Supervisor',
-    new Date().toISOString()
-  );
-  console.log(' [Auth DB] Seeded initial default account: adalinea@gmail.com / password123');
+
+  // Seed default administrative user if users table is empty
+  const countStmt = db.prepare('SELECT COUNT(*) AS total FROM users');
+  const { total } = countStmt.get();
+
+  if (total === 0) {
+    const seedSalt = crypto.randomBytes(16).toString('hex');
+    const seedHash = hashPassword('password123', seedSalt);
+    const insertSeed = db.prepare(`
+      INSERT INTO users (id, name, email, password_hash, salt, role, created_at)
+      VALUES (?, ?, ?, ?, ?, ?, ?)
+    `);
+    insertSeed.run(
+      'usr-adaline',
+      'Adaline Lively',
+      'adalinea@gmail.com',
+      seedHash,
+      seedSalt,
+      'Front Desk Supervisor',
+      new Date().toISOString()
+    );
+    console.log(' [Auth DB] Seeded initial default account: adalinea@gmail.com / password123');
+  }
+} catch (dbErr) {
+  console.warn(' [Auth DB] Warning: SQLite initialization fallback:', dbErr.message);
 }
 
 // =============================================================================
