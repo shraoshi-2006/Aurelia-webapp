@@ -338,7 +338,9 @@ $(document).ready(function () {
           html += `<span class="num-scroller-static">${sign}</span>`;
         }
         if (prefix) {
-          html += `<span class="num-scroller-static">${prefix}</span>`;
+          const isRupee = prefix.includes('₹');
+          const prefixClass = isRupee ? 'num-scroller-static num-currency-rupee' : 'num-scroller-static';
+          html += `<span class="${prefixClass}">${prefix}</span>`;
         }
 
         // Integer digits & separators
@@ -379,7 +381,7 @@ $(document).ready(function () {
         }
 
         if (suffix) {
-          html += `<span class="num-scroller-static ${suffixClass}">${suffix}</span>`;
+          html += `<span class="num-scroller-static num-scroller-suffix ${suffixClass}">${suffix}</span>`;
         }
 
         html += `</span>`;
@@ -4356,6 +4358,17 @@ $(document).ready(function () {
     showToast('Kitchen Ticket ORD-0082 (Room 304) is preparing. Front desk audit session active.', 'info');
   });
 
+  // Device ID Badge (Default DEV08, click to copy)
+  const defaultDeviceId = localStorage.getItem('aurelia_device_id') || 'DEV08';
+  $('#topbar-device-id-text').text(defaultDeviceId);
+  $('#topbar-device-id-badge').on('click', function () {
+    const devId = $('#topbar-device-id-text').text().trim() || 'DEV08';
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(devId).catch(() => {});
+    }
+    showToast(`Device ID: ${devId} copied to clipboard`, 'info');
+  });
+
   // =========================================================================
   // USER PROFILE & PHOTO MANAGEMENT CONTROLLER
   // =========================================================================
@@ -4645,6 +4658,39 @@ $(document).ready(function () {
       applyProfileChanges();
     }
   });
+
+  // =========================================================================
+  // LIVE SESSION TIME TRACKER (Shows Time Spent on Website)
+  // =========================================================================
+  function initSessionTimeTracker() {
+    const STORAGE_KEY = 'aurelia_session_start_time';
+    let startTime = parseInt(sessionStorage.getItem(STORAGE_KEY), 10);
+    const now = Date.now();
+    // If no start time stored, or invalid, or in the future, set it now
+    if (!startTime || isNaN(startTime) || startTime > now) {
+      startTime = now;
+      try {
+        sessionStorage.setItem(STORAGE_KEY, String(startTime));
+      } catch (e) { }
+    }
+
+    const displayEl = document.getElementById('session-time-display');
+    if (!displayEl) return;
+
+    function renderTime() {
+      const elapsedSec = Math.max(0, Math.floor((Date.now() - startTime) / 1000));
+      const hrs = String(Math.floor(elapsedSec / 3600)).padStart(2, '0');
+      const mins = String(Math.floor((elapsedSec % 3600) / 60)).padStart(2, '0');
+      const secs = String(elapsedSec % 60).padStart(2, '0');
+      displayEl.textContent = `${hrs}:${mins}:${secs}`;
+    }
+
+    renderTime();
+    setInterval(renderTime, 1000);
+  }
+
+  // Start live session time tracker
+  initSessionTimeTracker();
 
   // Initial Boot - guarded by authentication
   const initHash = window.location.hash.replace('#', '') || 'dashboard';
