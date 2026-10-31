@@ -174,7 +174,7 @@ $(document).ready(function () {
     ])
   ];
 
-    const DEFAULT_STAFF = [
+  const DEFAULT_STAFF = [
     ["Adaline Lively", "Front Desk Supervisor", "Front Office", "Main Reception Desk 01", "Morning (07:00 - 15:30)", "On Duty", null, "adaline.l@aureliahotel.com"],
     ["Vikram Malhotra", "Senior Concierge", "Front Office", "Concierge Lounge", "Morning (08:00 - 16:30)", "On Duty", null, "vikram.m@aureliahotel.com"],
     ["Priyanka Sharma", "Guest Relations Officer", "Front Office", "Executive Club Lounge", "Day (09:00 - 17:30)", "On Duty", null, "priyanka.s@aureliahotel.com"],
@@ -786,7 +786,7 @@ $(document).ready(function () {
     if (typeof this.showPicker === 'function') {
       try {
         this.showPicker();
-      } catch (err) {}
+      } catch (err) { }
     }
   });
 
@@ -4173,7 +4173,7 @@ $(document).ready(function () {
       try {
         const stored = localStorage.getItem('aurelia_auth_user') || sessionStorage.getItem('aurelia_auth_user');
         if (stored) user = JSON.parse(stored);
-      } catch (e) {}
+      } catch (e) { }
     }
     if (!user) {
       user = {
@@ -4391,7 +4391,7 @@ $(document).ready(function () {
           }
           localStorage.setItem('aurelia_local_users', JSON.stringify(localUsers));
         }
-      } catch (e) {}
+      } catch (e) { }
 
       // 3. Update staffDirectory roster if Adaline / EMP-2026-01 exists
       if (typeof staffDirectory !== 'undefined' && Array.isArray(staffDirectory)) {

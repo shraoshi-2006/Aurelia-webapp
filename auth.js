@@ -1041,8 +1041,13 @@
 
     function setActiveRoleTab(activeBtn, inactiveBtn) {
       if (!activeBtn || !inactiveBtn) return;
+<<<<<<< HEAD
       activeBtn.className = 'role-tab flex-1 py-1.5 px-2.5 rounded-lg text-xs font-semibold flex items-center justify-center gap-1.5 transition-all bg-[#14213d] text-white shadow-sm shadow-[#14213d]/30';
       inactiveBtn.className = 'role-tab flex-1 py-1.5 px-2.5 rounded-lg text-xs font-semibold flex items-center justify-center gap-1.5 transition-all text-slate-600 hover:text-slate-900';
+=======
+      activeBtn.className = 'role-tab flex-1 py-2 px-3 rounded-lg text-xs font-semibold flex items-center justify-center gap-2 transition-all bg-[#7C3AED] text-white shadow-sm';
+      inactiveBtn.className = 'role-tab flex-1 py-2 px-3 rounded-lg text-xs font-semibold flex items-center justify-center gap-2 transition-all text-slate-600 hover:text-slate-900';
+>>>>>>> 4b40ff5731d5088fe7f040d10fc87d9d3b51ab4b
     }
 
     staffRoleBtn?.addEventListener('click', () => {
@@ -1090,23 +1095,33 @@
       handleLogin(e);
     });
 
+<<<<<<< HEAD
     // View toggle links and side welcome buttons (Instagram Reel sliding toggle)
+=======
+    // View toggle links
+>>>>>>> 4b40ff5731d5088fe7f040d10fc87d9d3b51ab4b
     $('btn-goto-register')?.addEventListener('click', (e) => {
       e.preventDefault();
       showView('register');
     });
+<<<<<<< HEAD
     $('btn-side-register')?.addEventListener('click', (e) => {
       e.preventDefault();
       showView('register');
     });
+=======
+>>>>>>> 4b40ff5731d5088fe7f040d10fc87d9d3b51ab4b
     $('btn-goto-login')?.addEventListener('click', (e) => {
       e.preventDefault();
       showView('login');
     });
+<<<<<<< HEAD
     $('btn-side-login')?.addEventListener('click', (e) => {
       e.preventDefault();
       showView('login');
     });
+=======
+>>>>>>> 4b40ff5731d5088fe7f040d10fc87d9d3b51ab4b
     $('btn-goto-forgot')?.addEventListener('click', (e) => {
       e.preventDefault();
       showView('forgot');
