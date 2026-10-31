@@ -250,6 +250,15 @@ $(document).ready(function () {
       if (!localStorage.getItem(STORAGE_KEYS.STAFF)) {
         Storage.set(STORAGE_KEYS.STAFF, DEFAULT_STAFF);
       }
+      if (!Storage.get(STORAGE_KEYS.MENU, []).length) {
+        Storage.set(STORAGE_KEYS.MENU, DEFAULT_MENU_ITEMS);
+      }
+      if (!Storage.get(STORAGE_KEYS.ORDERS, []).length) {
+        Storage.set(STORAGE_KEYS.ORDERS, DEFAULT_ORDERS);
+      }
+      if (!Storage.get(STORAGE_KEYS.CUSTOMERS, []).length) {
+        Storage.set(STORAGE_KEYS.CUSTOMERS, DEFAULT_CUSTOMERS);
+      }
     }
   }
 
@@ -289,6 +298,12 @@ $(document).ready(function () {
 
     $els.each(function () {
       const el = this;
+
+      // Prevent re-triggering rolling odometer animation if value has not changed
+      // (stops badges and stats from fluctuating / spinning on every button click)
+      if (el._currentCountVal !== undefined && el._currentCountVal === target && el.innerHTML.trim() !== '') {
+        return;
+      }
 
       if (el._countAnimRaf) {
         cancelAnimationFrame(el._countAnimRaf);
@@ -567,14 +582,6 @@ $(document).ready(function () {
     $('main section').addClass('hidden').attr('hidden', true);
     $targetSec.removeClass('hidden').removeAttr('hidden');
 
-    // Replay smooth glassmorphic entrance animation on cards
-    $targetSec.find('.Aurelia-card').each(function () {
-      const el = $(this);
-      el.removeClass('glass-card-animate');
-      void this.offsetWidth; // Force reflow
-      el.addClass('glass-card-animate');
-    });
-
     if (target === 'dashboard') {
       const activeUser = (window.Auth && window.Auth.state && window.Auth.state.currentUser) || null;
       const firstName = activeUser ? (activeUser.name || 'Adaline').split(' ')[0] : 'Adaline';
@@ -598,6 +605,7 @@ $(document).ready(function () {
       holidays: renderHolidaysSection
     };
     if (sectionRenderers[target]) sectionRenderers[target]();
+    renderSidebarBadges();
 
     window.scrollTo({ top: 0, behavior: 'instant' });
   }
@@ -1152,15 +1160,22 @@ $(document).ready(function () {
   });
 
   function renderSidebarBadges() {
-    const menu = Storage.get(STORAGE_KEYS.MENU) || [];
-    const orders = Storage.get(STORAGE_KEYS.ORDERS) || [];
-    const customers = Storage.get(STORAGE_KEYS.CUSTOMERS) || [];
+    const rawMenu = Storage.get(STORAGE_KEYS.MENU, []);
+    const rawOrders = Storage.get(STORAGE_KEYS.ORDERS, []);
+    const rawCustomers = Storage.get(STORAGE_KEYS.CUSTOMERS, []);
+
+    const menu = (rawMenu && rawMenu.length) ? rawMenu : DEFAULT_MENU_ITEMS;
+    const orders = (rawOrders && rawOrders.length) ? rawOrders : DEFAULT_ORDERS;
+    const customers = (rawCustomers && rawCustomers.length) ? rawCustomers : DEFAULT_CUSTOMERS;
 
     const pendingOrdersCount = orders.filter(o => o.status === 'Pending' || o.status === 'Preparing').length;
-    animateNumber('#badge-menu-count', menu.length, { duration: 600, useLocale: false });
-    animateNumber('#badge-pending-orders', pendingOrdersCount, { duration: 600, useLocale: false });
-    animateNumber('#badge-customers-count', customers.length, { duration: 600, useLocale: false });
+
+    // Completely static numbers - zero animation
+    $('#badge-pending-orders').text(pendingOrdersCount);
+    $('#badge-menu-count').text(menu.length);
+    $('#badge-customers-count').text(customers.length);
   }
+  window.renderSidebarBadges = renderSidebarBadges;
 
   // =========================================================================
   // 4. DASHBOARD ENGINE (Matches FinSet Screenshot Exactly)
@@ -4986,8 +5001,9 @@ $(document).ready(function () {
   let currentHrDocCategory = 'all';
 
   function renderHrDocumentsSection() {
+    const $tbody = $('#hr-templates-tbody');
     const $grid = $('#hr-templates-grid');
-    if (!$grid.length) return;
+    if (!$tbody.length && !$grid.length) return;
 
     const query = $.trim($('#input-search-hr-docs').val()).toLowerCase();
     const filtered = HR_TEMPLATES.filter(tpl => {
@@ -4997,41 +5013,92 @@ $(document).ready(function () {
     });
 
     if (filtered.length === 0) {
-      $grid.empty();
+      if ($tbody.length) $tbody.empty();
+      if ($grid.length) $grid.empty();
       $('#hr-templates-empty').removeClass('hidden');
+      $('#hr-templates-count-label').text(`Showing 0 of ${HR_TEMPLATES.length} templates`);
       return;
     }
 
     $('#hr-templates-empty').addClass('hidden');
-    let html = '';
+    $('#hr-templates-count-label').text(`Showing ${filtered.length} of ${HR_TEMPLATES.length} templates`);
 
-    filtered.forEach(tpl => {
-      html += `
-        <div class="Aurelia-card p-5 space-y-4 flex flex-col justify-between hover:border-[#FCA311] transition-all shadow-xs group">
-          <div class="space-y-2.5">
-            <div class="flex items-center justify-between">
-              <span class="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-[#14213D] text-[#FCA311]">${tpl.code}</span>
-              <span class="text-[10px] font-semibold text-slate-400 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded-md">${tpl.badge}</span>
+    if ($tbody.length) {
+      let html = '';
+      filtered.forEach(tpl => {
+        html += `
+          <tr class="hover:bg-slate-50/70 dark:hover:bg-slate-800/50 transition-colors group">
+            <td class="py-3.5 px-4 align-top">
+              <div class="flex items-center gap-2 mb-1">
+                <span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-[#14213D] text-[#FCA311] inline-block shadow-xs">
+                  ${tpl.code}
+                </span>
+              </div>
+              <div class="font-bold text-slate-900 dark:text-white text-xs group-hover:text-[#FCA311] transition-colors leading-snug">
+                ${tpl.title}
+              </div>
+            </td>
+            <td class="py-3.5 px-4 align-top whitespace-nowrap">
+              <span class="px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-sky-50 dark:bg-sky-950/40 text-sky-700 dark:text-sky-300 border border-sky-200/60 dark:border-sky-800/60 inline-block">
+                ${tpl.categoryLabel}
+              </span>
+            </td>
+            <td class="py-3.5 px-4 align-top">
+              <p class="text-xs text-slate-500 dark:text-slate-400 line-clamp-2 max-w-sm leading-relaxed">
+                ${tpl.desc}
+              </p>
+            </td>
+            <td class="py-3.5 px-4 align-top whitespace-nowrap">
+              <div class="font-medium text-slate-700 dark:text-slate-300">${tpl.pages}</div>
+              <span class="text-[10px] font-semibold text-slate-400 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded inline-block mt-0.5">
+                ${tpl.badge}
+              </span>
+            </td>
+            <td class="py-3.5 px-4 align-top whitespace-nowrap">
+              <span class="text-slate-500 dark:text-slate-400 font-mono text-[11px]">${tpl.updated}</span>
+            </td>
+            <td class="py-3.5 px-4 align-top text-right whitespace-nowrap">
+              <button type="button" class="btn-preview-hr-doc btn-Aurelia-secondary text-xs py-1.5 px-3.5 inline-flex items-center space-x-1.5 shadow-xs" data-id="${tpl.id}">
+                <svg class="w-3.5 h-3.5 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+                <span>Preview & Use</span>
+              </button>
+            </td>
+          </tr>
+        `;
+      });
+      $tbody.html(html);
+    } else if ($grid.length) {
+      let html = '';
+      filtered.forEach(tpl => {
+        html += `
+          <div class="Aurelia-card p-5 space-y-4 flex flex-col justify-between hover:border-[#FCA311] transition-all shadow-xs group">
+            <div class="space-y-2.5">
+              <div class="flex items-center justify-between">
+                <span class="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-[#14213D] text-[#FCA311]">${tpl.code}</span>
+                <span class="text-[10px] font-semibold text-slate-400 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded-md">${tpl.badge}</span>
+              </div>
+              <h3 class="text-sm font-bold text-slate-900 dark:text-white group-hover:text-[#FCA311] transition-colors leading-snug">
+                ${tpl.title}
+              </h3>
+              <p class="text-xs text-slate-500 dark:text-slate-400 line-clamp-2 leading-relaxed">
+                ${tpl.desc}
+              </p>
             </div>
-            <h3 class="text-sm font-bold text-slate-900 dark:text-white group-hover:text-[#FCA311] transition-colors leading-snug">
-              ${tpl.title}
-            </h3>
-            <p class="text-xs text-slate-500 dark:text-slate-400 line-clamp-2 leading-relaxed">
-              ${tpl.desc}
-            </p>
-          </div>
 
-          <div class="pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-[11px] text-slate-400">
-            <span class="font-medium">${tpl.pages} • ${tpl.updated}</span>
-            <button type="button" class="btn-preview-hr-doc btn-Aurelia-secondary text-xs py-1 px-3" data-id="${tpl.id}">
-              Preview & Use
-            </button>
+            <div class="pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-[11px] text-slate-400">
+              <span class="font-medium">${tpl.pages} • ${tpl.updated}</span>
+              <button type="button" class="btn-preview-hr-doc btn-Aurelia-secondary text-xs py-1 px-3" data-id="${tpl.id}">
+                Preview & Use
+              </button>
+            </div>
           </div>
-        </div>
-      `;
-    });
-
-    $grid.html(html);
+        `;
+      });
+      $grid.html(html);
+    }
   }
 
   // Filter Buttons for HR Documents
@@ -5069,8 +5136,63 @@ $(document).ready(function () {
     showToast('Document exported to PDF format with hotel seal', 'success');
   });
 
+  // Upload HR Document Template Form Submit Handler
+  $(document).on('submit', '#form-upload-hr-doc', function (e) {
+    e.preventDefault();
+    const title = $.trim($('#hr-doc-input-title').val());
+    const desc = $.trim($('#hr-doc-input-desc').val());
+    const type = $('#hr-doc-input-type').val();
+    const fileInput = document.getElementById('hr-doc-input-file');
+    const fileName = (fileInput && fileInput.files && fileInput.files[0]) ? fileInput.files[0].name : 'document.pdf';
+
+    if (!title || !desc || !type) {
+      showToast('Please fill all required fields.', 'error');
+      return;
+    }
+
+    const typeLabels = {
+      employment: 'Employment Contract',
+      compliance: 'Compliance & NDA',
+      policies: 'Policies & SOPs',
+      letters: 'Letters & Notices'
+    };
+
+    const newCode = 'DOC-HR-' + (HR_TEMPLATES.length + 1).toString().padStart(3, '0');
+    const newId = 'doc-custom-' + Date.now();
+
+    const newDoc = {
+      code: newCode,
+      title: title,
+      category: type,
+      categoryLabel: typeLabels[type] || 'Standard Template',
+      desc: desc,
+      badge: fileName.toLowerCase().endsWith('.docx') ? 'DOCX • Uploaded' : 'PDF • Uploaded',
+      pages: '1 Page',
+      updated: '31 Oct 2026',
+      id: newId,
+      body: `
+        <div class="space-y-4">
+          <p class="font-bold text-slate-900">${escapeHtml(title)}</p>
+          <p>${escapeHtml(desc)}</p>
+          <p class="text-xs text-slate-500">Official attachment: ${escapeHtml(fileName)}</p>
+        </div>
+      `
+    };
+
+    HR_TEMPLATES.unshift(newDoc);
+    renderHrDocumentsSection();
+    showToast(`Template "${title}" uploaded and added to directory!`, 'success');
+    this.reset();
+  });
+
   $('#btn-create-custom-template').on('click', function () {
-    showToast('Custom template upload wizard ready (Supports .docx & .pdf)', 'info');
+    const $form = $('#card-add-hr-doc-form');
+    if ($form.length) {
+      $form[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+      $('#hr-doc-input-title').focus();
+    } else {
+      showToast('Custom template upload wizard ready (Supports .docx & .pdf)', 'info');
+    }
   });
 
   // =========================================================================
@@ -5416,6 +5538,9 @@ $(document).ready(function () {
   if (isBillingPage && (hashSec === 'history' || hashSec === 'create' || hashSec === 'billing')) {
     initHash = 'billing';
   }
+  // Immediately render sidebar badges on startup
+  renderSidebarBadges();
+
   if (!window.Auth || window.Auth.isAuthenticated()) {
     switchSection(initHash);
     if (!isStandalonePage) {

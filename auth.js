@@ -337,6 +337,10 @@
       if (dashSec) dashSec.classList.remove('hidden');
     }
 
+    if (typeof window.renderSidebarBadges === 'function') {
+      window.renderSidebarBadges();
+    }
+
     // Clean any query string from URL if form submission polluted it
     if (window.location.search) {
       const cleanUrl = window.location.pathname + (window.location.hash || '#dashboard');
