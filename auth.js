@@ -306,6 +306,11 @@
     else if (currentPath.includes('add-employee')) pageDefaultSec = 'add-employee';
     else if (currentPath.includes('hr-document')) pageDefaultSec = 'hr-documents';
     else if (currentPath.includes('holiday')) pageDefaultSec = 'holidays';
+    else if (currentPath.includes('billing.html') || currentPath.endsWith('billing')) pageDefaultSec = 'billing';
+    else if (currentPath.includes('order.html') || currentPath.endsWith('order')) pageDefaultSec = 'orders';
+    else if (currentPath.includes('menu.html') || currentPath.endsWith('menu')) pageDefaultSec = 'menu';
+    else if (currentPath.includes('customer.html') || currentPath.endsWith('customer')) pageDefaultSec = 'customers';
+    else if (currentPath.includes('analytics.html') || currentPath.endsWith('analytics')) pageDefaultSec = 'analytics';
 
     if (pageDefaultSec) {
       // On standalone HR pages: maintain page's own section, never bounce back to dashboard

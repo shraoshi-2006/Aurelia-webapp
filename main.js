@@ -545,6 +545,11 @@ $(document).ready(function () {
     if ($targetSec.length === 0) {
       const isSubdir = window.location.pathname.includes('/human-resources');
       const pageFileMap = {
+        'billing': isSubdir ? '../billing.html' : 'billing.html',
+        'orders': isSubdir ? '../order.html' : 'order.html',
+        'menu': isSubdir ? '../menu.html' : 'menu.html',
+        'customers': isSubdir ? '../customer.html' : 'customer.html',
+        'analytics': isSubdir ? '../analytics.html' : 'analytics.html',
         'hr-documents': isSubdir ? 'hr-document-template.html' : 'human-resources/hr-document-template.html',
         'add-employee': isSubdir ? 'add-employee.html' : 'human-resources/add-employee.html',
         'employees': isSubdir ? 'employee-list.html' : 'human-resources/employee-list.html',
@@ -5388,19 +5393,36 @@ $(document).ready(function () {
                    currentPath.includes('add-employee') ||
                    currentPath.includes('hr-document') ||
                    currentPath.includes('holiday');
+  const isBillingPage = currentPath.includes('billing.html') || currentPath.endsWith('billing');
+  const isOrdersPage = currentPath.includes('order.html') || currentPath.endsWith('order');
+  const isMenuPage = currentPath.includes('menu.html') || currentPath.endsWith('menu');
+  const isCustomerPage = currentPath.includes('customer.html') || currentPath.endsWith('customer');
+  const isAnalyticsPage = currentPath.includes('analytics.html') || currentPath.endsWith('analytics');
 
   let defaultSection = 'dashboard';
   if (currentPath.includes('employee-list')) defaultSection = 'employees';
   else if (currentPath.includes('add-employee')) defaultSection = 'add-employee';
   else if (currentPath.includes('hr-document')) defaultSection = 'hr-documents';
   else if (currentPath.includes('holiday')) defaultSection = 'holidays';
+  else if (isBillingPage) defaultSection = 'billing';
+  else if (isOrdersPage) defaultSection = 'orders';
+  else if (isMenuPage) defaultSection = 'menu';
+  else if (isCustomerPage) defaultSection = 'customers';
+  else if (isAnalyticsPage) defaultSection = 'analytics';
 
+  const isStandalonePage = isHRPage || isBillingPage || isOrdersPage || isMenuPage || isCustomerPage || isAnalyticsPage;
   const hashSec = window.location.hash.replace('#', '');
-  const initHash = isHRPage ? defaultSection : (hashSec || 'dashboard');
+  let initHash = isStandalonePage ? defaultSection : (hashSec || 'dashboard');
+  if (isBillingPage && (hashSec === 'history' || hashSec === 'create' || hashSec === 'billing')) {
+    initHash = 'billing';
+  }
   if (!window.Auth || window.Auth.isAuthenticated()) {
     switchSection(initHash);
-    if (!isHRPage) {
+    if (!isStandalonePage) {
       renderDashboard();
+    }
+    if (isBillingPage && hashSec === 'history') {
+      switchBillingSubtab('history');
     }
     renderSidebarBadges();
     updateTopbarAvatarUI();
