@@ -499,7 +499,11 @@ $(document).ready(function () {
     orders: 'Order Queue & Kitchen Tickets',
     customers: 'Guest Directory & Loyalty',
     analytics: 'Revenue & Sales Analytics',
-    settings: 'Station & Terminal Settings'
+    settings: 'Station & Terminal Settings',
+    'hr-documents': 'HR Document Templates & Agreements',
+    employees: 'Staff Directory & Shift Roster',
+    'add-employee': 'Add New Employee (Staff Onboarding)',
+    holidays: 'Hotel Holiday & Observance Calendar 2026'
   };
 
   function switchSection(target) {
@@ -514,6 +518,25 @@ $(document).ready(function () {
     $('.Aurelia-nav-item, .aurelia-nav-item, .finset-nav-item, .nav-link').each(function () {
       $(this).toggleClass('active', $(this).data('target') === target);
     });
+
+    // Auto-sync Human Resource submenu expansion and active pill
+    if (['hr-documents', 'employees', 'add-employee', 'holidays'].includes(target)) {
+      $('#submenu-human-resource').removeClass('hidden');
+      $('#chevron-nav-hr').addClass('rotate-180');
+
+      const hrActionMap = {
+        'hr-documents': 'hr-doc-templates',
+        'add-employee': 'add-employee',
+        'employees': 'employee-list',
+        'holidays': 'holiday-list'
+      };
+      const act = hrActionMap[target];
+      $('.hr-sub-item').removeClass('text-sky-400 font-bold active').addClass('text-slate-300');
+      $('.hr-sub-item span.rounded-full').removeClass('border-sky-400 bg-sky-400').addClass('border-slate-400');
+      const $activeItem = $(`.hr-sub-item[data-action="${act}"]`);
+      $activeItem.addClass('text-sky-400 font-bold active').removeClass('text-slate-300');
+      $activeItem.find('span.rounded-full').addClass('border-sky-400 bg-sky-400').removeClass('border-slate-400');
+    }
 
     // Hide all sections, show target
     $('main section').addClass('hidden').attr('hidden', true);
@@ -544,7 +567,11 @@ $(document).ready(function () {
       menu: renderMenuSection,
       orders: renderOrdersSection,
       customers: renderCustomersSection,
-      analytics: renderAnalyticsSection
+      analytics: renderAnalyticsSection,
+      'hr-documents': renderHrDocumentsSection,
+      employees: renderEmployeesSection,
+      'add-employee': renderAddEmployeeSection,
+      holidays: renderHolidaysSection
     };
     if (sectionRenderers[target]) sectionRenderers[target]();
 
@@ -650,8 +677,32 @@ $(document).ready(function () {
     $(this).addClass('text-sky-400 font-bold active').removeClass('text-slate-300');
     $(this).find('span.rounded-full').addClass('border-sky-400 bg-sky-400').removeClass('border-slate-400');
 
-    if (action === 'employee-list' || action === 'add-employee') {
-      typeof openStaffDirectoryModal === 'function' ? openStaffDirectoryModal() : $('#modal-total-staff').removeClass('hidden');
+    if (action === 'hr-doc-templates') {
+      window.location.hash = 'hr-documents';
+      switchSection('hr-documents');
+      showToast('Viewing HR Document Templates & Legal Agreements', 'info');
+      return;
+    }
+
+    if (action === 'add-employee') {
+      window.location.hash = 'add-employee';
+      switchSection('add-employee');
+      showToast('Onboard New Employee: Fill registration details', 'info');
+      return;
+    }
+
+    if (action === 'employee-list') {
+      window.location.hash = 'employees';
+      switchSection('employees');
+      showToast('Viewing Employee Directory (48 staff members)', 'info');
+      return;
+    }
+
+    if (action === 'holiday-list') {
+      window.location.hash = 'holidays';
+      switchSection('holidays');
+      showToast('Viewing Hotel Holiday & Observance Calendar 2026', 'info');
+      return;
     }
 
     const hrToastMap = {
@@ -1144,8 +1195,9 @@ $(document).ready(function () {
   }
 
   function animateStaffMetrics() {
-    const totalEmployees = 48;
-    const onDutyEmployees = 42;
+    const staffList = Storage.get(STORAGE_KEYS.STAFF, DEFAULT_STAFF) || DEFAULT_STAFF;
+    const totalEmployees = staffList.length;
+    const onDutyEmployees = staffList.filter(s => s.status === 'On Duty').length;
     const onLeaveEmployees = totalEmployees - onDutyEmployees;
     animateNumber('#stat-total-employee, #stat-total-savings', totalEmployees, {
       duration: 900,
@@ -4644,6 +4696,609 @@ $(document).ready(function () {
     } else {
       applyProfileChanges();
     }
+  });
+
+  // =========================================================================
+  // 10. HR DOCUMENT TEMPLATES STANDALONE PAGE CONTROLLER
+  // =========================================================================
+  const HR_TEMPLATES = [
+    {
+      id: 'doc-emp-contract',
+      category: 'contracts',
+      categoryLabel: 'Employment Contract',
+      title: 'Executive & Staff Employment Agreement',
+      code: 'AGR-EMP-2026',
+      badge: 'PDF • DOCX',
+      pages: '4 Pages',
+      updated: '15 Oct 2026',
+      desc: 'Standard hotel permanent employment agreement outlining remuneration, probationary terms, and duty hours.',
+      body: `
+        <div class="space-y-3">
+          <p class="font-bold text-slate-800 uppercase tracking-wide">1. Engagement & Position</p>
+          <p>The Employee is appointed to the designated operational role within Aurelia Hotel & Restaurant Operations. The Employee agrees to perform duties diligently in adherence to luxury hospitality standards.</p>
+          <p class="font-bold text-slate-800 uppercase tracking-wide mt-3">2. Compensation & Allowances</p>
+          <p>Salary, HRA, shift differential, PF contribution, and gratuity are detailed under Schedule A, disbursed monthly on or before the 1st day of each subsequent calendar month.</p>
+          <p class="font-bold text-slate-800 uppercase tracking-wide mt-3">3. Code of Conduct & Termination</p>
+          <p>Either party may terminate employment with thirty (30) days prior written notice or payment of base salary in lieu thereof, subject to hotel inventory clearance.</p>
+        </div>
+      `
+    },
+    {
+      id: 'doc-nda-privacy',
+      category: 'compliance',
+      categoryLabel: 'Compliance & NDA',
+      title: 'Hotel Non-Disclosure & Guest Data Privacy Agreement',
+      code: 'NDA-GST-2026',
+      badge: 'Legal Verified',
+      pages: '2 Pages',
+      updated: '12 Oct 2026',
+      desc: 'Strict non-disclosure agreement protecting high-profile guest identities, reservation logs, and payment details.',
+      body: `
+        <div class="space-y-3">
+          <p class="font-bold text-slate-800 uppercase tracking-wide">1. Confidential Information</p>
+          <p>All guest profiles, reservation data, VIP schedules, credit card tokens, and business financials constitute proprietary hotel confidential data under the Digital Data Protection Act.</p>
+          <p class="font-bold text-slate-800 uppercase tracking-wide mt-3">2. Prohibition on Disclosure</p>
+          <p>Staff members shall not photograph, record, or disclose any guest information to third parties, social media, or press under penalty of immediate termination and legal prosecution.</p>
+        </div>
+      `
+    },
+    {
+      id: 'doc-offer-letter',
+      category: 'contracts',
+      categoryLabel: 'Offer Letter',
+      title: 'Formal Job Offer & Welcome Appointment Letter',
+      code: 'LTR-OFR-2026',
+      badge: 'Editable',
+      pages: '2 Pages',
+      updated: '20 Oct 2026',
+      desc: 'Standardized onboarding offer letter with designation, CTC breakdown, reporting station, and joining date.',
+      body: `
+        <div class="space-y-3">
+          <p>Dear Candidate,</p>
+          <p>We are pleased to extend an offer of employment with <strong>Aurelia Luxury Hotel & Restaurant</strong>. We were impressed by your hospitality background and look forward to having you on our team.</p>
+          <p class="font-bold text-slate-800 uppercase tracking-wide mt-3">Terms of Offer</p>
+          <p>• Department: Operations / Hospitality Wings<br>• Annual CTC: As outlined in Annexure I<br>• Reporting Location: Station Road Main Complex, 1st Floor</p>
+        </div>
+      `
+    },
+    {
+      id: 'doc-grooming-sop',
+      category: 'policies',
+      categoryLabel: 'Hotel SOP',
+      title: 'Staff Grooming, Hygiene & Uniform Standards SOP',
+      code: 'SOP-GRM-2026',
+      badge: 'Mandatory',
+      pages: '3 Pages',
+      updated: '08 Oct 2026',
+      desc: 'Mandatory luxury hospitality grooming standards, personal hygiene, and front-of-house uniform protocols.',
+      body: `
+        <div class="space-y-3">
+          <p class="font-bold text-slate-800 uppercase tracking-wide">1. Uniform Standards</p>
+          <p>All staff on duty must wear spotless, steam-pressed Aurelia branded uniforms with polished name tags displayed on the left lapel.</p>
+          <p class="font-bold text-slate-800 uppercase tracking-wide mt-3">2. Personal Hygiene & Grooming</p>
+          <p>Hair must be neat and securely styled; kitchen personnel must wear approved hair nets and non-slip culinary footwear at all times in food preparation bays.</p>
+        </div>
+      `
+    },
+    {
+      id: 'doc-culinary-recipe',
+      category: 'compliance',
+      categoryLabel: 'Trade Secrets',
+      title: 'Culinary Recipes & Food Formula Protection Agreement',
+      code: 'AGR-RCP-2026',
+      badge: 'Kitchen Core',
+      pages: '2 Pages',
+      updated: '01 Oct 2026',
+      desc: 'Protects proprietary sauce recipes, royal Mughlai spice blends, and signature kitchen formulations.',
+      body: `
+        <div class="space-y-3">
+          <p class="font-bold text-slate-800 uppercase tracking-wide">1. Intellectual Property</p>
+          <p>All signature recipes, spice blends, preparation marinades, and presentation guidelines developed within Aurelia kitchens remain exclusive property of the hotel.</p>
+        </div>
+      `
+    },
+    {
+      id: 'doc-cash-pos-sop',
+      category: 'policies',
+      categoryLabel: 'Finance SOP',
+      title: 'POS Terminal, Cash Drawer & Cashier Handover Policy',
+      code: 'SOP-POS-2026',
+      badge: 'Cash Desk',
+      pages: '2 Pages',
+      updated: '18 Oct 2026',
+      desc: 'Daily shift cash balancing, POS terminal settlements, Pine Labs EDC machine handling, and discrepancy procedures.',
+      body: `
+        <div class="space-y-3">
+          <p class="font-bold text-slate-800 uppercase tracking-wide">1. Shift Opening & Float</p>
+          <p>Every cashier must verify the ₹5,000 baseline cash float prior to billing commencement and sign the ledger.</p>
+          <p class="font-bold text-slate-800 uppercase tracking-wide mt-3">2. Shift Settlement</p>
+          <p>End-of-day Z-reports from EDC machines must match the Aurelia digital billing ledger exactly before handover.</p>
+        </div>
+      `
+    },
+    {
+      id: 'doc-intern-trainee',
+      category: 'contracts',
+      categoryLabel: 'Internship',
+      title: 'Hospitality Internship & Industrial Trainee Agreement',
+      code: 'AGR-TRN-2026',
+      badge: 'Training',
+      pages: '2 Pages',
+      updated: '14 Oct 2026',
+      desc: 'Curriculum-accredited hotel management training contract with monthly stipend and rotation schedule.',
+      body: `
+        <div class="space-y-3">
+          <p class="font-bold text-slate-800 uppercase tracking-wide">1. Training Scope</p>
+          <p>The Trainee will rotate across Front Office, Housekeeping, Food & Beverage Service, and Kitchen operations over a 6-month period.</p>
+        </div>
+      `
+    },
+    {
+      id: 'doc-parttime-banquet',
+      category: 'contracts',
+      categoryLabel: 'Part-Time',
+      title: 'Part-Time & Event Banqueting Staff Agreement',
+      code: 'AGR-BNQ-2026',
+      badge: 'Per-Event',
+      pages: '1 Page',
+      updated: '22 Oct 2026',
+      desc: 'Flexible event-based agreement for weekend weddings, corporate banquets, and seasonal peak dining.',
+      body: `
+        <div class="space-y-3">
+          <p class="font-bold text-slate-800 uppercase tracking-wide">1. Daily Wage & Shift Commitment</p>
+          <p>Compensation is fixed per 8-hour banquet shift, disbursed via direct UPI/NEFT within 48 hours of event completion.</p>
+        </div>
+      `
+    },
+    {
+      id: 'doc-ethics-posh',
+      category: 'compliance',
+      categoryLabel: 'Ethics & POSH',
+      title: 'Workplace Ethics & POSH Compliance Policy',
+      code: 'POL-ETH-2026',
+      badge: 'Statutory',
+      pages: '3 Pages',
+      updated: '05 Oct 2026',
+      desc: 'Zero tolerance policy for workplace harassment, safety grievance mechanisms, and internal committee contacts.',
+      body: `
+        <div class="space-y-3">
+          <p class="font-bold text-slate-800 uppercase tracking-wide">1. Zero Tolerance Mandate</p>
+          <p>Aurelia maintains an absolute zero-tolerance policy against any form of discrimination, harassment, or intimidation.</p>
+        </div>
+      `
+    },
+    {
+      id: 'doc-food-safety',
+      category: 'policies',
+      categoryLabel: 'HACCP Safety',
+      title: 'FSSAI Food Safety, Sanitization & Allergen Protocol',
+      code: 'SOP-SAF-2026',
+      badge: 'Food Safety',
+      pages: '4 Pages',
+      updated: '10 Oct 2026',
+      desc: 'Cold storage temperature logs, cross-contamination prevention, raw food handling, and sanitization protocols.',
+      body: `
+        <div class="space-y-3">
+          <p class="font-bold text-slate-800 uppercase tracking-wide">1. Temperature Monitoring</p>
+          <p>Walk-in freezers must maintain -18°C or below; all dairy and fresh poultry cold storage must log at 0°C to 4°C thrice daily.</p>
+        </div>
+      `
+    },
+    {
+      id: 'doc-warning-letter',
+      category: 'letters',
+      categoryLabel: 'Notice',
+      title: 'Official Disciplinary Warning & Incident Notice',
+      code: 'LTR-WRN-2026',
+      badge: 'Formal',
+      pages: '1 Page',
+      updated: '19 Oct 2026',
+      desc: 'Standard HR incident counseling letter for unauthorized absence, safety breach, or guest service violation.',
+      body: `
+        <div class="space-y-3">
+          <p class="font-bold text-slate-800 uppercase tracking-wide">Incident Citation</p>
+          <p>This written notice records an operational deficiency observed on duty. The Employee is given opportunity to provide written clarification within 48 hours.</p>
+        </div>
+      `
+    },
+    {
+      id: 'doc-relieving-cert',
+      category: 'letters',
+      categoryLabel: 'Certificate',
+      title: 'Experience, Conduct & Relieving Certificate',
+      code: 'CRT-EXP-2026',
+      badge: 'HR Letterhead',
+      pages: '1 Page',
+      updated: '25 Oct 2026',
+      desc: 'Official hotel release certificate acknowledging employee tenure, role contributions, and satisfactory conduct.',
+      body: `
+        <div class="space-y-3">
+          <p><strong>TO WHOMSOEVER IT MAY CONCERN</strong></p>
+          <p>This is to certify that the employee was employed with Aurelia Luxury Hotel & Restaurant in good standing, exhibiting exemplary dedication to service excellence.</p>
+        </div>
+      `
+    }
+  ];
+
+  let currentHrDocCategory = 'all';
+
+  function renderHrDocumentsSection() {
+    const $grid = $('#hr-templates-grid');
+    if (!$grid.length) return;
+
+    const query = $.trim($('#input-search-hr-docs').val()).toLowerCase();
+    const filtered = HR_TEMPLATES.filter(tpl => {
+      const matchCat = (currentHrDocCategory === 'all' || tpl.category === currentHrDocCategory);
+      const matchSearch = !query || tpl.title.toLowerCase().includes(query) || tpl.code.toLowerCase().includes(query) || tpl.desc.toLowerCase().includes(query);
+      return matchCat && matchSearch;
+    });
+
+    if (filtered.length === 0) {
+      $grid.empty();
+      $('#hr-templates-empty').removeClass('hidden');
+      return;
+    }
+
+    $('#hr-templates-empty').addClass('hidden');
+    let html = '';
+
+    filtered.forEach(tpl => {
+      html += `
+        <div class="Aurelia-card p-5 space-y-4 flex flex-col justify-between hover:border-[#FCA311] transition-all shadow-xs group">
+          <div class="space-y-2.5">
+            <div class="flex items-center justify-between">
+              <span class="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-[#14213D] text-[#FCA311]">${tpl.code}</span>
+              <span class="text-[10px] font-semibold text-slate-400 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded-md">${tpl.badge}</span>
+            </div>
+            <h3 class="text-sm font-bold text-slate-900 dark:text-white group-hover:text-[#FCA311] transition-colors leading-snug">
+              ${tpl.title}
+            </h3>
+            <p class="text-xs text-slate-500 dark:text-slate-400 line-clamp-2 leading-relaxed">
+              ${tpl.desc}
+            </p>
+          </div>
+
+          <div class="pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-[11px] text-slate-400">
+            <span class="font-medium">${tpl.pages} • ${tpl.updated}</span>
+            <button type="button" class="btn-preview-hr-doc btn-Aurelia-secondary text-xs py-1 px-3" data-id="${tpl.id}">
+              Preview & Use
+            </button>
+          </div>
+        </div>
+      `;
+    });
+
+    $grid.html(html);
+  }
+
+  // Filter Buttons for HR Documents
+  $(document).on('click', '.hr-doc-filter-btn', function () {
+    $('.hr-doc-filter-btn').removeClass('active bg-[#14213D] text-white shadow-xs').addClass('text-slate-600 dark:text-slate-400 hover:text-slate-900');
+    $(this).addClass('active bg-[#14213D] text-white shadow-xs').removeClass('text-slate-600 dark:text-slate-400 hover:text-slate-900');
+    currentHrDocCategory = $(this).data('category') || 'all';
+    renderHrDocumentsSection();
+  });
+
+  // Search input for HR Documents
+  $('#input-search-hr-docs').on('input', function () {
+    renderHrDocumentsSection();
+  });
+
+  // Preview & Print HR Document
+  $(document).on('click', '.btn-preview-hr-doc', function () {
+    const id = $(this).data('id');
+    const tpl = HR_TEMPLATES.find(t => t.id === id);
+    if (!tpl) return;
+
+    $('#preview-doc-title').text(tpl.title);
+    $('#preview-doc-meta').text(`${tpl.categoryLabel} • Code: ${tpl.code} • ${tpl.pages}`);
+    $('#preview-doc-ref').text(`REF: AUR/HR/2026/${tpl.code}`);
+    $('#preview-doc-body').html(tpl.body);
+
+    $('#modal-preview-hr-doc').removeClass('hidden');
+  });
+
+  $('#btn-print-hr-doc').on('click', function () {
+    window.print();
+  });
+
+  $('#btn-download-hr-doc').on('click', function () {
+    showToast('Document exported to PDF format with hotel seal', 'success');
+  });
+
+  $('#btn-create-custom-template').on('click', function () {
+    showToast('Custom template upload wizard ready (Supports .docx & .pdf)', 'info');
+  });
+
+  // =========================================================================
+  // 11. EMPLOYEES STANDALONE PAGE CONTROLLER
+  // =========================================================================
+  let currentStaffPageFilter = 'all';
+
+  function renderEmployeesSection() {
+    const staffList = Storage.get(STORAGE_KEYS.STAFF, DEFAULT_STAFF) || DEFAULT_STAFF;
+    const search = $.trim($('#input-page-staff-search').val()).toLowerCase();
+    const deptFilter = $('#select-page-staff-dept').val() || 'all';
+
+    const filtered = staffList.filter(s => {
+      const matchStatus = (currentStaffPageFilter === 'all') ||
+        (currentStaffPageFilter === 'onduty' && s.status === 'On Duty') ||
+        (currentStaffPageFilter === 'leave' && s.status === 'On Leave');
+
+      const matchDept = (deptFilter === 'all') || (s.department === deptFilter);
+
+      const sName = (s.name || '').toLowerCase();
+      const sRole = (s.role || '').toLowerCase();
+      const sDept = (s.department || '').toLowerCase();
+      const sId = (s.id || '').toLowerCase();
+
+      const matchSearch = !search || sName.includes(search) || sRole.includes(search) || sDept.includes(search) || sId.includes(search);
+      return matchStatus && matchDept && matchSearch;
+    });
+
+    const $tbody = $('#page-staff-tbody');
+    $tbody.empty();
+
+    if (filtered.length === 0) {
+      $('#page-staff-empty').removeClass('hidden');
+    } else {
+      $('#page-staff-empty').addClass('hidden');
+      filtered.forEach(s => {
+        const initials = (s.name || 'Staff').split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+        const isOnDuty = s.status === 'On Duty';
+
+        $tbody.append(`
+          <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors">
+            <td class="py-3 px-4">
+              <div class="flex items-center space-x-3">
+                <div class="w-8 h-8 rounded-full bg-[#14213D] text-[#FCA311] font-bold text-xs flex items-center justify-center flex-shrink-0 shadow-xs">
+                  ${initials}
+                </div>
+                <div>
+                  <div class="font-bold text-slate-900 dark:text-white">${escapeHtml(s.name)}</div>
+                  <div class="text-[11px] font-mono text-slate-400">${escapeHtml(s.id)}</div>
+                </div>
+              </div>
+            </td>
+            <td class="py-3 px-4">
+              <div class="font-semibold text-slate-800 dark:text-slate-200">${escapeHtml(s.role)}</div>
+              <div class="text-[11px] text-slate-400">${escapeHtml(s.department)}</div>
+            </td>
+            <td class="py-3 px-4 font-medium text-slate-600 dark:text-slate-300">
+              ${escapeHtml(s.station)}
+            </td>
+            <td class="py-3 px-4 font-mono text-xs text-slate-500 dark:text-slate-400">
+              ${escapeHtml(s.shift)}
+            </td>
+            <td class="py-3 px-4 text-center">
+              <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold ${
+                isOnDuty ? 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 border border-emerald-200/50' : 'bg-amber-50 dark:bg-amber-950/40 text-amber-700 dark:text-amber-400 border border-amber-200/50'
+              }">
+                <span class="w-1.5 h-1.5 rounded-full ${isOnDuty ? 'bg-emerald-500' : 'bg-amber-500'} mr-1.5"></span>
+                ${escapeHtml(s.status)}
+              </span>
+            </td>
+            <td class="py-3 px-4 text-slate-500 font-mono text-xs">
+              ${escapeHtml(s.phone)}
+            </td>
+          </tr>
+        `);
+      });
+    }
+
+    $('#page-staff-count-label').text(`Showing ${filtered.length} of ${staffList.length} staff members`);
+  }
+
+  // Filter Buttons for Employees page
+  $(document).on('click', '.btn-staff-filter', function () {
+    $('.btn-staff-filter').removeClass('active bg-[#14213D] text-white').addClass('text-slate-600 dark:text-slate-400 hover:text-slate-900');
+    $(this).addClass('active bg-[#14213D] text-white').removeClass('text-slate-600 dark:text-slate-400 hover:text-slate-900');
+    currentStaffPageFilter = $(this).data('filter') || 'all';
+    renderEmployeesSection();
+  });
+
+  $('#select-page-staff-dept').on('change', function () {
+    renderEmployeesSection();
+  });
+
+  $('#input-page-staff-search').on('input', function () {
+    renderEmployeesSection();
+  });
+
+  $('#btn-page-add-employee').on('click', function () {
+    window.location.hash = 'add-employee';
+    switchSection('add-employee');
+  });
+
+  // =========================================================================
+  // 12. ADD EMPLOYEE STANDALONE PAGE CONTROLLER
+  // =========================================================================
+  function renderAddEmployeeSection() {
+    const staffList = Storage.get(STORAGE_KEYS.STAFF, DEFAULT_STAFF) || DEFAULT_STAFF;
+    const nextNum = staffList.length + 1;
+    const nextId = 'AUR-EMP-2026-' + String(nextNum).padStart(3, '0');
+    $('#add-emp-id').val(nextId);
+    $('#preview-emp-id-display').text(nextId);
+
+    function syncEmpPreview() {
+      const name = $.trim($('#add-emp-name').val()) || 'Vikramaditya Roy';
+      const role = $.trim($('#add-emp-role').val()) || 'Guest Relations Executive';
+      const dept = $('#add-emp-dept').val() || 'Front Office';
+      const status = $('#add-emp-status').val() || 'On Duty';
+      const shift = $('#add-emp-shift').val() || '07:00 - 15:30 (Morning)';
+
+      const initials = name.split(' ').filter(Boolean).map(n => n[0]).join('').substring(0, 2).toUpperCase() || 'VR';
+      $('#preview-emp-avatar').text(initials);
+      $('#preview-emp-name-display').text(name);
+      $('#preview-emp-role-display').text(role);
+      $('#preview-emp-dept-display').text(`${dept} • ${status}`);
+      $('#preview-emp-shift-display').text(shift.split(' ')[0]);
+    }
+
+    $('#add-emp-name, #add-emp-role, #add-emp-dept, #add-emp-status, #add-emp-shift').off('input change').on('input change', syncEmpPreview);
+    syncEmpPreview();
+  }
+
+  function handleAddEmployeeSubmit() {
+    const name = $.trim($('#add-emp-name').val());
+    const role = $.trim($('#add-emp-role').val());
+    const dept = $('#add-emp-dept').val();
+    const station = $.trim($('#add-emp-station').val());
+    const shift = $('#add-emp-shift').val();
+    const phone = $.trim($('#add-emp-phone').val());
+    const email = $.trim($('#add-emp-email').val());
+    const status = $('#add-emp-status').val() || 'On Duty';
+    const id = $('#add-emp-id').val() || ('AUR-EMP-2026-' + Date.now().toString().slice(-3));
+
+    if (!name) {
+      showToast('Please enter employee legal name', 'warning');
+      $('#add-emp-name').focus();
+      return;
+    }
+    if (!role) {
+      showToast('Please enter designation / role', 'warning');
+      $('#add-emp-role').focus();
+      return;
+    }
+    if (!station) {
+      showToast('Please specify assigned station or duty desk', 'warning');
+      $('#add-emp-station').focus();
+      return;
+    }
+
+    const staffList = Storage.get(STORAGE_KEYS.STAFF, DEFAULT_STAFF) || DEFAULT_STAFF;
+    const newStaff = {
+      id: id,
+      name: name,
+      role: role,
+      department: dept,
+      station: station,
+      shift: shift.split(' ')[0] + ' ' + (shift.split(' ')[1] || '-') + ' ' + (shift.split(' ')[2] || ''),
+      status: status,
+      phone: phone || '+91 98000 00000',
+      email: email
+    };
+
+    staffList.unshift(newStaff);
+    Storage.set(STORAGE_KEYS.STAFF, staffList);
+
+    animateStaffMetrics();
+    showToast(`Staff member ${name} onboarded successfully!`, 'success');
+
+    // Reset Form
+    $('#form-standalone-add-employee')[0].reset();
+
+    // Redirect to Employee Directory to view newly onboarded staff member
+    window.location.hash = 'employees';
+    switchSection('employees');
+  }
+
+  $('#btn-submit-add-emp, #btn-submit-add-emp-top').on('click', function (e) {
+    e.preventDefault();
+    handleAddEmployeeSubmit();
+  });
+
+  $('.btn-back-to-employees').on('click', function (e) {
+    e.preventDefault();
+    window.location.hash = 'employees';
+    switchSection('employees');
+  });
+
+  // =========================================================================
+  // 13. HOLIDAY LIST STANDALONE PAGE CONTROLLER
+  // =========================================================================
+  const HOTEL_HOLIDAYS_2026 = [
+    { date: '26 Jan 2026', day: 'Monday', name: 'Republic Day', type: 'gazetted', typeLabel: 'Gazetted Holiday', policy: 'Mandatory operational double-time pay or compensatory day off', status: 'Observed' },
+    { date: '17 Mar 2026', day: 'Tuesday', name: 'Maha Shivratri', type: 'floating', typeLabel: 'Floating Holiday', policy: 'Departmental roster rotation; floating leave option', status: 'Observed' },
+    { date: '25 Mar 2026', day: 'Wednesday', name: 'Holi (Festival of Colors)', type: 'gazetted', typeLabel: 'Gazetted Holiday', policy: 'Banquet & F&B active roster; shift bonus + comp off', status: 'Observed' },
+    { date: '03 Apr 2026', day: 'Friday', name: 'Good Friday', type: 'gazetted', typeLabel: 'Gazetted Holiday', policy: 'Normal hospitality shift timings; holiday rate applicable', status: 'Observed' },
+    { date: '11 Apr 2026', day: 'Saturday', name: 'Eid-ul-Fitr', type: 'gazetted', typeLabel: 'Gazetted Holiday', policy: 'Kitchen & banquet high coverage; compensatory credit', status: 'Observed' },
+    { date: '01 May 2026', day: 'Friday', name: 'International Labor Day', type: 'gazetted', typeLabel: 'Gazetted Holiday', policy: 'Statutory hospitality holiday pay for all active roster staff', status: 'Observed' },
+    { date: '17 Jun 2026', day: 'Wednesday', name: 'Bakrid / Eid al-Adha', type: 'floating', typeLabel: 'Floating Holiday', policy: 'Roster coverage swap allowed with 72h manager signoff', status: 'Observed' },
+    { date: '15 Aug 2026', day: 'Saturday', name: 'Independence Day', type: 'gazetted', typeLabel: 'Gazetted Holiday', policy: 'Flag hoisting ceremony at 09:00; double daily shift credit', status: 'Observed' },
+    { date: '04 Sep 2026', day: 'Friday', name: 'Janmashtami', type: 'floating', typeLabel: 'Floating Holiday', policy: 'Floating leave option upon prior supervisor approval', status: 'Observed' },
+    { date: '02 Oct 2026', day: 'Friday', name: 'Mahatma Gandhi Jayanti', type: 'gazetted', typeLabel: 'Gazetted Holiday', policy: 'Dry day observed across hotel bars; room service normal', status: 'Observed' },
+    { date: '20 Oct 2026', day: 'Tuesday', name: 'Dussehra (Vijayadashami)', type: 'gazetted', typeLabel: 'Gazetted Holiday', policy: 'High dining volume; full operational staffing bonus', status: 'Observed' },
+    { date: '08 Nov 2026', day: 'Sunday', name: 'Diwali (Deepavali)', type: 'gazetted', typeLabel: 'Gazetted Holiday', policy: 'Festive hamper bonus + 2x compensatory shift allowance', status: 'Upcoming' },
+    { date: '24 Nov 2026', day: 'Tuesday', name: 'Guru Nanak Jayanti', type: 'floating', typeLabel: 'Floating Holiday', policy: 'Floating leave selection; minimum desk skeleton crew', status: 'Upcoming' },
+    { date: '25 Dec 2026', day: 'Friday', name: 'Christmas Day', type: 'gazetted', typeLabel: 'Gazetted Holiday', policy: 'Gala Dinner peak operational schedule; festive holiday bonus', status: 'Upcoming' }
+  ];
+
+  let currentHolidayFilter = 'all';
+
+  function renderHolidaysSection() {
+    const search = $.trim($('#input-holiday-search').val()).toLowerCase();
+
+    const filtered = HOTEL_HOLIDAYS_2026.filter(h => {
+      const matchType = (currentHolidayFilter === 'all') || (h.type === currentHolidayFilter);
+      const matchSearch = !search ||
+        h.name.toLowerCase().includes(search) ||
+        h.date.toLowerCase().includes(search) ||
+        h.day.toLowerCase().includes(search) ||
+        h.policy.toLowerCase().includes(search);
+      return matchType && matchSearch;
+    });
+
+    const $tbody = $('#page-holiday-tbody');
+    $tbody.empty();
+
+    if (filtered.length === 0) {
+      $('#page-holiday-empty').removeClass('hidden');
+    } else {
+      $('#page-holiday-empty').addClass('hidden');
+      filtered.forEach(h => {
+        const isGazetted = h.type === 'gazetted';
+        const isUpcoming = h.status === 'Upcoming';
+
+        $tbody.append(`
+          <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors">
+            <td class="py-3 px-4 font-mono font-bold text-slate-800 dark:text-slate-200">
+              ${escapeHtml(h.date)}
+            </td>
+            <td class="py-3 px-4">
+              <div class="font-bold text-slate-900 dark:text-white">${escapeHtml(h.name)}</div>
+            </td>
+            <td class="py-3 px-4 font-medium text-slate-600 dark:text-slate-300">
+              ${escapeHtml(h.day)}
+            </td>
+            <td class="py-3 px-4">
+              <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold ${
+                isGazetted
+                  ? 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400 border border-emerald-200/50'
+                  : 'bg-sky-50 dark:bg-sky-950/40 text-sky-700 dark:text-sky-400 border border-sky-200/50'
+              }">
+                ${escapeHtml(h.typeLabel)}
+              </span>
+            </td>
+            <td class="py-3 px-4 text-slate-600 dark:text-slate-400 text-xs">
+              ${escapeHtml(h.policy)}
+            </td>
+            <td class="py-3 px-4 text-center">
+              <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold ${
+                isUpcoming
+                  ? 'bg-amber-100 text-amber-800 dark:bg-amber-950/50 dark:text-amber-400'
+                  : 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400'
+              }">
+                ${isUpcoming ? '● In 8 Days' : 'Observed'}
+              </span>
+            </td>
+          </tr>
+        `);
+      });
+    }
+
+    $('#page-holiday-count-label').text(`Showing ${filtered.length} of ${HOTEL_HOLIDAYS_2026.length} holidays`);
+  }
+
+  $(document).on('click', '.btn-holiday-filter', function () {
+    $('.btn-holiday-filter').removeClass('active bg-[#14213D] text-white').addClass('text-slate-600 dark:text-slate-400 hover:text-slate-900');
+    $(this).addClass('active bg-[#14213D] text-white').removeClass('text-slate-600 dark:text-slate-400 hover:text-slate-900');
+    currentHolidayFilter = $(this).data('type') || 'all';
+    renderHolidaysSection();
+  });
+
+  $('#input-holiday-search').on('input', function () {
+    renderHolidaysSection();
   });
 
   // Initial Boot - guarded by authentication
