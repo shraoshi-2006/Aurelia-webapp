@@ -140,6 +140,14 @@
   <!-- html2canvas for Pine Labs high fidelity receipt rendering -->
   <script src="assets/html2canvas.min.js"></script>
 
+  <!-- SweetAlert2 Modal Engine -->
+  <script src="assets/sweetalert2.all.min.js"></script>
+  <script>
+    if (typeof Swal === 'undefined') {
+      document.write('<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"><\/script>');
+    }
+  </script>
+
   <style>
     :root {
       --app-bg: #F4F5F7;
@@ -650,45 +658,79 @@
 
     #btn-sidebar-collapse {
       position: absolute;
-      right: -14px;
-      top: 395px;
+      right: -20px;
+      top: 50% !important;
+      transform: translateY(-50%) !important;
       z-index: 60;
-      width: 28px;
-      height: 28px;
-      border-radius: 9999px;
+      width: 20px;
+      height: 48px;
+      border-radius: 0 16px 16px 0 !important;
       display: flex !important;
       align-items: center !important;
       justify-content: center !important;
       background: #494D5F !important;
-      border: 1.5px solid rgba(255, 255, 255, 0.45) !important;
+      border: none !important;
       color: #FFFFFF !important;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3) !important;
+      box-shadow: none !important;
       cursor: pointer;
-      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: background 0.2s cubic-bezier(0.4, 0, 0.2, 1), color 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* Seamless concave fillets so the button flows smoothly out of the sidebar */
+    #btn-sidebar-collapse::before {
+      content: '';
+      position: absolute;
+      top: -12px;
+      left: 0;
+      width: 12px;
+      height: 12px;
+      background: radial-gradient(circle at 100% 0%, transparent 12px, #494D5F 12.5px);
+      pointer-events: none;
+      transition: background 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    #btn-sidebar-collapse::after {
+      content: '';
+      position: absolute;
+      bottom: -12px;
+      left: 0;
+      width: 12px;
+      height: 12px;
+      background: radial-gradient(circle at 100% 100%, transparent 12px, #494D5F 12.5px);
+      pointer-events: none;
+      transition: background 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     #btn-sidebar-collapse:hover {
       background: #FCA311 !important;
       color: #000000 !important;
-      border-color: #FCA311 !important;
-      box-shadow: 0 4px 14px rgba(252, 163, 17, 0.5) !important;
-      transform: scale(1.12);
+      border: none !important;
+      box-shadow: none !important;
+    }
+
+    #btn-sidebar-collapse:hover::before {
+      background: radial-gradient(circle at 100% 0%, transparent 12px, #FCA311 12.5px);
+    }
+
+    #btn-sidebar-collapse:hover::after {
+      background: radial-gradient(circle at 100% 100%, transparent 12px, #FCA311 12.5px);
     }
 
     #app-sidebar.is-collapsed #btn-sidebar-collapse {
       position: absolute;
-      right: -14px;
-      top: 395px;
+      right: -20px;
+      top: 50% !important;
+      transform: translateY(-50%) !important;
       z-index: 60;
-      width: 28px;
-      height: 28px;
+      width: 20px;
+      height: 48px;
       display: flex !important;
       align-items: center !important;
       justify-content: center !important;
       background: #494D5F !important;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3) !important;
-      border: 1.5px solid rgba(255, 255, 255, 0.45) !important;
-      border-radius: 9999px;
+      box-shadow: none !important;
+      border: none !important;
+      border-radius: 0 16px 16px 0 !important;
       color: #FFFFFF !important;
       cursor: pointer;
     }
@@ -696,9 +738,8 @@
     #app-sidebar.is-collapsed #btn-sidebar-collapse:hover {
       background: #FCA311 !important;
       color: #000000 !important;
-      border-color: #FCA311 !important;
-      box-shadow: 0 4px 14px rgba(252, 163, 17, 0.5) !important;
-      transform: scale(1.12);
+      border: none !important;
+      box-shadow: none !important;
     }
 
     #app-sidebar.is-collapsed #btn-sidebar-help,
@@ -828,6 +869,104 @@
       border-width: 5px;
       border-style: solid;
       border-color: #14213D transparent transparent transparent;
+    }
+
+    /* ========================================================================= */
+    /* LUXURY NUMBER SCROLLER / ODOMETER DIGIT REEL ENGINE                      */
+    /* ========================================================================= */
+    .num-scroller-wrap {
+      display: inline-flex !important;
+      align-items: baseline;
+      vertical-align: baseline;
+      line-height: 1.18;
+      font-variant-numeric: tabular-nums;
+      -moz-font-feature-settings: "tnum";
+      -webkit-font-feature-settings: "tnum";
+      font-feature-settings: "tnum";
+      position: relative;
+      overflow: hidden;
+      user-select: none;
+    }
+
+    .num-scroller-col {
+      display: inline-block;
+      position: relative;
+      height: 1.18em;
+      line-height: 1.18em;
+      overflow: hidden;
+      vertical-align: baseline;
+      text-align: center;
+      min-width: 0.58em;
+    }
+
+    .num-scroller-strip {
+      display: flex;
+      flex-direction: column;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      will-change: transform;
+      transform: translateY(0%);
+    }
+
+    .num-scroller-digit {
+      height: 1.18em;
+      line-height: 1.18em;
+      display: block;
+      text-align: center;
+    }
+
+    .num-scroller-static {
+      display: inline-block;
+      line-height: 1.18em;
+      vertical-align: baseline;
+      white-space: pre;
+    }
+
+    /* Countable Number Roll Down Animation (from top to bottom) */
+    @keyframes numberRollDown {
+      0% {
+        opacity: 0.35;
+        transform: translateY(-8px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .number-roll-active {
+      display: inline-flex !important;
+      align-items: baseline;
+      animation: numberRollDown 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    /* SweetAlert2 Modal Styling & Viewport Priority */
+    .swal2-container {
+      z-index: 999999 !important;
+      font-family: "Plus Jakarta Sans", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+    }
+    .swal2-popup {
+      border-radius: 1.25rem !important;
+      font-family: inherit !important;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25) !important;
+    }
+    .swal2-title {
+      font-weight: 700 !important;
+      color: #1e293b !important;
+      font-size: 1.35rem !important;
+    }
+    .dark .swal2-popup {
+      background-color: #1e293b !important;
+      color: #f8fafc !important;
+      border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    }
+    .dark .swal2-title {
+      color: #f8fafc !important;
+    }
+    .dark .swal2-html-container {
+      color: #cbd5e1 !important;
     }
 
     /* Date Range Calendar Picker Controls (Frosted Glass Capsule) */
@@ -1150,69 +1289,88 @@
     /* ========================================================================= */
     /* REEL-INSPIRED SLIDING AUTHENTICATION CARD & CURVED-SHAPE ANIMATION ENGINE */
     /* (Matches https://www.instagram.com/reel/DR8ujFHD0zs/)                    */
+    /* Deep Navy (#14213d) Theme with Crisp White Card                          */
     /* ========================================================================= */
     #auth-container {
-      background: radial-gradient(circle at 50% 50%, #D8E0EA 0%, #CBD5E1 55%, #B4C0D0 100%) !important;
+      background: radial-gradient(circle at 50% 50%, #E2E8F0 0%, #CBD5E1 55%, #94A3B8 100%) !important;
       background-color: #CBD5E1 !important;
     }
+
     #auth-card-frame {
       position: relative !important;
       overflow: hidden !important;
       width: 100% !important;
       max-width: 860px !important;
-      min-height: 520px;
-      border: 2px solid rgba(168, 85, 247, 0.55) !important;
-      box-shadow: 0 0 32px rgba(168, 85, 247, 0.25), 0 20px 45px -10px rgba(15, 23, 42, 0.1) !important;
-      transition: border-color 0.4s ease, box-shadow 0.4s ease, min-height 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      background-color: #FFFFFF !important;
+      border: 2px solid #14213d !important;
+      box-shadow: 0 0 35px rgba(20, 33, 61, 0.35), 0 25px 50px -12px rgba(20, 33, 61, 0.2) !important;
+      border-radius: 24px !important;
+      transition: border-color 0.4s ease, box-shadow 0.4s ease, min-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     #auth-card-frame:hover {
-      border-color: rgba(168, 85, 247, 0.85) !important;
-      box-shadow: 0 0 42px rgba(168, 85, 247, 0.38), 0 25px 50px -10px rgba(15, 23, 42, 0.12) !important;
+      border-color: #1f3660 !important;
+      box-shadow: 0 0 45px rgba(20, 33, 61, 0.48), 0 30px 60px -12px rgba(20, 33, 61, 0.25) !important;
     }
 
-    /* Iconic Sweeping Curved Shapes from the Instagram Reel (proportioned for wide card) */
+    /* Iconic Sweeping Curved Shapes from the Instagram Reel */
     .card-curved-shape {
       position: absolute;
-      right: -160px;
-      top: -80px;
-      width: 820px;
-      height: 760px;
-      background: linear-gradient(45deg, rgba(147, 51, 234, 0.05), rgba(168, 85, 247, 0.22));
-      border-left: 2px solid #A855F7;
-      box-shadow: 0 0 32px rgba(168, 85, 247, 0.35);
-      border-radius: 52px;
-      transform: rotate(12deg) skewY(36deg);
+      right: 0;
+      top: -15%;
+      width: 900px;
+      height: 130%;
+      background: linear-gradient(135deg, #14213d 0%, #1f3660 48%, #0b1324 100%);
+      border-left: 3px solid rgba(255, 255, 255, 0.42);
+      box-shadow: -10px 0 35px rgba(20, 33, 61, 0.55), inset 0 0 45px rgba(0, 0, 0, 0.25);
+      border-radius: 65px;
+      transform: rotate(10deg) skewY(38deg);
       transform-origin: bottom right;
       transition: transform 1.25s cubic-bezier(0.65, 0, 0.35, 1);
       pointer-events: none;
-      z-index: 1;
+      z-index: 2;
     }
 
     .card-curved-shape2 {
       position: absolute;
-      left: -180px;
-      bottom: -110px;
-      width: 820px;
-      height: 760px;
-      background: linear-gradient(135deg, rgba(168, 85, 247, 0.18), rgba(124, 58, 237, 0.08));
-      border-right: 2px solid #A855F7;
-      box-shadow: 0 0 32px rgba(168, 85, 247, 0.35);
-      border-radius: 52px;
-      transform: rotate(0deg) skewY(0deg);
+      left: 0;
+      bottom: -15%;
+      width: 900px;
+      height: 130%;
+      background: linear-gradient(315deg, #14213d 0%, #1f3660 48%, #0b1324 100%);
+      border-right: 3px solid rgba(255, 255, 255, 0.42);
+      box-shadow: 10px 0 35px rgba(20, 33, 61, 0.55), inset 0 0 45px rgba(0, 0, 0, 0.25);
+      border-radius: 65px;
+      transform: rotate(0deg) skewY(0deg) translate(-120%, 0);
       transform-origin: bottom left;
       transition: transform 1.25s cubic-bezier(0.65, 0, 0.35, 1);
       pointer-events: none;
-      z-index: 1;
+      z-index: 2;
     }
 
     /* Dynamic Sweeping Curve Transition when switching to Register View */
     #auth-card-frame.view-register .card-curved-shape {
-      transform: rotate(0deg) skewY(0deg) translate(-125%, 20px);
+      transform: rotate(0deg) skewY(0deg) translate(-130%, 35px);
     }
 
     #auth-card-frame.view-register .card-curved-shape2 {
-      transform: rotate(-12deg) skewY(-36deg) translate(140px, -50px);
+      transform: rotate(-10deg) skewY(-38deg) translate(0, 0);
+    }
+
+    /* In Forgot view, keep curve nicely on the right */
+    #auth-card-frame.view-forgot .card-curved-shape {
+      transform: rotate(10deg) skewY(38deg);
+    }
+    #auth-card-frame.view-forgot .card-curved-shape2 {
+      transform: rotate(0deg) skewY(0deg) translate(-120%, 0);
+    }
+
+    /* Hide large rotated overflow background shapes on small screens to prevent clipping */
+    @media (max-width: 767px) {
+      .card-curved-shape,
+      .card-curved-shape2 {
+        display: none !important;
+      }
     }
 
     /* Auth Slider Viewport */
@@ -1220,139 +1378,277 @@
       position: relative;
       width: 100%;
       overflow: hidden;
-      min-height: 480px;
-      transition: min-height 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-      z-index: 2;
+      min-height: 380px;
+      transition: min-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 4;
     }
 
     #auth-card-frame.view-register .auth-slider-viewport {
-      min-height: 490px;
+      min-height: 410px;
     }
 
     #auth-card-frame.view-forgot .auth-slider-viewport {
-      min-height: 380px;
+      min-height: 260px;
     }
 
-    /* Auth Slide Views */
+    /* Slide Views & Transitions */
     .auth-view-slide {
-      width: 100%;
-      transition: transform 0.65s cubic-bezier(0.4, 0, 0.2, 1),
-                  opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1),
-                  filter 0.5s cubic-bezier(0.4, 0, 0.2, 1),
-                  visibility 0.65s;
+      transition: transform 0.75s cubic-bezier(0.65, 0, 0.35, 1),
+                  opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1),
+                  filter 0.6s cubic-bezier(0.4, 0, 0.2, 1),
+                  visibility 0.75s;
       will-change: transform, opacity, filter;
     }
 
-    /* VIEW A: LOGIN ACTIVE */
-    #auth-card-frame.view-login #auth-card-login {
-      position: relative;
+    /* Desktop 2-Column Split Specifications */
+    @media (min-width: 768px) {
+      .auth-view-slide {
+        width: 50% !important;
+      }
+
+      /* VIEW A: LOGIN ACTIVE */
+      #auth-card-frame.view-login #auth-card-login {
+        position: relative;
+        left: 0;
+        transform: translateX(0);
+        opacity: 1;
+        filter: blur(0);
+        pointer-events: auto;
+        visibility: visible;
+        z-index: 5;
+      }
+
+      #auth-card-frame.view-login #auth-card-register {
+        position: absolute;
+        top: 0;
+        right: 0;
+        transform: translateX(120%);
+        opacity: 0;
+        filter: blur(10px);
+        pointer-events: none;
+        visibility: hidden;
+        z-index: 1;
+      }
+
+      #auth-card-frame.view-login #auth-card-forgot {
+        position: absolute;
+        top: 0;
+        left: 0;
+        transform: translateX(120%);
+        opacity: 0;
+        filter: blur(10px);
+        pointer-events: none;
+        visibility: hidden;
+        z-index: 1;
+      }
+
+      /* VIEW B: REGISTER ACTIVE */
+      #auth-card-frame.view-register #auth-card-login {
+        position: absolute;
+        top: 0;
+        left: 0;
+        transform: translateX(-120%);
+        opacity: 0;
+        filter: blur(10px);
+        pointer-events: none;
+        visibility: hidden;
+        z-index: 1;
+      }
+
+      #auth-card-frame.view-register #auth-card-register {
+        position: relative;
+        margin-left: 50%;
+        transform: translateX(0);
+        opacity: 1;
+        filter: blur(0);
+        pointer-events: auto;
+        visibility: visible;
+        z-index: 5;
+      }
+
+      #auth-card-frame.view-register #auth-card-forgot {
+        position: absolute;
+        top: 0;
+        left: 0;
+        transform: translateX(120%);
+        opacity: 0;
+        filter: blur(10px);
+        pointer-events: none;
+        visibility: hidden;
+        z-index: 1;
+      }
+
+      /* VIEW C: FORGOT ACTIVE */
+      #auth-card-frame.view-forgot #auth-card-login {
+        position: absolute;
+        top: 0;
+        left: 0;
+        transform: translateX(-120%);
+        opacity: 0;
+        filter: blur(10px);
+        pointer-events: none;
+        visibility: hidden;
+        z-index: 1;
+      }
+
+      #auth-card-frame.view-forgot #auth-card-register {
+        position: absolute;
+        top: 0;
+        right: 0;
+        transform: translateX(120%);
+        opacity: 0;
+        filter: blur(10px);
+        pointer-events: none;
+        visibility: hidden;
+        z-index: 1;
+      }
+
+      #auth-card-frame.view-forgot #auth-card-forgot {
+        position: relative;
+        left: 0;
+        transform: translateX(0);
+        opacity: 1;
+        filter: blur(0);
+        pointer-events: auto;
+        visibility: visible;
+        z-index: 5;
+      }
+    }
+
+    /* Mobile Single-Column Specifications (< 768px) */
+    @media (max-width: 767px) {
+      .auth-view-slide {
+        width: 100% !important;
+      }
+
+      #auth-card-frame.view-login #auth-card-login {
+        position: relative;
+        transform: translateX(0);
+        opacity: 1;
+        filter: blur(0);
+        pointer-events: auto;
+        visibility: visible;
+        z-index: 5;
+      }
+
+      #auth-card-frame.view-login #auth-card-register,
+      #auth-card-frame.view-login #auth-card-forgot {
+        position: absolute;
+        top: 0;
+        left: 0;
+        transform: translateX(110%);
+        opacity: 0;
+        filter: blur(8px);
+        pointer-events: none;
+        visibility: hidden;
+        z-index: 1;
+      }
+
+      #auth-card-frame.view-register #auth-card-login {
+        position: absolute;
+        top: 0;
+        left: 0;
+        transform: translateX(-110%);
+        opacity: 0;
+        filter: blur(8px);
+        pointer-events: none;
+        visibility: hidden;
+        z-index: 1;
+      }
+
+      #auth-card-frame.view-register #auth-card-register {
+        position: relative;
+        transform: translateX(0);
+        opacity: 1;
+        filter: blur(0);
+        pointer-events: auto;
+        visibility: visible;
+        z-index: 5;
+      }
+
+      #auth-card-frame.view-register #auth-card-forgot {
+        position: absolute;
+        top: 0;
+        left: 0;
+        transform: translateX(110%);
+        opacity: 0;
+        filter: blur(8px);
+        pointer-events: none;
+        visibility: hidden;
+        z-index: 1;
+      }
+
+      #auth-card-frame.view-forgot #auth-card-login,
+      #auth-card-frame.view-forgot #auth-card-register {
+        position: absolute;
+        top: 0;
+        left: 0;
+        transform: translateX(-110%);
+        opacity: 0;
+        filter: blur(8px);
+        pointer-events: none;
+        visibility: hidden;
+        z-index: 1;
+      }
+
+      #auth-card-frame.view-forgot #auth-card-forgot {
+        position: relative;
+        transform: translateX(0);
+        opacity: 1;
+        filter: blur(0);
+        pointer-events: auto;
+        visibility: visible;
+        z-index: 5;
+      }
+    }
+
+    /* Side Welcome Text Panels (Instagram Reel Overlay Text) */
+    .side-welcome-panel {
+      transition: transform 0.85s cubic-bezier(0.65, 0, 0.35, 1),
+                  opacity 0.65s ease,
+                  filter 0.65s ease;
+      will-change: transform, opacity, filter;
+    }
+
+    #auth-card-frame.view-login #welcome-panel-login {
       transform: translateX(0);
       opacity: 1;
       filter: blur(0);
       pointer-events: auto;
-      visibility: visible;
-      z-index: 3;
+      transition-delay: 0.18s;
     }
 
-    #auth-card-frame.view-login #auth-card-register {
-      position: absolute;
-      top: 0;
-      left: 0;
-      transform: translateX(115%);
+    #auth-card-frame.view-register #welcome-panel-login,
+    #auth-card-frame.view-forgot #welcome-panel-login {
+      transform: translateX(80px);
       opacity: 0;
-      filter: blur(8px);
+      filter: blur(10px);
       pointer-events: none;
-      visibility: hidden;
-      z-index: 1;
+      transition-delay: 0s;
     }
 
-    #auth-card-frame.view-login #auth-card-forgot {
-      position: absolute;
-      top: 0;
-      left: 0;
-      transform: translateX(115%);
-      opacity: 0;
-      filter: blur(8px);
-      pointer-events: none;
-      visibility: hidden;
-      z-index: 1;
-    }
-
-    /* VIEW B: REGISTER ACTIVE */
-    #auth-card-frame.view-register #auth-card-login {
-      position: absolute;
-      top: 0;
-      left: 0;
-      transform: translateX(-115%);
-      opacity: 0;
-      filter: blur(8px);
-      pointer-events: none;
-      visibility: hidden;
-      z-index: 1;
-    }
-
-    #auth-card-frame.view-register #auth-card-register {
-      position: relative;
+    #auth-card-frame.view-register #welcome-panel-register {
       transform: translateX(0);
       opacity: 1;
       filter: blur(0);
       pointer-events: auto;
-      visibility: visible;
-      z-index: 3;
+      transition-delay: 0.18s;
     }
 
-    #auth-card-frame.view-register #auth-card-forgot {
-      position: absolute;
-      top: 0;
-      left: 0;
-      transform: translateX(115%);
+    #auth-card-frame.view-login #welcome-panel-register,
+    #auth-card-frame.view-forgot #welcome-panel-register {
+      transform: translateX(-80px);
       opacity: 0;
-      filter: blur(8px);
+      filter: blur(10px);
       pointer-events: none;
-      visibility: hidden;
-      z-index: 1;
+      transition-delay: 0s;
     }
 
-    /* VIEW C: FORGOT ACTIVE */
-    #auth-card-frame.view-forgot #auth-card-login {
-      position: absolute;
-      top: 0;
-      left: 0;
-      transform: translateX(-115%);
-      opacity: 0;
-      filter: blur(8px);
-      pointer-events: none;
-      visibility: hidden;
-      z-index: 1;
-    }
-
-    #auth-card-frame.view-forgot #auth-card-register {
-      position: absolute;
-      top: 0;
-      left: 0;
-      transform: translateX(-115%);
-      opacity: 0;
-      filter: blur(8px);
-      pointer-events: none;
-      visibility: hidden;
-      z-index: 1;
-    }
-
-    #auth-card-frame.view-forgot #auth-card-forgot {
-      position: relative;
-      transform: translateX(0);
-      opacity: 1;
-      filter: blur(0);
-      pointer-events: auto;
-      visibility: visible;
-      z-index: 3;
-    }
-
-    /* Staggered Wave Animations for Form Elements (Reel-style --D and --S delay mechanics) */
+    /* Staggered Wave Animations for Form Elements (Reel-style --item-delay cascade) */
     .reel-anim-item {
-      transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1),
-                  opacity 0.5s ease,
-                  filter 0.5s ease;
+      transition: transform 0.65s cubic-bezier(0.16, 1, 0.3, 1),
+                  opacity 0.55s ease,
+                  filter 0.55s ease;
       will-change: transform, opacity, filter;
     }
 
@@ -1360,13 +1656,13 @@
       transform: translateX(0);
       opacity: 1;
       filter: blur(0);
-      transition-delay: calc(var(--item-delay, 0) * 0.045s + 0.08s);
+      transition-delay: calc(var(--item-delay, 0) * 0.045s + 0.1s);
     }
 
     #auth-card-frame.view-login #auth-card-register .reel-anim-item {
       transform: translateX(45px);
       opacity: 0;
-      filter: blur(5px);
+      filter: blur(6px);
       transition-delay: calc((8 - var(--item-delay, 0)) * 0.03s);
     }
 
@@ -1380,7 +1676,7 @@
     #auth-card-frame.view-register #auth-card-login .reel-anim-item {
       transform: translateX(-45px);
       opacity: 0;
-      filter: blur(5px);
+      filter: blur(6px);
       transition-delay: calc((8 - var(--item-delay, 0)) * 0.03s);
     }
 
@@ -1401,7 +1697,7 @@
   <!-- 1. AUTHENTICATION CONTAINER (Split 2-Column Light Themed System)     -->
   <!-- =================================================================== -->
   <div id="auth-container"
-    class="min-h-screen bg-[#CBD5E1] flex flex-col justify-center items-center py-6 sm:py-10 px-4 sm:px-6 lg:px-8 hidden relative z-30 overflow-hidden"
+    class="min-h-screen h-[100dvh] bg-[#CBD5E1] flex flex-col justify-center items-center p-3 sm:p-5 lg:p-6 hidden relative z-30 overflow-y-auto overflow-x-hidden"
     style="background: radial-gradient(circle at 50% 50%, #D8E0EA 0%, #CBD5E1 55%, #B4C0D0 100%) !important;">
 
     <!-- Ambient Studio Gray Backdrop Accents -->
@@ -1414,52 +1710,88 @@
 
     <!-- Unified Authentication Card (Light Theme with Reel-style Curved Shape Animation) -->
     <div id="auth-card-frame"
-      class="w-full max-w-[860px] bg-white rounded-3xl border-2 border-[#A855F7]/45 shadow-2xl shadow-purple-500/15 p-6 sm:px-10 sm:py-7 flex flex-col justify-between relative z-10 transition-all duration-300 view-login overflow-hidden">
+      class="my-auto w-full max-w-[860px] bg-white rounded-3xl border-2 border-[#14213d] shadow-2xl shadow-[#14213d]/20 p-4 sm:px-8 sm:py-5 flex flex-col justify-between relative z-10 transition-all duration-300 view-login overflow-hidden">
 
-        <!-- Reel-style Animated Curved Shapes -->
+        <!-- Reel-style Animated Curved Shapes (Deep Navy #14213d) -->
         <div class="card-curved-shape pointer-events-none" aria-hidden="true"></div>
         <div class="card-curved-shape2 pointer-events-none" aria-hidden="true"></div>
 
         <!-- Brand Header Top Bar -->
-        <div class="flex items-center justify-between pb-4 border-b border-[#F1F5F9] mb-4 relative z-10">
-          <div class="flex items-center space-x-3">
+        <div class="flex items-center justify-between pb-3 border-b border-[#F1F5F9] mb-3 relative z-20">
+          <div class="flex items-center space-x-2.5">
             <div
-              class="w-10 h-10 rounded-xl bg-[#F8FAFC] border border-[#E2E8F0] shadow-xs flex items-center justify-center p-2">
+              class="w-9 h-9 rounded-xl bg-[#F8FAFC] border border-[#E2E8F0] shadow-xs flex items-center justify-center p-1.5">
               <img src="assets/aurelia-mark.svg" alt="Aurelia Emblem" class="w-full h-full object-contain">
             </div>
             <div>
-              <span class="text-base font-bold text-[#14213D] tracking-[0.2em] uppercase leading-none block"
+              <span class="text-sm sm:text-base font-bold text-[#14213D] tracking-[0.2em] uppercase leading-none block"
                 style="font-family: 'Cormorant Garamond', Georgia, serif;">AURELIA</span>
               <span class="text-[9px] font-semibold text-slate-500 tracking-[0.16em] uppercase">Hotel &amp; Restaurant
                 POS</span>
             </div>
           </div>
           <span
-            class="inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
+            class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
             System Online
           </span>
         </div>
 
         <!-- Animated Forms Viewport Stage (Sliding Animation as in Instagram Reel) -->
-        <div id="auth-stage" class="auth-slider-viewport relative w-full overflow-hidden mt-1">
+        <div id="auth-stage" class="auth-slider-viewport relative w-full overflow-hidden mt-0.5">
+
+          <!-- Instagram Reel Side Panel: "WELCOME BACK!" (Visible in Login view on right half) -->
+          <div id="welcome-panel-login"
+            class="side-welcome-panel hidden md:flex flex-col justify-center items-center text-center px-4 lg:px-8 py-4 sm:py-6 absolute right-0 top-0 w-1/2 h-full z-10 pointer-events-auto">
+            <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[9px] font-bold tracking-widest uppercase bg-white/15 text-white/95 backdrop-blur-md border border-white/25 mb-2.5 sm:mb-3 shadow-xs">
+              Aurelia Luxury POS
+            </span>
+            <h3 class="text-2xl lg:text-3xl font-black text-white tracking-wider uppercase leading-tight drop-shadow-md" style="font-family: 'Outfit', sans-serif;">
+              WELCOME<br>BACK!
+            </h3>
+            <p class="text-xs text-white/85 mt-2 max-w-[260px] leading-relaxed font-normal">
+              Enter your credentials to access room service billing, kitchen KOT, and guest invoices.
+            </p>
+            <button type="button" id="btn-side-register"
+              class="mt-4 sm:mt-5 px-7 py-2 rounded-full border-2 border-white text-white font-bold text-xs uppercase tracking-wider hover:bg-white hover:text-[#14213d] transition-all duration-300 shadow-lg shadow-black/20 cursor-pointer active:scale-95">
+              Sign Up
+            </button>
+          </div>
+
+          <!-- Instagram Reel Side Panel: "WELCOME!" (Visible in Register view on left half) -->
+          <div id="welcome-panel-register"
+            class="side-welcome-panel hidden md:flex flex-col justify-center items-center text-center px-4 lg:px-8 py-4 sm:py-6 absolute left-0 top-0 w-1/2 h-full z-10 pointer-events-auto">
+            <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[9px] font-bold tracking-widest uppercase bg-white/15 text-white/95 backdrop-blur-md border border-white/25 mb-2.5 sm:mb-3 shadow-xs">
+              Join Aurelia Staff
+            </span>
+            <h3 class="text-2xl lg:text-3xl font-black text-white tracking-wider uppercase leading-tight drop-shadow-md" style="font-family: 'Outfit', sans-serif;">
+              WELCOME!
+            </h3>
+            <p class="text-xs text-white/85 mt-2 max-w-[260px] leading-relaxed font-normal">
+              Create a new staff or manager profile to streamline hotel billing and banquet operations.
+            </p>
+            <button type="button" id="btn-side-login"
+              class="mt-4 sm:mt-5 px-7 py-2 rounded-full border-2 border-white text-white font-bold text-xs uppercase tracking-wider hover:bg-white hover:text-[#14213d] transition-all duration-300 shadow-lg shadow-black/20 cursor-pointer active:scale-95">
+              Sign In
+            </button>
+          </div>
 
           <!-- ============================================================= -->
-          <!-- VIEW A: SIGN IN (STAFF & ADMIN)                                -->
+          <!-- VIEW A: SIGN IN (STAFF & ADMIN) - Left Column                  -->
           <!-- ============================================================= -->
-          <div id="auth-card-login" class="auth-view-slide flex-1 flex flex-col justify-between">
-            <div>
+          <div id="auth-card-login" class="auth-view-slide flex flex-col justify-between">
+            <div class="pr-0 md:pr-6">
               <!-- Heading & Subtitle -->
-              <div class="mb-4 reel-anim-item" style="--item-delay: 0;">
-                <h2 class="text-2xl sm:text-3xl font-extrabold text-[#0F172A] tracking-tight">Sign In</h2>
-                <p class="text-xs sm:text-sm text-slate-500 mt-1 font-normal">
+              <div class="mb-2.5 sm:mb-3 reel-anim-item" style="--item-delay: 0;">
+                <h2 class="text-xl sm:text-2xl font-extrabold text-[#0F172A] tracking-tight">Sign In</h2>
+                <p class="text-[11px] sm:text-xs text-slate-500 mt-0.5 font-normal">
                   Select your staff role and enter your credentials to access the billing dashboard.
                 </p>
               </div>
 
-              <!-- Role Switcher Tabs (Candidate / Employer Pill Style from reference) -->
-              <div class="flex p-1 bg-[#F1F5F9] rounded-xl border border-[#E2E8F0] mb-4 reel-anim-item" style="--item-delay: 1;" role="tablist">
+              <!-- Role Switcher Tabs (Front Desk Staff / Hotel Manager) -->
+              <div class="flex p-1 bg-[#F1F5F9] rounded-xl border border-[#E2E8F0] mb-2.5 sm:mb-3 reel-anim-item" style="--item-delay: 1;" role="tablist">
                 <button type="button" id="tab-login-staff"
-                  class="role-tab flex-1 py-2 px-3 rounded-lg text-xs font-semibold flex items-center justify-center gap-2 transition-all bg-[#7C3AED] text-white shadow-sm"
+                  class="role-tab flex-1 py-1.5 px-2.5 rounded-lg text-xs font-semibold flex items-center justify-center gap-1.5 transition-all bg-[#14213d] text-white shadow-sm shadow-[#14213d]/30"
                   data-role="staff">
                   <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -1468,7 +1800,7 @@
                   <span>Front Desk Staff</span>
                 </button>
                 <button type="button" id="tab-login-admin"
-                  class="role-tab flex-1 py-2 px-3 rounded-lg text-xs font-semibold flex items-center justify-center gap-2 transition-all text-slate-600 hover:text-slate-900"
+                  class="role-tab flex-1 py-1.5 px-2.5 rounded-lg text-xs font-semibold flex items-center justify-center gap-1.5 transition-all text-slate-600 hover:text-slate-900"
                   data-role="admin">
                   <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -1480,46 +1812,46 @@
 
               <div id="alert-login" class="hidden"></div>
 
-              <form id="form-login" class="space-y-3.5" novalidate
+              <form id="form-login" class="space-y-2.5" novalidate
                 onsubmit="if(window.Auth&&window.Auth.login){window.Auth.login(event);}return false;">
                 <!-- Email Field -->
                 <div class="reel-anim-item" style="--item-delay: 2;">
-                  <label for="login-email" class="block text-xs font-semibold text-slate-700 mb-1">Work Email
+                  <label for="login-email" class="block text-[11px] sm:text-xs font-semibold text-slate-700 mb-0.5">Work Email
                     Address</label>
                   <div class="relative">
-                    <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
-                      <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+                      <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
                           d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                       </svg>
                     </span>
                     <input type="email" id="login-email" name="email" required autocomplete="email"
                       placeholder="adalinea@gmail.com" value="adalinea@gmail.com"
-                      class="w-full pl-10 pr-3.5 py-2.5 bg-[#F8FAFC] border border-[#CBD5E1] rounded-xl text-xs text-slate-900 placeholder:text-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#A855F7]/30 focus:border-[#A855F7] transition-all">
+                      class="w-full pl-9 pr-3 py-2 bg-[#F8FAFC] border border-[#CBD5E1] rounded-xl text-xs text-slate-900 placeholder:text-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#14213d]/25 focus:border-[#14213d] transition-all">
                   </div>
                 </div>
 
                 <!-- Password Field -->
                 <div class="reel-anim-item" style="--item-delay: 3;">
-                  <div class="flex items-center justify-between mb-1">
-                    <label for="login-password" class="block text-xs font-semibold text-slate-700">Password</label>
+                  <div class="flex items-center justify-between mb-0.5">
+                    <label for="login-password" class="block text-[11px] sm:text-xs font-semibold text-slate-700">Password</label>
                     <button type="button" id="btn-goto-forgot"
-                      class="text-[11px] font-semibold text-[#7C3AED] hover:text-[#A855F7] transition-colors cursor-pointer">
+                      class="text-[11px] font-semibold text-[#14213d] hover:text-[#1f3660] transition-colors cursor-pointer">
                       Forgot password?
                     </button>
                   </div>
                   <div class="relative">
-                    <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
-                      <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+                      <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
                           d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                       </svg>
                     </span>
                     <input type="password" id="login-password" name="password" required autocomplete="current-password"
                       placeholder="Enter your password" value="password123"
-                      class="w-full pl-10 pr-10 py-2.5 bg-[#F8FAFC] border border-[#CBD5E1] rounded-xl text-xs text-slate-900 placeholder:text-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#A855F7]/30 focus:border-[#A855F7] transition-all">
+                      class="w-full pl-9 pr-9 py-2 bg-[#F8FAFC] border border-[#CBD5E1] rounded-xl text-xs text-slate-900 placeholder:text-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#14213d]/25 focus:border-[#14213d] transition-all">
                     <button type="button" data-toggle-password="login-password" aria-label="Toggle password visibility"
-                      class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-slate-600 transition-colors cursor-pointer">
+                      class="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-slate-600 transition-colors cursor-pointer">
                       <svg class="w-4 h-4 eye-open" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
                           d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -1535,10 +1867,10 @@
                 </div>
 
                 <!-- Remember Me Checkbox -->
-                <div class="flex items-center justify-between pt-0.5 reel-anim-item" style="--item-delay: 4;">
+                <div class="flex items-center justify-between reel-anim-item" style="--item-delay: 4;">
                   <label class="flex items-center space-x-2 cursor-pointer">
                     <input type="checkbox" id="login-remember" checked
-                      class="w-4 h-4 rounded border-[#CBD5E1] text-[#7C3AED] focus:ring-[#A855F7]/30 accent-[#7C3AED]">
+                      class="w-3.5 h-3.5 rounded border-[#CBD5E1] text-[#14213d] focus:ring-[#14213d]/25 accent-[#14213d]">
                     <span class="text-xs text-slate-600 font-medium">Keep me signed in</span>
                   </label>
                 </div>
@@ -1546,9 +1878,9 @@
                 <!-- Primary Submit Button with Arrow -->
                 <div class="reel-anim-item" style="--item-delay: 5;">
                   <button type="submit" id="btn-login-submit"
-                    class="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-[#A855F7] via-[#9333EA] to-[#7C3AED] hover:brightness-105 active:scale-[0.99] text-white text-xs sm:text-sm font-semibold tracking-wide transition-all shadow-md shadow-purple-500/25 flex items-center justify-center gap-2 group cursor-pointer">
+                    class="w-full py-2.5 px-4 rounded-xl bg-gradient-to-r from-[#14213d] via-[#1f3660] to-[#14213d] hover:brightness-110 active:scale-[0.99] text-white text-xs sm:text-sm font-semibold tracking-wide transition-all shadow-md shadow-[#14213d]/30 flex items-center justify-center gap-2 group cursor-pointer">
                     <span>Sign In to Aurelia</span>
-                    <svg class="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24"
+                    <svg class="w-3.5 h-3.5 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24"
                       stroke="currentColor">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
                     </svg>
@@ -1557,17 +1889,17 @@
               </form>
 
               <!-- Social / Quick Login Options -->
-              <div class="mt-3.5 reel-anim-item" style="--item-delay: 6;">
-                <div class="relative flex py-1 items-center">
+              <div class="mt-2.5 reel-anim-item" style="--item-delay: 6;">
+                <div class="relative flex py-0.5 items-center">
                   <div class="flex-grow border-t border-slate-200"></div>
-                  <span class="flex-shrink mx-3 text-[11px] font-medium text-slate-400 uppercase tracking-wider">Or sign
+                  <span class="flex-shrink mx-2.5 text-[10px] font-medium text-slate-400 uppercase tracking-wider">Or sign
                     in with</span>
                   <div class="flex-grow border-t border-slate-200"></div>
                 </div>
 
-                <div class="grid grid-cols-2 gap-2.5 mt-2">
+                <div class="grid grid-cols-2 gap-2 mt-1.5">
                   <button type="button" id="btn-social-linkedin"
-                    class="py-2 px-3 bg-white border border-[#CBD5E1] hover:bg-[#F8FAFC] rounded-xl text-xs font-semibold text-slate-700 flex items-center justify-center gap-2 transition-colors shadow-2xs cursor-pointer">
+                    class="py-1.5 px-2.5 bg-white border border-[#CBD5E1] hover:bg-[#F8FAFC] rounded-xl text-xs font-semibold text-slate-700 flex items-center justify-center gap-1.5 transition-colors shadow-2xs cursor-pointer">
                     <svg class="w-3.5 h-3.5 text-[#0A66C2]" fill="currentColor" viewBox="0 0 24 24">
                       <path
                         d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z" />
@@ -1575,7 +1907,7 @@
                     <span>LinkedIn</span>
                   </button>
                   <button type="button" id="btn-social-google"
-                    class="py-2 px-3 bg-white border border-[#CBD5E1] hover:bg-[#F8FAFC] rounded-xl text-xs font-semibold text-slate-700 flex items-center justify-center gap-2 transition-colors shadow-2xs cursor-pointer">
+                    class="py-1.5 px-2.5 bg-white border border-[#CBD5E1] hover:bg-[#F8FAFC] rounded-xl text-xs font-semibold text-slate-700 flex items-center justify-center gap-1.5 transition-colors shadow-2xs cursor-pointer">
                     <svg class="w-3.5 h-3.5" viewBox="0 0 24 24">
                       <path fill="#4285F4"
                         d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
@@ -1592,23 +1924,23 @@
 
                 <!-- Quick Demo One-Click Access -->
                 <button type="button" id="btn-quick-demo"
-                  class="w-full mt-2.5 py-2 px-3 bg-[#F1F5F9] hover:bg-[#E2E8F0] border border-[#CBD5E1] rounded-xl text-[11px] font-semibold text-slate-700 flex items-center justify-center gap-1.5 transition-colors cursor-pointer">
-                  <span class="text-[#FCA311]">⚡</span>
+                  class="w-full mt-2 py-1.5 px-2.5 bg-[#F1F5F9] hover:bg-[#E2E8F0] border border-[#CBD5E1] rounded-xl text-[10px] sm:text-[11px] font-semibold text-slate-700 flex items-center justify-center gap-1.5 transition-colors cursor-pointer">
+                  <span class="text-[#14213d]">⚡</span>
                   <span>Quick Demo: <strong class="text-slate-900">adalinea@gmail.com</strong> / password123</span>
                 </button>
               </div>
             </div>
 
             <!-- Bottom Footer Navigation & Disclaimer -->
-            <div class="mt-4 pt-3 border-t border-[#F1F5F9] text-center reel-anim-item" style="--item-delay: 7;">
+            <div class="mt-2.5 pt-2 border-t border-[#F1F5F9] text-center pr-0 md:pr-6 reel-anim-item" style="--item-delay: 7;">
               <p class="text-xs text-slate-500 font-medium">
                 Don't have an account?
                 <a href="#" id="btn-goto-register"
-                  class="font-bold text-[#A855F7] hover:text-[#7C3AED] ml-1 transition-colors">
+                  class="font-bold text-[#14213d] hover:text-[#1f3660] ml-1 transition-colors">
                   Create Account
                 </a>
               </p>
-              <p class="text-[10px] text-slate-400 mt-2 leading-relaxed">
+              <p class="text-[9px] text-slate-400 mt-1 leading-relaxed">
                 By clicking Sign In, Google, or LinkedIn, you agree to Aurelia Hotel Management
                 <span class="underline">Terms &amp; Conditions</span> and <span class="underline">Privacy Policy</span>.
               </p>
@@ -1616,22 +1948,22 @@
           </div>
 
           <!-- ============================================================= -->
-          <!-- VIEW B: CREATE ACCOUNT (Matches Jobpilot reference image)      -->
+          <!-- VIEW B: CREATE ACCOUNT - Right Column                          -->
           <!-- ============================================================= -->
-          <div id="auth-card-register" class="auth-view-slide flex-1 flex flex-col justify-between">
-            <div>
+          <div id="auth-card-register" class="auth-view-slide flex flex-col justify-between">
+            <div class="pl-0 md:pl-6">
               <!-- Heading & Subtitle -->
-              <div class="mb-4 reel-anim-item" style="--item-delay: 0;">
-                <h2 class="text-2xl sm:text-3xl font-extrabold text-[#0F172A] tracking-tight">Create Account</h2>
-                <p class="text-xs sm:text-sm text-slate-500 mt-1 font-normal">
+              <div class="mb-2.5 sm:mb-3 reel-anim-item" style="--item-delay: 0;">
+                <h2 class="text-xl sm:text-2xl font-extrabold text-[#0F172A] tracking-tight">Create Account</h2>
+                <p class="text-[11px] sm:text-xs text-slate-500 mt-0.5 font-normal">
                   Register a new profile for Aurelia Hotel &amp; Restaurant operations.
                 </p>
               </div>
 
-              <!-- Role Switcher Tabs (Candidate / Employer Pill Style from reference) -->
-              <div class="flex p-1 bg-[#F1F5F9] rounded-xl border border-[#E2E8F0] mb-4 reel-anim-item" style="--item-delay: 1;" role="tablist">
+              <!-- Role Switcher Tabs (Candidate / Employer) -->
+              <div class="flex p-1 bg-[#F1F5F9] rounded-xl border border-[#E2E8F0] mb-2.5 sm:mb-3 reel-anim-item" style="--item-delay: 1;" role="tablist">
                 <button type="button" id="tab-reg-staff"
-                  class="role-tab flex-1 py-2 px-3 rounded-lg text-xs font-semibold flex items-center justify-center gap-2 transition-all bg-[#7C3AED] text-white shadow-sm"
+                  class="role-tab flex-1 py-1.5 px-2.5 rounded-lg text-xs font-semibold flex items-center justify-center gap-1.5 transition-all bg-[#14213d] text-white shadow-sm shadow-[#14213d]/30"
                   data-role="Candidate">
                   <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -1640,7 +1972,7 @@
                   <span>Candidate</span>
                 </button>
                 <button type="button" id="tab-reg-admin"
-                  class="role-tab flex-1 py-2 px-3 rounded-lg text-xs font-semibold flex items-center justify-center gap-2 transition-all text-slate-600 hover:text-slate-900"
+                  class="role-tab flex-1 py-1.5 px-2.5 rounded-lg text-xs font-semibold flex items-center justify-center gap-1.5 transition-all text-slate-600 hover:text-slate-900"
                   data-role="Employer">
                   <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -1652,47 +1984,47 @@
 
               <div id="alert-register" class="hidden"></div>
 
-              <form id="form-register" class="space-y-3" novalidate
+              <form id="form-register" class="space-y-2 sm:space-y-2.5" novalidate
                 onsubmit="if(window.Auth&&window.Auth.register){window.Auth.register(event);}return false;">
-                <!-- 2-Column Row: Name & Username (Exact match to reference) -->
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 reel-anim-item" style="--item-delay: 2;">
+                <!-- 2-Column Row: Name & Username -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 reel-anim-item" style="--item-delay: 2;">
                   <div>
-                    <label for="reg-name" class="block text-xs font-semibold text-slate-700 mb-1">Name</label>
+                    <label for="reg-name" class="block text-[11px] sm:text-xs font-semibold text-slate-700 mb-0.5">Name</label>
                     <input type="text" id="reg-name" name="name" required autocomplete="name" placeholder="Full name"
-                      class="w-full px-3.5 py-2.5 bg-[#F8FAFC] border border-[#CBD5E1] rounded-xl text-xs text-slate-900 placeholder:text-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#A855F7]/30 focus:border-[#A855F7] transition-all">
+                      class="w-full px-3 py-1.5 sm:py-2 bg-[#F8FAFC] border border-[#CBD5E1] rounded-xl text-xs text-slate-900 placeholder:text-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#14213d]/25 focus:border-[#14213d] transition-all">
                   </div>
                   <div>
-                    <label for="reg-username" class="block text-xs font-semibold text-slate-700 mb-1">Username</label>
+                    <label for="reg-username" class="block text-[11px] sm:text-xs font-semibold text-slate-700 mb-0.5">Username</label>
                     <input type="text" id="reg-username" name="username" autocomplete="username" placeholder="Username"
-                      class="w-full px-3.5 py-2.5 bg-[#F8FAFC] border border-[#CBD5E1] rounded-xl text-xs text-slate-900 placeholder:text-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#A855F7]/30 focus:border-[#A855F7] transition-all">
+                      class="w-full px-3 py-1.5 sm:py-2 bg-[#F8FAFC] border border-[#CBD5E1] rounded-xl text-xs text-slate-900 placeholder:text-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#14213d]/25 focus:border-[#14213d] transition-all">
                   </div>
                 </div>
 
                 <!-- Email Address -->
                 <div class="reel-anim-item" style="--item-delay: 3;">
-                  <label for="reg-email" class="block text-xs font-semibold text-slate-700 mb-1">Email address</label>
+                  <label for="reg-email" class="block text-[11px] sm:text-xs font-semibold text-slate-700 mb-0.5">Email address</label>
                   <input type="email" id="reg-email" name="email" required autocomplete="email"
                     placeholder="Email address"
-                    class="w-full px-3.5 py-2.5 bg-[#F8FAFC] border border-[#CBD5E1] rounded-xl text-xs text-slate-900 placeholder:text-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#A855F7]/30 focus:border-[#A855F7] transition-all">
+                    class="w-full px-3 py-1.5 sm:py-2 bg-[#F8FAFC] border border-[#CBD5E1] rounded-xl text-xs text-slate-900 placeholder:text-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#14213d]/25 focus:border-[#14213d] transition-all">
                 </div>
 
                 <!-- 2-Column Row: Password & Confirm Password -->
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 reel-anim-item" style="--item-delay: 4;">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 reel-anim-item" style="--item-delay: 4;">
                   <div>
-                    <label for="reg-password" class="block text-xs font-semibold text-slate-700 mb-1">Password</label>
+                    <label for="reg-password" class="block text-[11px] sm:text-xs font-semibold text-slate-700 mb-0.5">Password</label>
                     <div class="relative">
                       <input type="password" id="reg-password" name="password" required autocomplete="new-password"
                         placeholder="Enter password"
-                        class="w-full pl-3.5 pr-10 py-2.5 bg-[#F8FAFC] border border-[#CBD5E1] rounded-xl text-xs text-slate-900 placeholder:text-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#A855F7]/30 focus:border-[#A855F7] transition-all">
+                        class="w-full pl-3 pr-8 py-1.5 sm:py-2 bg-[#F8FAFC] border border-[#CBD5E1] rounded-xl text-xs text-slate-900 placeholder:text-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#14213d]/25 focus:border-[#14213d] transition-all">
                       <button type="button" data-toggle-password="reg-password" aria-label="Toggle password visibility"
-                        class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-slate-600 transition-colors cursor-pointer">
-                        <svg class="w-4 h-4 eye-open" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        class="absolute inset-y-0 right-0 pr-2.5 flex items-center text-slate-400 hover:text-slate-600 transition-colors cursor-pointer">
+                        <svg class="w-3.5 h-3.5 eye-open" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
                             d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
                             d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                         </svg>
-                        <svg class="w-4 h-4 eye-closed hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <svg class="w-3.5 h-3.5 eye-closed hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
                             d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l18 18" />
                         </svg>
@@ -1700,22 +2032,22 @@
                     </div>
                   </div>
                   <div>
-                    <label for="reg-confirm-password" class="block text-xs font-semibold text-slate-700 mb-1">Confirm
+                    <label for="reg-confirm-password" class="block text-[11px] sm:text-xs font-semibold text-slate-700 mb-0.5">Confirm
                       Password</label>
                     <div class="relative">
                       <input type="password" id="reg-confirm-password" name="confirmPassword" required
                         autocomplete="new-password" placeholder="Enter password again"
-                        class="w-full pl-3.5 pr-10 py-2.5 bg-[#F8FAFC] border border-[#CBD5E1] rounded-xl text-xs text-slate-900 placeholder:text-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#A855F7]/30 focus:border-[#A855F7] transition-all">
+                        class="w-full pl-3 pr-8 py-1.5 sm:py-2 bg-[#F8FAFC] border border-[#CBD5E1] rounded-xl text-xs text-slate-900 placeholder:text-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#14213d]/25 focus:border-[#14213d] transition-all">
                       <button type="button" data-toggle-password="reg-confirm-password"
                         aria-label="Toggle password visibility"
-                        class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-slate-600 transition-colors cursor-pointer">
-                        <svg class="w-4 h-4 eye-open" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        class="absolute inset-y-0 right-0 pr-2.5 flex items-center text-slate-400 hover:text-slate-600 transition-colors cursor-pointer">
+                        <svg class="w-3.5 h-3.5 eye-open" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
                             d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
                             d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                         </svg>
-                        <svg class="w-4 h-4 eye-closed hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <svg class="w-3.5 h-3.5 eye-closed hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
                             d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l18 18" />
                         </svg>
@@ -1728,8 +2060,8 @@
                 <div class="pt-0.5 reel-anim-item" style="--item-delay: 5;">
                   <label class="flex items-start space-x-2 cursor-pointer">
                     <input type="checkbox" id="reg-terms" required
-                      class="w-4 h-4 mt-0.5 rounded border-[#CBD5E1] text-[#7C3AED] focus:ring-[#A855F7]/30 accent-[#7C3AED]">
-                    <span class="text-xs text-slate-600 leading-snug">
+                      class="w-3.5 h-3.5 mt-0.5 rounded border-[#CBD5E1] text-[#14213d] focus:ring-[#14213d]/25 accent-[#14213d]">
+                    <span class="text-[11px] sm:text-xs text-slate-600 leading-snug">
                       I agree to the Aurelia Terms of Service &amp; privacy confidentiality policy.
                     </span>
                   </label>
@@ -1738,9 +2070,9 @@
                 <!-- Primary Submit Button -->
                 <div class="reel-anim-item" style="--item-delay: 6;">
                   <button type="submit" id="btn-register-submit"
-                    class="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-[#A855F7] via-[#9333EA] to-[#7C3AED] hover:brightness-105 active:scale-[0.99] text-white text-xs sm:text-sm font-semibold tracking-wide transition-all shadow-md shadow-purple-500/25 flex items-center justify-center gap-2 group cursor-pointer">
+                    class="w-full py-2.5 px-4 rounded-xl bg-gradient-to-r from-[#14213d] via-[#1f3660] to-[#14213d] hover:brightness-110 active:scale-[0.99] text-white text-xs sm:text-sm font-semibold tracking-wide transition-all shadow-md shadow-[#14213d]/30 flex items-center justify-center gap-2 group cursor-pointer">
                     <span>Create Account</span>
-                    <svg class="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24"
+                    <svg class="w-3.5 h-3.5 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24"
                       stroke="currentColor">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
                     </svg>
@@ -1749,17 +2081,17 @@
               </form>
 
               <!-- Social Options -->
-              <div class="mt-3 reel-anim-item" style="--item-delay: 7;">
-                <div class="relative flex py-1 items-center">
+              <div class="mt-2.5 reel-anim-item" style="--item-delay: 7;">
+                <div class="relative flex py-0.5 items-center">
                   <div class="flex-grow border-t border-slate-200"></div>
-                  <span class="flex-shrink mx-3 text-[11px] font-medium text-slate-400 uppercase tracking-wider">Or sign
+                  <span class="flex-shrink mx-2.5 text-[10px] font-medium text-slate-400 uppercase tracking-wider">Or sign
                     up with</span>
                   <div class="flex-grow border-t border-slate-200"></div>
                 </div>
 
-                <div class="grid grid-cols-2 gap-2.5 mt-2">
+                <div class="grid grid-cols-2 gap-2 mt-1.5">
                   <button type="button"
-                    class="py-2 px-3 bg-white border border-[#CBD5E1] hover:bg-[#F8FAFC] rounded-xl text-xs font-semibold text-slate-700 flex items-center justify-center gap-2 transition-colors shadow-2xs cursor-pointer">
+                    class="py-1.5 px-2.5 bg-white border border-[#CBD5E1] hover:bg-[#F8FAFC] rounded-xl text-xs font-semibold text-slate-700 flex items-center justify-center gap-1.5 transition-colors shadow-2xs cursor-pointer">
                     <svg class="w-3.5 h-3.5 text-[#0A66C2]" fill="currentColor" viewBox="0 0 24 24">
                       <path
                         d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z" />
@@ -1767,7 +2099,7 @@
                     <span>LinkedIn</span>
                   </button>
                   <button type="button"
-                    class="py-2 px-3 bg-white border border-[#CBD5E1] hover:bg-[#F8FAFC] rounded-xl text-xs font-semibold text-slate-700 flex items-center justify-center gap-2 transition-colors shadow-2xs cursor-pointer">
+                    class="py-1.5 px-2.5 bg-white border border-[#CBD5E1] hover:bg-[#F8FAFC] rounded-xl text-xs font-semibold text-slate-700 flex items-center justify-center gap-1.5 transition-colors shadow-2xs cursor-pointer">
                     <svg class="w-3.5 h-3.5" viewBox="0 0 24 24">
                       <path fill="#4285F4"
                         d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
@@ -1785,15 +2117,15 @@
             </div>
 
             <!-- Bottom Footer Navigation & Disclaimer -->
-            <div class="mt-4 pt-3 border-t border-[#F1F5F9] text-center reel-anim-item" style="--item-delay: 8;">
+            <div class="mt-2.5 pt-2 border-t border-[#F1F5F9] text-center pl-0 md:pl-6 reel-anim-item" style="--item-delay: 8;">
               <p class="text-xs text-slate-500 font-medium">
                 Already have an account?
                 <a href="#" id="btn-goto-login"
-                  class="font-bold text-[#A855F7] hover:text-[#7C3AED] ml-1 transition-colors">
+                  class="font-bold text-[#14213d] hover:text-[#1f3660] ml-1 transition-colors">
                   Log In
                 </a>
               </p>
-              <p class="text-[10px] text-slate-400 mt-2 leading-relaxed">
+              <p class="text-[9px] text-slate-400 mt-1 leading-relaxed">
                 By clicking Create Account/Google/LinkedIn above, you acknowledge that you have read and understand, and
                 agree to Jobpilot/Aurelia Terms &amp; Conditions and Privacy Policy.
               </p>
@@ -1803,40 +2135,40 @@
           <!-- ============================================================= -->
           <!-- VIEW C: FORGOT PASSWORD                                       -->
           <!-- ============================================================= -->
-          <div id="auth-card-forgot" class="auth-view-slide flex-1 flex flex-col justify-between">
-            <div>
-              <div class="mb-5 reel-anim-item" style="--item-delay: 0;">
-                <h2 class="text-2xl sm:text-3xl font-extrabold text-[#0F172A] tracking-tight">Reset Password</h2>
-                <p class="text-xs sm:text-sm text-slate-500 mt-1 font-normal">
+          <div id="auth-card-forgot" class="auth-view-slide flex flex-col justify-between">
+            <div class="pr-0 md:pr-6">
+              <div class="mb-3 reel-anim-item" style="--item-delay: 0;">
+                <h2 class="text-xl sm:text-2xl font-extrabold text-[#0F172A] tracking-tight">Reset Password</h2>
+                <p class="text-[11px] sm:text-xs text-slate-500 mt-0.5 font-normal">
                   Enter your registered staff email address to receive recovery instructions.
                 </p>
               </div>
 
               <div id="alert-forgot" class="hidden"></div>
 
-              <form id="form-forgot" class="space-y-4" novalidate
+              <form id="form-forgot" class="space-y-3" novalidate
                 onsubmit="if(window.Auth&&window.Auth.forgotPassword){window.Auth.forgotPassword(event);}return false;">
                 <div class="reel-anim-item" style="--item-delay: 1;">
-                  <label for="forgot-email" class="block text-xs font-semibold text-slate-700 mb-1.5">Registered Work
+                  <label for="forgot-email" class="block text-[11px] sm:text-xs font-semibold text-slate-700 mb-1">Registered Work
                     Email</label>
                   <div class="relative">
-                    <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
-                      <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+                      <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"
                           d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                       </svg>
                     </span>
                     <input type="email" id="forgot-email" name="email" required autocomplete="email"
                       placeholder="adalinea@gmail.com"
-                      class="w-full pl-10 pr-3.5 py-2.5 bg-[#F8FAFC] border border-[#CBD5E1] rounded-xl text-xs text-slate-900 placeholder:text-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#A855F7]/30 focus:border-[#A855F7] transition-all">
+                      class="w-full pl-9 pr-3 py-2 bg-[#F8FAFC] border border-[#CBD5E1] rounded-xl text-xs text-slate-900 placeholder:text-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#14213d]/25 focus:border-[#14213d] transition-all">
                   </div>
                 </div>
 
                 <div class="reel-anim-item" style="--item-delay: 2;">
                   <button type="submit" id="btn-forgot-submit"
-                    class="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-[#A855F7] via-[#9333EA] to-[#7C3AED] hover:brightness-105 active:scale-[0.99] text-white text-xs sm:text-sm font-semibold tracking-wide transition-all shadow-md shadow-purple-500/25 flex items-center justify-center gap-2 group cursor-pointer">
+                    class="w-full py-2.5 px-4 rounded-xl bg-gradient-to-r from-[#14213d] via-[#1f3660] to-[#14213d] hover:brightness-110 active:scale-[0.99] text-white text-xs sm:text-sm font-semibold tracking-wide transition-all shadow-md shadow-[#14213d]/30 flex items-center justify-center gap-2 group cursor-pointer">
                     <span>Send Reset Instructions</span>
-                    <svg class="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24"
+                    <svg class="w-3.5 h-3.5 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24"
                       stroke="currentColor">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
                     </svg>
@@ -1845,9 +2177,9 @@
               </form>
             </div>
 
-            <div class="mt-6 pt-4 border-t border-[#F1F5F9] text-center reel-anim-item" style="--item-delay: 3;">
+            <div class="mt-4 pt-3 border-t border-[#F1F5F9] text-center pr-0 md:pr-6 reel-anim-item" style="--item-delay: 3;">
               <a href="#" id="btn-forgot-back-login"
-                class="text-xs font-semibold text-[#A855F7] hover:text-[#7C3AED] inline-flex items-center gap-1.5 transition-colors cursor-pointer">
+                class="text-xs font-semibold text-[#14213d] hover:text-[#1f3660] inline-flex items-center gap-1.5 transition-colors cursor-pointer">
                 <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                 </svg>
@@ -1906,12 +2238,11 @@
     <aside id="app-sidebar"
       class="fixed lg:sticky top-0 inset-y-0 left-0 z-50 w-64 lg:w-68 flex flex-col justify-between transform -translate-x-full lg:translate-x-0 transition-all duration-300 ease-in-out h-screen overflow-visible">
 
-      <!-- Collapse / Toggle Button (< / >) on the Right Border -->
       <button id="btn-sidebar-collapse" type="button"
-        class="w-7 h-7 rounded-full flex items-center justify-center transition-all cursor-pointer flex-shrink-0 shadow-md"
+        class="flex items-center justify-center cursor-pointer flex-shrink-0"
         aria-label="Toggle sidebar" title="Toggle sidebar">
-        <svg class="w-4 h-4 stroke-current transition-transform duration-300" fill="none" viewBox="0 0 24 24"
-          stroke-width="2">
+        <svg class="w-3.5 h-3.5 stroke-current transition-transform duration-300" fill="none" viewBox="0 0 24 24"
+          stroke-width="2.5">
           <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
         </svg>
       </button>
@@ -2382,6 +2713,7 @@
               </div>
               <div class="flex items-center space-x-2 pt-2 border-t border-slate-100 dark:border-slate-800/80">
                 <span
+                  id="stat-billing-growth"
                   class="stat-badge-pill inline-flex items-center text-xs font-semibold text-[#12B76A] bg-[#ECFDF3]/85 dark:bg-emerald-950/40 px-2.5 py-0.5 rounded-full">
                   ↑ 12.1%
                 </span>
@@ -2425,7 +2757,7 @@
                   <div class="text-[11px] text-slate-400 flex items-center space-x-1">
                     <span class="w-1.5 h-1.5 rounded-full bg-[#12B76A]"></span>
                     <span class="font-medium">Income</span>
-                    <span class="text-[10px] text-emerald-600 dark:text-emerald-400 font-bold ml-auto">↑ 6.3%</span>
+                    <span id="stat-income-growth" class="text-[10px] text-emerald-600 dark:text-emerald-400 font-bold ml-auto">↑ 6.3%</span>
                   </div>
                   <div id="stat-income-display" class="font-bold text-slate-900 dark:text-slate-100 text-sm mt-0.5">
                     ₹85,000<span class="text-slate-400 text-xs font-normal">.00</span>
@@ -2435,7 +2767,7 @@
                   <div class="text-[11px] text-slate-400 flex items-center space-x-1">
                     <span class="w-1.5 h-1.5 rounded-full bg-[#F04438]"></span>
                     <span class="font-medium">Expense</span>
-                    <span class="text-[10px] text-rose-600 dark:text-rose-400 font-bold ml-auto">↑ 2.4%</span>
+                    <span id="stat-expense-growth" class="text-[10px] text-rose-600 dark:text-rose-400 font-bold ml-auto">↑ 2.4%</span>
                   </div>
                   <div id="stat-expense-display" class="font-bold text-slate-900 dark:text-slate-100 text-sm mt-0.5">
                     ₹62,220<span class="text-slate-400 text-xs font-normal">.00</span>
@@ -2487,14 +2819,14 @@
                 class="absolute -bottom-16 -left-16 w-52 h-52 rounded-full bg-[#14213D]/5 blur-3xl pointer-events-none">
               </div>
 
-              <div class="money-flow-header w-full pb-2 relative z-10">
+              <div class="money-flow-header w-full pb-2 relative z-10 flex flex-wrap sm:flex-nowrap items-center justify-between gap-3">
                 <!-- Left: Title & Legend -->
-                <div class="flex items-center space-x-3 sm:space-x-4 flex-shrink-0 pt-1">
+                <div class="flex items-center space-x-3 sm:space-x-4 flex-shrink-0">
                   <h3 class="text-base font-bold text-slate-900 dark:text-white whitespace-nowrap">Money flow</h3>
 
                   <!-- Legend: Income & Expense dots with frosted pill styling -->
                   <div
-                    class="stat-badge-pill flex items-center space-x-3 text-xs font-semibold text-[#14213D] bg-white/80 dark:bg-slate-800/80 backdrop-blur-md px-3 py-1 rounded-full border border-[#E5E5E5]/80 dark:border-slate-700/80 shadow-xs flex-shrink-0">
+                    class="stat-badge-pill h-8 flex items-center space-x-3 text-xs font-semibold text-[#14213D] dark:text-slate-200 bg-white/80 dark:bg-slate-800/80 backdrop-blur-md px-3 rounded-full border border-[#E5E5E5]/80 dark:border-slate-700/80 shadow-xs flex-shrink-0">
                     <span class="inline-flex items-center">
                       <span class="w-2.5 h-2.5 rounded-full bg-[#14213D] inline-block mr-1.5 shadow-sm"></span>
                       Income
@@ -2506,22 +2838,22 @@
                   </div>
                 </div>
 
-                <!-- Right Controls: 'All accounts' stacked upper/above the Calendar Date Range Picker -->
-                <div class="money-flow-controls ml-auto flex flex-col items-end gap-1.5 text-xs font-semibold">
-                  <!-- All accounts on top -->
+                <!-- Right Controls: 'All accounts' and Calendar Date Range in ONE single line aligned with Money flow -->
+                <div class="money-flow-controls flex items-center gap-2.5 text-xs font-semibold flex-shrink-0">
+                  <!-- All accounts dropdown -->
                   <select id="select-money-flow-account"
-                    class="Aurelia-input py-1.5 px-3 text-xs rounded-full font-semibold bg-white/80 dark:bg-slate-800/80 backdrop-blur-md border border-[#E5E5E5]/90 dark:border-slate-700/90 hover:border-[#FCA311] shadow-xs cursor-pointer">
+                    class="Aurelia-input h-8 px-3 text-xs rounded-full font-semibold bg-white/80 dark:bg-slate-800/80 backdrop-blur-md border border-[#E5E5E5]/90 dark:border-slate-700/90 hover:border-[#FCA311] shadow-xs cursor-pointer focus:outline-none flex items-center">
                     <option value="all">All accounts</option>
                     <option value="frontdesk">Front Desk Counter</option>
                     <option value="restaurant">Restaurant Bar</option>
                     <option value="bank">HDFC Hotel Vault</option>
                   </select>
 
-                  <!-- Calendar Date Range Capsule below -->
+                  <!-- Calendar Date Range Capsule in same line -->
                   <div
-                    class="calendar-range-capsule flex items-center bg-white/80 dark:bg-slate-800/80 backdrop-blur-md rounded-full px-2.5 py-1 border border-[#E5E5E5]/90 dark:border-slate-700/90 hover:border-[#FCA311] shadow-xs cursor-pointer">
+                    class="calendar-range-capsule h-8 flex items-center bg-white/80 dark:bg-slate-800/80 backdrop-blur-md rounded-full px-3 border border-[#E5E5E5]/90 dark:border-slate-700/90 hover:border-[#FCA311] shadow-xs cursor-pointer">
                     <!-- First Calendar Symbol (Live, Clickable) -->
-                    <button type="button" class="calendar-icon-trigger p-0.5 mr-1 text-[#FCA311] cursor-pointer"
+                    <button type="button" class="calendar-icon-trigger p-0.5 mr-1 text-[#FCA311] cursor-pointer flex items-center justify-center"
                       title="Choose date">
                       <svg class="w-3.5 h-3.5 stroke-current flex-shrink-0" fill="none" viewBox="0 0 24 24"
                         stroke-width="1.8">
@@ -2531,7 +2863,7 @@
                     </button>
                     <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mr-1">From</span>
                     <input type="date" id="input-graph-date-from" value="2026-01-01"
-                      class="date-picker-input text-xs font-bold text-[#14213D] dark:text-white bg-transparent border-0 focus:outline-none cursor-pointer"
+                      class="date-picker-input text-xs font-bold text-[#14213D] dark:text-white bg-transparent border-0 focus:outline-none cursor-pointer p-0"
                       title="Graph date">
                     <input type="date" id="input-graph-date-to" class="hidden">
                   </div>
@@ -2794,11 +3126,12 @@
                 <!-- Goal 1: MacBook Pro (25%) -->
                 <div>
                   <div class="flex items-center justify-between text-xs mb-1.5">
-                    <span class="font-bold text-[#14213D]">MacBook Pro</span>
-                    <span class="text-slate-400 font-medium">₹1,650</span>
+                    <span class="font-bold text-[#14213D] dark:text-white">MacBook Pro</span>
+                    <span class="text-slate-400 font-medium" id="goal-val-macbook">₹1,650</span>
                   </div>
                   <div class="spatial-progress-track w-full h-6 rounded-full p-0.5 relative overflow-hidden">
                     <div
+                      id="goal-bar-macbook"
                       class="spatial-progress-bar h-full bg-[#14213D] rounded-full flex items-center justify-center text-[10px] font-bold text-white transition-all duration-700 shadow-sm"
                       style="width: 25%;">
                       25%
@@ -2809,11 +3142,12 @@
                 <!-- Goal 2: New car (42%) -->
                 <div>
                   <div class="flex items-center justify-between text-xs mb-1.5">
-                    <span class="font-bold text-[#14213D]">New car</span>
-                    <span class="text-slate-400 font-medium">₹60,000</span>
+                    <span class="font-bold text-[#14213D] dark:text-white">New car</span>
+                    <span class="text-slate-400 font-medium" id="goal-val-car">₹60,000</span>
                   </div>
                   <div class="spatial-progress-track w-full h-6 rounded-full p-0.5 relative overflow-hidden">
                     <div
+                      id="goal-bar-car"
                       class="spatial-progress-bar h-full bg-[#FCA311] rounded-full flex items-center justify-center text-[10px] font-bold text-[#000000] transition-all duration-700 shadow-sm"
                       style="width: 42%;">
                       42%
@@ -2824,11 +3158,12 @@
                 <!-- Goal 3: New house (3%) -->
                 <div>
                   <div class="flex items-center justify-between text-xs mb-1.5">
-                    <span class="font-bold text-[#14213D]">New house</span>
-                    <span class="text-slate-400 font-medium">₹1,50,000</span>
+                    <span class="font-bold text-[#14213D] dark:text-white">New house</span>
+                    <span class="text-slate-400 font-medium" id="goal-val-house">₹1,50,000</span>
                   </div>
                   <div class="spatial-progress-track w-full h-6 rounded-full p-0.5 relative overflow-hidden">
                     <div
+                      id="goal-bar-house"
                       class="spatial-progress-bar h-full bg-[#000000] rounded-full flex items-center justify-center text-[10px] font-bold text-white transition-all duration-700 shadow-sm"
                       style="width: 14%;">
                       3%
@@ -4147,30 +4482,88 @@
 
       <!-- Quick Metrics Strip -->
       <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 flex-shrink-0">
-        <div class="p-3 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-800">
-          <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-0.5">Total Billed</span>
+        <!-- Card 1: Total Billed (Luxury Navy & Gold) -->
+        <div
+          class="p-4 rounded-2xl bg-[#14213D] text-white shadow-sm border border-[#14213D] flex flex-col justify-between">
+          <div class="flex items-center justify-between text-xs font-semibold text-slate-200 mb-1.5">
+            <span class="flex items-center space-x-1.5">
+              <span class="w-2 h-2 rounded-full bg-[#FCA311]"></span>
+              <span class="font-bold">Total Billed</span>
+            </span>
+            <span
+              class="bg-emerald-400/20 text-emerald-300 border border-emerald-400/30 px-2 py-0.5 rounded-full text-[10px] font-bold">
+              ● 100% Settled
+            </span>
+          </div>
           <div id="modal-billings-stat-total"
-            class="text-lg sm:text-xl font-extrabold text-slate-900 dark:text-white tracking-tight">₹0.00</div>
-          <span class="text-[10px] text-emerald-600 font-semibold">● 100% Settled</span>
+            class="text-xl sm:text-2xl font-black tracking-tight text-white mb-1.5">₹0.00</div>
+          <div class="text-[11px] text-slate-300 flex justify-between font-medium">
+            <span>Gross Revenue</span>
+            <span class="text-[#FCA311] font-semibold">Verified Ledger</span>
+          </div>
         </div>
-        <div class="p-3 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-800">
-          <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-0.5">Total Receipts</span>
-          <div id="modal-billings-stat-count" class="text-lg sm:text-xl font-extrabold text-slate-900 dark:text-white">
-            0</div>
-          <span class="text-[10px] text-slate-400 font-medium">Recorded invoices</span>
+
+        <!-- Card 2: Total Receipts (Warm Amber Theme) -->
+        <div
+          class="p-4 rounded-2xl bg-amber-50/90 dark:bg-amber-950/30 border border-amber-200/80 dark:border-amber-800/40 text-slate-800 dark:text-amber-100 shadow-sm flex flex-col justify-between">
+          <div class="flex items-center justify-between text-xs font-semibold text-amber-900 dark:text-amber-300 mb-1.5">
+            <span class="flex items-center space-x-1.5">
+              <span class="w-2 h-2 rounded-full bg-[#FCA311]"></span>
+              <span class="font-bold">Total Receipts</span>
+            </span>
+            <span
+              class="bg-amber-200/80 dark:bg-amber-900/50 text-amber-900 dark:text-amber-200 border border-amber-300/60 px-2 py-0.5 rounded-full text-[10px] font-bold">
+              Invoices
+            </span>
+          </div>
+          <div id="modal-billings-stat-count"
+            class="text-xl sm:text-2xl font-black tracking-tight text-amber-950 dark:text-amber-300 mb-1.5">0</div>
+          <div class="text-[11px] text-amber-800/80 dark:text-amber-300/80 flex justify-between font-medium">
+            <span>Recorded Checks</span>
+            <span class="text-amber-700/80 font-semibold">Paid Receipts</span>
+          </div>
         </div>
-        <div class="p-3 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-800">
-          <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-0.5">Avg Bill Value</span>
+
+        <!-- Card 3: Avg Bill Value (Refined Slate Theme) -->
+        <div
+          class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-100 shadow-sm flex flex-col justify-between">
+          <div class="flex items-center justify-between text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5">
+            <span class="flex items-center space-x-1.5">
+              <span class="w-2 h-2 rounded-full bg-[#5C677D]"></span>
+              <span class="font-bold">Avg Bill Value</span>
+            </span>
+            <span
+              class="bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 border border-slate-300/60 px-2 py-0.5 rounded-full text-[10px] font-bold">
+              Per Check
+            </span>
+          </div>
           <div id="modal-billings-stat-avg"
-            class="text-lg sm:text-xl font-extrabold text-slate-900 dark:text-white tracking-tight">₹0.00</div>
-          <span class="text-[10px] text-amber-600 font-medium">Per guest check</span>
+            class="text-xl sm:text-2xl font-black tracking-tight text-slate-900 dark:text-white mb-1.5">₹0.00</div>
+          <div class="text-[11px] text-slate-500 dark:text-slate-400 flex justify-between font-medium">
+            <span>Per Guest Check</span>
+            <span class="text-slate-600 dark:text-slate-300 font-semibold">Average</span>
+          </div>
         </div>
-        <div class="p-3 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-800">
-          <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-0.5">GST (5%)
-            Collected</span>
+
+        <!-- Card 4: GST (5%) Collected (Aurelia Purple Theme) -->
+        <div
+          class="p-4 rounded-2xl bg-purple-50/80 dark:bg-purple-950/30 border border-purple-200/80 dark:border-purple-800/40 text-slate-800 dark:text-purple-100 shadow-sm flex flex-col justify-between">
+          <div class="flex items-center justify-between text-xs font-semibold text-purple-900 dark:text-purple-300 mb-1.5">
+            <span class="flex items-center space-x-1.5">
+              <span class="w-2 h-2 rounded-full bg-purple-600"></span>
+              <span class="font-bold">GST (5%)</span>
+            </span>
+            <span
+              class="bg-purple-100 dark:bg-purple-900/50 text-purple-700 dark:text-purple-300 border border-purple-200 px-2 py-0.5 rounded-full text-[10px] font-bold">
+              CGST + SGST
+            </span>
+          </div>
           <div id="modal-billings-stat-tax"
-            class="text-lg sm:text-xl font-extrabold text-[#14213D] dark:text-[#FCA311] tracking-tight">₹0.00</div>
-          <span class="text-[10px] text-slate-400 font-medium">CGST + SGST</span>
+            class="text-xl sm:text-2xl font-black tracking-tight text-purple-950 dark:text-purple-300 mb-1.5">₹0.00</div>
+          <div class="text-[11px] text-purple-800/80 dark:text-purple-300/80 flex justify-between font-medium">
+            <span>Tax Collected</span>
+            <span class="text-purple-600 dark:text-purple-400 font-semibold">100% Taxable</span>
+          </div>
         </div>
       </div>
 

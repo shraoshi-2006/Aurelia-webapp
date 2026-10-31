@@ -77,333 +77,158 @@ $(document).ready(function () {
   ];
 
   const DEFAULT_MENU_ITEMS = [
-    { id: 'item-1', name: 'Paneer Butter Masala', category: 'Main Course', price: 16.50, available: true, description: 'Fresh cottage cheese in rich tomato butter gravy' },
-    { id: 'item-2', name: 'Dal Makhani', category: 'Main Course', price: 12.00, available: true, description: 'Slow-cooked black lentils with fresh cream' },
-    { id: 'item-3', name: 'Chicken Tikka Masala', category: 'Main Course', price: 18.50, available: true, description: 'Charcoal-grilled chicken chunks in spiced gravy' },
-    { id: 'item-4', name: 'Mutton Rogan Josh', category: 'Main Course', price: 22.00, available: true, description: 'Traditional Kashmiri aromatic slow-cooked lamb' },
-    { id: 'item-5', name: 'Kadai Paneer', category: 'Main Course', price: 15.00, available: true, description: 'Bell peppers and cottage cheese with crushed spices' },
-    { id: 'item-6', name: 'Butter Chicken Grand Style', category: 'Main Course', price: 19.50, available: true, description: 'Signature mild tandoori chicken simmered in makhani sauce' },
-
-    { id: 'item-7', name: 'Paneer Tikka Angara', category: 'Starters', price: 14.00, available: true, description: 'Clay oven roasted spiced cottage cheese skewers' },
-    { id: 'item-8', name: 'Chicken 65 Hyderabadi', category: 'Starters', price: 15.50, available: true, description: 'Crispy tempered fried chicken with curry leaves' },
-    { id: 'item-9', name: 'Hara Bhara Kabab', category: 'Starters', price: 11.50, available: true, description: 'Spinach and green pea patties shallow fried' },
-    { id: 'item-10', name: 'Crispy Corn Pepper Salt', category: 'Starters', price: 10.50, available: true, description: 'Golden fried sweet corn tossed with scallions' },
-    { id: 'item-11', name: 'Tandoori Chicken Half', category: 'Starters', price: 17.00, available: false, description: 'Spiced yogurt marinated bone-in chicken' },
-
-    { id: 'item-12', name: 'Butter Naan', category: 'Breads', price: 3.50, available: true, description: 'Tandoori leavened flatbread brushed with butter' },
-    { id: 'item-13', name: 'Garlic Naan', category: 'Breads', price: 4.50, available: true, description: 'Leavened bread topped with minced roasted garlic' },
-    { id: 'item-14', name: 'Tandoori Roti', category: 'Breads', price: 2.50, available: true, description: 'Whole wheat flatbread baked in clay oven' },
-    { id: 'item-15', name: 'Lachha Paratha', category: 'Breads', price: 4.00, available: true, description: 'Multi-layered flaky whole wheat bread' },
-
-    { id: 'item-16', name: 'Hyderabadi Chicken Dum Biryani', category: 'Rice and Biryani', price: 19.00, available: true, description: 'Fragrant basmati rice layered with spiced chicken and saffron' },
-    { id: 'item-17', name: 'Royal Veg Dum Biryani', category: 'Rice and Biryani', price: 14.50, available: true, description: 'Assorted vegetables cooked on dum with aromatic herbs' },
-    { id: 'item-18', name: 'Mutton Gosht Biryani', category: 'Rice and Biryani', price: 23.50, available: true, description: 'Tender lamb cuts infused with aged long-grain basmati' },
-    { id: 'item-19', name: 'Jeera Basmati Rice', category: 'Rice and Biryani', price: 8.50, available: true, description: 'Cumin tempered steamed fragrant basmati rice' },
-
-    { id: 'item-20', name: 'Gulab Jamun with Rabri', category: 'Desserts', price: 7.50, available: true, description: 'Warm milk dumplings soaked in cardamom sugar syrup' },
-    { id: 'item-21', name: 'Kesar Rasmalai (2 Pcs)', category: 'Desserts', price: 8.00, available: true, description: 'Spongy cottage cheese patties in saffron clotted milk' },
-    { id: 'item-22', name: 'Shahi Matka Kulfi', category: 'Desserts', price: 6.50, available: true, description: 'Traditional condensed milk ice cream with pistachios' },
-
-    { id: 'item-23', name: 'South Indian Filter Coffee', category: 'Beverages', price: 4.00, available: true, description: 'Freshly brewed chicory coffee with frothy hot milk' },
-    { id: 'item-24', name: 'Masala Chai Pot', category: 'Beverages', price: 3.50, available: true, description: 'Assam tea simmered with fresh ginger and green cardamom' },
-    { id: 'item-25', name: 'Fresh Lime Soda', category: 'Beverages', price: 4.50, available: true, description: 'Chilled sparkling limeade with rock salt' },
-    { id: 'item-26', name: 'Mango Lassi', category: 'Beverages', price: 6.00, available: true, description: 'Thick yogurt shake blended with Alphonso pulp' },
-
-    { id: 'item-27', name: 'Executive Club Sandwich', category: 'Room Service', price: 13.50, available: true, description: 'Triple decker toast with grilled chicken, egg and cheese' },
-    { id: 'item-28', name: 'Continental Breakfast Tray', category: 'Room Service', price: 18.00, available: true, description: 'Croissant, toast, preserves, fresh juice and coffee' }
-  ];
+    ['item-1', 'Paneer Butter Masala', 'Main Course', 16.50, true, 'Fresh cottage cheese in rich tomato butter gravy'],
+    ['item-2', 'Dal Makhani', 'Main Course', 12.00, true, 'Slow-cooked black lentils with fresh cream'],
+    ['item-3', 'Chicken Tikka Masala', 'Main Course', 18.50, true, 'Charcoal-grilled chicken chunks in spiced gravy'],
+    ['item-4', 'Mutton Rogan Josh', 'Main Course', 22.00, true, 'Traditional Kashmiri aromatic slow-cooked lamb'],
+    ['item-5', 'Kadai Paneer', 'Main Course', 15.00, true, 'Bell peppers and cottage cheese with crushed spices'],
+    ['item-6', 'Butter Chicken Grand Style', 'Main Course', 19.50, true, 'Signature mild tandoori chicken simmered in makhani sauce'],
+    ['item-7', 'Paneer Tikka Angara', 'Starters', 14.00, true, 'Clay oven roasted spiced cottage cheese skewers'],
+    ['item-8', 'Chicken 65 Hyderabadi', 'Starters', 15.50, true, 'Crispy tempered fried chicken with curry leaves'],
+    ['item-9', 'Hara Bhara Kabab', 'Starters', 11.50, true, 'Spinach and green pea patties shallow fried'],
+    ['item-10', 'Crispy Corn Pepper Salt', 'Starters', 10.50, true, 'Golden fried sweet corn tossed with scallions'],
+    ['item-11', 'Tandoori Chicken Half', 'Starters', 17.00, false, 'Spiced yogurt marinated bone-in chicken'],
+    ['item-12', 'Butter Naan', 'Breads', 3.50, true, 'Tandoori leavened flatbread brushed with butter'],
+    ['item-13', 'Garlic Naan', 'Breads', 4.50, true, 'Leavened bread topped with minced roasted garlic'],
+    ['item-14', 'Tandoori Roti', 'Breads', 2.50, true, 'Whole wheat flatbread baked in clay oven'],
+    ['item-15', 'Lachha Paratha', 'Breads', 4.00, true, 'Multi-layered flaky whole wheat bread'],
+    ['item-16', 'Hyderabadi Chicken Dum Biryani', 'Rice and Biryani', 19.00, true, 'Fragrant basmati rice layered with spiced chicken and saffron'],
+    ['item-17', 'Royal Veg Dum Biryani', 'Rice and Biryani', 14.50, true, 'Assorted vegetables cooked on dum with aromatic herbs'],
+    ['item-18', 'Mutton Gosht Biryani', 'Rice and Biryani', 23.50, true, 'Tender lamb cuts infused with aged long-grain basmati'],
+    ['item-19', 'Jeera Basmati Rice', 'Rice and Biryani', 8.50, true, 'Cumin tempered steamed fragrant basmati rice'],
+    ['item-20', 'Gulab Jamun with Rabri', 'Desserts', 7.50, true, 'Warm milk dumplings soaked in cardamom sugar syrup'],
+    ['item-21', 'Kesar Rasmalai (2 Pcs)', 'Desserts', 8.00, true, 'Spongy cottage cheese patties in saffron clotted milk'],
+    ['item-22', 'Shahi Matka Kulfi', 'Desserts', 6.50, true, 'Traditional condensed milk ice cream with pistachios'],
+    ['item-23', 'South Indian Filter Coffee', 'Beverages', 4.00, true, 'Freshly brewed chicory coffee with frothy hot milk'],
+    ['item-24', 'Masala Chai Pot', 'Beverages', 3.50, true, 'Assam tea simmered with fresh ginger and green cardamom'],
+    ['item-25', 'Fresh Lime Soda', 'Beverages', 4.50, true, 'Chilled sparkling limeade with rock salt'],
+    ['item-26', 'Mango Lassi', 'Beverages', 6.00, true, 'Thick yogurt shake blended with Alphonso pulp'],
+    ['item-27', 'Executive Club Sandwich', 'Room Service', 13.50, true, 'Triple decker toast with grilled chicken, egg and cheese'],
+    ['item-28', 'Continental Breakfast Tray', 'Room Service', 18.00, true, 'Croissant, toast, preserves, fresh juice and coffee']
+  ].map(([id, name, category, price, available, description]) => ({ id, name, category, price, available, description }));
 
   const DEFAULT_CUSTOMERS = [
-    { id: 'cust-1', name: 'Rajesh Sharma', phone: '9845012345', email: 'rajesh.sharma@gmail.com', address: 'Koramangala 4th Block, Bengaluru', visits: 12, totalSpend: 840.00 },
-    { id: 'cust-2', name: 'Priya Sundaram', phone: '9886167890', email: 'priya.sundaram@outlook.com', address: 'Indiranagar 100ft Road, Bengaluru', visits: 8, totalSpend: 520.00 },
-    { id: 'cust-3', name: 'Vikramaditya Reddy', phone: '9741234567', email: 'vikram.reddy@techcorp.in', address: 'Whitefield EPIP Zone, Bengaluru', visits: 15, totalSpend: 1140.00 },
-    { id: 'cust-4', name: 'Ananya Deshmukh', phone: '9900298765', email: 'ananya.d@gmail.com', address: 'HSR Layout Sector 2, Bengaluru', visits: 6, totalSpend: 390.00 },
-    { id: 'cust-5', name: 'Amit Patel', phone: '9823045678', email: 'amit.patel@zenith.com', address: 'Jayanagar 4th T Block, Bengaluru', visits: 9, totalSpend: 680.00 },
-    { id: 'cust-6', name: 'Sunita Kulkarni', phone: '9448123409', email: 'sunita.k@gmail.com', address: 'Malleshwaram 15th Cross, Bengaluru', visits: 5, totalSpend: 310.00 }
-  ];
+    ['cust-1', 'Rajesh Sharma', '9845012345', 'rajesh.sharma@gmail.com', 'Koramangala 4th Block, Bengaluru', 12, 840.00],
+    ['cust-2', 'Priya Sundaram', '9886167890', 'priya.sundaram@outlook.com', 'Indiranagar 100ft Road, Bengaluru', 8, 520.00],
+    ['cust-3', 'Vikramaditya Reddy', '9741234567', 'vikram.reddy@techcorp.in', 'Whitefield EPIP Zone, Bengaluru', 15, 1140.00],
+    ['cust-4', 'Ananya Deshmukh', '9900298765', 'ananya.d@gmail.com', 'HSR Layout Sector 2, Bengaluru', 6, 390.00],
+    ['cust-5', 'Amit Patel', '9823045678', 'amit.patel@zenith.com', 'Jayanagar 4th T Block, Bengaluru', 9, 680.00],
+    ['cust-6', 'Sunita Kulkarni', '9448123409', 'sunita.k@gmail.com', 'Malleshwaram 15th Cross, Bengaluru', 5, 310.00]
+  ].map(([id, name, phone, email, address, visits, totalSpend]) => ({ id, name, phone, email, address, visits, totalSpend }));
+
+  const makeOrder = (id, customerName, customerPhone, tableRoom, status, timestamp, notes, items, billNumber = null) => ({
+    id, orderNumber: id, customerName, customerPhone, tableRoom, status, timestamp, notes, billNumber, items
+  });
 
   const DEFAULT_ORDERS = [
-    {
-      id: 'ORD-0081',
-      orderNumber: 'ORD-0081',
-      customerName: 'Rajesh Sharma',
-      customerPhone: '9845012345',
-      tableRoom: 'Table 4',
-      status: 'Pending',
-      timestamp: '2026-10-27T09:45:00',
-      notes: 'Less oil in Dal Makhani, extra butter on naan',
-      billNumber: null,
-      items: [
-        { id: 'item-2', name: 'Dal Makhani', price: 12.00, qty: 1 },
-        { id: 'item-1', name: 'Paneer Butter Masala', price: 16.50, qty: 1 },
-        { id: 'item-12', name: 'Butter Naan', price: 3.50, qty: 4 }
-      ]
-    },
-    {
-      id: 'ORD-0082',
-      orderNumber: 'ORD-0082',
-      customerName: 'Vikramaditya Reddy',
-      customerPhone: '9741234567',
-      tableRoom: 'Room 304',
-      status: 'Preparing',
-      timestamp: '2026-10-27T10:05:00',
-      notes: 'Serve warm with lime wedges and onion rings',
-      billNumber: null,
-      items: [
-        { id: 'item-16', name: 'Hyderabadi Chicken Dum Biryani', price: 19.00, qty: 2 },
-        { id: 'item-26', name: 'Mango Lassi', price: 6.00, qty: 2 }
-      ]
-    },
-    {
-      id: 'ORD-0080',
-      orderNumber: 'ORD-0080',
-      customerName: 'Ananya Deshmukh',
-      customerPhone: '9900298765',
-      tableRoom: 'Table 7',
-      status: 'Completed',
-      timestamp: '2026-10-27T08:20:00',
-      notes: 'Table cleared, invoice settled via UPI',
-      billNumber: 'INV-2026-0140',
-      items: [
-        { id: 'item-28', name: 'Continental Breakfast Tray', price: 18.00, qty: 2 },
-        { id: 'item-23', name: 'South Indian Filter Coffee', price: 4.00, qty: 2 }
-      ]
-    }
+    makeOrder('ORD-0081', 'Rajesh Sharma', '9845012345', 'Table 4', 'Pending', '2026-10-27T09:45:00', 'Less oil in Dal Makhani, extra butter on naan', [
+      { id: 'item-2', name: 'Dal Makhani', price: 12.00, qty: 1 },
+      { id: 'item-1', name: 'Paneer Butter Masala', price: 16.50, qty: 1 },
+      { id: 'item-12', name: 'Butter Naan', price: 3.50, qty: 4 }
+    ]),
+    makeOrder('ORD-0082', 'Vikramaditya Reddy', '9741234567', 'Room 304', 'Preparing', '2026-10-27T10:05:00', 'Serve warm with lime wedges and onion rings', [
+      { id: 'item-16', name: 'Hyderabadi Chicken Dum Biryani', price: 19.00, qty: 2 },
+      { id: 'item-26', name: 'Mango Lassi', price: 6.00, qty: 2 }
+    ]),
+    makeOrder('ORD-0080', 'Ananya Deshmukh', '9900298765', 'Table 7', 'Completed', '2026-10-27T08:20:00', 'Table cleared, invoice settled via UPI', [
+      { id: 'item-28', name: 'Continental Breakfast Tray', price: 18.00, qty: 2 },
+      { id: 'item-23', name: 'South Indian Filter Coffee', price: 4.00, qty: 2 }
+    ], 'INV-2026-0140')
   ];
+
+  const makeBill = (id, billNumber, date, customerName, customerPhone, customerEmail, customerAddress, tableRoom, paymentMethod, subtotal, taxAmount, grandTotal, items, linkedOrderId = null) => ({
+    id, billNumber, date, customerName, customerPhone, customerEmail, customerAddress, tableRoom, paymentMethod,
+    status: 'Paid', linkedOrderId, taxRate: 5, discountType: 'flat', discountVal: 0, discountAmount: 0.00,
+    subtotal, taxAmount, grandTotal, items
+  });
 
   const DEFAULT_BILLS = [
-    {
-      id: 'bill-142',
-      billNumber: 'INV-2026-0142',
-      date: '2026-10-27T10:10:00',
-      customerName: 'Vikramaditya Reddy',
-      customerPhone: '+91 97412 34567',
-      customerEmail: 'vikram.reddy@gmail.com',
-      customerAddress: 'Whitefield EPIP Zone, Bengaluru',
-      tableRoom: 'Presidential Suite 501',
-      paymentMethod: 'UPI',
-      status: 'Paid',
-      linkedOrderId: null,
-      taxRate: 5,
-      subtotal: 34000.00,
-      discountType: 'flat',
-      discountVal: 0,
-      discountAmount: 0.00,
-      taxAmount: 1700.00,
-      grandTotal: 35700.00,
-      items: [
-        { name: 'Presidential Suite Luxury Stay (2 Nights)', category: 'Room Service', price: 15000.00, qty: 2, subtotal: 30000.00 },
-        { name: 'In-Suite Candlelight Dining Experience', category: 'Main Course', price: 4000.00, qty: 1, subtotal: 4000.00 }
-      ]
-    },
-    {
-      id: 'bill-141',
-      billNumber: 'INV-2026-0141',
-      date: '2026-10-27T09:15:00',
-      customerName: 'Priya Sundaram',
-      customerPhone: '+91 98861 67890',
-      customerEmail: 'priya.sundaram@infosys.com',
-      customerAddress: 'Indiranagar 100ft Road, Bengaluru',
-      tableRoom: 'Deluxe Room 204',
-      paymentMethod: 'Card',
-      status: 'Paid',
-      linkedOrderId: null,
-      taxRate: 5,
-      subtotal: 27095.24,
-      discountType: 'flat',
-      discountVal: 0,
-      discountAmount: 0.00,
-      taxAmount: 1354.76,
-      grandTotal: 28450.00,
-      items: [
-        { name: 'Deluxe Garden View Room (3 Nights)', category: 'Room Service', price: 7500.00, qty: 3, subtotal: 22500.00 },
-        { name: 'Aurelia Ayurvedic Spa Therapy & Hydro', category: 'Beverages', price: 4595.24, qty: 1, subtotal: 4595.24 }
-      ]
-    },
-    {
-      id: 'bill-140',
-      billNumber: 'INV-2026-0140',
-      date: '2026-10-26T21:45:00',
-      customerName: 'Tech Mahindra Corporate',
-      customerPhone: '+91 99002 98765',
-      customerEmail: 'events@techmahindra.com',
-      customerAddress: 'Electronic City Phase 1, Bengaluru',
-      tableRoom: 'Imperial Banquet Hall',
-      paymentMethod: 'Card',
-      status: 'Paid',
-      linkedOrderId: null,
-      taxRate: 5,
-      subtotal: 40571.43,
-      discountType: 'flat',
-      discountVal: 0,
-      discountAmount: 0.00,
-      taxAmount: 2028.57,
-      grandTotal: 42600.00,
-      items: [
-        { name: 'Corporate Dinner Banquet Buffet (25 Pax)', category: 'Main Course', price: 1400.00, qty: 25, subtotal: 35000.00 },
-        { name: 'Audio-Visual Rigging & Live Mocktail Bar', category: 'Beverages', price: 5571.43, qty: 1, subtotal: 5571.43 }
-      ]
-    },
-    {
-      id: 'bill-139',
-      billNumber: 'INV-2026-0139',
-      date: '2026-10-26T14:30:00',
-      customerName: 'Rajesh Sharma',
-      customerPhone: '+91 98450 12345',
-      customerEmail: 'rajesh.sharma@tcs.com',
-      customerAddress: 'Koramangala 4th Block, Bengaluru',
-      tableRoom: 'Executive Suite 302',
-      paymentMethod: 'UPI',
-      status: 'Paid',
-      linkedOrderId: null,
-      taxRate: 5,
-      subtotal: 18000.00,
-      discountType: 'flat',
-      discountVal: 0,
-      discountAmount: 0.00,
-      taxAmount: 900.00,
-      grandTotal: 18900.00,
-      items: [
-        { name: 'Executive Club Suite (1 Night)', category: 'Room Service', price: 14500.00, qty: 1, subtotal: 14500.00 },
-        { name: 'Aurelia Lounge Bar & Signature Drinks', category: 'Beverages', price: 3500.00, qty: 1, subtotal: 3500.00 }
-      ]
-    },
-    {
-      id: 'bill-138',
-      billNumber: 'INV-2026-0138',
-      date: '2026-10-25T20:15:00',
-      customerName: 'Ananya Deshmukh',
-      customerPhone: '+91 98201 54321',
-      customerEmail: 'ananya.d@gmail.com',
-      customerAddress: 'HSR Layout Sector 2, Bengaluru',
-      tableRoom: 'Table 8 (Fine Dining)',
-      paymentMethod: 'UPI',
-      status: 'Paid',
-      linkedOrderId: 'ORD-0080',
-      taxRate: 5,
-      subtotal: 8047.62,
-      discountType: 'flat',
-      discountVal: 0,
-      discountAmount: 0.00,
-      taxAmount: 402.38,
-      grandTotal: 8450.00,
-      items: [
-        { name: 'Royal Nawabi Dinner Thali (4 Pax)', category: 'Main Course', price: 1300.00, qty: 4, subtotal: 5200.00 },
-        { name: 'Grilled Tiger Prawns Angara', category: 'Starters', price: 923.81, qty: 2, subtotal: 1847.62 },
-        { name: 'Kesar Rasmalai & Pistachio Kulfi Platter', category: 'Desserts', price: 500.00, qty: 2, subtotal: 1000.00 }
-      ]
-    },
-    {
-      id: 'bill-137',
-      billNumber: 'INV-2026-0137',
-      date: '2026-10-25T11:20:00',
-      customerName: 'Arjun Kapoor',
-      customerPhone: '+91 97110 88234',
-      customerEmail: 'arjun.k@outlook.com',
-      customerAddress: 'Lavelle Road, Bengaluru',
-      tableRoom: 'Premium King 410',
-      paymentMethod: 'Card',
-      status: 'Paid',
-      linkedOrderId: null,
-      taxRate: 5,
-      subtotal: 12619.05,
-      discountType: 'flat',
-      discountVal: 0,
-      discountAmount: 0.00,
-      taxAmount: 630.95,
-      grandTotal: 13250.00,
-      items: [
-        { name: 'Premium King Room (1 Night)', category: 'Room Service', price: 10500.00, qty: 1, subtotal: 10500.00 },
-        { name: 'Airport Luxury Chauffeur Transfer & Mini Bar', category: 'Beverages', price: 2119.05, qty: 1, subtotal: 2119.05 }
-      ]
-    },
-    {
-      id: 'bill-136',
-      billNumber: 'INV-2026-0136',
-      date: '2026-10-24T18:00:00',
-      customerName: 'Dr. Meera Nambiar',
-      customerPhone: '+91 94481 22901',
-      customerEmail: 'meera.nambiar@manipal.edu',
-      customerAddress: 'Sadashivanagar, Bengaluru',
-      tableRoom: 'Wellness Suite 108',
-      paymentMethod: 'Cash',
-      status: 'Paid',
-      linkedOrderId: null,
-      taxRate: 5,
-      subtotal: 9263.99,
-      discountType: 'flat',
-      discountVal: 0,
-      discountAmount: 0.00,
-      taxAmount: 463.20,
-      grandTotal: 9727.19,
-      items: [
-        { name: 'Wellness Rejuvenation Session & Aroma Therapy', category: 'Starters', price: 6500.00, qty: 1, subtotal: 6500.00 },
-        { name: 'Organic Cold-Pressed Juices & Healthy Dining', category: 'Beverages', price: 2763.99, qty: 1, subtotal: 2763.99 }
-      ]
-    }
+    makeBill('bill-142', 'INV-2026-0142', '2026-10-27T10:10:00', 'Vikramaditya Reddy', '+91 97412 34567', 'vikram.reddy@gmail.com', 'Whitefield EPIP Zone, Bengaluru', 'Presidential Suite 501', 'UPI', 34000.00, 1700.00, 35700.00, [
+      { name: 'Presidential Suite Luxury Stay (2 Nights)', category: 'Room Service', price: 15000.00, qty: 2, subtotal: 30000.00 },
+      { name: 'In-Suite Candlelight Dining Experience', category: 'Main Course', price: 4000.00, qty: 1, subtotal: 4000.00 }
+    ]),
+    makeBill('bill-141', 'INV-2026-0141', '2026-10-27T09:15:00', 'Priya Sundaram', '+91 98861 67890', 'priya.sundaram@infosys.com', 'Indiranagar 100ft Road, Bengaluru', 'Deluxe Room 204', 'Card', 27095.24, 1354.76, 28450.00, [
+      { name: 'Deluxe Garden View Room (3 Nights)', category: 'Room Service', price: 7500.00, qty: 3, subtotal: 22500.00 },
+      { name: 'Aurelia Ayurvedic Spa Therapy & Hydro', category: 'Beverages', price: 4595.24, qty: 1, subtotal: 4595.24 }
+    ]),
+    makeBill('bill-140', 'INV-2026-0140', '2026-10-26T21:45:00', 'Tech Mahindra Corporate', '+91 99002 98765', 'events@techmahindra.com', 'Electronic City Phase 1, Bengaluru', 'Imperial Banquet Hall', 'Card', 40571.43, 2028.57, 42600.00, [
+      { name: 'Corporate Dinner Banquet Buffet (25 Pax)', category: 'Main Course', price: 1400.00, qty: 25, subtotal: 35000.00 },
+      { name: 'Audio-Visual Rigging & Live Mocktail Bar', category: 'Beverages', price: 5571.43, qty: 1, subtotal: 5571.43 }
+    ]),
+    makeBill('bill-139', 'INV-2026-0139', '2026-10-26T14:30:00', 'Rajesh Sharma', '+91 98450 12345', 'rajesh.sharma@tcs.com', 'Koramangala 4th Block, Bengaluru', 'Executive Suite 302', 'UPI', 18000.00, 900.00, 18900.00, [
+      { name: 'Executive Club Suite (1 Night)', category: 'Room Service', price: 14500.00, qty: 1, subtotal: 14500.00 },
+      { name: 'Aurelia Lounge Bar & Signature Drinks', category: 'Beverages', price: 3500.00, qty: 1, subtotal: 3500.00 }
+    ]),
+    makeBill('bill-138', 'INV-2026-0138', '2026-10-25T20:15:00', 'Ananya Deshmukh', '+91 98201 54321', 'ananya.d@gmail.com', 'HSR Layout Sector 2, Bengaluru', 'Table 8 (Fine Dining)', 'UPI', 8047.62, 402.38, 8450.00, [
+      { name: 'Royal Nawabi Dinner Thali (4 Pax)', category: 'Main Course', price: 1300.00, qty: 4, subtotal: 5200.00 },
+      { name: 'Grilled Tiger Prawns Angara', category: 'Starters', price: 923.81, qty: 2, subtotal: 1847.62 },
+      { name: 'Kesar Rasmalai & Pistachio Kulfi Platter', category: 'Desserts', price: 500.00, qty: 2, subtotal: 1000.00 }
+    ], 'ORD-0080'),
+    makeBill('bill-137', 'INV-2026-0137', '2026-10-25T11:20:00', 'Arjun Kapoor', '+91 97110 88234', 'arjun.k@outlook.com', 'Lavelle Road, Bengaluru', 'Premium King 410', 'Card', 12619.05, 630.95, 13250.00, [
+      { name: 'Premium King Room (1 Night)', category: 'Room Service', price: 10500.00, qty: 1, subtotal: 10500.00 },
+      { name: 'Airport Luxury Chauffeur Transfer & Mini Bar', category: 'Beverages', price: 2119.05, qty: 1, subtotal: 2119.05 }
+    ]),
+    makeBill('bill-136', 'INV-2026-0136', '2026-10-24T18:00:00', 'Dr. Meera Nambiar', '+91 94481 22901', 'meera.nambiar@manipal.edu', 'Sadashivanagar, Bengaluru', 'Wellness Suite 108', 'Cash', 9263.99, 463.20, 9727.19, [
+      { name: 'Wellness Rejuvenation Session & Aroma Therapy', category: 'Starters', price: 6500.00, qty: 1, subtotal: 6500.00 },
+      { name: 'Organic Cold-Pressed Juices & Healthy Dining', category: 'Beverages', price: 2763.99, qty: 1, subtotal: 2763.99 }
+    ])
   ];
 
-  const DEFAULT_STAFF = [
-    // Front Office (8 staff: 7 On Duty, 1 On Leave)
-    { id: 'EMP-2026-01', name: 'Adaline Lively', role: 'Front Desk Supervisor', department: 'Front Office', station: 'Main Reception Desk 01', shift: 'Morning (07:00 - 15:30)', status: 'On Duty', leaveReason: null, phone: '+91 98450 11201', email: 'adaline.l@aureliahotel.com' },
-    { id: 'EMP-2026-02', name: 'Vikram Malhotra', role: 'Senior Concierge', department: 'Front Office', station: 'Concierge Lounge', shift: 'Morning (08:00 - 16:30)', status: 'On Duty', leaveReason: null, phone: '+91 98450 11202', email: 'vikram.m@aureliahotel.com' },
-    { id: 'EMP-2026-03', name: 'Priyanka Sharma', role: 'Guest Relations Officer', department: 'Front Office', station: 'Executive Club Lounge', shift: 'Day (09:00 - 17:30)', status: 'On Duty', leaveReason: null, phone: '+91 98450 11203', email: 'priyanka.s@aureliahotel.com' },
-    { id: 'EMP-2026-04', name: 'Rohan Desai', role: 'Night Auditor', department: 'Front Office', station: 'Front Office Back-Desk', shift: 'Night (23:00 - 07:30)', status: 'On Duty', leaveReason: null, phone: '+91 98450 11204', email: 'rohan.d@aureliahotel.com' },
-    { id: 'EMP-2026-05', name: 'Ananya Sen', role: 'Front Desk Agent', department: 'Front Office', station: 'Reception Desk 02', shift: 'Afternoon (14:00 - 22:30)', status: 'On Duty', leaveReason: null, phone: '+91 98450 11205', email: 'ananya.s@aureliahotel.com' },
-    { id: 'EMP-2026-06', name: 'Sameer Joshi', role: 'Bell Captain & Porter', department: 'Front Office', station: 'Main Portico / Lobby', shift: 'Morning (07:00 - 15:30)', status: 'On Duty', leaveReason: null, phone: '+91 98450 11206', email: 'sameer.j@aureliahotel.com' },
-    { id: 'EMP-2026-07', name: 'Neha Pillai', role: 'VIP Reservations Executive', department: 'Front Office', station: 'Front Office Suite', shift: 'Day (09:30 - 18:00)', status: 'On Duty', leaveReason: null, phone: '+91 98450 11207', email: 'neha.p@aureliahotel.com' },
-    { id: 'EMP-2026-08', name: 'Tanvi Agarwal', role: 'Front Desk Agent', department: 'Front Office', station: 'Reception Desk 03', shift: 'Off-duty', status: 'On Leave', leaveReason: 'Casual Leave', phone: '+91 98450 11208', email: 'tanvi.a@aureliahotel.com' },
-
-    // Culinary & Kitchen (12 staff: 10 On Duty, 2 On Leave)
-    { id: 'EMP-2026-09', name: 'Chef Rajesh Kulkarni', role: 'Executive Chef', department: 'Culinary & Kitchen', station: 'Master Kitchen Central', shift: 'Day (09:00 - 18:00)', status: 'On Duty', leaveReason: null, phone: '+91 98450 11209', email: 'chef.rajesh@aureliahotel.com' },
-    { id: 'EMP-2026-10', name: 'Tariq Mansoor', role: 'Sous Chef', department: 'Culinary & Kitchen', station: 'Hot Line & Saute', shift: 'Morning (06:30 - 15:00)', status: 'On Duty', leaveReason: null, phone: '+91 98450 11210', email: 'tariq.m@aureliahotel.com' },
-    { id: 'EMP-2026-11', name: 'Meenakshi Sundaram', role: 'Head Pastry Chef', department: 'Culinary & Kitchen', station: 'Bakery & Confectionery', shift: 'Morning (06:00 - 14:30)', status: 'On Duty', leaveReason: null, phone: '+91 98450 11211', email: 'meenakshi.s@aureliahotel.com' },
-    { id: 'EMP-2026-12', name: 'Amitava Roy', role: 'Tandoor Master Chef', department: 'Culinary & Kitchen', station: 'Live Charcoal Tandoor', shift: 'Evening (15:00 - 23:30)', status: 'On Duty', leaveReason: null, phone: '+91 98450 11212', email: 'amitava.r@aureliahotel.com' },
-    { id: 'EMP-2026-13', name: 'Gurpreet Singh', role: 'Continental Line Cook', department: 'Culinary & Kitchen', station: 'Continental Range 02', shift: 'Morning (07:00 - 15:30)', status: 'On Duty', leaveReason: null, phone: '+91 98450 11213', email: 'gurpreet.s@aureliahotel.com' },
-    { id: 'EMP-2026-14', name: 'Farhan Qureshi', role: 'Dum & Biryani Specialist', department: 'Culinary & Kitchen', station: 'Dum Biryani Hearth', shift: 'Afternoon (12:00 - 20:30)', status: 'On Duty', leaveReason: null, phone: '+91 98450 11214', email: 'farhan.q@aureliahotel.com' },
-    { id: 'EMP-2026-15', name: 'David D\'Souza', role: 'Kitchen Pantry Lead', department: 'Culinary & Kitchen', station: 'Cold Kitchen & Larder', shift: 'Morning (07:00 - 15:30)', status: 'On Duty', leaveReason: null, phone: '+91 98450 11215', email: 'david.d@aureliahotel.com' },
-    { id: 'EMP-2026-16', name: 'Ramesh Goud', role: 'Prep Chef & Butchery', department: 'Culinary & Kitchen', station: 'Meat & Seafood Prep', shift: 'Morning (06:00 - 14:30)', status: 'On Duty', leaveReason: null, phone: '+91 98450 11216', email: 'ramesh.g@aureliahotel.com' },
-    { id: 'EMP-2026-17', name: 'Sumanth Rao', role: 'Commis Chef III', department: 'Culinary & Kitchen', station: 'Banquet Prep Station', shift: 'Afternoon (13:00 - 21:30)', status: 'On Duty', leaveReason: null, phone: '+91 98450 11217', email: 'sumanth.r@aureliahotel.com' },
-    { id: 'EMP-2026-18', name: 'Prakash Shenoy', role: 'Chief Kitchen Steward', department: 'Culinary & Kitchen', station: 'Dishwashing & Sanitation', shift: 'Day (08:00 - 17:00)', status: 'On Duty', leaveReason: null, phone: '+91 98450 11218', email: 'prakash.s@aureliahotel.com' },
-    { id: 'EMP-2026-19', name: 'Joseph Kurian', role: 'South Indian Cuisine Lead', department: 'Culinary & Kitchen', station: 'Breakfast Live Counter', shift: 'Off-duty', status: 'On Leave', leaveReason: 'Annual Leave', phone: '+91 98450 11219', email: 'joseph.k@aureliahotel.com' },
-    { id: 'EMP-2026-20', name: 'Baldev Yadav', role: 'Grill Line Cook', department: 'Culinary & Kitchen', station: 'Robata & Skewers', shift: 'Off-duty', status: 'On Leave', leaveReason: 'Sick Leave', phone: '+91 98450 11220', email: 'baldev.y@aureliahotel.com' },
-
-    // Food & Beverage Service (12 staff: 11 On Duty, 1 On Leave)
-    { id: 'EMP-2026-21', name: 'Kevin Peterson', role: 'F&B Service Manager', department: 'Food & Beverage', station: 'Main Dining Hall', shift: 'Day (10:00 - 19:00)', status: 'On Duty', leaveReason: null, phone: '+91 98450 11221', email: 'kevin.p@aureliahotel.com' },
-    { id: 'EMP-2026-22', name: 'Suresh Nair', role: 'Head Bartender & Mixologist', department: 'Food & Beverage', station: 'Aurelia Bar & Lounge', shift: 'Evening (16:00 - 00:30)', status: 'On Duty', leaveReason: null, phone: '+91 98450 11222', email: 'suresh.n@aureliahotel.com' },
-    { id: 'EMP-2026-23', name: 'Aarti Menon', role: 'Senior Restaurant Captain', department: 'Food & Beverage', station: 'Fine Dining Section A', shift: 'Afternoon (13:00 - 21:30)', status: 'On Duty', leaveReason: null, phone: '+91 98450 11223', email: 'aarti.m@aureliahotel.com' },
-    { id: 'EMP-2026-24', name: 'Karthik Reddy', role: 'Senior Banquet Steward', department: 'Food & Beverage', station: 'Ballroom Banquet Hall', shift: 'Morning (07:00 - 15:30)', status: 'On Duty', leaveReason: null, phone: '+91 98450 11224', email: 'karthik.r@aureliahotel.com' },
-    { id: 'EMP-2026-25', name: 'Pooja Hegde', role: 'Restaurant Hostess', department: 'Food & Beverage', station: 'Restaurant Welcome Desk', shift: 'Morning (08:00 - 16:30)', status: 'On Duty', leaveReason: null, phone: '+91 98450 11225', email: 'pooja.h@aureliahotel.com' },
-    { id: 'EMP-2026-26', name: 'Nikhil Varma', role: 'In-Room Dining Lead', department: 'Food & Beverage', station: 'Room Service Dispatch', shift: 'Evening (15:00 - 23:30)', status: 'On Duty', leaveReason: null, phone: '+91 98450 11226', email: 'nikhil.v@aureliahotel.com' },
-    { id: 'EMP-2026-27', name: 'Deepa Swaminathan', role: 'Sommelier & Wine Steward', department: 'Food & Beverage', station: 'Wine Cellar & Bar', shift: 'Evening (17:00 - 01:00)', status: 'On Duty', leaveReason: null, phone: '+91 98450 11227', email: 'deepa.s@aureliahotel.com' },
-    { id: 'EMP-2026-28', name: 'Imran Baig', role: 'Lead Barista', department: 'Food & Beverage', station: 'Cafe & Bakery Counter', shift: 'Morning (06:30 - 15:00)', status: 'On Duty', leaveReason: null, phone: '+91 98450 11228', email: 'imran.b@aureliahotel.com' },
-    { id: 'EMP-2026-29', name: 'Abhishek Das', role: 'Banquet Captain', department: 'Food & Beverage', station: 'Conference Center', shift: 'Day (09:00 - 18:00)', status: 'On Duty', leaveReason: null, phone: '+91 98450 11229', email: 'abhishek.d@aureliahotel.com' },
-    { id: 'EMP-2026-30', name: 'Simran Kaur', role: 'Senior Table Server', department: 'Food & Beverage', station: 'Terrace Garden Dining', shift: 'Afternoon (14:00 - 22:30)', status: 'On Duty', leaveReason: null, phone: '+91 98450 11230', email: 'simran.k@aureliahotel.com' },
-    { id: 'EMP-2026-31', name: 'Rahul Chauhan', role: 'Food Expeditor', department: 'Food & Beverage', station: 'Kitchen Pass & Service', shift: 'Morning (07:00 - 15:30)', status: 'On Duty', leaveReason: null, phone: '+91 98450 11231', email: 'rahul.c@aureliahotel.com' },
-    { id: 'EMP-2026-32', name: 'Manoj Tiwari', role: 'Dining Room Steward', department: 'Food & Beverage', station: 'Poolside Deck Dining', shift: 'Off-duty', status: 'On Leave', leaveReason: 'Weekly Off', phone: '+91 98450 11232', email: 'manoj.t@aureliahotel.com' },
-
-    // Housekeeping & Laundry (10 staff: 9 On Duty, 1 On Leave)
-    { id: 'EMP-2026-33', name: 'Shanti Bai', role: 'Executive Housekeeper', department: 'Housekeeping', station: 'Housekeeping Control Desk', shift: 'Day (08:00 - 17:00)', status: 'On Duty', leaveReason: null, phone: '+91 98450 11233', email: 'shanti.b@aureliahotel.com' },
-    { id: 'EMP-2026-34', name: 'Lakshmi Devi', role: 'Floor Supervisor (Floors 2 & 3)', department: 'Housekeeping', station: '2nd Floor Linen Hub', shift: 'Morning (07:30 - 16:00)', status: 'On Duty', leaveReason: null, phone: '+91 98450 11234', email: 'lakshmi.d@aureliahotel.com' },
-    { id: 'EMP-2026-35', name: 'Mohanlal Gujjar', role: 'Laundry & Dry-Clean Master', department: 'Housekeeping', station: 'Industrial Laundry Plant', shift: 'Day (08:00 - 16:30)', status: 'On Duty', leaveReason: null, phone: '+91 98450 11235', email: 'mohanlal.g@aureliahotel.com' },
-    { id: 'EMP-2026-36', name: 'Rekha Das', role: 'Senior Room Attendant', department: 'Housekeeping', station: 'Executive Suites Floor 4', shift: 'Morning (08:00 - 16:30)', status: 'On Duty', leaveReason: null, phone: '+91 98450 11236', email: 'rekha.d@aureliahotel.com' },
-    { id: 'EMP-2026-37', name: 'Sunil Paswan', role: 'Public Area Lead', department: 'Housekeeping', station: 'Main Lobby & Atrium', shift: 'Morning (07:00 - 15:30)', status: 'On Duty', leaveReason: null, phone: '+91 98450 11237', email: 'sunil.p@aureliahotel.com' },
-    { id: 'EMP-2026-38', name: 'Geeta Soren', role: 'Room Amenities Attendant', department: 'Housekeeping', station: 'Linen & Amenity Stock', shift: 'Day (09:00 - 17:30)', status: 'On Duty', leaveReason: null, phone: '+91 98450 11238', email: 'geeta.s@aureliahotel.com' },
-    { id: 'EMP-2026-39', name: 'Harish Chandra', role: 'Linen Runner', department: 'Housekeeping', station: 'Service Elevators & Hubs', shift: 'Afternoon (13:00 - 21:30)', status: 'On Duty', leaveReason: null, phone: '+91 98450 11239', email: 'harish.c@aureliahotel.com' },
-    { id: 'EMP-2026-40', name: 'Mary Fernandez', role: 'Deluxe Rooms Attendant', department: 'Housekeeping', station: 'Deluxe Wing Floor 1', shift: 'Morning (08:00 - 16:30)', status: 'On Duty', leaveReason: null, phone: '+91 98450 11240', email: 'mary.f@aureliahotel.com' },
-    { id: 'EMP-2026-41', name: 'Basavaraj Patil', role: 'Deep Cleaning Specialist', department: 'Housekeeping', station: 'Banquet & Spa Floors', shift: 'Day (08:30 - 17:00)', status: 'On Duty', leaveReason: null, phone: '+91 98450 11241', email: 'basavaraj.p@aureliahotel.com' },
-    { id: 'EMP-2026-42', name: 'Savita More', role: 'Room Attendant', department: 'Housekeeping', station: 'Standard Wing Floor 1', shift: 'Off-duty', status: 'On Leave', leaveReason: 'Medical Leave', phone: '+91 98450 11242', email: 'savita.m@aureliahotel.com' },
-
-    // Engineering & Maintenance (4 staff: 3 On Duty, 1 On Leave)
-    { id: 'EMP-2026-43', name: 'Girish Sharma', role: 'Chief Facility Engineer', department: 'Engineering & Maintenance', station: 'Engineering Control Room', shift: 'Day (08:30 - 17:30)', status: 'On Duty', leaveReason: null, phone: '+91 98450 11243', email: 'girish.s@aureliahotel.com' },
-    { id: 'EMP-2026-44', name: 'Jagdish Mhatre', role: 'HVAC & Chiller Specialist', department: 'Engineering & Maintenance', station: 'Central Plant Room', shift: 'Morning (07:00 - 15:30)', status: 'On Duty', leaveReason: null, phone: '+91 98450 11244', email: 'jagdish.m@aureliahotel.com' },
-    { id: 'EMP-2026-45', name: 'Venkat Raman', role: 'Duty Electrician & DG Set', department: 'Engineering & Maintenance', station: 'Electrical Substation', shift: 'Evening (15:00 - 23:30)', status: 'On Duty', leaveReason: null, phone: '+91 98450 11245', email: 'venkat.r@aureliahotel.com' },
-    { id: 'EMP-2026-46', name: 'Santosh Kumar', role: 'Lead Plumber & RO Systems', department: 'Engineering & Maintenance', station: 'Water Treatment Facility', shift: 'Off-duty', status: 'On Leave', leaveReason: 'Emergency Leave', phone: '+91 98450 11246', email: 'santosh.k@aureliahotel.com' },
-
-    // Security & Operations (2 staff: 2 On Duty, 0 On Leave)
-    { id: 'EMP-2026-47', name: 'Capt. R. S. Rathore', role: 'Head of Hotel Security', department: 'Security & Operations', station: 'Security Command Center', shift: 'Day (08:00 - 17:00)', status: 'On Duty', leaveReason: null, phone: '+91 98450 11247', email: 'security.head@aureliahotel.com' },
-    { id: 'EMP-2026-48', name: 'Dharmender Singh', role: 'CCTV Surveillance Lead', department: 'Security & Operations', station: 'CCTV Monitoring Room', shift: 'Rotation (07:00 - 19:00)', status: 'On Duty', leaveReason: null, phone: '+91 98450 11248', email: 'dharmender.s@aureliahotel.com' }
-  ];
+    const DEFAULT_STAFF = [
+    ["Adaline Lively", "Front Desk Supervisor", "Front Office", "Main Reception Desk 01", "Morning (07:00 - 15:30)", "On Duty", null, "adaline.l@aureliahotel.com"],
+    ["Vikram Malhotra", "Senior Concierge", "Front Office", "Concierge Lounge", "Morning (08:00 - 16:30)", "On Duty", null, "vikram.m@aureliahotel.com"],
+    ["Priyanka Sharma", "Guest Relations Officer", "Front Office", "Executive Club Lounge", "Day (09:00 - 17:30)", "On Duty", null, "priyanka.s@aureliahotel.com"],
+    ["Rohan Desai", "Night Auditor", "Front Office", "Front Office Back-Desk", "Night (23:00 - 07:30)", "On Duty", null, "rohan.d@aureliahotel.com"],
+    ["Ananya Sen", "Front Desk Agent", "Front Office", "Reception Desk 02", "Afternoon (14:00 - 22:30)", "On Duty", null, "ananya.s@aureliahotel.com"],
+    ["Sameer Joshi", "Bell Captain & Porter", "Front Office", "Main Portico / Lobby", "Morning (07:00 - 15:30)", "On Duty", null, "sameer.j@aureliahotel.com"],
+    ["Neha Pillai", "VIP Reservations Executive", "Front Office", "Front Office Suite", "Day (09:30 - 18:00)", "On Duty", null, "neha.p@aureliahotel.com"],
+    ["Tanvi Agarwal", "Front Desk Agent", "Front Office", "Reception Desk 03", "Off-duty", "On Leave", "Casual Leave", "tanvi.a@aureliahotel.com"],
+    ["Chef Rajesh Kulkarni", "Executive Chef", "Culinary & Kitchen", "Master Kitchen Central", "Day (09:00 - 18:00)", "On Duty", null, "chef.rajesh@aureliahotel.com"],
+    ["Tariq Mansoor", "Sous Chef", "Culinary & Kitchen", "Hot Line & Saute", "Morning (06:30 - 15:00)", "On Duty", null, "tariq.m@aureliahotel.com"],
+    ["Meenakshi Sundaram", "Head Pastry Chef", "Culinary & Kitchen", "Bakery & Confectionery", "Morning (06:00 - 14:30)", "On Duty", null, "meenakshi.s@aureliahotel.com"],
+    ["Amitava Roy", "Tandoor Master Chef", "Culinary & Kitchen", "Live Charcoal Tandoor", "Evening (15:00 - 23:30)", "On Duty", null, "amitava.r@aureliahotel.com"],
+    ["Gurpreet Singh", "Continental Line Cook", "Culinary & Kitchen", "Continental Range 02", "Morning (07:00 - 15:30)", "On Duty", null, "gurpreet.s@aureliahotel.com"],
+    ["Farhan Qureshi", "Dum & Biryani Specialist", "Culinary & Kitchen", "Dum Biryani Hearth", "Afternoon (12:00 - 20:30)", "On Duty", null, "farhan.q@aureliahotel.com"],
+    ["David D'Souza", "Kitchen Pantry Lead", "Culinary & Kitchen", "Cold Kitchen & Larder", "Morning (07:00 - 15:30)", "On Duty", null, "david.d@aureliahotel.com"],
+    ["Ramesh Goud", "Prep Chef & Butchery", "Culinary & Kitchen", "Meat & Seafood Prep", "Morning (06:00 - 14:30)", "On Duty", null, "ramesh.g@aureliahotel.com"],
+    ["Sumanth Rao", "Commis Chef III", "Culinary & Kitchen", "Banquet Prep Station", "Afternoon (13:00 - 21:30)", "On Duty", null, "sumanth.r@aureliahotel.com"],
+    ["Prakash Shenoy", "Chief Kitchen Steward", "Culinary & Kitchen", "Dishwashing & Sanitation", "Day (08:00 - 17:00)", "On Duty", null, "prakash.s@aureliahotel.com"],
+    ["Joseph Kurian", "South Indian Cuisine Lead", "Culinary & Kitchen", "Breakfast Live Counter", "Off-duty", "On Leave", "Annual Leave", "joseph.k@aureliahotel.com"],
+    ["Baldev Yadav", "Grill Line Cook", "Culinary & Kitchen", "Robata & Skewers", "Off-duty", "On Leave", "Sick Leave", "baldev.y@aureliahotel.com"],
+    ["Kevin Peterson", "F&B Service Manager", "Food & Beverage", "Main Dining Hall", "Day (10:00 - 19:00)", "On Duty", null, "kevin.p@aureliahotel.com"],
+    ["Suresh Nair", "Head Bartender & Mixologist", "Food & Beverage", "Aurelia Bar & Lounge", "Evening (16:00 - 00:30)", "On Duty", null, "suresh.n@aureliahotel.com"],
+    ["Aarti Menon", "Senior Restaurant Captain", "Food & Beverage", "Fine Dining Section A", "Afternoon (13:00 - 21:30)", "On Duty", null, "aarti.m@aureliahotel.com"],
+    ["Karthik Reddy", "Senior Banquet Steward", "Food & Beverage", "Ballroom Banquet Hall", "Morning (07:00 - 15:30)", "On Duty", null, "karthik.r@aureliahotel.com"],
+    ["Pooja Hegde", "Restaurant Hostess", "Food & Beverage", "Restaurant Welcome Desk", "Morning (08:00 - 16:30)", "On Duty", null, "pooja.h@aureliahotel.com"],
+    ["Nikhil Varma", "In-Room Dining Lead", "Food & Beverage", "Room Service Dispatch", "Evening (15:00 - 23:30)", "On Duty", null, "nikhil.v@aureliahotel.com"],
+    ["Deepa Swaminathan", "Sommelier & Wine Steward", "Food & Beverage", "Wine Cellar & Bar", "Evening (17:00 - 01:00)", "On Duty", null, "deepa.s@aureliahotel.com"],
+    ["Imran Baig", "Lead Barista", "Food & Beverage", "Cafe & Bakery Counter", "Morning (06:30 - 15:00)", "On Duty", null, "imran.b@aureliahotel.com"],
+    ["Abhishek Das", "Banquet Captain", "Food & Beverage", "Conference Center", "Day (09:00 - 18:00)", "On Duty", null, "abhishek.d@aureliahotel.com"],
+    ["Simran Kaur", "Senior Table Server", "Food & Beverage", "Terrace Garden Dining", "Afternoon (14:00 - 22:30)", "On Duty", null, "simran.k@aureliahotel.com"],
+    ["Rahul Chauhan", "Food Expeditor", "Food & Beverage", "Kitchen Pass & Service", "Morning (07:00 - 15:30)", "On Duty", null, "rahul.c@aureliahotel.com"],
+    ["Manoj Tiwari", "Dining Room Steward", "Food & Beverage", "Poolside Deck Dining", "Off-duty", "On Leave", "Weekly Off", "manoj.t@aureliahotel.com"],
+    ["Shanti Bai", "Executive Housekeeper", "Housekeeping", "Housekeeping Control Desk", "Day (08:00 - 17:00)", "On Duty", null, "shanti.b@aureliahotel.com"],
+    ["Lakshmi Devi", "Floor Supervisor (Floors 2 & 3)", "Housekeeping", "2nd Floor Linen Hub", "Morning (07:30 - 16:00)", "On Duty", null, "lakshmi.d@aureliahotel.com"],
+    ["Mohanlal Gujjar", "Laundry & Dry-Clean Master", "Housekeeping", "Industrial Laundry Plant", "Day (08:00 - 16:30)", "On Duty", null, "mohanlal.g@aureliahotel.com"],
+    ["Rekha Das", "Senior Room Attendant", "Housekeeping", "Executive Suites Floor 4", "Morning (08:00 - 16:30)", "On Duty", null, "rekha.d@aureliahotel.com"],
+    ["Sunil Paswan", "Public Area Lead", "Housekeeping", "Main Lobby & Atrium", "Morning (07:00 - 15:30)", "On Duty", null, "sunil.p@aureliahotel.com"],
+    ["Geeta Soren", "Room Amenities Attendant", "Housekeeping", "Linen & Amenity Stock", "Day (09:00 - 17:30)", "On Duty", null, "geeta.s@aureliahotel.com"],
+    ["Harish Chandra", "Linen Runner", "Housekeeping", "Service Elevators & Hubs", "Afternoon (13:00 - 21:30)", "On Duty", null, "harish.c@aureliahotel.com"],
+    ["Mary Fernandez", "Deluxe Rooms Attendant", "Housekeeping", "Deluxe Wing Floor 1", "Morning (08:00 - 16:30)", "On Duty", null, "mary.f@aureliahotel.com"],
+    ["Basavaraj Patil", "Deep Cleaning Specialist", "Housekeeping", "Banquet & Spa Floors", "Day (08:30 - 17:00)", "On Duty", null, "basavaraj.p@aureliahotel.com"],
+    ["Savita More", "Room Attendant", "Housekeeping", "Standard Wing Floor 1", "Off-duty", "On Leave", "Medical Leave", "savita.m@aureliahotel.com"],
+    ["Girish Sharma", "Chief Facility Engineer", "Engineering & Maintenance", "Engineering Control Room", "Day (08:30 - 17:30)", "On Duty", null, "girish.s@aureliahotel.com"],
+    ["Jagdish Mhatre", "HVAC & Chiller Specialist", "Engineering & Maintenance", "Central Plant Room", "Morning (07:00 - 15:30)", "On Duty", null, "jagdish.m@aureliahotel.com"],
+    ["Venkat Raman", "Duty Electrician & DG Set", "Engineering & Maintenance", "Electrical Substation", "Evening (15:00 - 23:30)", "On Duty", null, "venkat.r@aureliahotel.com"],
+    ["Santosh Kumar", "Lead Plumber & RO Systems", "Engineering & Maintenance", "Water Treatment Facility", "Off-duty", "On Leave", "Emergency Leave", "santosh.k@aureliahotel.com"],
+    ["Capt. R. S. Rathore", "Head of Hotel Security", "Security & Operations", "Security Command Center", "Day (08:00 - 17:00)", "On Duty", null, "security.head@aureliahotel.com"],
+    ["Dharmender Singh", "CCTV Surveillance Lead", "Security & Operations", "CCTV Monitoring Room", "Rotation (07:00 - 19:00)", "On Duty", null, "dharmender.s@aureliahotel.com"]
+  ].map(([name, role, department, station, shift, status, leaveReason, email], i) => ({
+    id: `EMP-2026-${String(i + 1).padStart(2, "0")}`,
+    name, role, department, station, shift, status, leaveReason,
+    phone: `+91 98450 112${String(i + 1).padStart(2, "0")}`,
+    email
+  }));
 
   function initializeSampleData(force = false) {
     const existingBills = Storage.get(STORAGE_KEYS.BILLS, []);
@@ -441,6 +266,156 @@ $(document).ready(function () {
 
   // Alias for backward compatibility
   window.formatINR = formatMoney;
+
+  // =========================================================================
+  // ANIMATED NUMBER SCROLLER / ODOMETER DIGIT REEL ENGINE
+  // =========================================================================
+
+  function animateNumber(selector, targetVal, options = {}) {
+    const $els = $(selector);
+    if (!$els.length) return;
+
+    const target = Number(targetVal) || 0;
+    const duration = options.duration !== undefined ? options.duration : 1150;
+    const delay = options.delay || 0;
+    const decimals = options.decimals !== undefined ? options.decimals : 0;
+    const prefix = options.prefix || '';
+    const suffix = options.suffix || '';
+    const decimalClass = options.decimalClass || '';
+    const suffixClass = options.suffixClass || '';
+    const useLocale = options.useLocale !== false;
+    const stagger = options.stagger !== undefined ? options.stagger : 35;
+    const rollAnim = options.rollAnim !== false;
+
+    $els.each(function () {
+      const el = this;
+
+      if (el._countAnimRaf) {
+        cancelAnimationFrame(el._countAnimRaf);
+        el._countAnimRaf = null;
+      }
+      if (el._countDelayTimer) {
+        clearTimeout(el._countDelayTimer);
+        el._countDelayTimer = null;
+      }
+
+      function startAnimation() {
+        if (el.tagName === 'INPUT') {
+          el.value = (decimals > 0 ? target.toFixed(decimals) : Math.round(target));
+          return;
+        }
+
+        const isNegative = target < 0;
+        const absVal = Math.abs(target);
+        let numStr = decimals > 0 ? absVal.toFixed(decimals) : Math.round(absVal).toString();
+
+        let intStr = '';
+        let decStr = '';
+
+        if (decimals > 0) {
+          const parts = numStr.split('.');
+          const intPart = parseInt(parts[0], 10) || 0;
+          intStr = useLocale ? intPart.toLocaleString('en-IN') : intPart.toString();
+          decStr = parts[1] || '';
+        } else {
+          const intPart = parseInt(numStr, 10) || 0;
+          intStr = useLocale ? intPart.toLocaleString('en-IN') : intPart.toString();
+        }
+
+        const sign = isNegative ? '-' : '';
+        const fullLabel = `${sign}${prefix}${intStr}${decStr ? '.' + decStr : ''}${suffix}`;
+
+        if (!rollAnim) {
+          el.innerHTML = fullLabel;
+          el._currentCountVal = target;
+          return;
+        }
+
+        // Build rolling digit reel columns
+        let html = `<span class="num-scroller-wrap" aria-label="${escapeHtml(fullLabel)}">`;
+
+        if (sign) {
+          html += `<span class="num-scroller-static">${sign}</span>`;
+        }
+        if (prefix) {
+          html += `<span class="num-scroller-static">${prefix}</span>`;
+        }
+
+        // Integer digits & separators
+        for (let i = 0; i < intStr.length; i++) {
+          const ch = intStr[i];
+          if (ch >= '0' && ch <= '9') {
+            const d = parseInt(ch, 10);
+            html += `<span class="num-scroller-col" data-digit="${d}"><span class="num-scroller-strip">`;
+            for (let c = 0; c < 2; c++) {
+              for (let n = 0; n <= 9; n++) {
+                html += `<span class="num-scroller-digit">${n}</span>`;
+              }
+            }
+            html += `</span></span>`;
+          } else {
+            html += `<span class="num-scroller-static">${ch}</span>`;
+          }
+        }
+
+        // Decimal point & decimal digits
+        if (decimals > 0 && decStr) {
+          html += `<span class="num-scroller-static ${decimalClass}">.</span>`;
+          for (let i = 0; i < decStr.length; i++) {
+            const ch = decStr[i];
+            if (ch >= '0' && ch <= '9') {
+              const d = parseInt(ch, 10);
+              html += `<span class="num-scroller-col ${decimalClass}" data-digit="${d}"><span class="num-scroller-strip">`;
+              for (let c = 0; c < 2; c++) {
+                for (let n = 0; n <= 9; n++) {
+                  html += `<span class="num-scroller-digit">${n}</span>`;
+                }
+              }
+              html += `</span></span>`;
+            } else {
+              html += `<span class="num-scroller-static ${decimalClass}">${ch}</span>`;
+            }
+          }
+        }
+
+        if (suffix) {
+          html += `<span class="num-scroller-static ${suffixClass}">${suffix}</span>`;
+        }
+
+        html += `</span>`;
+
+        el.innerHTML = html;
+        el._currentCountVal = target;
+
+        // Animate digit strips from top to target index in next frame
+        const cols = el.querySelectorAll('.num-scroller-col');
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            cols.forEach((col, idx) => {
+              const digit = parseInt(col.getAttribute('data-digit'), 10) || 0;
+              const strip = col.querySelector('.num-scroller-strip');
+              if (strip) {
+                // Second cycle target index is 10 + digit (each digit is 5% of 20-digit strip)
+                const targetPct = (10 + digit) * 5;
+                const colDelay = idx * stagger;
+                strip.style.transition = `transform ${duration}ms cubic-bezier(0.12, 0.8, 0.2, 1) ${colDelay}ms`;
+                strip.style.transform = `translateY(-${targetPct}%)`;
+              }
+            });
+          });
+        });
+      }
+
+      if (delay > 0) {
+        el._countDelayTimer = setTimeout(startAnimation, delay);
+      } else {
+        startAnimation();
+      }
+    });
+  }
+
+  // Expose globally so external calls or developer consoles can trigger counters
+  window.animateNumber = animateNumber;
 
   function formatDateTime(dateString) {
     if (!dateString) return '-';
@@ -532,24 +507,16 @@ $(document).ready(function () {
   };
 
   function switchSection(target) {
-    // Authentication Route Guard: Prevent access to dashboard sections if unauthenticated
-    if (window.Auth && typeof window.Auth.isAuthenticated === 'function') {
-      if (!window.Auth.isAuthenticated()) {
-        window.Auth.showView('login');
-        return;
-      }
+    if (window.Auth && typeof window.Auth.isAuthenticated === 'function' && !window.Auth.isAuthenticated()) {
+      window.Auth.showView('login');
+      return;
     }
 
     if (!titles[target]) target = 'dashboard';
 
     // Update nav links active styling
     $('.Aurelia-nav-item, .aurelia-nav-item, .finset-nav-item, .nav-link').each(function () {
-      const linkTarget = $(this).data('target');
-      if (linkTarget === target) {
-        $(this).addClass('active');
-      } else {
-        $(this).removeClass('active');
-      }
+      $(this).toggleClass('active', $(this).data('target') === target);
     });
 
     // Hide all sections, show target
@@ -575,20 +542,15 @@ $(document).ready(function () {
 
     closeSidebar();
 
-    // Module-specific renderers
-    if (target === 'dashboard') {
-      renderDashboard();
-    } else if (target === 'billing') {
-      initBillingSection();
-    } else if (target === 'menu') {
-      renderMenuSection();
-    } else if (target === 'orders') {
-      renderOrdersSection();
-    } else if (target === 'customers') {
-      renderCustomersSection();
-    } else if (target === 'analytics') {
-      renderAnalyticsSection();
-    }
+    const sectionRenderers = {
+      dashboard: renderDashboard,
+      billing: initBillingSection,
+      menu: renderMenuSection,
+      orders: renderOrdersSection,
+      customers: renderCustomersSection,
+      analytics: renderAnalyticsSection
+    };
+    if (sectionRenderers[target]) sectionRenderers[target]();
 
     window.scrollTo({ top: 0, behavior: 'instant' });
   }
@@ -680,80 +642,33 @@ $(document).ready(function () {
     e.preventDefault();
     const action = $(this).data('action');
 
-    // Highlight active sub-item
     $('.hr-sub-item').removeClass('text-sky-400 font-bold active').addClass('text-slate-300');
     $('.hr-sub-item span.rounded-full').removeClass('border-sky-400 bg-sky-400').addClass('border-slate-400');
-
     $(this).addClass('text-sky-400 font-bold active').removeClass('text-slate-300');
     $(this).find('span.rounded-full').addClass('border-sky-400 bg-sky-400').removeClass('border-slate-400');
 
-    switch (action) {
-      case 'employee-list':
-        if (typeof openStaffDirectoryModal === 'function') {
-          openStaffDirectoryModal();
-        } else {
-          $('#modal-total-staff').removeClass('hidden');
-        }
-        showToast('Viewing Employee Directory (48 staff members)', 'info');
-        break;
-
-      case 'add-employee':
-        if (typeof openStaffDirectoryModal === 'function') {
-          openStaffDirectoryModal();
-        } else {
-          $('#modal-total-staff').removeClass('hidden');
-        }
-        showToast('Human Resource: Add Employee panel ready', 'info');
-        break;
-
-      case 'holiday-list':
-        showToast('Holiday List: 14 official paid holidays & gazetted calendar for 2026', 'info');
-        break;
-
-      case 'hr-doc-templates':
-        showToast('HR Document Templates: 12 official hotel agreements, contracts & policies available', 'info');
-        break;
-
-      case 'leave-category':
-        showToast('Leave Categories: Casual Leave, Sick Leave, Earned Leave, Maternity/Paternity', 'info');
-        break;
-
-      case 'leave-assign':
-        showToast('Leave Allocation: Annual quotas assigned for 48 staff members', 'info');
-        break;
-
-      case 'leave-request':
-        showToast('Leave Requests: 6 staff members currently on approved leave today', 'warning');
-        break;
-
-      case 'attendance-list':
-        showToast('Attendance Ledger: 42 of 48 staff on duty (87.5% attendance rate)', 'info');
-        break;
-
-      case 'attendance-report':
-        showToast('Monthly Attendance Report generated for October 2026', 'info');
-        break;
-
-      case 'salary-grade':
-        showToast('Salary Grades: Executive Grade A to Support Grade E configured', 'info');
-        break;
-
-      case 'manage-salary':
-        showToast('Salary Management: Base salary, HRA, DA, and shift allowances active', 'info');
-        break;
-
-      case 'disburse-salary-update':
-        showToast('Disburse Salary: October payroll processed for 48 employees', 'success');
-        break;
-
-      case 'pay-slip':
-        showToast('Pay Slips: Digital salary slips with PF and Tax breakdown ready for dispatch', 'info');
-        break;
-
-      default:
-        showToast(`Human Resource: ${action}`, 'info');
-        break;
+    if (action === 'employee-list' || action === 'add-employee') {
+      typeof openStaffDirectoryModal === 'function' ? openStaffDirectoryModal() : $('#modal-total-staff').removeClass('hidden');
     }
+
+    const hrToastMap = {
+      'employee-list': ['Viewing Employee Directory (48 staff members)', 'info'],
+      'add-employee': ['Human Resource: Add Employee panel ready', 'info'],
+      'holiday-list': ['Holiday List: 14 official paid holidays & gazetted calendar for 2026', 'info'],
+      'hr-doc-templates': ['HR Document Templates: 12 official hotel agreements, contracts & policies available', 'info'],
+      'leave-category': ['Leave Categories: Casual Leave, Sick Leave, Earned Leave, Maternity/Paternity', 'info'],
+      'leave-assign': ['Leave Allocation: Annual quotas assigned for 48 staff members', 'info'],
+      'leave-request': ['Leave Requests: 6 staff members currently on approved leave today', 'warning'],
+      'attendance-list': ['Attendance Ledger: 42 of 48 staff on duty (87.5% attendance rate)', 'info'],
+      'attendance-report': ['Monthly Attendance Report generated for October 2026', 'info'],
+      'salary-grade': ['Salary Grades: Executive Grade A to Support Grade E configured', 'info'],
+      'manage-salary': ['Salary Management: Base salary, HRA, DA, and shift allowances active', 'info'],
+      'disburse-salary-update': ['Disburse Salary: October payroll processed for 48 employees', 'success'],
+      'pay-slip': ['Pay Slips: Digital salary slips with PF and Tax breakdown ready for dispatch', 'info']
+    };
+
+    const [msg, type] = hrToastMap[action] || [`Human Resource: ${action}`, 'info'];
+    showToast(msg, type);
   });
 
   $(window).on('hashchange', function () {
@@ -837,6 +752,7 @@ $(document).ready(function () {
     const displayLabel = formatPeriodDateLabel(d1, d2);
 
     renderMoneyFlowChart();
+    renderDashboard();
     showToast(`Dashboard updated for ${displayLabel}.`, 'info');
   }
 
@@ -927,67 +843,199 @@ $(document).ready(function () {
   });
 
   function renderSidebarBadges() {
-    const menu = Storage.get(STORAGE_KEYS.MENU);
-    const orders = Storage.get(STORAGE_KEYS.ORDERS);
-    const customers = Storage.get(STORAGE_KEYS.CUSTOMERS);
+    const menu = Storage.get(STORAGE_KEYS.MENU) || [];
+    const orders = Storage.get(STORAGE_KEYS.ORDERS) || [];
+    const customers = Storage.get(STORAGE_KEYS.CUSTOMERS) || [];
 
     const pendingOrdersCount = orders.filter(o => o.status === 'Pending' || o.status === 'Preparing').length;
-    $('#badge-menu-count').text(menu.length);
-    $('#badge-pending-orders').text(pendingOrdersCount);
-    $('#badge-customers-count').text(customers.length);
+    animateNumber('#badge-menu-count', menu.length, { duration: 600, useLocale: false });
+    animateNumber('#badge-pending-orders', pendingOrdersCount, { duration: 600, useLocale: false });
+    animateNumber('#badge-customers-count', customers.length, { duration: 600, useLocale: false });
   }
 
   // =========================================================================
   // 4. DASHBOARD ENGINE (Matches FinSet Screenshot Exactly)
   // =========================================================================
 
-  function renderDashboard() {
-    const bills = Storage.get(STORAGE_KEYS.BILLS);
-    const orders = Storage.get(STORAGE_KEYS.ORDERS);
-
-    // Dynamic totals with fallback to screenshot numbers for maximum visual accuracy
-    const totalSales = bills.reduce((sum, b) => sum + (Number(b.grandTotal) || 0), 0);
-    const todayBills = bills.filter(b => (b.date || '').startsWith('2026-10-27'));
-    const todayRevenue = todayBills.reduce((sum, b) => sum + (Number(b.grandTotal) || 0), 0);
-
-    // Format top 3 cards (Total Billing, Merged Income/Expense & Profit, Total Employee)
+  function animateBillingMetrics(bills = Storage.get(STORAGE_KEYS.BILLS) || []) {
     const totalBillingVal = bills.reduce((sum, b) => sum + (Number(b.grandTotal) || 0), 0);
-    const billParts = totalBillingVal.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).split('.');
-    $('#stat-total-billing, #stat-total-balance').html(`₹${billParts[0]}<span class="text-slate-400 font-semibold text-lg">.${billParts[1]}</span>`);
+    animateNumber('#stat-total-billing, #stat-total-balance', totalBillingVal, {
+      duration: 1200,
+      decimals: 2,
+      prefix: '₹',
+      decimalClass: 'text-slate-400 font-semibold text-lg'
+    });
+    animateNumber('#stat-billing-growth', 12.1, { duration: 900, decimals: 1, prefix: '↑ ', suffix: '%', useLocale: false });
+  }
 
-    // Merged Income & Expense with Calculated Profit
+  function animateProfitMetrics() {
     const currentIncome = 85000;
     const currentExpense = 62220;
-    const calculatedProfit = currentIncome - currentExpense; // ₹22,780.00
+    const calculatedProfit = currentIncome - currentExpense;
     const profitMargin = ((calculatedProfit / currentIncome) * 100).toFixed(1);
 
-    const profitParts = calculatedProfit.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).split('.');
-    $('#stat-calculated-profit').html(`₹${profitParts[0]}<span class="text-emerald-600/70 dark:text-emerald-400/70 font-semibold text-lg">.${profitParts[1]}</span>`);
-    $('#stat-profit-margin').text(`+${profitMargin}% Profit`);
+    animateNumber('#stat-calculated-profit', calculatedProfit, {
+      duration: 1200,
+      decimals: 2,
+      prefix: '₹',
+      decimalClass: 'text-emerald-600/70 dark:text-emerald-400/70 font-semibold text-lg'
+    });
+    animateNumber('#stat-profit-margin', Number(profitMargin), {
+      duration: 1000,
+      decimals: 1,
+      prefix: '+',
+      suffix: '% Profit',
+      useLocale: false
+    });
+    animateNumber('#stat-income-display, #stat-income', currentIncome, {
+      duration: 1100,
+      decimals: 2,
+      prefix: '₹',
+      decimalClass: 'text-slate-400 text-xs font-normal'
+    });
+    animateNumber('#stat-income-growth', 6.3, { duration: 900, decimals: 1, prefix: '↑ ', suffix: '%', useLocale: false });
+    animateNumber('#stat-expense-display, #stat-expense', currentExpense, {
+      duration: 1100,
+      decimals: 2,
+      prefix: '₹',
+      decimalClass: 'text-slate-400 text-xs font-normal'
+    });
+    animateNumber('#stat-expense-growth', 2.4, { duration: 900, decimals: 1, prefix: '↑ ', suffix: '%', useLocale: false });
+  }
 
-    const incomeParts = currentIncome.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).split('.');
-    $('#stat-income-display, #stat-income').html(`₹${incomeParts[0]}<span class="text-slate-400 text-xs font-normal">.${incomeParts[1]}</span>`);
-
-    const expenseParts = currentExpense.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).split('.');
-    $('#stat-expense-display, #stat-expense').html(`₹${expenseParts[0]}<span class="text-slate-400 text-xs font-normal">.${expenseParts[1]}</span>`);
-
-    // Total Employee
+  function animateStaffMetrics() {
     const totalEmployees = 48;
     const onDutyEmployees = 42;
     const onLeaveEmployees = totalEmployees - onDutyEmployees;
-    $('#stat-total-employee, #stat-total-savings').html(`${totalEmployees}<span class="text-slate-400 font-semibold text-lg ml-1.5">Staff</span>`);
-    $('#stat-employee-onduty').text(`● ${onDutyEmployees} On Duty`);
-    $('#stat-employee-leave').text(`${onLeaveEmployees} on leave today`);
+    animateNumber('#stat-total-employee, #stat-total-savings', totalEmployees, {
+      duration: 900,
+      decimals: 0,
+      suffix: 'Staff',
+      suffixClass: 'text-slate-400 font-semibold text-lg ml-1.5'
+    });
+    animateNumber('#stat-employee-onduty', onDutyEmployees, { duration: 900, decimals: 0, prefix: '● ', suffix: ' On Duty' });
+    animateNumber('#stat-employee-leave', onLeaveEmployees, { duration: 900, decimals: 0, suffix: ' on leave today' });
+  }
 
-    // Render Charts
+  function renderDashboard() {
+    const bills = Storage.get(STORAGE_KEYS.BILLS) || [];
+    const orders = Storage.get(STORAGE_KEYS.ORDERS) || [];
+
+    // Format top 3 cards with smooth count-up animation
+    animateBillingMetrics(bills);
+    animateProfitMetrics();
+    animateStaffMetrics();
+
+    // Render Charts (Row 2: Cascades from top to bottom at 200ms)
     renderMoneyFlowChart();
     renderBudgetDoughnutChart();
 
-    // Render Recent Transactions
+    // Render Recent Transactions (Row 3: Cascades at 400ms)
     renderDashboardRecentTransactions(bills);
+
+    // Render Saving Goals (Row 3: Cascades at 400ms)
+    renderSavingGoals();
 
     // Update Badges
     renderSidebarBadges();
+
+    // Initialize/refresh scroll-driven observer for dashboard cards
+    initDashboardScrollAnimations();
+  }
+
+  // =========================================================================
+  // SAVING GOALS ENGINE (Bottom Right Card in Dashboard)
+  // =========================================================================
+
+  function renderSavingGoals() {
+    const goals = [
+      { id: 'macbook', val: 1650, pct: 25, width: 25 },
+      { id: 'car', val: 60000, pct: 42, width: 42 },
+      { id: 'house', val: 150000, pct: 3, width: 14 }
+    ];
+
+    goals.forEach((g, idx) => {
+      // 1. Animate target amount in top-to-bottom order
+      animateNumber(`#goal-val-${g.id}`, g.val, {
+        duration: 900,
+        delay: 400 + (idx * 80),
+        prefix: '₹'
+      });
+
+      // 2. Animate progress bar width and internal percentage
+      const $bar = $(`#goal-bar-${g.id}`);
+      if ($bar.length) {
+        $bar.css({ width: '0%', transition: 'none' });
+        setTimeout(() => {
+          $bar.css({ width: g.width + '%', transition: 'width 1s cubic-bezier(0.16, 1, 0.3, 1)' });
+          animateNumber($bar, g.pct, {
+            duration: 900,
+            delay: 0,
+            suffix: '%',
+            useLocale: false
+          });
+        }, 400 + (idx * 80));
+      }
+    });
+  }
+
+  // =========================================================================
+  // SCROLL-DRIVEN NUMBER SCROLLING ENGINE FOR DASHBOARD
+  // (Detects when cards/sections scroll into view & triggers number reel rolls)
+  // =========================================================================
+
+  let dashboardIntersectionObserver = null;
+
+  function initDashboardScrollAnimations() {
+    if (!('IntersectionObserver' in window)) return;
+
+    if (dashboardIntersectionObserver) {
+      dashboardIntersectionObserver.disconnect();
+    }
+
+    const cards = document.querySelectorAll(
+      '#section-dashboard .Aurelia-card, #section-dashboard .glass-card-animate'
+    );
+
+    if (!cards.length) return;
+
+    dashboardIntersectionObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const target = entry.target;
+          if (!target._hasScrolledIn) {
+            target._hasScrolledIn = true;
+            // Trigger number reel roll inside this specific card
+            if (target.id === 'card-dashboard-total-billing') {
+              animateBillingMetrics();
+            } else if (target.querySelector && target.querySelector('#stat-calculated-profit')) {
+              animateProfitMetrics();
+            } else if (target.querySelector && target.querySelector('#stat-total-employee')) {
+              animateStaffMetrics();
+            } else if (target.querySelector && target.querySelector('#chart-money-flow')) {
+              renderMoneyFlowChart();
+            } else if (target.querySelector && target.querySelector('#chart-budget-doughnut')) {
+              renderBudgetDoughnutChart();
+            } else if (target.querySelector && target.querySelector('#dashboard-recent-trans-tbody')) {
+              renderDashboardRecentTransactions(Storage.get(STORAGE_KEYS.BILLS) || []);
+            } else if (target.querySelector && target.querySelector('#goal-val-macbook')) {
+              renderSavingGoals();
+            }
+          }
+        } else {
+          // Reset when scrolled completely out of view so it can animate again when scrolled back
+          entry.target._hasScrolledIn = false;
+        }
+      });
+    }, {
+      root: null,
+      threshold: 0.15
+    });
+
+    cards.forEach(card => {
+      card._hasScrolledIn = false;
+      dashboardIntersectionObserver.observe(card);
+    });
   }
 
   // Range-driven chart generator for Money Flow Area Graph
@@ -1109,7 +1157,7 @@ $(document).ready(function () {
     const peakIndex = incomeData.indexOf(maxInc);
     const leftPercent = labels.length > 1 ? Math.round(10 + (peakIndex / (labels.length - 1)) * 78) : 50;
     $('#chart-march-tooltip').css('left', `${leftPercent}%`);
-    $('#chart-march-tooltip span:last-child').text(formatMoney(maxInc));
+    animateNumber('#chart-march-tooltip span:last-child', maxInc, { duration: 900, delay: 200, prefix: '₹' });
 
     moneyFlowChart = new Chart(canvas, {
       type: 'line',
@@ -1381,33 +1429,21 @@ $(document).ready(function () {
     const analysis = calculateFoodSalesTiers(5950);
     const { tiers, totalBudget } = analysis;
 
-    // Update 4 Tier Sections on the left side of the Budget Card
-    // 1. Best Selling
-    $('#budget-val-best').text(formatMoney(tiers.best.budget));
-    $('#budget-items-best').text(tiers.best.items.length + ' foods (' + tiers.best.totalQty + ' sold)');
-    $('#budget-pct-best').text(tiers.best.pct + '%');
-
-    // 2. Moderate Selling
-    $('#budget-val-moderate').text(formatMoney(tiers.moderate.budget));
-    $('#budget-items-moderate').text(tiers.moderate.items.length + ' foods (' + tiers.moderate.totalQty + ' sold)');
-    $('#budget-pct-moderate').text(tiers.moderate.pct + '%');
-
-    // 3. Less Selling
-    $('#budget-val-less').text(formatMoney(tiers.less.budget));
-    $('#budget-items-less').text(tiers.less.items.length + ' foods (' + tiers.less.totalQty + ' sold)');
-    $('#budget-pct-less').text(tiers.less.pct + '%');
-
-    // 4. Not Selling
-    $('#budget-val-not').text(formatMoney(0));
-    $('#budget-items-not').text(tiers.not.items.length + ' foods (0 sold)');
-    $('#budget-pct-not').text('0%');
+    // Update 4 Tier Sections on the left side of the Budget Card with animated counters (Row 2: delay 200ms)
+    ['best', 'moderate', 'less', 'not'].forEach(key => {
+      const t = tiers[key];
+      const isNot = key === 'not';
+      animateNumber(`#budget-val-${key}`, isNot ? 0 : t.budget, { duration: 900, delay: 200, prefix: '₹' });
+      $(`#budget-items-${key}`).text(`${t.items.length} foods (${isNot ? 0 : t.totalQty} sold)`);
+      animateNumber(`#budget-pct-${key}`, isNot ? 0 : t.pct, { duration: 800, delay: 200, suffix: '%' });
+    });
 
     // Center text: Total for month
-    $('#budget-doughnut-total').text(formatMoney(totalBudget));
+    animateNumber('#budget-doughnut-total', totalBudget, { duration: 1100, delay: 200, decimals: 2, prefix: '₹' });
 
     // Top callout pill badge: Default to Best Selling tier
-    $('#budget-badge-pct').text(tiers.best.pct + '%');
-    $('#budget-badge-val').text(formatMoney(tiers.best.budget));
+    animateNumber('#budget-badge-pct', tiers.best.pct, { duration: 800, delay: 200, suffix: '%' });
+    animateNumber('#budget-badge-val', tiers.best.budget, { duration: 900, delay: 200, prefix: '₹' });
 
     // Data for Doughnut chart: [Best, Moderate, Less]
     const data = [tiers.best.budget, tiers.moderate.budget, tiers.less.budget];
@@ -1478,32 +1514,29 @@ $(document).ready(function () {
     const analysis = calculateFoodSalesTiers(5950);
     const { tiers, totalBudget, allItems } = analysis;
 
-    // Update 4 Metric Summary Cards in Modal
-    $('#modal-metric-best-pct').text(tiers.best.pct + '%');
-    $('#modal-metric-best-budget').text(formatMoney(tiers.best.budget));
-    $('#modal-metric-best-items').text(tiers.best.items.length + ' foods');
-    $('#modal-metric-best-qty').text(tiers.best.totalQty + ' units sold');
-
-    $('#modal-metric-mod-pct').text(tiers.moderate.pct + '%');
-    $('#modal-metric-mod-budget').text(formatMoney(tiers.moderate.budget));
-    $('#modal-metric-mod-items').text(tiers.moderate.items.length + ' foods');
-    $('#modal-metric-mod-qty').text(tiers.moderate.totalQty + ' units sold');
-
-    $('#modal-metric-less-pct').text(tiers.less.pct + '%');
-    $('#modal-metric-less-budget').text(formatMoney(tiers.less.budget));
-    $('#modal-metric-less-items').text(tiers.less.items.length + ' foods');
-    $('#modal-metric-less-qty').text(tiers.less.totalQty + ' units sold');
-
-    $('#modal-metric-not-budget').text(formatMoney(0));
+    // Update 4 Metric Summary Cards in Modal with animated counters
+    [
+      ['best', tiers.best],
+      ['mod', tiers.moderate],
+      ['less', tiers.less]
+    ].forEach(([k, t]) => {
+      animateNumber(`#modal-metric-${k}-pct`, t.pct, { duration: 800, suffix: '%' });
+      animateNumber(`#modal-metric-${k}-budget`, t.budget, { duration: 900, decimals: 2, prefix: '₹' });
+      $(`#modal-metric-${k}-items`).text(t.items.length + ' foods');
+      $(`#modal-metric-${k}-qty`).text(t.totalQty + ' units sold');
+    });
+    animateNumber('#modal-metric-not-budget', 0, { duration: 900, decimals: 2, prefix: '₹' });
     $('#modal-metric-not-items').text(tiers.not.items.length + ' foods');
 
     // Tab counts
-    $('#modal-tab-count-all').text(allItems.length);
-    $('#modal-tab-count-best').text(tiers.best.items.length);
-    $('#modal-tab-count-mod').text(tiers.moderate.items.length);
-    $('#modal-tab-count-less').text(tiers.less.items.length);
-    $('#modal-tab-count-not').text(tiers.not.items.length);
-    $('#modal-footer-total-budget').text(formatMoney(totalBudget));
+    [
+      ['all', allItems.length],
+      ['best', tiers.best.items.length],
+      ['mod', tiers.moderate.items.length],
+      ['less', tiers.less.items.length],
+      ['not', tiers.not.items.length]
+    ].forEach(([k, cnt]) => animateNumber(`#modal-tab-count-${k}`, cnt, { duration: 600, useLocale: false }));
+    animateNumber('#modal-footer-total-budget', totalBudget, { duration: 900, decimals: 2, prefix: '₹' });
 
     // Update Tab Active Style
     $('.food-modal-tab-btn').removeClass('active bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-xs')
@@ -1535,17 +1568,15 @@ $(document).ready(function () {
       return;
     }
 
+    const tierBadgeMap = {
+      best: '<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-[#14213D] text-amber-300 shadow-xs">🔥 Best Selling</span>',
+      moderate: '<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-amber-100 text-amber-800 dark:bg-amber-900/50 dark:text-amber-200 border border-amber-200/60">⚡ Moderate</span>',
+      less: '<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-slate-100 text-slate-700 dark:bg-slate-700 dark:text-slate-300 border border-slate-200/60">⚠️ Less Selling</span>',
+      not: '<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-rose-50 text-rose-600 dark:bg-rose-950/40 dark:text-rose-300 border border-rose-200/60">Not Selling</span>'
+    };
+
     list.forEach(item => {
-      let tierBadge = '';
-      if (item.tier === 'best') {
-        tierBadge = '<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-[#14213D] text-amber-300 shadow-xs">🔥 Best Selling</span>';
-      } else if (item.tier === 'moderate') {
-        tierBadge = '<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-amber-100 text-amber-800 dark:bg-amber-900/50 dark:text-amber-200 border border-amber-200/60">⚡ Moderate</span>';
-      } else if (item.tier === 'less') {
-        tierBadge = '<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-slate-100 text-slate-700 dark:bg-slate-700 dark:text-slate-300 border border-slate-200/60">⚠️ Less Selling</span>';
-      } else {
-        tierBadge = '<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-rose-50 text-rose-600 dark:bg-rose-950/40 dark:text-rose-300 border border-rose-200/60">Not Selling</span>';
-      }
+      const tierBadge = tierBadgeMap[item.tier] || tierBadgeMap.not;
 
       const rowHtml = `
         <tr class="hover:bg-slate-50/80 dark:hover:bg-slate-800/40 transition-colors">
@@ -1608,8 +1639,8 @@ $(document).ready(function () {
     $('#modal-billings-search').val('');
     $('#modal-billings-filter-payment').val('all');
     $('#modal-billings-sort').val('newest');
-    renderModalBillingsList();
     $('#modal-total-billings').removeClass('hidden').css('display', 'flex');
+    renderModalBillingsList(true);
   }
 
   function closeTotalBillingsModal() {
@@ -1648,7 +1679,7 @@ $(document).ready(function () {
     showToast(`Exported ${bills.length} invoices to CSV.`, 'success');
   }
 
-  function renderModalBillingsList() {
+  function renderModalBillingsList(isInitialOpen = false) {
     const bills = Storage.get(STORAGE_KEYS.BILLS, DEFAULT_BILLS) || [];
     const search = $.trim($('#modal-billings-search').val()).toLowerCase();
     const payFilter = $('#modal-billings-filter-payment').val() || 'all';
@@ -1659,11 +1690,48 @@ $(document).ready(function () {
     const totalTax = bills.reduce((sum, b) => sum + (Number(b.taxAmount) || 0), 0);
     const avgBill = bills.length ? (totalBillingVal / bills.length) : 0;
 
-    $('#modal-billings-count-badge').text(`${bills.length} Invoices`);
-    $('#modal-billings-stat-total').text(formatMoney(totalBillingVal));
-    $('#modal-billings-stat-count').text(bills.length);
-    $('#modal-billings-stat-avg').text(formatMoney(avgBill));
-    $('#modal-billings-stat-tax').text(formatMoney(totalTax));
+    // Top-to-Bottom Cascading Animated Number Counter Sequence
+    const baseDelay = isInitialOpen ? 40 : 0;
+
+    animateNumber('#modal-billings-count-badge', bills.length, {
+      duration: 650,
+      delay: baseDelay,
+      suffix: ' Invoices',
+      useLocale: false,
+      rollAnim: isInitialOpen
+    });
+
+    animateNumber('#modal-billings-stat-total', totalBillingVal, {
+      duration: 900,
+      delay: baseDelay + 40,
+      decimals: 2,
+      prefix: '₹',
+      rollAnim: isInitialOpen
+    });
+
+    animateNumber('#modal-billings-stat-count', bills.length, {
+      duration: 800,
+      delay: baseDelay + 80,
+      decimals: 0,
+      useLocale: false,
+      rollAnim: isInitialOpen
+    });
+
+    animateNumber('#modal-billings-stat-avg', avgBill, {
+      duration: 900,
+      delay: baseDelay + 120,
+      decimals: 2,
+      prefix: '₹',
+      rollAnim: isInitialOpen
+    });
+
+    animateNumber('#modal-billings-stat-tax', totalTax, {
+      duration: 900,
+      delay: baseDelay + 160,
+      decimals: 2,
+      prefix: '₹',
+      rollAnim: isInitialOpen
+    });
 
     // Filter bills
     let filtered = bills.filter(b => {
@@ -1706,7 +1774,7 @@ $(document).ready(function () {
       $('#modal-billings-empty').removeClass('hidden');
     } else {
       $('#modal-billings-empty').addClass('hidden');
-      filtered.forEach(b => {
+      filtered.forEach((b, idx) => {
         let payBadge = '';
         if (b.paymentMethod === 'UPI') {
           payBadge = '<span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-purple-50 text-purple-700 dark:bg-purple-950/60 dark:text-purple-300 border border-purple-200/70"><span class="w-1.5 h-1.5 rounded-full bg-purple-500 mr-1"></span>UPI</span>';
@@ -1719,6 +1787,7 @@ $(document).ready(function () {
         const itemsList = (b.items || []).map(it => `${it.name} (x${it.qty})`).join(', ') || 'General Hotel Billing';
         const itemsCount = (b.items || []).reduce((sum, it) => sum + (Number(it.qty) || 1), 0);
         const itemsPreview = itemsList.length > 34 ? itemsList.substring(0, 31) + '...' : itemsList;
+        const rowAmtId = `modal-bill-amt-${b.id || idx}`;
 
         $tbody.append(`
           <tr class="hover:bg-slate-50/90 dark:hover:bg-slate-800/50 transition-colors border-b border-slate-100 dark:border-slate-800/80">
@@ -1748,7 +1817,7 @@ $(document).ready(function () {
               </div>
             </td>
             <td class="py-3 px-3 text-right font-extrabold text-slate-900 dark:text-white whitespace-nowrap text-sm">
-              ${formatMoney(b.grandTotal)}
+              <span id="${rowAmtId}">${formatMoney(b.grandTotal)}</span>
             </td>
             <td class="py-3 px-3 text-center whitespace-nowrap space-x-1">
               <button type="button" class="btn-view-bill px-2.5 py-1 text-[11px] font-bold rounded-lg bg-[#14213D] text-white hover:bg-slate-800 dark:hover:bg-slate-700 transition-colors cursor-pointer shadow-xs" data-id="${b.id}" title="View tax invoice receipt">
@@ -1760,6 +1829,16 @@ $(document).ready(function () {
             </td>
           </tr>
         `);
+
+        if (isInitialOpen) {
+          animateNumber(`#${rowAmtId}`, Number(b.grandTotal) || 0, {
+            duration: 750,
+            delay: baseDelay + 200 + Math.min(idx * 25, 450),
+            decimals: 2,
+            prefix: '₹',
+            rollAnim: true
+          });
+        }
       });
     }
 
@@ -1792,8 +1871,8 @@ $(document).ready(function () {
   });
 
   // Search & Filter event bindings
-  $('#modal-billings-search').on('input keyup', renderModalBillingsList);
-  $('#modal-billings-filter-payment, #modal-billings-sort').on('change', renderModalBillingsList);
+  $('#modal-billings-search').on('input keyup', function () { renderModalBillingsList(false); });
+  $('#modal-billings-filter-payment, #modal-billings-sort').on('change', function () { renderModalBillingsList(true); });
 
   $('#btn-modal-billings-create').on('click', function () {
     closeTotalBillingsModal();
@@ -1816,8 +1895,8 @@ $(document).ready(function () {
     $('#modal-staff-search').val('');
     $('#modal-staff-filter-dept').val('all');
     updateStaffStatusTabButtons();
-    renderModalStaffList();
-    $('#modal-total-staff').removeClass('hidden');
+    $('#modal-total-staff').removeClass('hidden').css('display', 'flex');
+    renderModalStaffList(true);
   }
 
   function updateStaffStatusTabButtons() {
@@ -1831,7 +1910,7 @@ $(document).ready(function () {
     });
   }
 
-  function renderModalStaffList() {
+  function renderModalStaffList(isInitialOpen = false) {
     const staffList = Storage.get(STORAGE_KEYS.STAFF, DEFAULT_STAFF) || DEFAULT_STAFF;
     const search = $.trim($('#modal-staff-search').val()).toLowerCase();
     const deptFilter = $('#modal-staff-filter-dept').val() || 'all';
@@ -1839,14 +1918,15 @@ $(document).ready(function () {
     const onDutyCount = staffList.filter(s => s.status === 'On Duty').length;
     const onLeaveCount = staffList.filter(s => s.status === 'On Leave').length;
 
-    $('#modal-staff-count-badge').text(`${staffList.length} Total Staff`);
-    $('#modal-staff-stat-total').text(`${staffList.length} Staff`);
-    $('#modal-staff-stat-onduty').text(`${onDutyCount} Staff`);
-    $('#modal-staff-stat-leave').text(`${onLeaveCount} Staff`);
+    const baseDelay = isInitialOpen ? 40 : 0;
+    animateNumber('#modal-staff-count-badge', staffList.length, { duration: 600, delay: baseDelay, suffix: ' Total Staff', useLocale: false, rollAnim: isInitialOpen });
+    animateNumber('#modal-staff-stat-total', staffList.length, { duration: 800, delay: baseDelay + 40, suffix: ' Staff', useLocale: false, rollAnim: isInitialOpen });
+    animateNumber('#modal-staff-stat-onduty', onDutyCount, { duration: 800, delay: baseDelay + 80, suffix: ' Staff', useLocale: false, rollAnim: isInitialOpen });
+    animateNumber('#modal-staff-stat-leave', onLeaveCount, { duration: 800, delay: baseDelay + 120, suffix: ' Staff', useLocale: false, rollAnim: isInitialOpen });
 
-    $('#modal-staff-badge-all').text(staffList.length);
-    $('#modal-staff-badge-onduty').text(onDutyCount);
-    $('#modal-staff-badge-leave').text(onLeaveCount);
+    animateNumber('#modal-staff-badge-all', staffList.length, { duration: 500, useLocale: false });
+    animateNumber('#modal-staff-badge-onduty', onDutyCount, { duration: 500, useLocale: false });
+    animateNumber('#modal-staff-badge-leave', onLeaveCount, { duration: 500, useLocale: false });
 
     let filtered = staffList.filter(s => {
       const matchStatus = (currentStaffFilterStatus === 'all') ||
@@ -1939,11 +2019,11 @@ $(document).ready(function () {
   $(document).on('click', '.tab-staff-status', function () {
     currentStaffFilterStatus = $(this).data('status');
     updateStaffStatusTabButtons();
-    renderModalStaffList();
+    renderModalStaffList(true);
   });
 
-  $('#modal-staff-search').on('input keyup', renderModalStaffList);
-  $('#modal-staff-filter-dept').on('change', renderModalStaffList);
+  $('#modal-staff-search').on('input keyup', function () { renderModalStaffList(false); });
+  $('#modal-staff-filter-dept').on('change', function () { renderModalStaffList(true); });
 
   // Recent Transactions Table in Dashboard (Filtered by Payment Method, capped at last 5)
   function renderDashboardRecentTransactions(bills) {
@@ -2053,7 +2133,7 @@ $(document).ready(function () {
       return;
     }
 
-    last5Transactions.forEach(row => {
+    last5Transactions.forEach((row, index) => {
       let iconHtml = '';
       if (row.icon === 'youtube') {
         iconHtml = `<div class="w-7 h-7 rounded-lg bg-red-500 flex items-center justify-center text-white flex-shrink-0 shadow-sm"><svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/></svg></div>`;
@@ -2065,14 +2145,16 @@ $(document).ready(function () {
         iconHtml = `<div class="w-7 h-7 rounded-lg bg-emerald-500/10 text-emerald-600 dark:bg-emerald-950/40 dark:text-emerald-400 flex items-center justify-center text-[10px] font-bold flex-shrink-0 shadow-xs">🏨</div>`;
       }
 
-      const amountHtml = row.isIncome
-        ? `<span class="font-bold text-emerald-600 dark:text-emerald-400">+ ${formatMoney(row.amount)}</span>`
-        : `<span class="font-bold text-slate-900 dark:text-white">- ${formatMoney(Math.abs(row.amount))}</span>`;
+      const amtId = `recent-trans-amt-${index}`;
+      const amountColor = row.isIncome ? 'text-emerald-600 dark:text-emerald-400' : 'text-slate-900 dark:text-white';
+      const amountSign = row.isIncome ? '+ ₹' : '- ₹';
 
       $tbody.append(`
         <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors">
           <td class="py-3 px-4 text-slate-500 font-medium">${escapeHtml(row.date)}</td>
-          <td class="py-3 px-3">${amountHtml}</td>
+          <td class="py-3 px-3">
+            <span id="${amtId}" class="font-bold ${amountColor}">${amountSign}0</span>
+          </td>
           <td class="py-3 px-4">
             <div class="flex items-center space-x-2.5">
               ${iconHtml}
@@ -2085,6 +2167,14 @@ $(document).ready(function () {
           </td>
         </tr>
       `);
+
+      // Animate table transaction amounts in top-to-bottom sequence
+      animateNumber(`#${amtId}`, Math.abs(row.amount), {
+        duration: 900,
+        delay: 450 + (index * 60),
+        prefix: amountSign,
+        decimals: 0
+      });
     });
   }
 
@@ -2291,36 +2381,22 @@ $(document).ready(function () {
   }
 
   // Live quantity change without destroying input element while typing
-  $(document).on('input', '.bill-item-qty-input', function () {
-    const idx = parseInt($(this).data('index'), 10);
-    const rawVal = $(this).val();
-    if (rawVal === '') return;
-    let newQty = parseInt(rawVal, 10);
-    if (isNaN(newQty) || newQty < 1) newQty = 1;
-    if (newQty > 99) newQty = 99;
-
+  function updateBillItemQty($input, isBlur) {
+    const idx = parseInt($input.data('index'), 10);
+    const rawVal = $input.val();
+    if (!isBlur && rawVal === '') return;
+    let newQty = Math.min(99, Math.max(1, parseInt(rawVal, 10) || 1));
+    if (isBlur) $input.val(newQty);
     if (currentBillItems[idx]) {
       currentBillItems[idx].qty = newQty;
       currentBillItems[idx].subtotal = Math.round(newQty * Number(currentBillItems[idx].price || 0) * 100) / 100;
-      $(this).closest('tr').find('.bill-item-subtotal').text(formatMoney(currentBillItems[idx].subtotal));
+      $input.closest('tr').find('.bill-item-subtotal').text(formatMoney(currentBillItems[idx].subtotal));
       calculateLiveBillTotals();
     }
-  });
+  }
 
-  $(document).on('change blur', '.bill-item-qty-input', function () {
-    const idx = parseInt($(this).data('index'), 10);
-    let newQty = parseInt($(this).val(), 10);
-    if (isNaN(newQty) || newQty < 1) newQty = 1;
-    if (newQty > 99) newQty = 99;
-    $(this).val(newQty);
-
-    if (currentBillItems[idx]) {
-      currentBillItems[idx].qty = newQty;
-      currentBillItems[idx].subtotal = Math.round(newQty * Number(currentBillItems[idx].price || 0) * 100) / 100;
-      $(this).closest('tr').find('.bill-item-subtotal').text(formatMoney(currentBillItems[idx].subtotal));
-      calculateLiveBillTotals();
-    }
-  });
+  $(document).on('input', '.bill-item-qty-input', function () { updateBillItemQty($(this), false); });
+  $(document).on('change blur', '.bill-item-qty-input', function () { updateBillItemQty($(this), true); });
 
   $(document).on('click', '.btn-remove-bill-item', function () {
     const idx = parseInt($(this).data('index'), 10);
@@ -3119,37 +3195,35 @@ $(document).ready(function () {
       doc.text('MERCHANT COPY', 40, 21, { align: 'center' });
 
       let y = 28;
-      doc.setFontSize(7);
-      doc.text('MERCHANT', 6, y); y += 3.5;
-      doc.setFont('courier', 'bold');
-      doc.text('AURELIA', 6, y); y += 5;
+      const drawDivider = (char = '=') => {
+        doc.setFont('courier', 'normal').setFontSize(6.5);
+        doc.text(char.repeat(60), 40, y, { align: 'center' });
+        y += 5;
+      };
+      const drawHeader = (title, size = 8.5) => {
+        doc.setFontSize(size).setFont('courier', 'bold');
+        doc.text(title, 40, y, { align: 'center' });
+        y += 5;
+      };
+      const drawKV = (left, right, isBoldRight = false, gap = 4) => {
+        doc.setFontSize(7.5).setFont('courier', 'normal').text(left, 6, y);
+        if (isBoldRight) doc.setFont('courier', 'bold');
+        doc.text(right, 74, y, { align: 'right' });
+        y += gap;
+      };
 
-      doc.setFont('courier', 'normal');
-      doc.text('ADDRESS', 6, y); y += 3.5;
-      doc.setFont('courier', 'bold');
-      doc.text('KOLKATA, WEST BENGAL', 6, y); y += 5;
+      [
+        ['MERCHANT', 'AURELIA'],
+        ['ADDRESS', 'KOLKATA, WEST BENGAL'],
+        ['MERCHANT ID', 'PL123456789'],
+        ['TERMINAL ID', 'TID123456']
+      ].forEach(([lbl, val]) => {
+        doc.setFontSize(7).setFont('courier', 'normal').text(lbl, 6, y); y += 3.5;
+        doc.setFont('courier', 'bold').text(val, 6, y); y += 5;
+      });
 
-      doc.setFont('courier', 'normal');
-      doc.text('MERCHANT ID', 6, y); y += 3.5;
-      doc.setFont('courier', 'bold');
-      doc.text('PL123456789', 6, y); y += 5;
-
-      doc.setFont('courier', 'normal');
-      doc.text('TERMINAL ID', 6, y); y += 3.5;
-      doc.setFont('courier', 'bold');
-      doc.text('TID123456', 6, y); y += 5;
-
-      // Divider
-      doc.setFont('courier', 'normal');
-      doc.setFontSize(6.5);
-      doc.text('============================================================', 40, y, { align: 'center' });
-      y += 5;
-
-      // SALE
-      doc.setFontSize(9);
-      doc.setFont('courier', 'bold');
-      doc.text('SALE', 40, y, { align: 'center' });
-      y += 5;
+      drawDivider();
+      drawHeader('SALE', 9);
 
       const d = new Date(bill.date || Date.now());
       const months = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
@@ -3157,82 +3231,44 @@ $(document).ready(function () {
       let hours = d.getHours();
       const ampm = hours >= 12 ? 'PM' : 'AM';
       hours = hours % 12 || 12;
-      const minutes = String(d.getMinutes()).padStart(2, '0');
-      const timeFormatted = `${String(hours).padStart(2, '0')}:${minutes} ${ampm}`;
+      const timeFormatted = `${String(hours).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')} ${ampm}`;
 
-      doc.setFontSize(7.5);
-      doc.setFont('courier', 'normal');
-      doc.text('DATE', 6, y); doc.setFont('courier', 'bold'); doc.text(dateFormatted, 74, y, { align: 'right' }); y += 4;
-      doc.setFont('courier', 'normal'); doc.text('TIME', 6, y); doc.setFont('courier', 'bold'); doc.text(timeFormatted, 74, y, { align: 'right' }); y += 4;
-      doc.setFont('courier', 'normal'); doc.text('INVOICE NO.', 6, y); doc.setFont('courier', 'bold'); doc.text(bill.billNumber || 'PL-2026-001', 74, y, { align: 'right' }); y += 4;
-      doc.setFont('courier', 'normal'); doc.text('PAYMENT MODE', 6, y); doc.setFont('courier', 'bold'); doc.text((bill.paymentMethod || 'UPI').toUpperCase(), 74, y, { align: 'right' }); y += 4;
-      doc.setFont('courier', 'normal'); doc.text('STATUS', 6, y); doc.setFont('courier', 'bold'); doc.text('SUCCESS', 74, y, { align: 'right' }); y += 5;
+      drawKV('DATE', dateFormatted, true);
+      drawKV('TIME', timeFormatted, true);
+      drawKV('INVOICE NO.', bill.billNumber || 'PL-2026-001', true);
+      drawKV('PAYMENT MODE', (bill.paymentMethod || 'UPI').toUpperCase(), true);
+      drawKV('STATUS', 'SUCCESS', true, 5);
 
-      // Divider
-      doc.setFont('courier', 'normal');
-      doc.setFontSize(6.5);
-      doc.text('============================================================', 40, y, { align: 'center' });
-      y += 5;
-
-      // PRODUCT / BILL DETAILS
-      doc.setFontSize(8.5);
-      doc.setFont('courier', 'bold');
-      doc.text('PRODUCT / BILL DETAILS', 40, y, { align: 'center' });
-      y += 5;
+      drawDivider();
+      drawHeader('PRODUCT / BILL DETAILS');
 
       doc.setFontSize(7.5);
       items.forEach((it, idx) => {
-        doc.setFont('courier', 'normal'); doc.text('Product / Service', 6, y); doc.text(it.name || 'Aurelia Item', 74, y, { align: 'right' }); y += 3.8;
-        doc.text('Product Category', 6, y); doc.text(it.category || 'Dining', 74, y, { align: 'right' }); y += 3.8;
-        doc.text('Product Code', 6, y); doc.text(it.code || it.id || ('AUR-' + String(idx + 1).padStart(3, '0')), 74, y, { align: 'right' }); y += 3.8;
-        doc.text('Serial No.', 6, y); doc.text('SN-2026-' + String(idx + 1).padStart(3, '0'), 74, y, { align: 'right' }); y += 3.8;
-        doc.text('Quantity', 6, y); doc.text(String(it.qty || 1), 74, y, { align: 'right' }); y += 5;
+        drawKV('Product / Service', it.name || 'Aurelia Item', false, 3.8);
+        drawKV('Product Category', it.category || 'Dining', false, 3.8);
+        drawKV('Product Code', it.code || it.id || ('AUR-' + String(idx + 1).padStart(3, '0')), false, 3.8);
+        drawKV('Serial No.', 'SN-2026-' + String(idx + 1).padStart(3, '0'), false, 3.8);
+        drawKV('Quantity', String(it.qty || 1), false, 5);
       });
 
-      // Divider
-      doc.setFont('courier', 'normal');
-      doc.setFontSize(6.5);
-      doc.text('============================================================', 40, y, { align: 'center' });
-      y += 5;
-
-      // AMOUNT BREAKUP
-      doc.setFontSize(8.5);
-      doc.setFont('courier', 'bold');
-      doc.text('AMOUNT BREAKUP', 40, y, { align: 'center' });
-      y += 5;
+      drawDivider();
+      drawHeader('AMOUNT BREAKUP');
 
       const fmt = (num) => 'Rs ' + (Number(num) || 0).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-      doc.setFontSize(7.5);
-      doc.setFont('courier', 'normal');
-      doc.text('Subtotal', 6, y); doc.text(fmt(bill.subtotal || bill.grandTotal), 74, y, { align: 'right' }); y += 4;
-      doc.text('Discount', 6, y); doc.text(fmt(bill.discountAmount || 0), 74, y, { align: 'right' }); y += 4;
-      doc.text('Tax / GST', 6, y); doc.text(fmt(bill.taxAmount || 0), 74, y, { align: 'right' }); y += 5;
+      drawKV('Subtotal', fmt(bill.subtotal || bill.grandTotal));
+      drawKV('Discount', fmt(bill.discountAmount || 0));
+      drawKV('Tax / GST', fmt(bill.taxAmount || 0), false, 5);
 
-      // Divider
-      doc.setFont('courier', 'normal');
-      doc.setFontSize(6.5);
-      doc.text('============================================================', 40, y, { align: 'center' });
-      y += 5;
-
-      // TOTAL AMOUNT
-      doc.setFontSize(8);
-      doc.setFont('courier', 'bold');
+      drawDivider();
+      doc.setFontSize(8).setFont('courier', 'bold');
       doc.text('TOTAL AMOUNT', 6, y);
       doc.text(fmt(bill.grandTotal), 74, y, { align: 'right' });
       y += 5;
 
-      // Dashed divider
-      doc.setFont('courier', 'normal');
-      doc.setFontSize(6.5);
-      doc.text('------------------------------------------------------------', 40, y, { align: 'center' });
-      y += 5;
-
-      // Footer
-      doc.setFontSize(7);
-      doc.text('Thank you for your purchase!', 40, y, { align: 'center' }); y += 3.5;
+      drawDivider('-');
+      doc.setFontSize(7).text('Thank you for your purchase!', 40, y, { align: 'center' }); y += 3.5;
       doc.text('Please keep this receipt for your records.', 40, y, { align: 'center' }); y += 5;
-      doc.setFontSize(6.5);
-      doc.text('This is a sample receipt format.', 40, y, { align: 'center' });
+      doc.setFontSize(6.5).text('This is a sample receipt format.', 40, y, { align: 'center' });
 
       doc.save(`${bill.billNumber || 'Receipt'}_Aurelia.pdf`);
       showToast(`Aurelia receipt for ${bill.billNumber} downloaded!`, 'success');
@@ -3853,32 +3889,11 @@ $(document).ready(function () {
     $('#cust-input-name').focus();
   });
 
-  // Edit Customer Modal Trigger
-  $(document).on('click', '.btn-edit-customer', function () {
-    const id = $(this).data('id');
-    const customers = Storage.get(STORAGE_KEYS.CUSTOMERS);
-    const c = customers.find(x => x.id === id);
+  // Customer Edit Modal Handlers
+  function openEditCustomerModal(id) {
+    if (!id) return;
+    const c = Storage.get(STORAGE_KEYS.CUSTOMERS).find(x => x.id === id);
     if (!c) return;
-
-    $('#form-customer')[0].reset();
-    $('.text-rose-600').addClass('hidden');
-    $('#modal-customer-title').text('Edit Customer');
-    $('#customer-edit-id').val(c.id);
-    $('#cust-input-name').val(c.name || '');
-    $('#cust-input-phone').val(c.phone || '');
-    $('#cust-input-email').val(c.email || '');
-    $('#cust-input-address').val(c.address || '');
-    $('#modal-customer').removeClass('hidden');
-    $('#cust-input-name').focus();
-  });
-
-  // Edit from Profile Modal
-  $('#btn-edit-from-profile').on('click', function () {
-    if (!currentViewingCustomerId) return;
-    const customers = Storage.get(STORAGE_KEYS.CUSTOMERS);
-    const c = customers.find(x => x.id === currentViewingCustomerId);
-    if (!c) return;
-
     $('#modal-view-customer').addClass('hidden');
     $('#form-customer')[0].reset();
     $('.text-rose-600').addClass('hidden');
@@ -3890,6 +3905,14 @@ $(document).ready(function () {
     $('#cust-input-address').val(c.address || '');
     $('#modal-customer').removeClass('hidden');
     $('#cust-input-name').focus();
+  }
+
+  $(document).on('click', '.btn-edit-customer', function () {
+    openEditCustomerModal($(this).data('id'));
+  });
+
+  $('#btn-edit-from-profile').on('click', function () {
+    openEditCustomerModal(currentViewingCustomerId);
   });
 
   $('#form-customer').on('submit', function (e) {
@@ -4036,10 +4059,10 @@ $(document).ready(function () {
     const avgBill = filteredBills.length > 0 ? (grossTotal / filteredBills.length) : 0;
     const netRevenue = Math.max(0, grossTotal - totalTax);
 
-    $('#report-tax-collected').text(formatMoney(totalTax));
-    $('#report-discounts-given').text(formatMoney(totalDiscounts));
-    $('#report-avg-bill').text(formatMoney(avgBill));
-    $('#report-net-revenue').text(formatMoney(netRevenue));
+    animateNumber('#report-tax-collected', totalTax, { duration: 1000, decimals: 2, prefix: '₹' });
+    animateNumber('#report-discounts-given', totalDiscounts, { duration: 1000, decimals: 2, prefix: '₹' });
+    animateNumber('#report-avg-bill', avgBill, { duration: 1000, decimals: 2, prefix: '₹' });
+    animateNumber('#report-net-revenue', netRevenue, { duration: 1100, decimals: 2, prefix: '₹' });
 
     // Top 5 Items
     const itemMap = {};
@@ -4331,75 +4354,102 @@ $(document).ready(function () {
       return;
     }
 
-    const existingUser = getActiveUserData();
-    const updatedUser = {
-      ...existingUser,
-      name: nameVal,
-      email: emailVal,
-      phone: phoneVal,
-      empId: empIdVal,
-      role: roleVal,
-      department: deptVal,
-      avatar: currentPendingAvatar
+    const applyProfileChanges = () => {
+      const existingUser = getActiveUserData();
+      const updatedUser = {
+        ...existingUser,
+        name: nameVal,
+        email: emailVal,
+        phone: phoneVal,
+        empId: empIdVal,
+        role: roleVal,
+        department: deptVal,
+        avatar: currentPendingAvatar
+      };
+
+      // 1. Update session/local storage
+      try {
+        localStorage.setItem('aurelia_auth_user', JSON.stringify(updatedUser));
+        sessionStorage.setItem('aurelia_auth_user', JSON.stringify(updatedUser));
+      } catch (err) {
+        console.warn('Storage quota error:', err);
+      }
+
+      // 2. Update local registered users list
+      try {
+        const localUsersStr = localStorage.getItem('aurelia_local_users');
+        if (localUsersStr) {
+          const localUsers = JSON.parse(localUsersStr);
+          const idx = localUsers.findIndex(u =>
+            (u.email && u.email.toLowerCase() === (existingUser.email || '').toLowerCase()) ||
+            u.id === existingUser.id
+          );
+          if (idx >= 0) {
+            localUsers[idx] = { ...localUsers[idx], ...updatedUser };
+          } else {
+            localUsers.push(updatedUser);
+          }
+          localStorage.setItem('aurelia_local_users', JSON.stringify(localUsers));
+        }
+      } catch (e) {}
+
+      // 3. Update staffDirectory roster if Adaline / EMP-2026-01 exists
+      if (typeof staffDirectory !== 'undefined' && Array.isArray(staffDirectory)) {
+        const staffIdx = staffDirectory.findIndex(s => s.id === empIdVal || s.name === existingUser.name);
+        if (staffIdx >= 0) {
+          staffDirectory[staffIdx].name = nameVal;
+          staffDirectory[staffIdx].role = roleVal;
+          staffDirectory[staffIdx].department = deptVal;
+          staffDirectory[staffIdx].phone = phoneVal;
+          staffDirectory[staffIdx].email = emailVal;
+          if (typeof renderStaffDirectoryModal === 'function') {
+            renderStaffDirectoryModal();
+          }
+        }
+      }
+
+      // 4. Update window.Auth state if active
+      if (window.Auth) {
+        if (window.Auth.state) {
+          window.Auth.state.currentUser = updatedUser;
+        }
+        if (typeof window.Auth.syncUserProfile === 'function') {
+          window.Auth.syncUserProfile(updatedUser);
+        }
+      }
+
+      // 5. Update topbar avatar display immediately
+      updateTopbarAvatarUI(updatedUser);
+
+      // 6. Close modal & show SweetAlert Saved!
+      $('#modal-user-profile').addClass('hidden');
+      if (typeof Swal !== 'undefined') {
+        Swal.fire("Saved!", "", "success");
+      } else {
+        showToast('Profile and photo updated successfully!', 'success');
+      }
     };
 
-    // 1. Update session/local storage
-    try {
-      localStorage.setItem('aurelia_auth_user', JSON.stringify(updatedUser));
-      sessionStorage.setItem('aurelia_auth_user', JSON.stringify(updatedUser));
-    } catch (err) {
-      console.warn('Storage quota error:', err);
-    }
-
-    // 2. Update local registered users list
-    try {
-      const localUsersStr = localStorage.getItem('aurelia_local_users');
-      if (localUsersStr) {
-        const localUsers = JSON.parse(localUsersStr);
-        const idx = localUsers.findIndex(u =>
-          (u.email && u.email.toLowerCase() === (existingUser.email || '').toLowerCase()) ||
-          u.id === existingUser.id
-        );
-        if (idx >= 0) {
-          localUsers[idx] = { ...localUsers[idx], ...updatedUser };
-        } else {
-          localUsers.push(updatedUser);
+    if (typeof Swal !== 'undefined') {
+      Swal.fire({
+        title: "Do you want to save the changes?",
+        showDenyButton: true,
+        showCancelButton: true,
+        confirmButtonText: "Save",
+        denyButtonText: `Don't save`
+      }).then((result) => {
+        /* Read more about isConfirmed, isDenied below */
+        if (result.isConfirmed) {
+          applyProfileChanges();
+        } else if (result.isDenied) {
+          $('#modal-user-profile').addClass('hidden');
+          currentPendingAvatar = null;
+          Swal.fire("Changes are not saved", "", "info");
         }
-        localStorage.setItem('aurelia_local_users', JSON.stringify(localUsers));
-      }
-    } catch (e) {}
-
-    // 3. Update staffDirectory roster if Adaline / EMP-2026-01 exists
-    if (typeof staffDirectory !== 'undefined' && Array.isArray(staffDirectory)) {
-      const staffIdx = staffDirectory.findIndex(s => s.id === empIdVal || s.name === existingUser.name);
-      if (staffIdx >= 0) {
-        staffDirectory[staffIdx].name = nameVal;
-        staffDirectory[staffIdx].role = roleVal;
-        staffDirectory[staffIdx].department = deptVal;
-        staffDirectory[staffIdx].phone = phoneVal;
-        staffDirectory[staffIdx].email = emailVal;
-        if (typeof renderStaffDirectoryModal === 'function') {
-          renderStaffDirectoryModal();
-        }
-      }
+      });
+    } else {
+      applyProfileChanges();
     }
-
-    // 4. Update window.Auth state if active
-    if (window.Auth) {
-      if (window.Auth.state) {
-        window.Auth.state.currentUser = updatedUser;
-      }
-      if (typeof window.Auth.syncUserProfile === 'function') {
-        window.Auth.syncUserProfile(updatedUser);
-      }
-    }
-
-    // 5. Update topbar avatar display immediately
-    updateTopbarAvatarUI(updatedUser);
-
-    // 6. Close modal & show toast
-    $('#modal-user-profile').addClass('hidden');
-    showToast('Profile and photo updated successfully!', 'success');
   });
 
   // Initial Boot - guarded by authentication

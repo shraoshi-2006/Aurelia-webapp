@@ -1041,8 +1041,8 @@
 
     function setActiveRoleTab(activeBtn, inactiveBtn) {
       if (!activeBtn || !inactiveBtn) return;
-      activeBtn.className = 'role-tab flex-1 py-2 px-3 rounded-lg text-xs font-semibold flex items-center justify-center gap-2 transition-all bg-[#7C3AED] text-white shadow-sm';
-      inactiveBtn.className = 'role-tab flex-1 py-2 px-3 rounded-lg text-xs font-semibold flex items-center justify-center gap-2 transition-all text-slate-600 hover:text-slate-900';
+      activeBtn.className = 'role-tab flex-1 py-1.5 px-2.5 rounded-lg text-xs font-semibold flex items-center justify-center gap-1.5 transition-all bg-[#14213d] text-white shadow-sm shadow-[#14213d]/30';
+      inactiveBtn.className = 'role-tab flex-1 py-1.5 px-2.5 rounded-lg text-xs font-semibold flex items-center justify-center gap-1.5 transition-all text-slate-600 hover:text-slate-900';
     }
 
     staffRoleBtn?.addEventListener('click', () => {
@@ -1090,12 +1090,20 @@
       handleLogin(e);
     });
 
-    // View toggle links
+    // View toggle links and side welcome buttons (Instagram Reel sliding toggle)
     $('btn-goto-register')?.addEventListener('click', (e) => {
       e.preventDefault();
       showView('register');
     });
+    $('btn-side-register')?.addEventListener('click', (e) => {
+      e.preventDefault();
+      showView('register');
+    });
     $('btn-goto-login')?.addEventListener('click', (e) => {
+      e.preventDefault();
+      showView('login');
+    });
+    $('btn-side-login')?.addEventListener('click', (e) => {
       e.preventDefault();
       showView('login');
     });
