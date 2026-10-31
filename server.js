@@ -372,7 +372,19 @@ const server = http.createServer((req, res) => {
     safePath = '/index.html';
   }
 
-  const filePath = path.join(__dirname, safePath);
+  let filePath = path.join(__dirname, safePath);
+
+  // Clean URLs support: if no extension, check if an .html file exists
+  if (!path.extname(filePath)) {
+    if (fs.existsSync(filePath + '.html')) {
+      filePath = filePath + '.html';
+    } else {
+      const hrCandidateHtml = path.join(__dirname, 'human-resources', path.basename(filePath) + '.html');
+      if (fs.existsSync(hrCandidateHtml)) {
+        filePath = hrCandidateHtml;
+      }
+    }
+  }
 
   // Security check: ensure path is within directory
   if (!filePath.startsWith(__dirname)) {

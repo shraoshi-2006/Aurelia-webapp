@@ -5,9 +5,15 @@
   "outputDirectory": ".",
   "cleanUrls": true,
   "rewrites": [
-    { "source": "/employee-list.html", "destination": "/human-resources/employee-list.html" },
-    { "source": "/add-employee.html", "destination": "/human-resources/add-employee.html" },
+    { "source": "/hr-document-template", "destination": "/human-resources/hr-document-template.html" },
     { "source": "/hr-document-template.html", "destination": "/human-resources/hr-document-template.html" },
+    { "source": "/hr-document-templates", "destination": "/human-resources/hr-document-template.html" },
+    { "source": "/hr-document-templates.html", "destination": "/human-resources/hr-document-template.html" },
+    { "source": "/employee-list", "destination": "/human-resources/employee-list.html" },
+    { "source": "/employee-list.html", "destination": "/human-resources/employee-list.html" },
+    { "source": "/add-employee", "destination": "/human-resources/add-employee.html" },
+    { "source": "/add-employee.html", "destination": "/human-resources/add-employee.html" },
+    { "source": "/holiday-list", "destination": "/human-resources/holiday-list.html" },
     { "source": "/holiday-list.html", "destination": "/human-resources/holiday-list.html" }
   ]
 }
