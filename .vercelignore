@@ -2,4 +2,6 @@ server.js
 auth.db
 auth.db-shm
 auth.db-wal
+package.json
+package-lock.json
 .git
