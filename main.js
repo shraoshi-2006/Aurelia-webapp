@@ -542,7 +542,7 @@ $(document).ready(function () {
     const $targetSec = $('#section-' + target);
     if ($targetSec.length === 0) {
       const pageFileMap = {
-        'hr-documents': 'hr-document-templates.html',
+        'hr-documents': 'hr-document-template.html',
         'add-employee': 'add-employee.html',
         'employees': 'employee-list.html',
         'holidays': 'holiday-list.html'
@@ -708,7 +708,7 @@ $(document).ready(function () {
         window.location.hash = 'hr-documents';
         switchSection('hr-documents');
       } else {
-        window.location.href = 'hr-document-templates.html';
+        window.location.href = 'hr-document-template.html';
       }
       showToast('Viewing HR Document Templates & Legal Agreements', 'info');
       return;
