@@ -4724,7 +4724,6 @@ $(document).ready(function () {
   });
 
   // =========================================================================
-<<<<<<< HEAD
   // LIVE SESSION TIME TRACKER (Shows Time Spent on Website)
   // =========================================================================
   function initSessionTimeTracker() {
@@ -4756,7 +4755,8 @@ $(document).ready(function () {
 
   // Start live session time tracker
   initSessionTimeTracker();
-=======
+
+  // =========================================================================
   // 10. HR DOCUMENT TEMPLATES STANDALONE PAGE CONTROLLER
   // =========================================================================
   const HR_TEMPLATES = [
@@ -5380,7 +5380,6 @@ $(document).ready(function () {
   $('#input-holiday-search').on('input', function () {
     renderHolidaysSection();
   });
->>>>>>> ce2a8dbcc5b04d3e39113dd3ab003aacc74c9408
 
   // Initial Boot - guarded by authentication
   const currentPath = (window.location.pathname || '').toLowerCase();
