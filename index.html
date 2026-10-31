@@ -15,7 +15,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
-    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700;800;900&display=swap"
     rel="stylesheet">
 
   <!-- Tailwind CSS CDN with Custom Aurelia Palette -->
@@ -872,31 +872,33 @@
     }
 
     /* ========================================================================= */
-    /* LUXURY NUMBER SCROLLER / ODOMETER DIGIT REEL ENGINE                      */
+    /* NUMBER SCROLLER / ODOMETER DIGIT REEL ENGINE (Inter Font & Lining Nums)   */
     /* ========================================================================= */
     .num-scroller-wrap {
       display: inline-flex !important;
-      align-items: baseline;
-      vertical-align: baseline;
-      line-height: 1.18;
-      font-variant-numeric: tabular-nums;
-      -moz-font-feature-settings: "tnum";
-      -webkit-font-feature-settings: "tnum";
-      font-feature-settings: "tnum";
+      align-items: baseline !important;
+      vertical-align: baseline !important;
+      line-height: 1.15 !important;
+      font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+      font-variant-numeric: tabular-nums lining-nums !important;
+      -moz-font-feature-settings: "tnum" 1, "lnum" 1 !important;
+      -webkit-font-feature-settings: "tnum" 1, "lnum" 1 !important;
+      font-feature-settings: "tnum" 1, "lnum" 1 !important;
       position: relative;
-      overflow: hidden;
       user-select: none;
     }
 
     .num-scroller-col {
-      display: inline-block;
+      display: inline-flex !important;
+      align-items: flex-start !important;
+      justify-content: center !important;
       position: relative;
-      height: 1.18em;
-      line-height: 1.18em;
+      height: 1.15em !important;
+      line-height: 1.15em !important;
       overflow: hidden;
-      vertical-align: baseline;
+      vertical-align: baseline !important;
       text-align: center;
-      min-width: 0.58em;
+      min-width: 0.6em;
     }
 
     .num-scroller-strip {
@@ -911,17 +913,52 @@
     }
 
     .num-scroller-digit {
-      height: 1.18em;
-      line-height: 1.18em;
-      display: block;
+      height: 1.15em !important;
+      line-height: 1.15em !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
       text-align: center;
+      font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+      font-variant-numeric: tabular-nums lining-nums !important;
     }
 
     .num-scroller-static {
-      display: inline-block;
-      line-height: 1.18em;
-      vertical-align: baseline;
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      height: 1.15em !important;
+      line-height: 1.15em !important;
+      vertical-align: baseline !important;
       white-space: pre;
+      font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+      font-variant-numeric: tabular-nums lining-nums !important;
+    }
+
+    /* Primary Number Font Engine: Inter for all numbers across the website */
+    .num-font,
+    .tabular-nums,
+    [class*="tabular-nums"],
+    .num-scroller-wrap,
+    .num-scroller-col,
+    .num-scroller-digit,
+    .num-scroller-static,
+    [id^="stat-"],
+    [id*="-val-"],
+    [id*="-pct-"],
+    [id*="-total"],
+    [id*="-badge-"],
+    [id*="-count"],
+    [id*="-amount"],
+    .stat-badge-pill,
+    .food-tier-item span,
+    #card-dashboard-total-billing div,
+    .money-flow-header span,
+    #chart-march-tooltip span {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+      font-variant-numeric: tabular-nums lining-nums !important;
+      -webkit-font-feature-settings: "tnum" 1, "lnum" 1 !important;
+      font-feature-settings: "tnum" 1, "lnum" 1 !important;
     }
 
     /* Countable Number Roll Down Animation (from top to bottom) */
@@ -2804,7 +2841,7 @@
               <div class="my-2.5">
                 <div id="stat-total-billing"
                   class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
-                  ₹1,57,077<span class="text-slate-400 font-semibold text-lg">.19</span>
+                  ₹1,57,077<span class="text-slate-400 font-normal">.19</span>
                 </div>
               </div>
               <div class="flex items-center space-x-2 pt-2 border-t border-slate-100 dark:border-slate-800/80">
@@ -2842,7 +2879,7 @@
                     Profit</span>
                   <div id="stat-calculated-profit"
                     class="text-2xl sm:text-3xl font-extrabold text-[#12B76A] dark:text-emerald-400 tracking-tight">
-                    ₹22,780<span class="text-emerald-600/60 dark:text-emerald-400/60 font-semibold text-lg">.00</span>
+                    ₹22,780<span class="text-emerald-600/70 dark:text-emerald-400/70 font-normal">.00</span>
                   </div>
                 </div>
               </div>
@@ -2856,7 +2893,7 @@
                     <span id="stat-income-growth" class="text-[10px] text-emerald-600 dark:text-emerald-400 font-bold ml-auto">↑ 6.3%</span>
                   </div>
                   <div id="stat-income-display" class="font-bold text-slate-900 dark:text-slate-100 text-sm mt-0.5">
-                    ₹85,000<span class="text-slate-400 text-xs font-normal">.00</span>
+                    ₹85,000<span class="text-slate-400 font-normal">.00</span>
                   </div>
                 </div>
                 <div class="border-l border-slate-100 dark:border-slate-800/80 pl-3">
@@ -2866,7 +2903,7 @@
                     <span id="stat-expense-growth" class="text-[10px] text-rose-600 dark:text-rose-400 font-bold ml-auto">↑ 2.4%</span>
                   </div>
                   <div id="stat-expense-display" class="font-bold text-slate-900 dark:text-slate-100 text-sm mt-0.5">
-                    ₹62,220<span class="text-slate-400 text-xs font-normal">.00</span>
+                    ₹62,220<span class="text-slate-400 font-normal">.00</span>
                   </div>
                 </div>
               </div>
@@ -2895,7 +2932,10 @@
                   class="stat-badge-pill inline-flex items-center text-xs font-semibold text-[#12B76A] bg-[#ECFDF3]/85 dark:bg-emerald-950/40 px-2.5 py-0.5 rounded-full">
                   ● 42 On Duty
                 </span>
-                <span id="stat-employee-leave" class="text-xs text-slate-400 font-medium">6 on leave today</span>
+                <span id="stat-employee-leave"
+                  class="stat-badge-pill inline-flex items-center text-xs font-semibold text-slate-500 bg-slate-100/80 dark:bg-slate-800/60 dark:text-slate-400 px-2.5 py-0.5 rounded-full">
+                  6 on leave today
+                </span>
               </div>
             </div>
 
@@ -3004,15 +3044,14 @@
                     <div class="flex items-center justify-between">
                       <div class="flex items-center space-x-1.5 min-w-0">
                         <span class="w-2.5 h-2.5 rounded-full bg-[#14213D] dark:bg-amber-400 flex-shrink-0"></span>
-                        <span class="font-bold text-slate-800 dark:text-slate-100 text-[11px] truncate">Best
-                          Selling</span>
+                        <span class="font-bold text-slate-800 dark:text-slate-100 text-[11px] truncate">Best Selling</span>
                       </div>
-                      <span class="text-[11px] font-extrabold text-[#14213D] dark:text-white"
+                      <span class="text-[11px] font-extrabold text-[#14213D] dark:text-white tabular-nums min-w-[55px] text-right"
                         id="budget-val-best">₹3,225</span>
                     </div>
                     <div class="flex items-center justify-between pl-4 text-[10px] text-slate-400 mt-0.5">
                       <span class="truncate max-w-[85px]" id="budget-items-best">3 foods</span>
-                      <span class="font-semibold text-emerald-600 dark:text-emerald-400" id="budget-pct-best">54%</span>
+                      <span class="font-semibold text-emerald-600 dark:text-emerald-400 tabular-nums min-w-[36px] text-right" id="budget-pct-best">54%</span>
                     </div>
                   </div>
 
@@ -3023,15 +3062,14 @@
                     <div class="flex items-center justify-between">
                       <div class="flex items-center space-x-1.5 min-w-0">
                         <span class="w-2.5 h-2.5 rounded-full bg-[#FCA311] flex-shrink-0"></span>
-                        <span class="font-bold text-slate-800 dark:text-slate-100 text-[11px] truncate">Moderate
-                          Selling</span>
+                        <span class="font-bold text-slate-800 dark:text-slate-100 text-[11px] truncate">Moderate Selling</span>
                       </div>
-                      <span class="text-[11px] font-extrabold text-[#14213D] dark:text-white"
+                      <span class="text-[11px] font-extrabold text-[#14213D] dark:text-white tabular-nums min-w-[55px] text-right"
                         id="budget-val-moderate">₹1,709</span>
                     </div>
                     <div class="flex items-center justify-between pl-4 text-[10px] text-slate-400 mt-0.5">
                       <span class="truncate max-w-[85px]" id="budget-items-moderate">4 foods</span>
-                      <span class="font-semibold text-amber-500" id="budget-pct-moderate">29%</span>
+                      <span class="font-semibold text-amber-500 tabular-nums min-w-[36px] text-right" id="budget-pct-moderate">29%</span>
                     </div>
                   </div>
 
@@ -3042,15 +3080,14 @@
                     <div class="flex items-center justify-between">
                       <div class="flex items-center space-x-1.5 min-w-0">
                         <span class="w-2.5 h-2.5 rounded-full bg-[#5C677D] flex-shrink-0"></span>
-                        <span class="font-bold text-slate-800 dark:text-slate-100 text-[11px] truncate">Less
-                          Selling</span>
+                        <span class="font-bold text-slate-800 dark:text-slate-100 text-[11px] truncate">Less Selling</span>
                       </div>
-                      <span class="text-[11px] font-extrabold text-[#14213D] dark:text-white"
+                      <span class="text-[11px] font-extrabold text-[#14213D] dark:text-white tabular-nums min-w-[55px] text-right"
                         id="budget-val-less">₹1,016</span>
                     </div>
                     <div class="flex items-center justify-between pl-4 text-[10px] text-slate-400 mt-0.5">
                       <span class="truncate max-w-[85px]" id="budget-items-less">4 foods</span>
-                      <span class="font-semibold text-slate-500" id="budget-pct-less">17%</span>
+                      <span class="font-semibold text-slate-500 tabular-nums min-w-[36px] text-right" id="budget-pct-less">17%</span>
                     </div>
                   </div>
 
@@ -3062,14 +3099,13 @@
                       <div class="flex items-center space-x-1.5 min-w-0">
                         <span
                           class="w-2.5 h-2.5 rounded-full bg-[#CBD5E1] dark:bg-slate-600 border border-slate-300 dark:border-slate-500 flex-shrink-0"></span>
-                        <span class="font-bold text-slate-800 dark:text-slate-100 text-[11px] truncate">Not
-                          Selling</span>
+                        <span class="font-bold text-slate-800 dark:text-slate-100 text-[11px] truncate">Not Selling</span>
                       </div>
-                      <span class="text-[11px] font-extrabold text-slate-400" id="budget-val-not">₹0</span>
+                      <span class="text-[11px] font-extrabold text-slate-400 tabular-nums min-w-[55px] text-right" id="budget-val-not">₹0</span>
                     </div>
                     <div class="flex items-center justify-between pl-4 text-[10px] text-slate-400 mt-0.5">
                       <span class="truncate max-w-[85px]" id="budget-items-not">17 foods</span>
-                      <span class="font-semibold text-rose-500" id="budget-pct-not">0%</span>
+                      <span class="font-semibold text-rose-500 tabular-nums min-w-[36px] text-right" id="budget-pct-not">0%</span>
                     </div>
                   </div>
                 </div>

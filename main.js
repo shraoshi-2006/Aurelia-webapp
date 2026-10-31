@@ -1103,7 +1103,7 @@ $(document).ready(function () {
       duration: 1200,
       decimals: 2,
       prefix: '₹',
-      decimalClass: 'text-slate-400 font-semibold text-lg'
+      decimalClass: 'text-slate-400 font-normal'
     });
     animateNumber('#stat-billing-growth', 12.1, { duration: 900, decimals: 1, prefix: '↑ ', suffix: '%', useLocale: false });
   }
@@ -1118,7 +1118,7 @@ $(document).ready(function () {
       duration: 1200,
       decimals: 2,
       prefix: '₹',
-      decimalClass: 'text-emerald-600/70 dark:text-emerald-400/70 font-semibold text-lg'
+      decimalClass: 'text-emerald-600/70 dark:text-emerald-400/70 font-normal'
     });
     animateNumber('#stat-profit-margin', Number(profitMargin), {
       duration: 1000,
@@ -1131,14 +1131,14 @@ $(document).ready(function () {
       duration: 1100,
       decimals: 2,
       prefix: '₹',
-      decimalClass: 'text-slate-400 text-xs font-normal'
+      decimalClass: 'text-slate-400 font-normal'
     });
     animateNumber('#stat-income-growth', 6.3, { duration: 900, decimals: 1, prefix: '↑ ', suffix: '%', useLocale: false });
     animateNumber('#stat-expense-display, #stat-expense', currentExpense, {
       duration: 1100,
       decimals: 2,
       prefix: '₹',
-      decimalClass: 'text-slate-400 text-xs font-normal'
+      decimalClass: 'text-slate-400 font-normal'
     });
     animateNumber('#stat-expense-growth', 2.4, { duration: 900, decimals: 1, prefix: '↑ ', suffix: '%', useLocale: false });
   }
@@ -1453,9 +1453,9 @@ $(document).ready(function () {
             enabled: true,
             backgroundColor: 'rgba(20, 33, 61, 0.92)',
             titleColor: '#FFFFFF',
-            titleFont: { family: 'Plus Jakarta Sans', size: 12, weight: 'bold' },
+            titleFont: { family: 'Inter', size: 12, weight: 'bold' },
             bodyColor: '#FCA311',
-            bodyFont: { family: 'Plus Jakarta Sans', size: 12, weight: 600 },
+            bodyFont: { family: 'Inter', size: 12, weight: 600 },
             borderColor: 'rgba(252, 163, 17, 0.35)',
             borderWidth: 1,
             padding: { top: 9, bottom: 9, left: 14, right: 14 },
@@ -1475,7 +1475,7 @@ $(document).ready(function () {
           x: {
             grid: { display: false },
             ticks: {
-              font: { family: 'Plus Jakarta Sans', size: 11, weight: 600 },
+              font: { family: 'Inter', size: 11, weight: 600 },
               color: tickColor
             }
           },
@@ -1488,7 +1488,7 @@ $(document).ready(function () {
             },
             ticks: {
               stepSize: stepSize,
-              font: { family: 'Plus Jakarta Sans', size: 11, weight: 600 },
+              font: { family: 'Inter', size: 11, weight: 600 },
               color: tickColor,
               callback: function (val) {
                 return '₹' + Number(val).toLocaleString('en-IN');
@@ -1710,8 +1710,8 @@ $(document).ready(function () {
           legend: { display: false },
           tooltip: {
             backgroundColor: '#14213D',
-            titleFont: { family: 'Plus Jakarta Sans', size: 11, weight: 'bold' },
-            bodyFont: { family: 'Plus Jakarta Sans', size: 11 },
+            titleFont: { family: 'Inter', size: 11, weight: 'bold' },
+            bodyFont: { family: 'Inter', size: 11 },
             padding: 10,
             cornerRadius: 8,
             callbacks: {
