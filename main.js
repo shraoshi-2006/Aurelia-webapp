@@ -2256,10 +2256,12 @@ $(document).ready(function () {
     $('#modal-staff-footer-count').text(`Showing ${filtered.length} of ${staffList.length} staff members`);
   }
 
-  // Trigger Total Staff Modal
+  // Trigger Total Staff: Direct redirect to Human Resource -> Employee List standalone page
   $('#btn-dashboard-total-staff').on('click', function (e) {
     e.preventDefault();
-    openTotalStaffModal();
+    $('#modal-total-staff').addClass('hidden').hide();
+    window.location.hash = 'employees';
+    switchSection('employees');
   });
 
   $(document).on('click', '.tab-staff-status', function () {
