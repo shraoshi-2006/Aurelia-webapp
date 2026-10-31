@@ -5384,16 +5384,25 @@ $(document).ready(function () {
 
   // Initial Boot - guarded by authentication
   const currentPath = (window.location.pathname || '').toLowerCase();
+  const isHRPage = currentPath.includes('/human-resources') ||
+                   currentPath.includes('employee-list') ||
+                   currentPath.includes('add-employee') ||
+                   currentPath.includes('hr-document') ||
+                   currentPath.includes('holiday');
+
   let defaultSection = 'dashboard';
   if (currentPath.includes('employee-list')) defaultSection = 'employees';
   else if (currentPath.includes('add-employee')) defaultSection = 'add-employee';
   else if (currentPath.includes('hr-document')) defaultSection = 'hr-documents';
   else if (currentPath.includes('holiday')) defaultSection = 'holidays';
 
-  const initHash = window.location.hash.replace('#', '') || defaultSection;
+  const hashSec = window.location.hash.replace('#', '');
+  const initHash = isHRPage ? defaultSection : (hashSec || 'dashboard');
   if (!window.Auth || window.Auth.isAuthenticated()) {
     switchSection(initHash);
-    renderDashboard();
+    if (!isHRPage) {
+      renderDashboard();
+    }
     renderSidebarBadges();
     updateTopbarAvatarUI();
   }

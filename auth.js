@@ -299,15 +299,31 @@
     // 5. Sync profile details
     syncUserProfile(user);
 
-    // 6. Update URL hash to #dashboard so router and browser history reflect logged-in state
-    if (!window.location.hash || window.location.hash === '#login' || window.location.hash === '#register' || window.location.hash === '#forgot') {
-      window.location.hash = '#dashboard';
+    // 6. Determine target section based on page path and hash
+    const currentPath = (window.location.pathname || '').toLowerCase();
+    let pageDefaultSec = null;
+    if (currentPath.includes('employee-list')) pageDefaultSec = 'employees';
+    else if (currentPath.includes('add-employee')) pageDefaultSec = 'add-employee';
+    else if (currentPath.includes('hr-document')) pageDefaultSec = 'hr-documents';
+    else if (currentPath.includes('holiday')) pageDefaultSec = 'holidays';
+
+    if (pageDefaultSec) {
+      // On standalone HR pages: maintain page's own section, never bounce back to dashboard
+      if (!window.location.hash || ['#login', '#register', '#forgot', '#dashboard'].includes(window.location.hash)) {
+        window.location.hash = '#' + pageDefaultSec;
+      }
+    } else {
+      // On index.html: default to #dashboard
+      if (!window.location.hash || ['#login', '#register', '#forgot'].includes(window.location.hash)) {
+        window.location.hash = '#dashboard';
+      }
     }
 
     // 7. Explicitly switch section to target
-    const targetSection = (window.location.hash && !['#login', '#register', '#forgot'].includes(window.location.hash))
-      ? window.location.hash.replace('#', '')
-      : 'dashboard';
+    const targetSection = pageDefaultSec ||
+      ((window.location.hash && !['#login', '#register', '#forgot'].includes(window.location.hash))
+        ? window.location.hash.replace('#', '')
+        : 'dashboard');
 
     if (typeof window.switchSection === 'function') {
       window.switchSection(targetSection);
