@@ -541,16 +541,17 @@ $(document).ready(function () {
     // If target section is not present in the current DOM (e.g. cross-navigating between index.html and standalone HR pages)
     const $targetSec = $('#section-' + target);
     if ($targetSec.length === 0) {
+      const isSubdir = window.location.pathname.includes('/human-resources');
       const pageFileMap = {
-        'hr-documents': 'hr-document-template.html',
-        'add-employee': 'add-employee.html',
-        'employees': 'employee-list.html',
-        'holidays': 'holiday-list.html'
+        'hr-documents': isSubdir ? 'hr-document-template.html' : 'human-resources/hr-document-template.html',
+        'add-employee': isSubdir ? 'add-employee.html' : 'human-resources/add-employee.html',
+        'employees': isSubdir ? 'employee-list.html' : 'human-resources/employee-list.html',
+        'holidays': isSubdir ? 'holiday-list.html' : 'human-resources/holiday-list.html'
       };
       if (pageFileMap[target]) {
         window.location.href = pageFileMap[target];
       } else {
-        window.location.href = 'index.html#' + target;
+        window.location.href = (isSubdir ? '../index.html#' : 'index.html#') + target;
       }
       return;
     }
@@ -686,14 +687,26 @@ $(document).ready(function () {
   // Human Resource Sub-Items Actions
   $('.hr-sub-item').on('click', function (e) {
     const action = $(this).data('action');
-    const href = $(this).attr('href');
+    const isSubdir = window.location.pathname.includes('/human-resources');
 
-    if (href && !href.startsWith('#') && !href.startsWith('javascript:')) {
-      const currentFile = window.location.pathname.split('/').pop() || 'index.html';
-      if (currentFile !== href) {
-        // Navigate directly to the standalone page
-        return;
+    const hrPageMap = {
+      'hr-doc-templates': isSubdir ? 'hr-document-template.html' : 'human-resources/hr-document-template.html',
+      'add-employee': isSubdir ? 'add-employee.html' : 'human-resources/add-employee.html',
+      'employee-list': isSubdir ? 'employee-list.html' : 'human-resources/employee-list.html',
+      'holiday-list': isSubdir ? 'holiday-list.html' : 'human-resources/holiday-list.html'
+    };
+
+    if (hrPageMap[action]) {
+      e.preventDefault();
+      const targetFile = hrPageMap[action].split('/').pop();
+      const currentFile = window.location.pathname.split('/').pop();
+
+      if (currentFile === targetFile) {
+        return; // Already on this page
       }
+
+      window.location.href = hrPageMap[action];
+      return;
     }
 
     e.preventDefault();
@@ -702,50 +715,6 @@ $(document).ready(function () {
     $('.hr-sub-item span.rounded-full').removeClass('border-sky-400 bg-sky-400').addClass('border-slate-400');
     $(this).addClass('text-sky-400 font-bold active').removeClass('text-slate-300');
     $(this).find('span.rounded-full').addClass('border-sky-400 bg-sky-400').removeClass('border-slate-400');
-
-    if (action === 'hr-doc-templates') {
-      if ($('#section-hr-documents').length > 0) {
-        window.location.hash = 'hr-documents';
-        switchSection('hr-documents');
-      } else {
-        window.location.href = 'hr-document-template.html';
-      }
-      showToast('Viewing HR Document Templates & Legal Agreements', 'info');
-      return;
-    }
-
-    if (action === 'add-employee') {
-      if ($('#section-add-employee').length > 0) {
-        window.location.hash = 'add-employee';
-        switchSection('add-employee');
-      } else {
-        window.location.href = 'add-employee.html';
-      }
-      showToast('Onboard New Employee: Fill registration details', 'info');
-      return;
-    }
-
-    if (action === 'employee-list') {
-      if ($('#section-employees').length > 0) {
-        window.location.hash = 'employees';
-        switchSection('employees');
-      } else {
-        window.location.href = 'employee-list.html';
-      }
-      showToast('Viewing Employee Directory (48 staff members)', 'info');
-      return;
-    }
-
-    if (action === 'holiday-list') {
-      if ($('#section-holidays').length > 0) {
-        window.location.hash = 'holidays';
-        switchSection('holidays');
-      } else {
-        window.location.href = 'holiday-list.html';
-      }
-      showToast('Viewing Hotel Holiday & Observance Calendar 2026', 'info');
-      return;
-    }
 
     const hrToastMap = {
       'employee-list': ['Viewing Employee Directory (48 staff members)', 'info'],
@@ -2302,7 +2271,7 @@ $(document).ready(function () {
   $('#btn-dashboard-total-staff').on('click', function (e) {
     e.preventDefault();
     $('#modal-total-staff').addClass('hidden').hide();
-    window.location.href = 'employee-list.html';
+    window.location.href = 'human-resources/employee-list.html';
   });
 
   $(document).on('click', '.tab-staff-status', function () {
