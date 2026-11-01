@@ -4580,7 +4580,7 @@ $(document).ready(function () {
   $('#topbar-device-id-badge').on('click', function () {
     const devId = $('#topbar-device-id-text').text().trim() || 'DEV08';
     if (navigator.clipboard && navigator.clipboard.writeText) {
-      navigator.clipboard.writeText(devId).catch(() => {});
+      navigator.clipboard.writeText(devId).catch(() => { });
     }
     showToast(`Device ID: ${devId} copied to clipboard`, 'info');
   });
@@ -5469,9 +5469,8 @@ $(document).ready(function () {
               ${escapeHtml(s.shift)}
             </td>
             <td class="py-3 px-4 text-center">
-              <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold ${
-                isOnDuty ? 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 border border-emerald-200/50' : 'bg-amber-50 dark:bg-amber-950/40 text-amber-700 dark:text-amber-400 border border-amber-200/50'
-              }">
+              <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold ${isOnDuty ? 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 border border-emerald-200/50' : 'bg-amber-50 dark:bg-amber-950/40 text-amber-700 dark:text-amber-400 border border-amber-200/50'
+          }">
                 <span class="w-1.5 h-1.5 rounded-full ${isOnDuty ? 'bg-emerald-500' : 'bg-amber-500'} mr-1.5"></span>
                 ${escapeHtml(s.status)}
               </span>
@@ -5682,11 +5681,10 @@ $(document).ready(function () {
               ${escapeHtml(h.day)}
             </td>
             <td class="py-3 px-4">
-              <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold ${
-                isGazetted
-                  ? 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400 border border-emerald-200/50'
-                  : 'bg-sky-50 dark:bg-sky-950/40 text-sky-700 dark:text-sky-400 border border-sky-200/50'
-              }">
+              <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold ${isGazetted
+            ? 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400 border border-emerald-200/50'
+            : 'bg-sky-50 dark:bg-sky-950/40 text-sky-700 dark:text-sky-400 border border-sky-200/50'
+          }">
                 ${escapeHtml(h.typeLabel)}
               </span>
             </td>
@@ -5694,11 +5692,10 @@ $(document).ready(function () {
               ${escapeHtml(h.policy)}
             </td>
             <td class="py-3 px-4 text-center">
-              <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold ${
-                isUpcoming
-                  ? 'bg-amber-100 text-amber-800 dark:bg-amber-950/50 dark:text-amber-400'
-                  : 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400'
-              }">
+              <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold ${isUpcoming
+            ? 'bg-amber-100 text-amber-800 dark:bg-amber-950/50 dark:text-amber-400'
+            : 'bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400'
+          }">
                 ${isUpcoming ? '● In 8 Days' : 'Observed'}
               </span>
             </td>
@@ -5724,11 +5721,11 @@ $(document).ready(function () {
   // Initial Boot - guarded by authentication
   const currentPath = (window.location.pathname || '').toLowerCase();
   const isHRPage = currentPath.includes('/human-resources') ||
-                   currentPath.includes('hr-employee-list') ||
-                   currentPath.includes('employee-list') ||
-                   currentPath.includes('add-employee') ||
-                   currentPath.includes('hr-document') ||
-                   currentPath.includes('holiday');
+    currentPath.includes('hr-employee-list') ||
+    currentPath.includes('employee-list') ||
+    currentPath.includes('add-employee') ||
+    currentPath.includes('hr-document') ||
+    currentPath.includes('holiday');
   const isBillingPage = currentPath.includes('billing.html') || currentPath.endsWith('billing');
   const isOrdersPage = currentPath.includes('order.html') || currentPath.endsWith('order');
   const isMenuPage = currentPath.includes('menu.html') || currentPath.endsWith('menu');

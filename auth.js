@@ -92,7 +92,7 @@
           return list;
         }
       }
-    } catch (e) {}
+    } catch (e) { }
 
     localStorage.setItem(STORAGE_KEY_LOCAL_USERS, JSON.stringify(defaultList));
     return defaultList;
@@ -122,9 +122,9 @@
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ name: u.name, email: u.email, password: u.password, role: u.role || 'Front Desk Supervisor' })
-        }).catch(() => {});
+        }).catch(() => { });
       }
-    } catch (e) {}
+    } catch (e) { }
   }
 
   // DOM Elements Cache
@@ -493,7 +493,7 @@
                 const cachedUser = JSON.parse(cachedUserStr);
                 renderAuthenticatedState(cachedUser);
                 return;
-              } catch (e) {}
+              } catch (e) { }
             }
           }
         } catch (err) {
@@ -503,7 +503,7 @@
               const cachedUser = JSON.parse(cachedUserStr);
               renderAuthenticatedState(cachedUser);
               return;
-            } catch (e) {}
+            } catch (e) { }
           }
         }
       } else if (cachedUserStr) {
@@ -512,7 +512,7 @@
           const cachedUser = JSON.parse(cachedUserStr);
           renderAuthenticatedState(cachedUser);
           return;
-        } catch (e) {}
+        } catch (e) { }
       }
     }
 
@@ -563,8 +563,8 @@
     // Local / Offline authentication helper
     function loginLocally() {
       const localUsers = getLocalUsers();
-      const matchedUser = localUsers.find(u => 
-        u.email.toLowerCase() === email.toLowerCase() && 
+      const matchedUser = localUsers.find(u =>
+        u.email.toLowerCase() === email.toLowerCase() &&
         u.password === password
       );
 
@@ -641,8 +641,8 @@
         const data = await res.json().catch(() => ({}));
         // If 401 or backend check failed, verify if valid in local user registry before failing
         const localUsers = getLocalUsers();
-        const matched = localUsers.find(u => 
-          u.email && u.email.toLowerCase() === email.toLowerCase() && 
+        const matched = localUsers.find(u =>
+          u.email && u.email.toLowerCase() === email.toLowerCase() &&
           u.password === password
         );
         if (matched) {
@@ -809,7 +809,7 @@
           body: JSON.stringify({ email }),
           credentials: 'include'
         });
-      } catch (e) {}
+      } catch (e) { }
     }
 
     setButtonLoading('btn-forgot-submit', false, 'Send Reset Instructions');
@@ -861,7 +861,7 @@
           },
           credentials: 'include'
         });
-      } catch (e) {}
+      } catch (e) { }
     }
 
     localStorage.removeItem(STORAGE_KEY_TOKEN);
@@ -1028,8 +1028,8 @@
       }
 
       const isStillMoving = Math.abs(targetHeadRotY - currentHeadRotY) > 0.05 ||
-                            Math.abs(targetHeadRotX - currentHeadRotX) > 0.05 ||
-                            Math.abs(targetHeadX - currentHeadX) > 0.05;
+        Math.abs(targetHeadRotX - currentHeadRotX) > 0.05 ||
+        Math.abs(targetHeadX - currentHeadX) > 0.05;
 
       if (isTrackingMouse || isStillMoving) {
         rafId = requestAnimationFrame(updateEyesight);
