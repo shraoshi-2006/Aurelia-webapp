@@ -5212,7 +5212,10 @@ $(document).ready(function () {
       $('#hr-templates-count-label').text(`Showing top ${displayList.length} of ${HR_TEMPLATES.length} templates`);
       $('#hr-templates-see-more-wrap').removeClass('hidden');
     } else if (isHrEmployeeListPage) {
-      displayList = filtered.slice(4);
+      // Include any newly uploaded custom templates at the top plus the leftover default templates (rows 5 to 12)
+      const customTemplates = filtered.filter(t => t.id && t.id.startsWith('doc-custom-'));
+      const defaultLeftover = filtered.filter(t => !t.id || !t.id.startsWith('doc-custom-')).slice(4);
+      displayList = [...customTemplates, ...defaultLeftover];
       $('#hr-templates-count-label').text(`Showing ${displayList.length} remaining templates from See More`);
       $('#hr-templates-see-more-wrap').addClass('hidden');
     } else {
