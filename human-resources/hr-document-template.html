@@ -2442,14 +2442,21 @@
                 <span>HR Document Templates</span>
               </a>
 
-              <!-- 2. Add Employee -->
+              <!-- 2. HR Employee Lists -->
+              <a href="hr-employee-list.html" class="hr-sub-item flex items-center space-x-2.5 py-1.5 px-2 rounded-lg text-slate-300 hover:text-white hover:bg-white/10 transition-colors group cursor-pointer" data-action="hr-employee-list">
+                <span
+                  class="w-1.5 h-1.5 rounded-full border border-slate-400 group-hover:border-[#FCA311] group-hover:bg-[#FCA311] transition-all flex-shrink-0"></span>
+                <span>HR Employee Lists</span>
+              </a>
+
+              <!-- 3. Add Employee -->
               <a href="add-employee.html" class="hr-sub-item flex items-center space-x-2.5 py-1.5 px-2 rounded-lg text-slate-300 hover:text-white hover:bg-white/10 transition-colors group cursor-pointer" data-action="add-employee">
                 <span
                   class="w-1.5 h-1.5 rounded-full border border-slate-400 group-hover:border-[#FCA311] group-hover:bg-[#FCA311] transition-all flex-shrink-0"></span>
                 <span>Add Employee</span>
               </a>
 
-              <!-- 3. Employee List -->
+              <!-- 4. Employee List -->
               <a href="employee-list.html" class="hr-sub-item flex items-center space-x-2.5 py-1.5 px-2 rounded-lg text-slate-300 hover:text-white hover:bg-white/10 transition-colors group cursor-pointer" data-action="employee-list">
                 <span
                   class="w-1.5 h-1.5 rounded-full border border-slate-400 group-hover:border-[#FCA311] group-hover:bg-[#FCA311] transition-all flex-shrink-0"></span>
@@ -2887,7 +2894,7 @@
           <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
             <div class="Aurelia-card p-4 flex flex-col justify-between">
               <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Total Templates</span>
-              <div class="text-2xl font-black text-slate-900 dark:text-white mt-1">12 Documents</div>
+              <div class="text-2xl font-black text-slate-900 dark:text-white mt-1" id="hr-total-templates-stat">12 Documents</div>
               <span class="text-[11px] text-slate-400 font-medium mt-1">4 Distinct Categories</span>
             </div>
             <div class="Aurelia-card p-4 flex flex-col justify-between">
@@ -2953,9 +2960,20 @@
                   </tr>
                 </thead>
                 <tbody id="hr-templates-tbody" class="divide-y divide-slate-100 dark:divide-slate-800">
-                  <!-- Rendered row-wise by main.js -->
+                  <!-- Rendered row-wise by main.js (Top 4 rows) -->
                 </tbody>
               </table>
+            </div>
+
+            <!-- See More Option at the bottom of the 4 rows (Redirects to HR employee list page) -->
+            <div id="hr-templates-see-more-wrap" class="p-4 border-t border-slate-100 dark:border-slate-800 bg-slate-50/60 dark:bg-slate-800/40 flex items-center justify-center">
+              <a href="hr-employee-list.html" id="btn-see-more-hr-docs"
+                class="btn-Aurelia-primary inline-flex items-center space-x-2 py-2 px-6 text-xs font-bold shadow-md shadow-[#FCA311]/20 hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer">
+                <span>See More</span>
+                <svg class="w-4 h-4 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2.5">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                </svg>
+              </a>
             </div>
 
             <div id="hr-templates-empty" class="p-10 text-center text-xs text-slate-400 hidden">
@@ -2963,8 +2981,11 @@
             </div>
 
             <div class="p-3.5 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs text-slate-400">
-              <span id="hr-templates-count-label">Showing 12 of 12 templates</span>
-              <span>Hospitality Operational Legal Standards</span>
+              <span id="hr-templates-count-label">Showing top 4 of 12 templates</span>
+              <a href="hr-employee-list.html" class="text-xs font-semibold text-sky-600 dark:text-sky-400 hover:text-[#FCA311] transition-colors flex items-center space-x-1">
+                <span>HR Employee Lists</span>
+                <span>&rarr;</span>
+              </a>
             </div>
           </div>
         </section>

@@ -345,7 +345,8 @@
     // 6. Determine target section based on page path and hash
     const currentPath = (window.location.pathname || '').toLowerCase();
     let pageDefaultSec = null;
-    if (currentPath.includes('employee-list')) pageDefaultSec = 'employees';
+    if (currentPath.includes('hr-employee-list')) pageDefaultSec = 'hr-documents';
+    else if (currentPath.includes('employee-list')) pageDefaultSec = 'employees';
     else if (currentPath.includes('add-employee')) pageDefaultSec = 'add-employee';
     else if (currentPath.includes('hr-document')) pageDefaultSec = 'hr-documents';
     else if (currentPath.includes('holiday')) pageDefaultSec = 'holidays';

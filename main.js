@@ -550,7 +550,10 @@ $(document).ready(function () {
         'employees': 'employee-list',
         'holidays': 'holiday-list'
       };
-      const act = hrActionMap[target];
+      let act = hrActionMap[target];
+      if (window.location.pathname.includes('hr-employee-list')) {
+        act = 'hr-employee-list';
+      }
       $('.hr-sub-item').removeClass('text-sky-400 font-bold active').addClass('text-slate-300');
       $('.hr-sub-item span.rounded-full').removeClass('border-sky-400 bg-sky-400').addClass('border-slate-400');
       const $activeItem = $(`.hr-sub-item[data-action="${act}"]`);
@@ -588,6 +591,7 @@ $(document).ready(function () {
         'customers': isSubdir ? '../customer.html' : 'customer.html',
         'analytics': isSubdir ? '../analytics.html' : 'analytics.html',
         'hr-documents': isDeptSubdir ? '../human-resources/hr-document-template.html' : (isHRSubdir ? 'hr-document-template.html' : 'human-resources/hr-document-template.html'),
+        'hr-employee-list': isDeptSubdir ? '../human-resources/hr-employee-list.html' : (isHRSubdir ? 'hr-employee-list.html' : 'human-resources/hr-employee-list.html'),
         'add-employee': isDeptSubdir ? '../human-resources/add-employee.html' : (isHRSubdir ? 'add-employee.html' : 'human-resources/add-employee.html'),
         'employees': isDeptSubdir ? '../human-resources/employee-list.html' : (isHRSubdir ? 'employee-list.html' : 'human-resources/employee-list.html'),
         'holidays': isDeptSubdir ? '../human-resources/holiday-list.html' : (isHRSubdir ? 'holiday-list.html' : 'human-resources/holiday-list.html'),
@@ -733,6 +737,7 @@ $(document).ready(function () {
 
     const hrPageMap = {
       'hr-doc-templates': isSubdir ? 'hr-document-template.html' : 'human-resources/hr-document-template.html',
+      'hr-employee-list': isSubdir ? 'hr-employee-list.html' : 'human-resources/hr-employee-list.html',
       'add-employee': isSubdir ? 'add-employee.html' : 'human-resources/add-employee.html',
       'employee-list': isSubdir ? 'employee-list.html' : 'human-resources/employee-list.html',
       'holiday-list': isSubdir ? 'holiday-list.html' : 'human-resources/holiday-list.html'
@@ -759,6 +764,7 @@ $(document).ready(function () {
     $(this).find('span.rounded-full').addClass('border-sky-400 bg-sky-400').removeClass('border-slate-400');
 
     const hrToastMap = {
+      'hr-employee-list': ['Viewing HR Employee Document Templates', 'info'],
       'employee-list': ['Viewing Employee Directory (48 staff members)', 'info'],
       'add-employee': ['Human Resource: Add Employee panel ready', 'info'],
       'holiday-list': ['Holiday List: 14 official paid holidays & gazetted calendar for 2026', 'info'],
@@ -4905,7 +4911,7 @@ $(document).ready(function () {
   // =========================================================================
   // 10. HR DOCUMENT TEMPLATES STANDALONE PAGE CONTROLLER
   // =========================================================================
-  const HR_TEMPLATES = [
+  const DEFAULT_HR_TEMPLATES = [
     {
       id: 'doc-emp-contract',
       category: 'contracts',
@@ -5124,12 +5130,32 @@ $(document).ready(function () {
     }
   ];
 
+  let HR_TEMPLATES = [];
+  try {
+    const storedHrTpls = localStorage.getItem('aurelia_hr_templates');
+    if (storedHrTpls) {
+      HR_TEMPLATES = JSON.parse(storedHrTpls);
+    } else {
+      HR_TEMPLATES = [...DEFAULT_HR_TEMPLATES];
+      localStorage.setItem('aurelia_hr_templates', JSON.stringify(HR_TEMPLATES));
+    }
+  } catch (err) {
+    HR_TEMPLATES = [...DEFAULT_HR_TEMPLATES];
+  }
+
   let currentHrDocCategory = 'all';
 
   function renderHrDocumentsSection() {
     const $tbody = $('#hr-templates-tbody');
     const $grid = $('#hr-templates-grid');
     if (!$tbody.length && !$grid.length) return;
+
+    // Update total template counters in metrics strip and filter tabs
+    $('#hr-total-templates-stat').text(`${HR_TEMPLATES.length} Documents`);
+    $('.hr-doc-filter-btn[data-category="all"]').text(`All Templates (${HR_TEMPLATES.length})`);
+
+    const isHrDocTemplatePage = window.location.pathname.includes('hr-document-template.html');
+    const isHrEmployeeListPage = window.location.pathname.includes('hr-employee-list.html');
 
     const query = $.trim($('#input-search-hr-docs').val()).toLowerCase();
     const filtered = HR_TEMPLATES.filter(tpl => {
@@ -5147,11 +5173,30 @@ $(document).ready(function () {
     }
 
     $('#hr-templates-empty').addClass('hidden');
-    $('#hr-templates-count-label').text(`Showing ${filtered.length} of ${HR_TEMPLATES.length} templates`);
+    // On hr-document-template.html, display only top 4 rows as requested.
+    // On hr-employee-list.html, display only the remaining leftover rows (rows 5 to 12) from "See More".
+    // When a search query is typed, display all matching results on either page!
+    let displayList = filtered;
+    if (query) {
+      displayList = filtered;
+      $('#hr-templates-count-label').text(`Found ${displayList.length} matching template${displayList.length === 1 ? '' : 's'}`);
+      $('#hr-templates-see-more-wrap').addClass('hidden');
+    } else if (isHrDocTemplatePage) {
+      displayList = filtered.slice(0, 4);
+      $('#hr-templates-count-label').text(`Showing top ${displayList.length} of ${HR_TEMPLATES.length} templates`);
+      $('#hr-templates-see-more-wrap').removeClass('hidden');
+    } else if (isHrEmployeeListPage) {
+      displayList = filtered.slice(4);
+      $('#hr-templates-count-label').text(`Showing ${displayList.length} remaining templates from See More`);
+      $('#hr-templates-see-more-wrap').addClass('hidden');
+    } else {
+      $('#hr-templates-count-label').text(`Showing ${displayList.length} of ${HR_TEMPLATES.length} templates`);
+      $('#hr-templates-see-more-wrap').addClass('hidden');
+    }
 
     if ($tbody.length) {
       let html = '';
-      filtered.forEach(tpl => {
+      displayList.forEach(tpl => {
         html += `
           <tr class="hover:bg-slate-50/70 dark:hover:bg-slate-800/50 transition-colors group">
             <td class="py-3.5 px-4 align-top">
@@ -5198,7 +5243,7 @@ $(document).ready(function () {
       $tbody.html(html);
     } else if ($grid.length) {
       let html = '';
-      filtered.forEach(tpl => {
+      displayList.forEach(tpl => {
         html += `
           <div class="Aurelia-card p-5 space-y-4 flex flex-col justify-between hover:border-[#FCA311] transition-all shadow-xs group">
             <div class="space-y-2.5">
@@ -5262,6 +5307,14 @@ $(document).ready(function () {
     showToast('Document exported to PDF format with hotel seal', 'success');
   });
 
+  // Redirect to HR Employee Lists page (full templates list) when clicking "See More"
+  $(document).on('click', '#btn-see-more-hr-docs', function (e) {
+    e.preventDefault();
+    const isHrFolder = window.location.pathname.includes('human-resources');
+    const targetUrl = isHrFolder ? 'hr-employee-list.html' : 'human-resources/hr-employee-list.html';
+    window.location.href = targetUrl;
+  });
+
   // Upload HR Document Template Form Submit Handler
   $(document).on('submit', '#form-upload-hr-doc', function (e) {
     e.preventDefault();
@@ -5292,7 +5345,7 @@ $(document).ready(function () {
       category: type,
       categoryLabel: typeLabels[type] || 'Standard Template',
       desc: desc,
-      badge: fileName.toLowerCase().endsWith('.docx') ? 'DOCX • Uploaded' : 'PDF • Uploaded',
+      badge: fileName.toLowerCase().endsWith('.docx') ? 'DOCX • Uploaded' : (fileName.toLowerCase().endsWith('.csv') ? 'CSV • Uploaded' : 'PDF • Uploaded'),
       pages: '1 Page',
       updated: '31 Oct 2026',
       id: newId,
@@ -5306,6 +5359,11 @@ $(document).ready(function () {
     };
 
     HR_TEMPLATES.unshift(newDoc);
+    try {
+      localStorage.setItem('aurelia_hr_templates', JSON.stringify(HR_TEMPLATES));
+    } catch (e) {
+      console.warn('Failed to save HR templates to localStorage', e);
+    }
     renderHrDocumentsSection();
     showToast(`Template "${title}" uploaded and added to directory!`, 'success');
     this.reset();
@@ -5637,6 +5695,7 @@ $(document).ready(function () {
   // Initial Boot - guarded by authentication
   const currentPath = (window.location.pathname || '').toLowerCase();
   const isHRPage = currentPath.includes('/human-resources') ||
+                   currentPath.includes('hr-employee-list') ||
                    currentPath.includes('employee-list') ||
                    currentPath.includes('add-employee') ||
                    currentPath.includes('hr-document') ||
@@ -5651,7 +5710,8 @@ $(document).ready(function () {
   const isDeptPage = isAllDeptPage || isAddDeptPage;
 
   let defaultSection = 'dashboard';
-  if (currentPath.includes('employee-list')) defaultSection = 'employees';
+  if (currentPath.includes('hr-employee-list')) defaultSection = 'hr-documents';
+  else if (currentPath.includes('employee-list')) defaultSection = 'employees';
   else if (currentPath.includes('add-employee')) defaultSection = 'add-employee';
   else if (currentPath.includes('hr-document')) defaultSection = 'hr-documents';
   else if (currentPath.includes('holiday')) defaultSection = 'holidays';
