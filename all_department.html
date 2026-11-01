@@ -2767,10 +2767,10 @@
         <!-- HOTEL DEPARTMENTS DIRECTORY (STANDALONE PAGE)                 -->
         <!-- ============================================================= -->
         <section id="section-all-departments" class="space-y-6">
-          <div id="modal-all-departments" class="Aurelia-card w-full p-5 sm:p-6 space-y-4 shadow-sm flex flex-col rounded-3xl border border-slate-100 dark:border-slate-800">
+          <div id="modal-all-departments" class="w-full space-y-6 flex flex-col">
 
-            <!-- Modal Header -->
-            <div class="flex items-center justify-between pb-3.5 border-b border-slate-100 dark:border-slate-800 flex-shrink-0">
+            <!-- Page Header -->
+            <div class="flex items-center justify-between pb-2 flex-shrink-0">
               <div class="flex items-center space-x-3">
                 <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-[#14213D] to-[#FCA311] flex items-center justify-center text-white shadow-md">
                   <svg class="w-5 h-5 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2">
@@ -2779,14 +2779,14 @@
                 </div>
                 <div>
                   <div class="flex items-center space-x-2">
-                    <h3 class="text-base font-bold text-slate-900 dark:text-white">Hotel Departments</h3>
+                    <h3 class="text-base sm:text-lg font-bold text-slate-900 dark:text-white">Hotel Departments</h3>
                     <span id="modal-dept-count-badge" class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#14213D] text-[#FCA311]">6 Departments</span>
                   </div>
                   <p class="text-xs text-slate-400">Operational wings, departmental hierarchy, staff allocations & shift management</p>
                 </div>
               </div>
               <div class="flex items-center space-x-2">
-                <a href="department/add_department.html" id="btn-open-add-dept-from-list" class="btn-Aurelia-primary text-xs py-1.5 px-3 flex items-center space-x-1.5 shadow-sm">
+                <a href="department/add_department.html" id="btn-open-add-dept-from-list" class="btn-Aurelia-primary text-xs py-2 px-3.5 flex items-center space-x-1.5 shadow-sm">
                   <span>+</span>
                   <span>Add Department</span>
                 </a>
@@ -2795,22 +2795,22 @@
 
             <!-- Department Metrics Strip -->
             <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 flex-shrink-0">
-              <div class="p-3 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-800">
+              <div class="p-3.5 rounded-2xl bg-white dark:bg-slate-800/80 border border-slate-100 dark:border-slate-700/80 shadow-xs">
                 <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-0.5">Total Departments</span>
                 <div id="stat-dept-count" class="text-lg sm:text-xl font-extrabold text-slate-900 dark:text-white">6 Wings</div>
                 <span class="text-[10px] text-emerald-600 font-semibold">● 100% Active</span>
               </div>
-              <div class="p-3 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-800">
+              <div class="p-3.5 rounded-2xl bg-white dark:bg-slate-800/80 border border-slate-100 dark:border-slate-700/80 shadow-xs">
                 <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-0.5">Total Assigned Staff</span>
                 <div id="stat-dept-staff" class="text-lg sm:text-xl font-extrabold text-[#14213D] dark:text-white">48 Staff</div>
                 <span class="text-[10px] text-slate-400 font-medium">8.0 avg / dept</span>
               </div>
-              <div class="p-3 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-800">
+              <div class="p-3.5 rounded-2xl bg-white dark:bg-slate-800/80 border border-slate-100 dark:border-slate-700/80 shadow-xs">
                 <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-0.5">24/7 Coverage</span>
                 <div class="text-lg sm:text-xl font-extrabold text-slate-900 dark:text-white">3 Units</div>
                 <span class="text-[10px] text-amber-600 font-medium">Front Desk • Security • Maint</span>
               </div>
-              <div class="p-3 rounded-2xl bg-emerald-50/70 dark:bg-emerald-950/30 border border-emerald-200/50 dark:border-emerald-800/40">
+              <div class="p-3.5 rounded-2xl bg-emerald-50/70 dark:bg-emerald-950/30 border border-emerald-200/50 dark:border-emerald-800/40 shadow-xs">
                 <span class="text-[10px] font-bold uppercase tracking-wider text-emerald-700 dark:text-emerald-400 block mb-0.5">Service Status</span>
                 <div class="text-lg sm:text-xl font-extrabold text-emerald-700 dark:text-emerald-400">All Normal</div>
                 <span class="text-[10px] text-emerald-600 font-semibold">● Zero service bottlenecks</span>
@@ -2828,19 +2828,34 @@
               </div>
             </div>
 
-            <!-- Department Grid (Scrollable) -->
-            <div class="rounded-2xl border border-slate-100 dark:border-slate-800 min-h-[260px] p-2">
-              <div id="modal-dept-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-                <!-- Populated by main.js -->
+            <!-- Departments Table Container -->
+            <div class="Aurelia-card p-0 overflow-hidden shadow-xs border border-slate-100 dark:border-slate-800">
+              <div class="overflow-x-auto">
+                <table class="w-full text-xs text-left">
+                  <thead class="bg-slate-50/80 dark:bg-slate-800/80 text-slate-500 dark:text-slate-400 font-semibold text-[11px] border-b border-slate-200/80 dark:border-slate-700/80">
+                    <tr>
+                      <th class="py-3.5 px-4 font-bold uppercase tracking-wider text-[10px]">Department</th>
+                      <th class="py-3.5 px-4 font-bold uppercase tracking-wider text-[10px]">Code</th>
+                      <th class="py-3.5 px-4 font-bold uppercase tracking-wider text-[10px]">Head of Dept</th>
+                      <th class="py-3.5 px-4 font-bold uppercase tracking-wider text-[10px]">Staff Quota</th>
+                      <th class="py-3.5 px-4 font-bold uppercase tracking-wider text-[10px]">Station / Location</th>
+                      <th class="py-3.5 px-4 font-bold uppercase tracking-wider text-[10px]">Shift Schedule</th>
+                      <th class="py-3.5 px-4 font-bold uppercase tracking-wider text-[10px] text-center">Status</th>
+                      <th class="py-3.5 px-4 font-bold uppercase tracking-wider text-[10px] text-right">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody id="modal-dept-grid" class="divide-y divide-slate-100 dark:divide-slate-800/80">
+                    <!-- Populated by main.js -->
+                  </tbody>
+                </table>
               </div>
               <div id="modal-dept-empty" class="p-8 text-center text-xs text-slate-400 hidden">
                 No departments found matching your search.
               </div>
-            </div>
-
-            <!-- Modal Footer -->
-            <div class="pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between flex-shrink-0">
-              <span id="modal-dept-footer-count" class="text-xs text-slate-400 font-medium">Showing 6 of 6 departments</span>
+              <div class="p-3.5 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs text-slate-400">
+                <span id="modal-dept-footer-count">Showing 6 of 6 departments</span>
+                <span class="font-medium text-slate-500 dark:text-slate-400">Hotel Wings & Staff Allocations</span>
+              </div>
             </div>
 
           </div>
