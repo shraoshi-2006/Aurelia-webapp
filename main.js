@@ -5145,6 +5145,32 @@ $(document).ready(function () {
 
   let currentHrDocCategory = 'all';
 
+  // Helper to determine if employee document record is active or not based on 2-week (14 days) inactivity rule
+  function getHrTemplateActivityStatus(tpl) {
+    if (!tpl) return 'Not active';
+    if (tpl.status === 'inactive' || tpl.active === false || tpl.status === 'left') {
+      return 'Not active';
+    }
+
+    const rawDate = tpl.updated;
+    if (!rawDate) return 'Not active';
+
+    const docDate = new Date(rawDate);
+    if (isNaN(docDate.getTime())) return rawDate;
+
+    // Use current system time (anchored at least to Nov 1, 2026 to align with 2026 schedule data)
+    const now = new Date();
+    const refTime = Math.max(now.getTime(), new Date('2026-11-01T12:00:00Z').getTime());
+    const elapsedMs = refTime - docDate.getTime();
+    const TWO_WEEKS_MS = 14 * 24 * 60 * 60 * 1000; // 14 days in milliseconds
+
+    if (elapsedMs > TWO_WEEKS_MS) {
+      return 'Not active';
+    }
+
+    return rawDate;
+  }
+
   function renderHrDocumentsSection() {
     const $tbody = $('#hr-templates-tbody');
     const $grid = $('#hr-templates-grid');
@@ -5197,6 +5223,7 @@ $(document).ready(function () {
     if ($tbody.length) {
       let html = '';
       displayList.forEach(tpl => {
+        const statusDisplay = getHrTemplateActivityStatus(tpl);
         html += `
           <tr class="hover:bg-slate-50/70 dark:hover:bg-slate-800/50 transition-colors group">
             <td class="py-3.5 px-4 align-top">
@@ -5226,7 +5253,7 @@ $(document).ready(function () {
               </span>
             </td>
             <td class="py-3.5 px-4 align-top whitespace-nowrap">
-              <span class="text-slate-500 dark:text-slate-400 font-mono text-[11px]">${tpl.updated}</span>
+              <span class="text-slate-500 dark:text-slate-400 font-mono text-[11px]">${statusDisplay}</span>
             </td>
             <td class="py-3.5 px-4 align-top text-right whitespace-nowrap">
               <button type="button" class="btn-preview-hr-doc btn-Aurelia-secondary text-xs py-1.5 px-3.5 inline-flex items-center space-x-1.5 shadow-xs" data-id="${tpl.id}">
@@ -5244,6 +5271,7 @@ $(document).ready(function () {
     } else if ($grid.length) {
       let html = '';
       displayList.forEach(tpl => {
+        const statusDisplay = getHrTemplateActivityStatus(tpl);
         html += `
           <div class="Aurelia-card p-5 space-y-4 flex flex-col justify-between hover:border-[#FCA311] transition-all shadow-xs group">
             <div class="space-y-2.5">
@@ -5260,7 +5288,7 @@ $(document).ready(function () {
             </div>
 
             <div class="pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-[11px] text-slate-400">
-              <span class="font-medium">${tpl.pages} • ${tpl.updated}</span>
+              <span class="font-medium">${tpl.pages} • ${statusDisplay}</span>
               <button type="button" class="btn-preview-hr-doc btn-Aurelia-secondary text-xs py-1 px-3" data-id="${tpl.id}">
                 Preview & Use
               </button>
@@ -5291,8 +5319,9 @@ $(document).ready(function () {
     const tpl = HR_TEMPLATES.find(t => t.id === id);
     if (!tpl) return;
 
+    const statusDisplay = getHrTemplateActivityStatus(tpl);
     $('#preview-doc-title').text(tpl.title);
-    $('#preview-doc-meta').text(`${tpl.categoryLabel} • Code: ${tpl.code} • ${tpl.pages}`);
+    $('#preview-doc-meta').text(`${tpl.categoryLabel} • Code: ${tpl.code} • ${tpl.pages} • ${statusDisplay}`);
     $('#preview-doc-ref').text(`REF: AUR/HR/2026/${tpl.code}`);
     $('#preview-doc-body').html(tpl.body);
 
