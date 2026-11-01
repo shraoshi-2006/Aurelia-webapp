@@ -745,8 +745,8 @@ $(document).ready(function () {
 
     if (hrPageMap[action]) {
       e.preventDefault();
-      const targetFile = hrPageMap[action].split('/').pop();
-      const currentFile = window.location.pathname.split('/').pop();
+      const targetFile = hrPageMap[action].split('/').pop().replace('.html', '');
+      const currentFile = window.location.pathname.split('/').pop().replace('.html', '');
 
       if (currentFile === targetFile) {
         return; // Already on this page
@@ -5154,8 +5154,8 @@ $(document).ready(function () {
     $('#hr-total-templates-stat').text(`${HR_TEMPLATES.length} Documents`);
     $('.hr-doc-filter-btn[data-category="all"]').text(`All Templates (${HR_TEMPLATES.length})`);
 
-    const isHrDocTemplatePage = window.location.pathname.includes('hr-document-template.html');
-    const isHrEmployeeListPage = window.location.pathname.includes('hr-employee-list.html');
+    const isHrDocTemplatePage = window.location.pathname.includes('hr-document-template');
+    const isHrEmployeeListPage = window.location.pathname.includes('hr-employee-list');
 
     const query = $.trim($('#input-search-hr-docs').val()).toLowerCase();
     const filtered = HR_TEMPLATES.filter(tpl => {
