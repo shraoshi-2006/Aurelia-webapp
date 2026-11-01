@@ -16,15 +16,25 @@
     try {
       const loc = window.location;
       if (!loc || !loc.href) return 'http://localhost:3000';
+
+      // 1. If currently served directly from node server.js on port 3000
       if (loc.port === '3000') {
         return loc.origin;
       }
+
+      // 2. If running locally (VS Code Live Server on 5500, Vite, file:// protocol)
       const isLocal = !loc.hostname || loc.hostname === 'localhost' || loc.hostname === '127.0.0.1' || loc.protocol === 'file:';
       if (isLocal) {
         const host = loc.hostname === '127.0.0.1' ? '127.0.0.1' : 'localhost';
         return `http://${host}:3000`;
       }
-      return loc.origin || '';
+
+      // 3. Static host without Node.js backend (e.g. GitHub Pages)
+      if (loc.hostname && loc.hostname.includes('github.io')) {
+        return null;
+      }
+
+      return loc.origin || null;
     } catch (e) {
       return 'http://localhost:3000';
     }
@@ -676,15 +686,19 @@
 
         const data = await res.json().catch(() => ({}));
 
-        if (!res.ok) {
+        if (res.ok) {
+          savedToDatabase = true;
+          if (data.user && data.user.id) {
+            newUser.id = data.user.id;
+          }
+        } else if (res.status === 404) {
+          // Endpoint not found on static/local proxy host; fallback to local storage
+          console.warn('[Auth Server] Backend route 404 at ' + API_BASE + ', saving to local registry.');
+        } else {
+          // Specific backend validation or duplicate error (400, 409, 500)
           showAlert('alert-register', data.error || 'Failed to create account.');
           setButtonLoading('btn-register-submit', false, 'Create Staff Account');
           return false;
-        }
-
-        savedToDatabase = true;
-        if (data.user && data.user.id) {
-          newUser.id = data.user.id;
         }
       } catch (err) {
         console.warn('[Auth Server] Backend API unreachable at ' + API_BASE + ':', err);
@@ -706,7 +720,7 @@
     if (savedToDatabase) {
       showAlert('alert-login', 'Staff account created and saved to auth.db! You can now sign in.', 'success');
     } else {
-      showAlert('alert-login', serverWarning || 'Account created in local session.', 'warning');
+      showAlert('alert-login', serverWarning || 'Account created successfully! Please sign in with your credentials.', 'success');
     }
     return false;
   }
