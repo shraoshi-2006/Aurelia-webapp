@@ -309,6 +309,8 @@
     else if (currentPath.includes('menu.html') || currentPath.endsWith('menu')) pageDefaultSec = 'menu';
     else if (currentPath.includes('customer.html') || currentPath.endsWith('customer')) pageDefaultSec = 'customers';
     else if (currentPath.includes('analytics.html') || currentPath.endsWith('analytics')) pageDefaultSec = 'analytics';
+    else if (currentPath.includes('all_department')) pageDefaultSec = 'all-departments';
+    else if (currentPath.includes('add_department')) pageDefaultSec = 'add-department';
 
     if (pageDefaultSec) {
       // On standalone HR pages: maintain page's own section, never bounce back to dashboard

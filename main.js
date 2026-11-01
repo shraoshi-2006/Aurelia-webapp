@@ -518,6 +518,9 @@ $(document).ready(function () {
     analytics: 'Revenue & Sales Analytics',
     settings: 'Station & Terminal Settings',
     'hr-documents': 'HR Document Templates & Agreements',
+    'all-departments': 'Hotel Departments',
+    'all-department': 'Hotel Departments',
+    'add-department': 'Create New Department',
     employees: 'Staff Directory & Shift Roster',
     'add-employee': 'Add New Employee (Staff Onboarding)',
     holidays: 'Hotel Holiday & Observance Calendar 2026'
@@ -555,20 +558,42 @@ $(document).ready(function () {
       $activeItem.find('span.rounded-full').addClass('border-sky-400 bg-sky-400').removeClass('border-slate-400');
     }
 
+    // Auto-sync Department submenu expansion and active pill
+    if (['all-departments', 'all-department', 'add-department'].includes(target)) {
+      $('#submenu-department').removeClass('hidden');
+      $('#chevron-nav-dept').addClass('rotate-180');
+      const deptActionMap = {
+        'all-departments': 'all-department',
+        'all-department': 'all-department',
+        'add-department': 'add-department'
+      };
+      const act = deptActionMap[target];
+      $('.dept-sub-item').removeClass('text-sky-400 font-bold active').addClass('text-slate-300');
+      $('.dept-sub-item span.rounded-full').removeClass('border-sky-400 bg-sky-400').addClass('border-slate-400');
+      const $activeItem = $(`.dept-sub-item[data-action="${act}"]`);
+      $activeItem.addClass('text-sky-400 font-bold active').removeClass('text-slate-300');
+      $activeItem.find('span.rounded-full').addClass('border-sky-400 bg-sky-400').removeClass('border-slate-400');
+    }
+
     // If target section is not present in the current DOM (e.g. cross-navigating between index.html and standalone HR pages)
     const $targetSec = $('#section-' + target);
     if ($targetSec.length === 0) {
-      const isSubdir = window.location.pathname.includes('/human-resources');
+      const isDeptSubdir = window.location.pathname.includes('/department');
+      const isHRSubdir = window.location.pathname.includes('/human-resources');
+      const isSubdir = isDeptSubdir || isHRSubdir;
       const pageFileMap = {
         'billing': isSubdir ? '../billing.html' : 'billing.html',
         'orders': isSubdir ? '../order.html' : 'order.html',
         'menu': isSubdir ? '../menu.html' : 'menu.html',
         'customers': isSubdir ? '../customer.html' : 'customer.html',
         'analytics': isSubdir ? '../analytics.html' : 'analytics.html',
-        'hr-documents': isSubdir ? 'hr-document-template.html' : 'human-resources/hr-document-template.html',
-        'add-employee': isSubdir ? 'add-employee.html' : 'human-resources/add-employee.html',
-        'employees': isSubdir ? 'employee-list.html' : 'human-resources/employee-list.html',
-        'holidays': isSubdir ? 'holiday-list.html' : 'human-resources/holiday-list.html'
+        'hr-documents': isDeptSubdir ? '../human-resources/hr-document-template.html' : (isHRSubdir ? 'hr-document-template.html' : 'human-resources/hr-document-template.html'),
+        'add-employee': isDeptSubdir ? '../human-resources/add-employee.html' : (isHRSubdir ? 'add-employee.html' : 'human-resources/add-employee.html'),
+        'employees': isDeptSubdir ? '../human-resources/employee-list.html' : (isHRSubdir ? 'employee-list.html' : 'human-resources/employee-list.html'),
+        'holidays': isDeptSubdir ? '../human-resources/holiday-list.html' : (isHRSubdir ? 'holiday-list.html' : 'human-resources/holiday-list.html'),
+        'all-departments': isDeptSubdir ? 'all_department.html' : (isHRSubdir ? '../department/all_department.html' : 'department/all_department.html'),
+        'all-department': isDeptSubdir ? 'all_department.html' : (isHRSubdir ? '../department/all_department.html' : 'department/all_department.html'),
+        'add-department': isDeptSubdir ? 'add_department.html' : (isHRSubdir ? '../department/add_department.html' : 'department/add_department.html')
       };
       if (pageFileMap[target]) {
         window.location.href = pageFileMap[target];
@@ -602,7 +627,9 @@ $(document).ready(function () {
       'hr-documents': renderHrDocumentsSection,
       employees: renderEmployeesSection,
       'add-employee': renderAddEmployeeSection,
-      holidays: renderHolidaysSection
+      holidays: renderHolidaysSection,
+      'all-departments': renderDepartmentsGrid,
+      'all-department': renderDepartmentsGrid
     };
     if (sectionRenderers[target]) sectionRenderers[target]();
     renderSidebarBadges();
@@ -917,29 +944,35 @@ $(document).ready(function () {
 
   // Department Sub-items Click Handlers
   $('.dept-sub-item').on('click', function (e) {
-    e.preventDefault();
     const action = $(this).data('action');
-
-    $('.dept-sub-item').removeClass('text-sky-400 font-bold active').addClass('text-slate-300');
-    $('.dept-sub-item span.rounded-full').removeClass('border-sky-400 bg-sky-400').addClass('border-slate-400');
-    $(this).addClass('text-sky-400 font-bold active').removeClass('text-slate-300');
-    $(this).find('span.rounded-full').addClass('border-sky-400 bg-sky-400').removeClass('border-slate-400');
+    const isDeptSubdir = window.location.pathname.includes('/department');
+    const isHRSubdir = window.location.pathname.includes('/human-resources');
 
     if (action === 'all-department') {
-      renderDepartmentsGrid();
-      $('#modal-all-departments').removeClass('hidden');
-      showToast('Viewing All Hotel Departments', 'info');
+      const targetUrl = isDeptSubdir ? 'all_department.html' : (isHRSubdir ? '../department/all_department.html' : 'department/all_department.html');
+      if (window.location.pathname.includes('all_department')) {
+        e.preventDefault();
+        renderDepartmentsGrid();
+      } else {
+        window.location.href = targetUrl;
+      }
     } else if (action === 'add-department') {
-      $('#modal-add-department').removeClass('hidden');
-      $('#input-dept-name').focus();
+      const targetUrl = isDeptSubdir ? 'add_department.html' : (isHRSubdir ? '../department/add_department.html' : 'department/add_department.html');
+      if (window.location.pathname.includes('add_department')) {
+        e.preventDefault();
+        $('#input-dept-name').focus();
+      } else {
+        window.location.href = targetUrl;
+      }
     }
   });
 
-  // Open Add Department from inside All Department modal
+  // Open Add Department from inside All Department
   $('#btn-open-add-dept-from-list').on('click', function () {
-    $('#modal-all-departments').addClass('hidden');
-    $('#modal-add-department').removeClass('hidden');
-    $('#input-dept-name').focus();
+    const isDeptSubdir = window.location.pathname.includes('/department');
+    const isHRSubdir = window.location.pathname.includes('/human-resources');
+    const targetUrl = isDeptSubdir ? 'add_department.html' : (isHRSubdir ? '../department/add_department.html' : 'department/add_department.html');
+    window.location.href = targetUrl;
   });
 
   // Search Departments
@@ -978,14 +1011,16 @@ $(document).ready(function () {
     hotelDepartments.unshift(newDept);
     saveDepartments();
 
-    // Reset Form & Close Modal
+    // Reset Form
     this.reset();
-    $('#modal-add-department').addClass('hidden');
-
-    // Re-render and open All Departments view
-    renderDepartmentsGrid();
-    $('#modal-all-departments').removeClass('hidden');
     showToast(`Department "${name}" successfully created!`, 'success');
+
+    const isDeptSubdir = window.location.pathname.includes('/department');
+    const isHRSubdir = window.location.pathname.includes('/human-resources');
+    const targetUrl = isDeptSubdir ? 'all_department.html' : (isHRSubdir ? '../department/all_department.html' : 'department/all_department.html');
+    setTimeout(() => {
+      window.location.href = targetUrl;
+    }, 500);
   });
 
   $(window).on('hashchange', function () {
@@ -5520,6 +5555,9 @@ $(document).ready(function () {
   const isMenuPage = currentPath.includes('menu.html') || currentPath.endsWith('menu');
   const isCustomerPage = currentPath.includes('customer.html') || currentPath.endsWith('customer');
   const isAnalyticsPage = currentPath.includes('analytics.html') || currentPath.endsWith('analytics');
+  const isAllDeptPage = currentPath.includes('all_department');
+  const isAddDeptPage = currentPath.includes('add_department');
+  const isDeptPage = isAllDeptPage || isAddDeptPage;
 
   let defaultSection = 'dashboard';
   if (currentPath.includes('employee-list')) defaultSection = 'employees';
@@ -5531,8 +5569,10 @@ $(document).ready(function () {
   else if (isMenuPage) defaultSection = 'menu';
   else if (isCustomerPage) defaultSection = 'customers';
   else if (isAnalyticsPage) defaultSection = 'analytics';
+  else if (isAllDeptPage) defaultSection = 'all-departments';
+  else if (isAddDeptPage) defaultSection = 'add-department';
 
-  const isStandalonePage = isHRPage || isBillingPage || isOrdersPage || isMenuPage || isCustomerPage || isAnalyticsPage;
+  const isStandalonePage = isHRPage || isBillingPage || isOrdersPage || isMenuPage || isCustomerPage || isAnalyticsPage || isDeptPage;
   const hashSec = window.location.hash.replace('#', '');
   let initHash = isStandalonePage ? defaultSection : (hashSec || 'dashboard');
   if (isBillingPage && (hashSec === 'history' || hashSec === 'create' || hashSec === 'billing')) {
@@ -5548,6 +5588,9 @@ $(document).ready(function () {
     }
     if (isBillingPage && hashSec === 'history') {
       switchBillingSubtab('history');
+    }
+    if (isAllDeptPage) {
+      renderDepartmentsGrid();
     }
     renderSidebarBadges();
     updateTopbarAvatarUI();
