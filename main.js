@@ -886,65 +886,65 @@ $(document).ready(function () {
       if (isTable) {
         html += `
           <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors border-b border-slate-100 dark:border-slate-800/80 last:border-b-0 group">
-            <td class="py-3.5 px-4 min-w-[240px]">
-              <div class="flex items-center space-x-3">
-                <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-[#14213D] to-[#FCA311] flex items-center justify-center text-white text-xs font-black shadow-xs flex-shrink-0">
+            <td class="py-2.5 sm:py-3 px-3">
+              <div class="flex items-center space-x-2.5 min-w-0">
+                <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-[#14213D] to-[#FCA311] flex items-center justify-center text-white text-[11px] font-black shadow-2xs flex-shrink-0">
                   ${dept.code.replace('DEPT-', '').slice(0, 2)}
                 </div>
                 <div class="min-w-0">
-                  <div class="font-bold text-slate-900 dark:text-white text-xs group-hover:text-[#FCA311] transition-colors whitespace-nowrap">
+                  <div class="font-bold text-slate-900 dark:text-white text-xs group-hover:text-[#FCA311] transition-colors truncate" title="${dept.name}">
                     ${dept.name}
                   </div>
-                  <div class="text-[11px] text-slate-400 truncate max-w-[260px]" title="${dept.desc || ''}">
+                  <div class="text-[10px] text-slate-400 truncate max-w-[160px] sm:max-w-[190px]" title="${dept.desc || ''}">
                     ${dept.desc || 'Operational hotel division.'}
                   </div>
                 </div>
               </div>
             </td>
-            <td class="py-3.5 px-3 whitespace-nowrap">
-              <span class="px-2.5 py-1 rounded-md text-[10px] font-mono font-bold bg-[#14213D] text-[#FCA311] inline-block shadow-2xs">
+            <td class="py-2.5 sm:py-3 px-2 whitespace-nowrap">
+              <span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-[#14213D] text-[#FCA311] inline-block">
                 ${dept.code}
               </span>
             </td>
-            <td class="py-3.5 px-4 whitespace-nowrap min-w-[170px]">
-              <div class="font-bold text-slate-800 dark:text-slate-200 text-xs whitespace-nowrap leading-tight">${dept.head}</div>
-              <div class="text-[10px] text-slate-400 font-medium mt-0.5">Head of Dept</div>
+            <td class="py-2.5 sm:py-3 px-2.5 whitespace-nowrap">
+              <div class="font-semibold text-slate-800 dark:text-slate-200 text-xs leading-tight">${dept.head}</div>
+              <div class="text-[10px] text-slate-400 font-medium">Head of Dept</div>
             </td>
-            <td class="py-3.5 px-3 whitespace-nowrap text-center">
+            <td class="py-2.5 sm:py-3 px-2 whitespace-nowrap text-center">
               <div class="inline-flex items-center justify-center space-x-1">
                 <span class="font-black text-slate-900 dark:text-white text-xs">${dept.staffCount}</span>
-                <span class="text-slate-400 text-[11px] font-medium">Staff</span>
+                <span class="text-slate-400 text-[10px]">Staff</span>
               </div>
             </td>
-            <td class="py-3.5 px-4 whitespace-nowrap min-w-[190px]">
-              <div class="flex items-center space-x-1.5 text-slate-600 dark:text-slate-300">
-                <svg class="w-3.5 h-3.5 text-slate-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <td class="py-2.5 sm:py-3 px-2.5 whitespace-nowrap">
+              <div class="flex items-center space-x-1 text-slate-600 dark:text-slate-300">
+                <svg class="w-3 h-3 text-slate-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
                   <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
                 </svg>
-                <span class="text-[11px] font-medium whitespace-nowrap" title="${dept.location}">${dept.location}</span>
+                <span class="text-[11px] truncate max-w-[140px]" title="${dept.location}">${dept.location}</span>
               </div>
             </td>
-            <td class="py-3.5 px-3 whitespace-nowrap min-w-[170px]">
-              <span class="inline-block px-2.5 py-1 rounded-full text-[10px] font-semibold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 whitespace-nowrap">
+            <td class="py-2.5 sm:py-3 px-2 whitespace-nowrap">
+              <span class="inline-block px-2 py-0.5 rounded-full text-[10px] font-medium bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 whitespace-nowrap">
                 ${dept.shift || 'Standard (2 Shifts)'}
               </span>
             </td>
-            <td class="py-3.5 px-3 whitespace-nowrap text-center">
-              <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-50 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400 border border-emerald-200/60 dark:border-emerald-800/40">
-                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 mr-1.5 animate-pulse"></span>
+            <td class="py-2.5 sm:py-3 px-2 whitespace-nowrap text-center">
+              <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-50 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400 border border-emerald-200/60 dark:border-emerald-800/40">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 mr-1 animate-pulse"></span>
                 Active
               </span>
             </td>
-            <td class="py-3.5 pl-3 pr-6 whitespace-nowrap text-right min-w-[120px]">
-              <div class="flex items-center justify-end space-x-2">
-                <a href="${staffListUrl}" class="inline-flex items-center space-x-1 px-2.5 py-1 rounded-lg text-xs font-semibold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-[#FCA311] hover:text-black transition-all shadow-2xs" title="View staff assigned to this department">
-                  <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <td class="py-2.5 sm:py-3 px-3 whitespace-nowrap text-right">
+              <div class="inline-flex items-center justify-end space-x-1.5">
+                <a href="${staffListUrl}" class="inline-flex items-center space-x-1 px-2 py-1 rounded-md text-[11px] font-semibold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-[#FCA311] hover:text-black transition-all shadow-2xs" title="View staff assigned to this department">
+                  <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z" />
                   </svg>
                   <span>Staff</span>
                 </a>
-                <button type="button" class="btn-delete-dept p-1.5 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition-colors" data-code="${dept.code}" data-name="${dept.name}" title="Delete Department">
+                <button type="button" class="btn-delete-dept p-1 rounded-md text-slate-400 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition-colors" data-code="${dept.code}" data-name="${dept.name}" title="Delete Department">
                   <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
                   </svg>

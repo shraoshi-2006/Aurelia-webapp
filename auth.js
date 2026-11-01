@@ -9,11 +9,28 @@
   'use strict';
 
   // API Base URL configuration:
-  // - When running locally via node server.js on port 3000: use window.location.origin
-  // - When running locally via Live Server (port 5500, etc.) over HTTP: use 'http://localhost:3000'
-  // - When running on live hosts (Vercel, Netlify, custom domain): set to null so it immediately uses localStorage
-  const isLocalHost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-  const API_BASE = isLocalHost ? (window.location.origin || 'http://localhost:3000') : null;
+  // - If running directly on backend server (port 3000): use window.location.origin
+  // - If running via Live Server (port 5500, etc.), Vite, or file:// protocol: route to http://localhost:3000
+  // - If deployed on production domain: use window.location.origin
+  function getApiBaseUrl() {
+    try {
+      const loc = window.location;
+      if (!loc || !loc.href) return 'http://localhost:3000';
+      if (loc.port === '3000') {
+        return loc.origin;
+      }
+      const isLocal = !loc.hostname || loc.hostname === 'localhost' || loc.hostname === '127.0.0.1' || loc.protocol === 'file:';
+      if (isLocal) {
+        const host = loc.hostname === '127.0.0.1' ? '127.0.0.1' : 'localhost';
+        return `http://${host}:3000`;
+      }
+      return loc.origin || '';
+    } catch (e) {
+      return 'http://localhost:3000';
+    }
+  }
+
+  const API_BASE = getApiBaseUrl();
 
   const STORAGE_KEY_TOKEN = 'aurelia_auth_token';
   const STORAGE_KEY_USER = 'aurelia_auth_user';
@@ -54,6 +71,24 @@
       list.push(userObj);
     }
     localStorage.setItem(STORAGE_KEY_LOCAL_USERS, JSON.stringify(list));
+  }
+
+  /**
+   * Sync any local offline users from localStorage into SQLite auth.db
+   */
+  async function syncLocalUsersToDatabase() {
+    if (!API_BASE) return;
+    try {
+      const localUsers = getLocalUsers();
+      for (const u of localUsers) {
+        if (!u.email || !u.password || u.email.toLowerCase() === 'adalinea@gmail.com') continue;
+        await fetch(`${API_BASE}/api/auth/register`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name: u.name, email: u.email, password: u.password, role: u.role || 'Front Desk Supervisor' })
+        }).catch(() => {});
+      }
+    } catch (e) {}
   }
 
   // DOM Elements Cache
@@ -627,14 +662,16 @@
       role: 'Front Desk Supervisor'
     };
 
-    // 1. Try Backend API if configured
+    // 1. Try Backend API (persists into SQLite auth.db)
+    let savedToDatabase = false;
+    let serverWarning = null;
+
     if (API_BASE) {
       try {
         const res = await fetch(`${API_BASE}/api/auth/register`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ name, email, password }),
-          credentials: 'include'
+          body: JSON.stringify({ name, email, password, role: newUser.role })
         });
 
         const data = await res.json().catch(() => ({}));
@@ -644,12 +681,18 @@
           setButtonLoading('btn-register-submit', false, 'Create Staff Account');
           return false;
         }
+
+        savedToDatabase = true;
+        if (data.user && data.user.id) {
+          newUser.id = data.user.id;
+        }
       } catch (err) {
-        console.warn('Server offline during registration, saving to local store:', err);
+        console.warn('[Auth Server] Backend API unreachable at ' + API_BASE + ':', err);
+        serverWarning = 'Backend server (node server.js) is offline. Saved locally in browser session.';
       }
     }
 
-    // Always cache locally as well
+    // Always cache locally as well for offline resilience
     saveLocalUser(newUser);
 
     setButtonLoading('btn-register-submit', false, 'Create Staff Account');
@@ -659,7 +702,12 @@
     if ($('login-email')) {
       $('login-email').value = email;
     }
-    showAlert('alert-login', 'Account created successfully! Please sign in with your credentials.', 'success');
+
+    if (savedToDatabase) {
+      showAlert('alert-login', 'Staff account created and saved to auth.db! You can now sign in.', 'success');
+    } else {
+      showAlert('alert-login', serverWarning || 'Account created in local session.', 'warning');
+    }
     return false;
   }
 
@@ -1216,8 +1264,9 @@
     isAuthenticated: () => AuthState.isAuthenticated
   };
 
-  // Seed default account
+  // Seed default account & sync any local user accounts into auth.db
   getLocalUsers();
+  syncLocalUsersToDatabase();
 
   // Run initialization when DOM is ready
   if (document.readyState === 'loading') {
@@ -1225,11 +1274,13 @@
       initDOM();
       bindEvents();
       checkSession();
+      syncLocalUsersToDatabase();
     });
   } else {
     initDOM();
     bindEvents();
     checkSession();
+    syncLocalUsersToDatabase();
   }
 
 })();

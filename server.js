@@ -112,9 +112,9 @@ function parseCookies(cookieHeader) {
 
 function sendJson(res, statusCode, data, headers = {}) {
   const req = res.req;
-  const origin = (req && req.headers && req.headers['origin']) || '*';
-  const allowOrigin = origin === 'null' ? '*' : origin;
-  const allowCredentials = allowOrigin === '*' ? 'false' : 'true';
+  const origin = (req && req.headers && req.headers['origin']);
+  const allowOrigin = origin ? origin : '*';
+  const allowCredentials = origin ? 'true' : 'false';
   const body = JSON.stringify(data);
   res.writeHead(statusCode, {
     'Content-Type': 'application/json',
@@ -141,9 +141,9 @@ function getSessionToken(req) {
 const server = http.createServer((req, res) => {
   // CORS Preflight
   if (req.method === 'OPTIONS') {
-    const origin = req.headers['origin'] || '*';
-    const allowOrigin = origin === 'null' ? '*' : origin;
-    const allowCredentials = allowOrigin === '*' ? 'false' : 'true';
+    const origin = req.headers['origin'];
+    const allowOrigin = origin ? origin : '*';
+    const allowCredentials = origin ? 'true' : 'false';
     res.writeHead(204, {
       'Access-Control-Allow-Origin': allowOrigin,
       'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
