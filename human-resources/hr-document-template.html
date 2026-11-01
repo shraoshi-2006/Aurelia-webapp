@@ -435,9 +435,15 @@
       border: 1px solid #FCA311 !important;
       color: #000000 !important;
       font-weight: 700 !important;
+      font-size: 11px !important;
+      line-height: 1 !important;
+      padding: 2px 7px !important;
+      border-radius: 9999px !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: center !important;
     }
-
-    /* Primary Filled Amber Pill Button */
+/* Primary Filled Amber Pill Button */
     .btn-Aurelia-primary,
     .btn-aurelia-primary,
     .btn-finset-primary {
@@ -2376,7 +2382,7 @@
               <span class="sidebar-label">Order</span>
             </div>
             <span id="badge-pending-orders"
-              class="sidebar-badge text-[11px] px-2 py-0.5 rounded-full bg-[#FCA311] text-[#000000] font-bold">0</span>
+              class="sidebar-badge text-[11px] px-2 py-0.5 rounded-full bg-[#FCA311] text-[#000000] font-bold">2</span>
           </a>
 
           <!-- 4. Goals (Menu Items & Targets) -->
@@ -2390,7 +2396,7 @@
               <span class="sidebar-label">Menu</span>
             </div>
             <span id="badge-menu-count"
-              class="sidebar-badge text-[11px] px-2 py-0.5 rounded-full bg-[#FCA311] text-[#000000] font-bold">0</span>
+              class="sidebar-badge text-[11px] px-2 py-0.5 rounded-full bg-[#FCA311] text-[#000000] font-bold">28</span>
           </a>
 
           <!-- 5. Budget (Customers & Budgets) -->
@@ -2403,7 +2409,7 @@
               <span class="sidebar-label">Customer</span>
             </div>
             <span id="badge-customers-count"
-              class="sidebar-badge text-[11px] px-2 py-0.5 rounded-full bg-[#FCA311] text-[#000000] font-bold">0</span>
+              class="sidebar-badge text-[11px] px-2 py-0.5 rounded-full bg-[#FCA311] text-[#000000] font-bold">6</span>
           </a>
 
           <!-- 6. Human Resource Dropdown Group -->
@@ -2776,6 +2782,107 @@
             </div>
           </div>
 
+          <!-- Upload / Add Document Template Form (Aurelia Cream-White Slate Grey Card) -->
+          <div id="card-add-hr-doc-form" class="p-6 relative overflow-hidden rounded-2xl shadow-xl transition-all"
+            style="background: linear-gradient(135deg, rgba(255, 253, 248, 0.45) 0%, rgba(255, 255, 255, 0.28) 25%, #8B92A6 60%, #767D92 100%) !important; border: 1px solid rgba(255, 255, 255, 0.5) !important; box-shadow: inset 0 1.5px 2px rgba(255, 255, 255, 0.7), 0 12px 30px -6px rgba(20, 25, 40, 0.2) !important;">
+            
+            <!-- Center Watermark: Emblem Badge & Website Name (Original intact) -->
+            <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none select-none z-0 opacity-15 blur-[0.5px] transition-all">
+              <div class="w-40 h-40 sm:w-52 sm:h-52 rounded-full flex items-center justify-center mb-2.5">
+                <img src="../assets/aurelia-mark.svg" alt="Aurelia Logo Watermark" class="w-full h-full object-contain">
+              </div>
+              <h2 class="text-3xl sm:text-4xl font-extrabold text-[#14213D] tracking-[0.25em] leading-none uppercase"
+                style="font-family: 'Cormorant Garamond', Georgia, serif;">AURELIA</h2>
+              <div class="w-16 h-[2px] bg-[#FCA311] my-2 shadow-xs"></div>
+              <span class="text-xs sm:text-sm font-bold text-[#14213D] tracking-[0.25em] uppercase">
+                HOTEL &amp; RESTAURANT
+              </span>
+            </div>
+
+            <!-- Foreground Content Layer -->
+            <div class="relative z-10">
+              <div class="flex items-center justify-between pb-3.5 mb-4 border-b border-slate-300/60 dark:border-white/20">
+                <div class="flex items-center space-x-2.5">
+                  <div class="w-8 h-8 rounded-full bg-[#14213D] text-[#FCA311] flex items-center justify-center font-bold text-xs shadow-xs">
+                    <svg class="w-4 h-4 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m3.75 9v6m3-3H9m1.5-12H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
+                    </svg>
+                  </div>
+                  <div>
+                    <h3 class="text-sm font-bold text-slate-900 tracking-tight">Upload Document Template</h3>
+                    <p class="text-[11px] text-slate-700 font-medium">Add contract agreements, policies & official hotel notice templates</p>
+                  </div>
+                </div>
+
+                <!-- Top Right Pill Badge (Kept exactly as requested) -->
+                <span class="px-4 py-1.5 rounded-full text-xs font-bold tracking-widest text-white border border-white/40 flex items-center space-x-2 shadow-sm transition-all"
+                  style="background: linear-gradient(135deg, rgba(255, 255, 255, 0.32) 0%, #686E82 40%, #565C70 100%); box-shadow: inset 0 1px 1.5px rgba(255, 255, 255, 0.7), 0 3px 8px -2px rgba(60, 65, 80, 0.3);">
+                  <span class="w-2 h-2 rounded-full bg-[#FCA311] shadow-xs"></span>
+                  <span>AURELIA HR</span>
+                </span>
+              </div>
+
+              <form id="form-upload-hr-doc" class="space-y-4">
+                <!-- Grid Row 1: Title & Description -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div class="space-y-1.5">
+                    <label for="hr-doc-input-title" class="block text-xs font-bold text-slate-900">
+                      Title <span class="text-[#FCA311]">*</span>
+                    </label>
+                    <input type="text" id="hr-doc-input-title" required
+                      class="w-full text-xs py-2.5 px-3.5 font-medium rounded-xl bg-white text-slate-900 placeholder:text-slate-400 border border-white/60 shadow-sm focus:outline-none focus:ring-2 focus:ring-[#FCA311]"
+                      placeholder="Add name">
+                  </div>
+
+                  <div class="space-y-1.5">
+                    <label for="hr-doc-input-desc" class="block text-xs font-bold text-slate-900">
+                      Description <span class="text-[#FCA311]">*</span>
+                    </label>
+                    <input type="text" id="hr-doc-input-desc" required
+                      class="w-full text-xs py-2.5 px-3.5 font-medium rounded-xl bg-white text-slate-900 placeholder:text-slate-400 border border-white/60 shadow-sm focus:outline-none focus:ring-2 focus:ring-[#FCA311]"
+                      placeholder="Enter description">
+                  </div>
+                </div>
+
+                <!-- Grid Row 2: File & Type -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div class="space-y-1.5">
+                    <label for="hr-doc-input-file" class="block text-xs font-bold text-slate-900">
+                      File <span class="text-[#FCA311]">*</span>
+                    </label>
+                    <input type="file" id="hr-doc-input-file" required
+                      class="w-full text-xs py-2 px-3 rounded-xl bg-white text-slate-900 border border-white/60 shadow-sm focus:outline-none focus:ring-2 focus:ring-[#FCA311] file:mr-3 file:py-1 file:px-3.5 file:rounded-full file:border-0 file:text-[11px] file:font-bold file:bg-[#14213D] file:text-[#FCA311] file:cursor-pointer cursor-pointer">
+                  </div>
+
+                  <div class="space-y-1.5">
+                    <label for="hr-doc-input-type" class="block text-xs font-bold text-slate-900">
+                      Type <span class="text-[#FCA311]">*</span>
+                    </label>
+                    <select id="hr-doc-input-type" required
+                      class="w-full text-xs py-2.5 px-3.5 font-semibold rounded-xl bg-white text-slate-900 border border-white/60 shadow-sm focus:outline-none focus:ring-2 focus:ring-[#FCA311] cursor-pointer">
+                      <option value="" disabled selected>Select type</option>
+                      <option value="employment">Employment Contract</option>
+                      <option value="compliance">Compliance & NDA</option>
+                      <option value="policies">Policies & SOPs</option>
+                      <option value="letters">Letters & Notices</option>
+                    </select>
+                  </div>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="pt-2 flex justify-center">
+                  <button type="submit" id="btn-submit-hr-doc"
+                    class="btn-Aurelia-primary text-xs py-2.5 px-10 font-bold flex items-center justify-center space-x-2 shadow-md shadow-[#FCA311]/25 hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer">
+                    <svg class="w-4 h-4 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                    </svg>
+                    <span>Submit</span>
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+
           <!-- HR Document Metrics Strip -->
           <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
             <div class="Aurelia-card p-4 flex flex-col justify-between">
@@ -2831,13 +2938,34 @@
             </div>
           </div>
 
-          <!-- Templates Grid -->
-          <div id="hr-templates-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            <!-- Rendered by main.js -->
-          </div>
+          <!-- Document Templates Table Card -->
+          <div class="Aurelia-card p-0 overflow-hidden">
+            <div class="overflow-x-auto">
+              <table class="w-full text-xs text-left">
+                <thead class="bg-slate-50 dark:bg-slate-800 text-slate-500 font-semibold text-[11px] border-b border-slate-200 dark:border-slate-700">
+                  <tr>
+                    <th class="py-3 px-4">Document Code & Title</th>
+                    <th class="py-3 px-4">Category</th>
+                    <th class="py-3 px-4">Description</th>
+                    <th class="py-3 px-4">Pages & Format</th>
+                    <th class="py-3 px-4">Last Updated</th>
+                    <th class="py-3 px-4 text-right">Action</th>
+                  </tr>
+                </thead>
+                <tbody id="hr-templates-tbody" class="divide-y divide-slate-100 dark:divide-slate-800">
+                  <!-- Rendered row-wise by main.js -->
+                </tbody>
+              </table>
+            </div>
 
-          <div id="hr-templates-empty" class="Aurelia-card p-12 text-center text-xs text-slate-400 hidden">
-            No document templates found matching your search.
+            <div id="hr-templates-empty" class="p-10 text-center text-xs text-slate-400 hidden">
+              No document templates found matching your search.
+            </div>
+
+            <div class="p-3.5 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs text-slate-400">
+              <span id="hr-templates-count-label">Showing 12 of 12 templates</span>
+              <span>Hospitality Operational Legal Standards</span>
+            </div>
           </div>
         </section>
 
