@@ -5206,18 +5206,18 @@ $(document).ready(function () {
     const $grid = $('#hr-templates-grid');
     if (!$tbody.length && !$grid.length) return;
 
-<<<<<<< HEAD
     if ($('#select-hr-doc-category').length) {
       currentHrDocCategory = $('#select-hr-doc-category').val() || 'all';
     }
-=======
-    // Update total template counters in metrics strip and filter tabs
-    $('#hr-total-templates-stat').text(`${HR_TEMPLATES.length} Documents`);
+
+    // Update total template counters in metrics strip and filter tabs if present
+    if ($('#hr-total-templates-stat').length) {
+      $('#hr-total-templates-stat').text(`${HR_TEMPLATES.length} Documents`);
+    }
     $('.hr-doc-filter-btn[data-category="all"]').text(`All Templates (${HR_TEMPLATES.length})`);
 
     const isHrDocTemplatePage = window.location.pathname.includes('hr-document-template');
     const isHrEmployeeListPage = window.location.pathname.includes('hr-employee-list');
->>>>>>> d2b53eb99ad87d569462a2d5d23cfaab0fa4d8fb
 
     const query = $.trim($('#input-search-hr-docs').val()).toLowerCase();
     const filtered = HR_TEMPLATES.filter(tpl => {
