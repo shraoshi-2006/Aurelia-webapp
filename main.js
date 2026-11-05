@@ -459,6 +459,23 @@ $(document).ready(function () {
   }
 
   function showToast(message, type = 'info') {
+    let iconType = 'info';
+    if (type === 'success') iconType = 'success';
+    else if (type === 'error' || type === 'danger') iconType = 'error';
+    else if (type === 'warning' || type === 'warn') iconType = 'warning';
+    else if (type === 'info') iconType = 'info';
+
+    if (typeof Swal !== 'undefined') {
+      Swal.fire({
+        position: 'center',
+        icon: iconType,
+        title: message,
+        showConfirmButton: false,
+        timer: 1500
+      });
+      return;
+    }
+
     const toastId = 'toast-' + Date.now();
     const isError = type === 'error';
     const typeClass = isError ? 'toast-error text-[#DC2626]' : 'toast-default text-black';
@@ -481,6 +498,7 @@ $(document).ready(function () {
       setTimeout(() => $elem.remove(), 250);
     }, 3200);
   }
+  window.showToast = showToast;
 
   function getStatusBadge(status) {
     status = status || 'Pending';
@@ -4841,7 +4859,13 @@ $(document).ready(function () {
       // 6. Close modal & show SweetAlert Saved!
       $('#modal-user-profile').addClass('hidden');
       if (typeof Swal !== 'undefined') {
-        Swal.fire("Saved!", "", "success");
+        Swal.fire({
+          position: "center",
+          icon: "success",
+          title: "Your work has been saved",
+          showConfirmButton: false,
+          timer: 1500
+        });
       } else {
         showToast('Profile and photo updated successfully!', 'success');
       }
@@ -4861,7 +4885,13 @@ $(document).ready(function () {
         } else if (result.isDenied) {
           $('#modal-user-profile').addClass('hidden');
           currentPendingAvatar = null;
-          Swal.fire("Changes are not saved", "", "info");
+          Swal.fire({
+            position: "center",
+            icon: "info",
+            title: "Changes are not saved",
+            showConfirmButton: false,
+            timer: 1500
+          });
         }
       });
     } else {
@@ -5131,6 +5161,10 @@ $(document).ready(function () {
     const $grid = $('#hr-templates-grid');
     if (!$tbody.length && !$grid.length) return;
 
+    if ($('#select-hr-doc-category').length) {
+      currentHrDocCategory = $('#select-hr-doc-category').val() || 'all';
+    }
+
     const query = $.trim($('#input-search-hr-docs').val()).toLowerCase();
     const filtered = HR_TEMPLATES.filter(tpl => {
       const matchCat = (currentHrDocCategory === 'all' || tpl.category === currentHrDocCategory);
@@ -5227,11 +5261,19 @@ $(document).ready(function () {
     }
   }
 
-  // Filter Buttons for HR Documents
+  // Category Dropdown & Filter Buttons for HR Documents
+  $(document).on('change', '#select-hr-doc-category', function () {
+    currentHrDocCategory = $(this).val() || 'all';
+    renderHrDocumentsSection();
+  });
+
   $(document).on('click', '.hr-doc-filter-btn', function () {
     $('.hr-doc-filter-btn').removeClass('active bg-[#14213D] text-white shadow-xs').addClass('text-slate-600 dark:text-slate-400 hover:text-slate-900');
     $(this).addClass('active bg-[#14213D] text-white shadow-xs').removeClass('text-slate-600 dark:text-slate-400 hover:text-slate-900');
     currentHrDocCategory = $(this).data('category') || 'all';
+    if ($('#select-hr-doc-category').length) {
+      $('#select-hr-doc-category').val(currentHrDocCategory);
+    }
     renderHrDocumentsSection();
   });
 

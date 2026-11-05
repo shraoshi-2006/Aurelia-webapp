@@ -1351,8 +1351,21 @@
     /* Deep Navy (#14213d) Theme with Crisp White Card                          */
     /* ========================================================================= */
     #auth-container {
-      background: radial-gradient(circle at 50% 50%, #E2E8F0 0%, #CBD5E1 55%, #94A3B8 100%) !important;
-      background-color: #CBD5E1 !important;
+      position: relative !important;
+      background: #f0f4f9 !important;
+      background-color: #f0f4f9 !important;
+    }
+
+    .auth-bg-pattern {
+      position: absolute;
+      inset: 0;
+      background-image: url('../assets/auth-bg-pattern.jpg');
+      background-repeat: repeat;
+      background-position: center;
+      background-size: 500px 500px;
+      opacity: 0.5;
+      pointer-events: none;
+      z-index: 0;
     }
 
     #auth-card-frame {
@@ -1362,14 +1375,14 @@
       max-width: 860px !important;
       background-color: #FFFFFF !important;
       border: 2px solid #14213d !important;
-      box-shadow: 0 0 35px rgba(20, 33, 61, 0.35), 0 25px 50px -12px rgba(20, 33, 61, 0.2) !important;
+      box-shadow: none !important;
       border-radius: 24px !important;
-      transition: border-color 0.4s ease, box-shadow 0.4s ease, min-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: border-color 0.4s ease, min-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     #auth-card-frame:hover {
       border-color: #1f3660 !important;
-      box-shadow: 0 0 45px rgba(20, 33, 61, 0.48), 0 30px 60px -12px rgba(20, 33, 61, 0.25) !important;
+      box-shadow: none !important;
     }
 
     /* Iconic Sweeping Curved Shapes from the Instagram Reel */
@@ -1381,7 +1394,7 @@
       height: 130%;
       background: linear-gradient(135deg, #14213d 0%, #1f3660 48%, #0b1324 100%);
       border-left: 3px solid rgba(255, 255, 255, 0.42);
-      box-shadow: -10px 0 35px rgba(20, 33, 61, 0.55), inset 0 0 45px rgba(0, 0, 0, 0.25);
+      box-shadow: none !important;
       border-radius: 65px;
       transform: rotate(10deg) skewY(38deg);
       transform-origin: bottom right;
@@ -1398,7 +1411,7 @@
       height: 130%;
       background: linear-gradient(315deg, #14213d 0%, #1f3660 48%, #0b1324 100%);
       border-right: 3px solid rgba(255, 255, 255, 0.42);
-      box-shadow: 10px 0 35px rgba(20, 33, 61, 0.55), inset 0 0 45px rgba(0, 0, 0, 0.25);
+      box-shadow: none !important;
       border-radius: 65px;
       transform: rotate(0deg) skewY(0deg) translate(-120%, 0);
       transform-origin: bottom left;
@@ -1756,20 +1769,16 @@
   <!-- 1. AUTHENTICATION CONTAINER (Split 2-Column Light Themed System)     -->
   <!-- =================================================================== -->
   <div id="auth-container"
-    class="min-h-screen h-[100dvh] bg-[#CBD5E1] flex flex-col justify-center items-center p-3 sm:p-5 lg:p-6 hidden relative z-30 overflow-y-auto overflow-x-hidden"
-    style="background: radial-gradient(circle at 50% 50%, #D8E0EA 0%, #CBD5E1 55%, #B4C0D0 100%) !important;">
+    class="min-h-screen h-[100dvh] bg-[#f0f4f9] flex flex-col justify-center items-center p-3 sm:p-5 lg:p-6 hidden relative z-30 overflow-y-auto overflow-x-hidden">
 
-    <!-- Ambient Studio Gray Backdrop Accents -->
-    <div class="absolute -top-32 -left-32 w-96 h-96 bg-slate-400/25 rounded-full blur-3xl pointer-events-none"></div>
-    <div class="absolute -bottom-32 -right-32 w-96 h-96 bg-slate-500/20 rounded-full blur-3xl pointer-events-none">
-    </div>
-    <div
-      class="absolute inset-0 bg-[radial-gradient(#94A3B8_1px,transparent_1px)] [background-size:24px_24px] opacity-25 pointer-events-none">
+    <!-- Geometric Low-Poly Pattern Background (0.5 opacity) -->
+    <div class="auth-bg-pattern absolute inset-0 pointer-events-none z-0"
+      style="background-image: url('../assets/auth-bg-pattern.jpg'); background-repeat: repeat; background-position: center; background-size: 500px 500px; opacity: 0.5;">
     </div>
 
     <!-- Unified Authentication Card (Light Theme with Reel-style Curved Shape Animation) -->
     <div id="auth-card-frame"
-      class="my-auto w-full max-w-[860px] bg-white rounded-3xl border-2 border-[#14213d] shadow-2xl shadow-[#14213d]/20 p-4 sm:px-8 sm:py-5 flex flex-col justify-between relative z-10 transition-all duration-300 view-login overflow-hidden">
+      class="my-auto w-full max-w-[860px] bg-white rounded-3xl border-2 border-[#14213d] shadow-none p-4 sm:px-8 sm:py-5 flex flex-col justify-between relative z-10 transition-all duration-300 view-login overflow-hidden">
 
         <!-- Reel-style Animated Curved Shapes (Deep Navy #14213d) -->
         <div class="card-curved-shape pointer-events-none" aria-hidden="true"></div>
