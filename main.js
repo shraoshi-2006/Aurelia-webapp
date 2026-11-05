@@ -503,6 +503,19 @@ $(document).ready(function () {
   function getStatusBadge(status) {
     status = status || 'Pending';
     switch (status.toLowerCase()) {
+      case 'active':
+        return `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-[#15803d] text-white shadow-2xs">Active</span>`;
+      case 'not active':
+      case 'not-active':
+      case 'inactive':
+        return `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-[#b91c1c] text-white shadow-2xs">${escapeHtml(status)}</span>`;
+      case 'on duty':
+      case 'onduty':
+        return `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-[#15803d] text-white shadow-2xs">On Duty</span>`;
+      case 'on leave':
+      case 'onleave':
+      case 'leave':
+        return `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-[#b91c1c] text-white shadow-2xs">On Leave</span>`;
       case 'paid':
       case 'completed':
         return `<span class="px-2.5 py-0.5 text-xs font-semibold rounded-full bg-[#ECFDF3] text-[#12B76A] dark:bg-emerald-950/50 dark:text-emerald-300">${escapeHtml(status)}</span>`;
@@ -955,10 +968,14 @@ $(document).ready(function () {
               </span>
             </td>
             <td class="py-2.5 sm:py-3 px-2 whitespace-nowrap text-center">
-              <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-50 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400 border border-emerald-200/60 dark:border-emerald-800/40">
-                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 mr-1 animate-pulse"></span>
-                Active
-              </span>
+              ${(dept.status === 'Inactive' || dept.status === 'Not active' || dept.status === 'not-active')
+                ? `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-[#b91c1c] text-white shadow-2xs">
+                    Not active
+                  </span>`
+                : `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-[#15803d] text-white shadow-2xs">
+                    Active
+                  </span>`
+              }
             </td>
             <td class="py-2.5 sm:py-3 px-3 whitespace-nowrap text-right">
               <div class="inline-flex items-center justify-end space-x-1.5">
@@ -983,10 +1000,14 @@ $(document).ready(function () {
             <div>
               <div class="flex items-center justify-between mb-1.5">
                 <span class="px-2 py-0.5 rounded-md text-[10px] font-mono font-bold bg-[#14213D] text-[#FCA311]">${dept.code}</span>
-                <span class="inline-flex items-center text-[10px] font-semibold text-emerald-600 dark:text-emerald-400">
-                  <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 mr-1 animate-pulse"></span>
-                  Active
-                </span>
+                ${(dept.status === 'Inactive' || dept.status === 'Not active' || dept.status === 'not-active')
+                  ? `<span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold bg-[#b91c1c] text-white shadow-2xs">
+                      Not active
+                    </span>`
+                  : `<span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold bg-[#15803d] text-white shadow-2xs">
+                      Active
+                    </span>`
+                }
               </div>
               <h4 class="text-xs font-bold text-slate-900 dark:text-white group-hover:text-[#FCA311] transition-colors leading-snug">
                 ${dept.name}
@@ -2387,18 +2408,16 @@ $(document).ready(function () {
         const isOnDuty = s.status === 'On Duty';
 
         const statusPill = isOnDuty
-          ? `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-[#ECFDF3] text-[#12B76A] dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-300/40">
-              <span class="w-1.5 h-1.5 rounded-full bg-[#12B76A] mr-1.5 animate-pulse"></span>
+          ? `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-[#15803d] text-white shadow-2xs">
               On Duty
             </span>`
-          : `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-amber-50 text-amber-700 dark:bg-amber-950/60 dark:text-amber-300 border border-amber-300/40" title="${escapeHtml(s.leaveReason || 'On Leave')}">
-              <span class="w-1.5 h-1.5 rounded-full bg-amber-500 mr-1.5"></span>
-              On Leave (${escapeHtml(s.leaveReason || 'Leave')})
+          : `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-[#b91c1c] text-white shadow-2xs" title="${escapeHtml(s.leaveReason || 'On Leave')}">
+              On Leave
             </span>`;
 
         const avatarDot = isOnDuty
-          ? '<span class="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-[#12B76A] border-2 border-white dark:border-slate-800 rounded-full"></span>'
-          : '<span class="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-amber-500 border-2 border-white dark:border-slate-800 rounded-full"></span>';
+          ? '<span class="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-[#15803d] border-2 border-white dark:border-slate-800 rounded-full"></span>'
+          : '<span class="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-[#b91c1c] border-2 border-white dark:border-slate-800 rounded-full"></span>';
 
         $tbody.append(`
           <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors">
@@ -5292,7 +5311,14 @@ $(document).ready(function () {
               </span>
             </td>
             <td class="py-3.5 px-4 align-top whitespace-nowrap">
-              <span class="text-slate-500 dark:text-slate-400 font-mono text-[11px]">${statusDisplay}</span>
+              ${(statusDisplay === 'Not active' || statusDisplay === 'not-active' || statusDisplay === 'Inactive')
+                ? `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-[#b91c1c] text-white shadow-2xs" title="${escapeHtml(tpl.updated || '')}">
+                    Not active
+                  </span>`
+                : `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-[#15803d] text-white shadow-2xs" title="${escapeHtml(tpl.updated || '')}">
+                    Active
+                  </span>`
+              }
             </td>
             <td class="py-3.5 px-4 align-top text-right whitespace-nowrap">
               <button type="button" class="btn-preview-hr-doc btn-Aurelia-secondary text-xs py-1.5 px-3.5 inline-flex items-center space-x-1.5 shadow-xs" data-id="${tpl.id}">
@@ -5327,7 +5353,7 @@ $(document).ready(function () {
             </div>
 
             <div class="pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-[11px] text-slate-400">
-              <span class="font-medium">${tpl.pages} • ${statusDisplay}</span>
+              <span class="font-medium flex items-center gap-1.5">${tpl.pages} • ${(statusDisplay === 'Not active' || statusDisplay === 'not-active' || statusDisplay === 'Inactive') ? '<span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold bg-[#b91c1c] text-white shadow-2xs">Not active</span>' : '<span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold bg-[#15803d] text-white shadow-2xs">Active</span>'}</span>
               <button type="button" class="btn-preview-hr-doc btn-Aurelia-secondary text-xs py-1 px-3" data-id="${tpl.id}">
                 Preview & Use
               </button>
@@ -5516,9 +5542,7 @@ $(document).ready(function () {
               ${escapeHtml(s.shift)}
             </td>
             <td class="py-3 px-4 text-center">
-              <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold ${isOnDuty ? 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 border border-emerald-200/50' : 'bg-amber-50 dark:bg-amber-950/40 text-amber-700 dark:text-amber-400 border border-amber-200/50'
-          }">
-                <span class="w-1.5 h-1.5 rounded-full ${isOnDuty ? 'bg-emerald-500' : 'bg-amber-500'} mr-1.5"></span>
+              <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold ${isOnDuty ? 'bg-[#15803d] text-white' : 'bg-[#b91c1c] text-white'} shadow-2xs">
                 ${escapeHtml(s.status)}
               </span>
             </td>
