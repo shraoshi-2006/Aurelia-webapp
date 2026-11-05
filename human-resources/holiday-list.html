@@ -762,13 +762,16 @@
       border-radius: 12px !important;
     }
 
-    #btn-sidebar-help,
-    #btn-sidebar-logout {
+    #btn-sidebar-help {
+      display: inline-flex !important;
+      align-items: center !important;
+      height: 42px !important;
+      border-radius: 14px !important;
       color: #E2E8F0 !important;
+      transition: all 0.2s ease !important;
     }
 
-    #btn-sidebar-help svg,
-    #btn-sidebar-logout svg {
+    #btn-sidebar-help svg {
       stroke: rgba(255, 255, 255, 0.75) !important;
       transition: stroke 0.18s ease;
     }
@@ -782,13 +785,38 @@
       stroke: #FCA311 !important;
     }
 
-    #btn-sidebar-logout:hover {
+    #btn-sidebar-logout {
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      width: 42px !important;
+      height: 42px !important;
+      border-radius: 14px !important;
+      background: rgba(244, 63, 94, 0.22) !important;
+      border: 1px solid rgba(244, 63, 94, 0.25) !important;
       color: #FFA39E !important;
-      background: rgba(244, 63, 94, 0.15) !important;
+      transition: all 0.2s ease !important;
+    }
+
+    #btn-sidebar-logout svg {
+      stroke: #FFA39E !important;
+      transition: stroke 0.18s ease, transform 0.18s ease;
+    }
+
+    #btn-sidebar-logout:hover {
+      background: rgba(244, 63, 94, 0.35) !important;
+      border-color: rgba(244, 63, 94, 0.45) !important;
+      color: #FFFFFF !important;
     }
 
     #btn-sidebar-logout:hover svg {
-      stroke: #FFA39E !important;
+      stroke: #FFFFFF !important;
+      transform: scale(1.05);
+    }
+
+    #app-sidebar.is-collapsed #sidebar-bottom-row {
+      flex-direction: column !important;
+      gap: 10px !important;
     }
 
     /* ========================================================================= */
@@ -2650,30 +2678,32 @@
       </div>
 
       <!-- Bottom Sidebar Controls (Help, Log out - Fixed at bottom) -->
-      <div class="p-6 pt-3 space-y-3 sidebar-pad flex-shrink-0 border-t border-white/10" id="sidebar-bottom-controls">
+      <div class="p-6 pt-3 pb-5 sidebar-pad flex-shrink-0 border-t border-white/10" id="sidebar-bottom-controls">
+        <div class="flex items-center space-x-2.5 w-full" id="sidebar-bottom-row">
 
-        <!-- Help Action -->
-        <button type="button" id="btn-sidebar-help"
-          class="w-full flex items-center space-x-3.5 px-4 py-2.5 rounded-xl text-[#14213D] hover:text-[#000000] hover:bg-white text-sm font-semibold transition-all text-left"
-          title="Support">
-          <svg class="w-5 h-5 stroke-current flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.8">
-            <path stroke-linecap="round" stroke-linejoin="round"
-              d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M12 18h.008v.008H12V18z" />
-            <circle cx="12" cy="12" r="9" />
-          </svg>
-          <span class="sidebar-label">Support</span>
-        </button>
+          <!-- Log out Action: Red background icon at Left Bottom -->
+          <button type="button" id="btn-sidebar-logout"
+            class="flex items-center justify-center w-[42px] h-[42px] rounded-2xl bg-rose-500/20 border border-rose-500/30 text-[#FFA39E] hover:bg-rose-500/35 hover:text-white transition-all cursor-pointer flex-shrink-0"
+            title="Log out" aria-label="Log out">
+            <svg class="w-5 h-5 stroke-current flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.8">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75" />
+            </svg>
+          </button>
 
-        <!-- Log out Action -->
-        <button type="button" id="btn-sidebar-logout"
-          class="w-full flex items-center space-x-3.5 px-4 py-2.5 rounded-xl text-[#14213D] hover:text-[#000000] hover:bg-white text-sm font-semibold transition-all text-left"
-          title="Log out">
-          <svg class="w-5 h-5 stroke-current flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.8">
-            <path stroke-linecap="round" stroke-linejoin="round"
-              d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75" />
-          </svg>
-          <span class="sidebar-label">Log out</span>
-        </button>
+          <!-- Support Action: Beside the Logout Icon -->
+          <button type="button" id="btn-sidebar-help"
+            class="flex-1 flex items-center space-x-2.5 px-3.5 h-[42px] rounded-2xl text-slate-300 hover:text-white hover:bg-white/10 text-sm font-semibold transition-all text-left"
+            title="Support">
+            <svg class="w-5 h-5 stroke-current flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.8">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M12 18h.008v.008H12V18z" />
+              <circle cx="12" cy="12" r="9" />
+            </svg>
+            <span class="sidebar-label">Support</span>
+          </button>
+
+        </div>
       </div>
 
     </aside>
@@ -2893,7 +2923,7 @@
   <!-- Authentication Controller -->
   <script src="../auth.js"></script>
   <!-- Main JavaScript Logic -->
-  <script src="../main.js"></script>
+  <script src="../main.js?v=20261106_v7"></script>
 </body>
 
 </html>

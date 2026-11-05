@@ -2474,163 +2474,181 @@ $(document).ready(function () {
   $('#modal-staff-search').on('input keyup', function () { renderModalStaffList(false); });
   $('#modal-staff-filter-dept').on('change', function () { renderModalStaffList(true); });
 
-  // Recent Transactions Table in Dashboard (Filtered by Payment Method, capped at last 5)
-  function renderDashboardRecentTransactions(bills) {
+  // User Login Sessions & Device Activity in Dashboard (Filtered by Device Type, capped at 5)
+  function renderDashboardRecentTransactions() {
     const $tbody = $('#dashboard-recent-trans-tbody');
     if (!$tbody.length) return;
     $tbody.empty();
 
-    const selectedMethod = $('#select-trans-payment-method').val() || 'all';
-    bills = bills || Storage.get(STORAGE_KEYS.BILLS, DEFAULT_BILLS);
+    const selectedFilter = ($('#select-trans-payment-method').val() || 'all').toLowerCase();
+    const activeUser = (window.Auth && window.Auth.state && window.Auth.state.currentUser) || {
+      name: 'Adaline Lively',
+      email: 'adalinea@gmail.com',
+      role: 'Front Desk Supervisor'
+    };
 
-    // 1. Hotel Operating Invoices (Revenue)
-    const billTransactions = (bills || []).map(b => {
-      const dt = new Date(b.date);
-      const timestamp = !isNaN(dt.getTime()) ? dt.getTime() : 0;
-      const dateStr = !isNaN(dt.getTime())
-        ? dt.toLocaleDateString('en-GB', { day: '2-digit', month: 'short' }) + ' ' + dt.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false })
-        : b.date;
+    // Calculate real session elapsed time on website
+    let sessionStart = sessionStorage.getItem('aurelia_session_start_time');
+    if (!sessionStart) {
+      sessionStart = Date.now() - ((3 * 60 + 42) * 60 * 1000); // 3h 42m initial baseline
+      sessionStorage.setItem('aurelia_session_start_time', sessionStart);
+    }
+    const elapsedMs = Math.max(0, Date.now() - parseInt(sessionStart, 10));
+    const totalMinutes = Math.floor(elapsedMs / (60 * 1000));
+    const hours = Math.floor(totalMinutes / 60);
+    const mins = totalMinutes % 60;
+    const currentActiveTimeStr = hours > 0 ? `${hours} hrs ${mins} mins` : `${mins} mins`;
 
-      let methodLabel = 'Cash Counter';
-      let methodType = 'Cash';
-      const rawMethod = (b.paymentMethod || '').trim().toLowerCase();
-      if (rawMethod === 'card' || rawMethod.includes('card') || rawMethod.includes('visa') || rawMethod.includes('mastercard')) {
-        methodLabel = 'VISA **4912';
-        methodType = 'Card';
-      } else if (rawMethod === 'upi' || rawMethod.includes('upi') || rawMethod.includes('qr')) {
-        methodLabel = 'UPI / QR';
-        methodType = 'UPI';
-      } else if (rawMethod === 'cash') {
-        methodLabel = 'Cash Counter';
-        methodType = 'Cash';
-      }
+    // Detect browser/device
+    let currentDeviceName = 'Front Desk PC (Win 11 / Chrome)';
+    let currentDeviceType = 'Desktop';
+    const ua = (navigator.userAgent || '').toLowerCase();
+    if (/mobile|android|iphone/i.test(ua)) {
+      currentDeviceName = 'Mobile Terminal (Android / Chrome)';
+      currentDeviceType = 'Mobile';
+    } else if (/tablet|ipad/i.test(ua)) {
+      currentDeviceName = 'Manager iPad Pro (iPadOS / Safari)';
+      currentDeviceType = 'Tablet';
+    } else if (/macintosh|mac os x/i.test(ua)) {
+      currentDeviceName = 'Concierge iMac (macOS / Safari)';
+      currentDeviceType = 'Desktop';
+    }
 
-      const firstCat = (b.items && b.items[0] && b.items[0].category) || 'Cafe & Dining';
-
-      return {
-        timestamp: timestamp,
-        date: dateStr,
-        amount: Number(b.grandTotal) || 0,
-        name: b.customerName || 'Front Desk Guest',
-        icon: 'hotel',
-        method: methodLabel,
-        paymentMethodType: methodType,
-        category: firstCat,
-        isIncome: true
-      };
-    });
-
-    // 2. Demo Operations & Expense Transactions
-    const staticRows = [
+    const sessions = [
       {
-        timestamp: new Date('2026-10-27T09:00:00').getTime(),
-        date: '27 Jul 9:00',
-        amount: 80,
-        name: 'Yaposhka',
-        icon: 'yaposhka',
-        method: 'Mastercard **2154',
-        paymentMethodType: 'Card',
-        category: 'Cafe & Restaurants',
-        isIncome: false
+        id: 'EMP-2026-01',
+        name: activeUser.name || 'Adaline Lively',
+        role: activeUser.role || 'Front Desk Supervisor',
+        avatarBg: 'bg-[#14213D] dark:bg-[#FCA311] text-white dark:text-[#14213D]',
+        initials: (activeUser.name || 'Adaline Lively').split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase(),
+        email: activeUser.email || 'adalinea@gmail.com',
+        phone: '+91 98450 11201',
+        deviceName: currentDeviceName,
+        deviceType: currentDeviceType,
+        timeSpent: currentActiveTimeStr,
+        isLive: true
       },
       {
-        timestamp: new Date('2026-10-26T15:00:00').getTime(),
-        date: '26 Jul 15:00',
-        amount: 150,
-        name: 'Reserved',
-        icon: 'reserved',
-        method: 'Mastercard **2154',
-        paymentMethodType: 'Card',
-        category: 'Shopping',
-        isIncome: false
+        id: 'EMP-2026-04',
+        name: 'Vikramaditya Reddy',
+        role: 'General Manager',
+        avatarBg: 'bg-blue-600 text-white',
+        initials: 'VR',
+        email: 'vikram.reddy@techcorp.in',
+        phone: '+91 97412 34567',
+        deviceName: 'Executive iMac 27" (macOS / Safari)',
+        deviceType: 'Desktop',
+        timeSpent: '2 hrs 15 mins',
+        isLive: true
       },
       {
-        timestamp: new Date('2026-10-25T12:30:00').getTime(),
-        date: '25 Jul 12:30',
-        amount: 10,
-        name: 'YouTube',
-        icon: 'youtube',
-        method: 'VISA **3254',
-        paymentMethodType: 'Card',
-        category: 'Subscription',
-        isIncome: false
+        id: 'EMP-2026-07',
+        name: 'Priya Sundaram',
+        role: 'Guest Relations Officer',
+        avatarBg: 'bg-purple-600 text-white',
+        initials: 'PS',
+        email: 'priya.s@aureliahotel.com',
+        phone: '+91 98112 45678',
+        deviceName: 'Reception iPad Pro (iPadOS / Safari)',
+        deviceType: 'Tablet',
+        timeSpent: '1 hr 45 mins',
+        isLive: false
+      },
+      {
+        id: 'EMP-2026-12',
+        name: 'Rohan Desai',
+        role: 'Night Auditor',
+        avatarBg: 'bg-slate-700 text-white dark:bg-slate-300 dark:text-slate-900',
+        initials: 'RD',
+        email: 'rohan.d@aureliahotel.com',
+        phone: '+91 98200 55189',
+        deviceName: 'Back Office PC #04 (Win 11 / Edge)',
+        deviceType: 'Desktop',
+        timeSpent: '58 mins',
+        isLive: false
+      },
+      {
+        id: 'EMP-2026-19',
+        name: 'Kevin Peterson',
+        role: 'F&B Service Captain',
+        avatarBg: 'bg-emerald-600 text-white',
+        initials: 'KP',
+        email: 'kevin.p@aureliahotel.com',
+        phone: '+91 99012 33456',
+        deviceName: 'POS Handheld Dev #02 (Android 14)',
+        deviceType: 'Mobile',
+        timeSpent: '24 mins',
+        isLive: false
       }
     ];
 
-    // Combine all records
-    let allTransactions = [...billTransactions, ...staticRows];
-
-    // Filter by selected payment method
-    if (selectedMethod !== 'all') {
-      allTransactions = allTransactions.filter(t => t.paymentMethodType.toLowerCase() === selectedMethod.toLowerCase());
+    let filtered = sessions;
+    if (selectedFilter !== 'all') {
+      filtered = sessions.filter(s => s.deviceType.toLowerCase() === selectedFilter);
     }
 
-    // Sort by timestamp descending (most recent first)
-    allTransactions.sort((a, b) => b.timestamp - a.timestamp);
-
-    // Strictly limit to the LAST 5 TRANSACTIONS
-    const last5Transactions = allTransactions.slice(0, 5);
-
-    if (last5Transactions.length === 0) {
+    if (filtered.length === 0) {
       $tbody.html(`
         <tr>
           <td colspan="5" class="py-8 text-center text-slate-400 font-medium">
-            No transactions found for the selected payment method (${escapeHtml(selectedMethod)}).
+            No active login sessions found for device filter (${escapeHtml(selectedFilter)}).
           </td>
         </tr>
       `);
       return;
     }
 
-    last5Transactions.forEach((row, index) => {
-      let iconHtml = '';
-      if (row.icon === 'youtube') {
-        iconHtml = `<div class="w-7 h-7 rounded-lg bg-red-500 flex items-center justify-center text-white flex-shrink-0 shadow-sm"><svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/></svg></div>`;
-      } else if (row.icon === 'reserved') {
-        iconHtml = `<div class="w-7 h-7 rounded-lg bg-slate-900 dark:bg-white text-white dark:text-slate-900 flex items-center justify-center text-[9px] font-black flex-shrink-0 shadow-sm">RSV</div>`;
-      } else if (row.icon === 'yaposhka') {
-        iconHtml = `<div class="w-7 h-7 rounded-lg bg-[#14213D] text-[#FCA311] flex items-center justify-center text-[12px] font-black flex-shrink-0 shadow-sm">🍜</div>`;
+    filtered.forEach((row) => {
+      let deviceIcon = '';
+      if (row.deviceType.toLowerCase() === 'mobile') {
+        deviceIcon = `<svg class="w-4 h-4 text-slate-500 dark:text-slate-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>`;
+      } else if (row.deviceType.toLowerCase() === 'tablet') {
+        deviceIcon = `<svg class="w-4 h-4 text-slate-500 dark:text-slate-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>`;
       } else {
-        iconHtml = `<div class="w-7 h-7 rounded-lg bg-emerald-500/10 text-emerald-600 dark:bg-emerald-950/40 dark:text-emerald-400 flex items-center justify-center text-[10px] font-bold flex-shrink-0 shadow-xs">🏨</div>`;
+        deviceIcon = `<svg class="w-4 h-4 text-slate-500 dark:text-slate-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>`;
       }
 
-      const amtId = `recent-trans-amt-${index}`;
-      const amountColor = row.isIncome ? 'text-emerald-600 dark:text-emerald-400' : 'text-slate-900 dark:text-white';
-      const amountSign = row.isIncome ? '+ ₹' : '- ₹';
+      const statusBadge = row.isLive
+        ? `<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400 border border-emerald-200/60 dark:border-emerald-800/50"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>${escapeHtml(row.timeSpent)}</span>`
+        : `<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200/50 dark:border-slate-700/50">${escapeHtml(row.timeSpent)}</span>`;
 
       $tbody.append(`
         <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors">
-          <td class="py-3 px-4 text-slate-500 font-medium">${escapeHtml(row.date)}</td>
-          <td class="py-3 px-3">
-            <span id="${amtId}" class="font-bold ${amountColor}">${amountSign}0</span>
+          <td class="py-3 px-4">
+            <span class="font-mono text-xs font-semibold text-[#14213D] dark:text-[#FCA311] bg-slate-100 dark:bg-slate-800/80 px-2.5 py-1 rounded-md border border-slate-200 dark:border-slate-700/60">${escapeHtml(row.id)}</span>
           </td>
           <td class="py-3 px-4">
             <div class="flex items-center space-x-2.5">
-              ${iconHtml}
-              <span class="font-semibold text-slate-900 dark:text-white">${escapeHtml(row.name)}</span>
+              <div class="w-7 h-7 rounded-full ${row.avatarBg} flex items-center justify-center text-[10px] font-bold flex-shrink-0 shadow-xs">${escapeHtml(row.initials)}</div>
+              <div class="flex flex-col">
+                <span class="font-semibold text-slate-900 dark:text-white leading-tight">${escapeHtml(row.name)}</span>
+                <span class="text-[10px] text-slate-500 dark:text-slate-400">${escapeHtml(row.role)}</span>
+              </div>
             </div>
           </td>
-          <td class="py-3 px-4 text-slate-500 font-mono text-[11px]">${escapeHtml(row.method)}</td>
           <td class="py-3 px-4">
-            <span class="text-slate-600 dark:text-slate-300 font-medium">${escapeHtml(row.category)}</span>
+            <div class="flex flex-col text-xs">
+              <span class="text-slate-800 dark:text-slate-200 font-medium">${escapeHtml(row.email)}</span>
+              <span class="text-slate-500 dark:text-slate-400 text-[11px] font-mono">${escapeHtml(row.phone)}</span>
+            </div>
+          </td>
+          <td class="py-3 px-4">
+            <div class="flex items-center space-x-2">
+              ${deviceIcon}
+              <span class="text-slate-700 dark:text-slate-300 font-medium text-xs">${escapeHtml(row.deviceName)}</span>
+            </div>
+          </td>
+          <td class="py-3 px-4">
+            ${statusBadge}
           </td>
         </tr>
       `);
-
-      // Animate table transaction amounts in top-to-bottom sequence
-      animateNumber(`#${amtId}`, Math.abs(row.amount), {
-        duration: 900,
-        delay: 450 + (index * 60),
-        prefix: amountSign,
-        decimals: 0
-      });
     });
   }
 
-  // Filter Recent Transactions on Payment Method change
+  // Filter login sessions on Device Type change
   $(document).on('change', '#select-trans-payment-method', function () {
-    const bills = Storage.get(STORAGE_KEYS.BILLS, DEFAULT_BILLS);
-    renderDashboardRecentTransactions(bills);
+    renderDashboardRecentTransactions();
   });
 
   // =========================================================================
@@ -4963,6 +4981,7 @@ $(document).ready(function () {
   const DEFAULT_HR_TEMPLATES = [
     {
       id: 'doc-emp-contract',
+      status: 'Active',
       category: 'contracts',
       categoryLabel: 'Employment Contract',
       title: 'Executive & Staff Employment Agreement',
@@ -4984,6 +5003,7 @@ $(document).ready(function () {
     },
     {
       id: 'doc-nda-privacy',
+      status: 'Active',
       category: 'compliance',
       categoryLabel: 'Compliance & NDA',
       title: 'Hotel Non-Disclosure & Guest Data Privacy Agreement',
@@ -5003,6 +5023,7 @@ $(document).ready(function () {
     },
     {
       id: 'doc-offer-letter',
+      status: 'Active',
       category: 'contracts',
       categoryLabel: 'Offer Letter',
       title: 'Formal Job Offer & Welcome Appointment Letter',
@@ -5022,6 +5043,7 @@ $(document).ready(function () {
     },
     {
       id: 'doc-grooming-sop',
+      status: 'Not active',
       category: 'policies',
       categoryLabel: 'Hotel SOP',
       title: 'Staff Grooming, Hygiene & Uniform Standards SOP',
@@ -5041,6 +5063,7 @@ $(document).ready(function () {
     },
     {
       id: 'doc-culinary-recipe',
+      status: 'Active',
       category: 'compliance',
       categoryLabel: 'Trade Secrets',
       title: 'Culinary Recipes & Food Formula Protection Agreement',
@@ -5058,6 +5081,7 @@ $(document).ready(function () {
     },
     {
       id: 'doc-cash-pos-sop',
+      status: 'Active',
       category: 'policies',
       categoryLabel: 'Finance SOP',
       title: 'POS Terminal, Cash Drawer & Cashier Handover Policy',
@@ -5077,6 +5101,7 @@ $(document).ready(function () {
     },
     {
       id: 'doc-intern-trainee',
+      status: 'Not active',
       category: 'contracts',
       categoryLabel: 'Internship',
       title: 'Hospitality Internship & Industrial Trainee Agreement',
@@ -5094,6 +5119,7 @@ $(document).ready(function () {
     },
     {
       id: 'doc-parttime-banquet',
+      status: 'Active',
       category: 'contracts',
       categoryLabel: 'Part-Time',
       title: 'Part-Time & Event Banqueting Staff Agreement',
@@ -5111,6 +5137,7 @@ $(document).ready(function () {
     },
     {
       id: 'doc-ethics-posh',
+      status: 'Active',
       category: 'compliance',
       categoryLabel: 'Ethics & POSH',
       title: 'Workplace Ethics & POSH Compliance Policy',
@@ -5128,6 +5155,7 @@ $(document).ready(function () {
     },
     {
       id: 'doc-food-safety',
+      status: 'Not active',
       category: 'policies',
       categoryLabel: 'HACCP Safety',
       title: 'FSSAI Food Safety, Sanitization & Allergen Protocol',
@@ -5145,6 +5173,7 @@ $(document).ready(function () {
     },
     {
       id: 'doc-warning-letter',
+      status: 'Not active',
       category: 'letters',
       categoryLabel: 'Notice',
       title: 'Official Disciplinary Warning & Incident Notice',
@@ -5162,6 +5191,7 @@ $(document).ready(function () {
     },
     {
       id: 'doc-relieving-cert',
+      status: 'Active',
       category: 'letters',
       categoryLabel: 'Certificate',
       title: 'Experience, Conduct & Relieving Certificate',
@@ -5194,30 +5224,37 @@ $(document).ready(function () {
 
   let currentHrDocCategory = 'all';
 
-  // Helper to determine if employee document record is active or not based on 2-week (14 days) inactivity rule
+  // Helper to determine whether an HR document template is Active or Not active
   function getHrTemplateActivityStatus(tpl) {
     if (!tpl) return 'Not active';
-    if (tpl.status === 'inactive' || tpl.active === false || tpl.status === 'left') {
+    if (typeof tpl.status === 'string') {
+      const s = tpl.status.trim().toLowerCase();
+      if (s === 'not active' || s === 'not-active' || s === 'inactive' || s === 'on leave' || s === 'leave') {
+        return 'Not active';
+      }
+      if (s === 'active' || s === 'on duty' || s === 'completed' || s === 'verified') {
+        return 'Active';
+      }
+    }
+    if (tpl.active === false) return 'Not active';
+    if (tpl.active === true) return 'Active';
+
+    // Explicit fallback for default template IDs
+    const inactiveIds = ['doc-grooming-sop', 'doc-intern-trainee', 'doc-food-safety', 'doc-warning-letter'];
+    if (inactiveIds.includes(tpl.id)) {
       return 'Not active';
     }
+    return 'Active';
+  }
 
-    const rawDate = tpl.updated;
-    if (!rawDate) return 'Not active';
-
-    const docDate = new Date(rawDate);
-    if (isNaN(docDate.getTime())) return rawDate;
-
-    // Use current system time (anchored at least to Nov 1, 2026 to align with 2026 schedule data)
-    const now = new Date();
-    const refTime = Math.max(now.getTime(), new Date('2026-11-01T12:00:00Z').getTime());
-    const elapsedMs = refTime - docDate.getTime();
-    const TWO_WEEKS_MS = 14 * 24 * 60 * 60 * 1000; // 14 days in milliseconds
-
-    if (elapsedMs > TWO_WEEKS_MS) {
-      return 'Not active';
+  // Consistent status badge matching On Duty (Green) and On Leave (Red)
+  function getHrTemplateStatusBadge(tpl) {
+    const status = getHrTemplateActivityStatus(tpl);
+    if (status === 'Active') {
+      return `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-[#15803d] text-white shadow-2xs">Active</span>`;
+    } else {
+      return `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-[#b91c1c] text-white shadow-2xs">Not active</span>`;
     }
-
-    return rawDate;
   }
 
   function renderHrDocumentsSection() {
@@ -5311,14 +5348,7 @@ $(document).ready(function () {
               </span>
             </td>
             <td class="py-3.5 px-4 align-top whitespace-nowrap">
-              ${(statusDisplay === 'Not active' || statusDisplay === 'not-active' || statusDisplay === 'Inactive')
-                ? `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-[#b91c1c] text-white shadow-2xs" title="${escapeHtml(tpl.updated || '')}">
-                    Not active
-                  </span>`
-                : `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-[#15803d] text-white shadow-2xs" title="${escapeHtml(tpl.updated || '')}">
-                    Active
-                  </span>`
-              }
+              ${getHrTemplateStatusBadge(tpl)}
             </td>
             <td class="py-3.5 px-4 align-top text-right whitespace-nowrap">
               <button type="button" class="btn-preview-hr-doc btn-Aurelia-secondary text-xs py-1.5 px-3.5 inline-flex items-center space-x-1.5 shadow-xs" data-id="${tpl.id}">
