@@ -1306,26 +1306,30 @@
 
     /* Print invoice area rules */
     @media print {
-      body * {
-        visibility: hidden !important;
+      body {
+        background: #ffffff !important;
+        margin: 0 !important;
+        padding: 0 !important;
       }
 
-      #print-invoice-area,
-      #print-invoice-area * {
-        visibility: visible !important;
+      body > *:not(#print-invoice-area) {
+        display: none !important;
       }
 
       #print-invoice-area {
-        position: absolute !important;
-        left: 0 !important;
-        top: 0 !important;
+        display: block !important;
+        position: static !important;
         width: 100% !important;
-        max-width: 800px !important;
-        margin: 0 auto !important;
+        max-width: 100% !important;
+        margin: 0 !important;
         padding: 24px !important;
         background: #ffffff !important;
-        color: #000000 !important;
-        display: block !important;
+        color: #0f172a !important;
+        visibility: visible !important;
+      }
+
+      #print-invoice-area * {
+        visibility: visible !important;
       }
     }
 
@@ -3039,13 +3043,13 @@
           </div>
         </div>
         <div class="flex items-center space-x-2">
-          <button type="button" id="btn-print-hr-doc" class="btn-Aurelia-secondary text-xs py-1.5 px-3 flex items-center space-x-1.5">
+          <button type="button" id="btn-print-hr-doc" onclick="printHrDocumentDirectly()" class="btn-Aurelia-secondary text-xs py-1.5 px-3 flex items-center space-x-1.5 cursor-pointer">
             <svg class="w-4 h-4 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2">
               <path stroke-linecap="round" stroke-linejoin="round" d="M6.72 13.829c-.24.03-.48.062-.72.096m.72-.096a42.415 42.415 0 0110.56 0m-10.56 0L6.34 18m10.94-4.171c.24.03.48.062.72.096m-.72-.096L17.66 18m0 0l.229 2.523a1.125 1.125 0 01-1.12 1.227H7.231c-.662 0-1.18-.568-1.12-1.227L6.34 18m11.32 0c.268-.07.534-.144.798-.222A2.25 2.25 0 0020.25 15.6V10.5a2.25 2.25 0 00-2.25-2.25h-12A2.25 2.25 0 003.75 10.5v5.1a2.25 2.25 0 001.792 2.178c.264.078.53.152.798.222" />
             </svg>
             <span>Print</span>
           </button>
-          <button type="button" id="btn-download-hr-doc" class="btn-Aurelia-primary text-xs py-1.5 px-3 flex items-center space-x-1.5 shadow-sm shadow-[#FCA311]/20">
+          <button type="button" id="btn-download-hr-doc" onclick="printHrDocumentDirectly()" class="btn-Aurelia-primary text-xs py-1.5 px-3 flex items-center space-x-1.5 shadow-sm shadow-[#FCA311]/20 cursor-pointer">
             <svg class="w-4 h-4 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2">
               <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
             </svg>
@@ -3107,9 +3111,35 @@
   <div id="print-invoice-area" class="hidden"></div>
 
   <!-- Authentication Controller -->
-  <script src="../auth.js?v=20261106_03"></script>
+  <script src="../auth.js?v=20261107_v03"></script>
   <!-- Main JavaScript Logic -->
-<script src="../main.js?v=20261106_v14"></script>
+  <script src="../main.js?v=20261107_print_v03"></script>
+
+  <script>
+    function printHrDocumentDirectly() {
+      const printDoc = document.getElementById('printable-hr-doc');
+      if (!printDoc) {
+        window.print();
+        return;
+      }
+      let printArea = document.getElementById('print-invoice-area');
+      if (!printArea) {
+        printArea = document.createElement('div');
+        printArea.id = 'print-invoice-area';
+        document.body.appendChild(printArea);
+      }
+      printArea.innerHTML = '<div style="background:#ffffff; color:#0f172a; padding: 24px; font-family: -apple-system, BlinkMacSystemFont, sans-serif; font-size: 12px; line-height: 1.6;">' + printDoc.innerHTML + '</div>';
+      printArea.classList.remove('hidden');
+
+      window.print();
+
+      setTimeout(function() {
+        printArea.classList.add('hidden');
+        printArea.innerHTML = '';
+      }, 1500);
+    }
+    window.printHrDocumentDirectly = printHrDocumentDirectly;
+  </script>
 </body>
 
 </html>
