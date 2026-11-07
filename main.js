@@ -804,61 +804,6 @@ $(document).ready(function () {
     }
   });
 
-  // =========================================================================
-  // ULTRA-FAST INSTANT PAGE PRELOADER & CDN CACHING
-  // Pre-fetches pages on hover / touch so clicking sidebar items loads in 0ms
-  // =========================================================================
-  const preloadedUrls = new Set();
-  function prefetchPage(url) {
-    if (!url || typeof url !== 'string') return;
-    url = url.trim();
-    if (!url || url.startsWith('#') || url.startsWith('javascript:') || url.startsWith('mailto:') || url.startsWith('tel:')) return;
-
-    try {
-      const targetUrl = new URL(url, window.location.href);
-      if (targetUrl.origin !== window.location.origin) return;
-      if (targetUrl.pathname === window.location.pathname) return;
-      if (preloadedUrls.has(targetUrl.href)) return;
-
-      preloadedUrls.add(targetUrl.href);
-
-      // 1. Native browser link prefetch
-      const link = document.createElement('link');
-      link.rel = 'prefetch';
-      link.href = targetUrl.href;
-      link.as = 'document';
-      document.head.appendChild(link);
-
-      // 2. Fetch cache warming (silent background fetch)
-      if ('fetch' in window) {
-        fetch(targetUrl.href, { priority: 'low', credentials: 'include' }).catch(() => {});
-      }
-    } catch (e) {}
-  }
-
-  // Pre-fetch on hover or touch
-  $(document).on('mouseenter touchstart', 'a[href]', function () {
-    const href = $(this).attr('href');
-    if (href) prefetchPage(href);
-  });
-
-  // Pre-fetch primary navigation links after page is idle
-  if ('requestIdleCallback' in window) {
-    requestIdleCallback(() => {
-      $('#app-sidebar a[href]').each(function () {
-        const href = $(this).attr('href');
-        if (href && !href.startsWith('#')) prefetchPage(href);
-      });
-    }, { timeout: 2000 });
-  } else {
-    setTimeout(() => {
-      $('#app-sidebar a[href]').each(function () {
-        const href = $(this).attr('href');
-        if (href && !href.startsWith('#')) prefetchPage(href);
-      });
-    }, 1200);
-  }
-
   // Expose switchSection & syncSectionWithHash for Auth controller
   window.switchSection = switchSection;
   window.syncSectionWithHash = function () {
