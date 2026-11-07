@@ -5507,7 +5507,27 @@ $(document).ready(function () {
   });
 
   $('#btn-print-hr-doc').on('click', function () {
+    const $printDoc = $('#printable-hr-doc');
+    if (!$printDoc.length) {
+      window.print();
+      return;
+    }
+    const docHtml = $printDoc.html();
+    let $printArea = $('#print-invoice-area');
+    if (!$printArea.length) {
+      $printArea = $('<div id="print-invoice-area"></div>').appendTo('body');
+    }
+    $printArea.html(`
+      <div style="background:#ffffff; color:#0f172a; padding: 24px; font-family: -apple-system, BlinkMacSystemFont, 'Plus Jakarta Sans', sans-serif; font-size: 12px; line-height: 1.6;">
+        ${docHtml}
+      </div>
+    `).removeClass('hidden');
+
     window.print();
+
+    setTimeout(() => {
+      $printArea.addClass('hidden').empty();
+    }, 1500);
   });
 
   $('#btn-download-hr-doc').on('click', function () {
