@@ -2480,11 +2480,11 @@
                 <span>HR Document Templates</span>
               </a>
 
-              <!-- 2. HR Employee Lists -->
+              <!-- 2. HR List -->
               <a href="hr-employee-list.html" class="hr-sub-item flex items-center space-x-2.5 py-1.5 px-2 rounded-lg text-slate-300 hover:text-white hover:bg-white/10 transition-colors group cursor-pointer" data-action="hr-employee-list">
                 <span
                   class="w-1.5 h-1.5 rounded-full border border-slate-400 group-hover:border-[#FCA311] group-hover:bg-[#FCA311] transition-all flex-shrink-0"></span>
-                <span>HR Employee Lists</span>
+                <span>HR List</span>
               </a>
 
               <!-- 3. Add Employee -->
@@ -2526,32 +2526,32 @@
                 <!-- Leave Management Sub-items -->
                 <div id="nested-leave-mgmt-menu"
                   class="pl-4 pr-1 py-1 space-y-1 text-xs border-l border-white/10 ml-4 mt-0.5">
-                  <a href="javascript:void(0)"
+                  <a href="leave-category.html"
                     class="hr-sub-item flex items-center space-x-2 py-1 px-2 rounded-lg text-slate-300 hover:text-white hover:bg-white/10 transition-colors group cursor-pointer"
                     data-action="leave-category">
                     <span
                       class="w-1 h-1 rounded-full border border-slate-400 group-hover:border-[#FCA311] group-hover:bg-[#FCA311] transition-all flex-shrink-0"></span>
                     <span>Leave Category</span>
                   </a>
-                  <a href="javascript:void(0)"
+                  <a href="leave-assign.html"
                     class="hr-sub-item flex items-center space-x-2 py-1 px-2 rounded-lg text-slate-300 hover:text-white hover:bg-white/10 transition-colors group cursor-pointer"
                     data-action="leave-assign">
                     <span
                       class="w-1 h-1 rounded-full border border-slate-400 group-hover:border-[#FCA311] group-hover:bg-[#FCA311] transition-all flex-shrink-0"></span>
                     <span>Leave Assign</span>
                   </a>
-                  <a href="javascript:void(0)"
-                    class="hr-sub-item flex items-center space-x-2 py-1 px-2 rounded-lg text-slate-300 hover:text-white hover:bg-white/10 transition-colors group cursor-pointer text-sky-400 font-semibold"
+                  <a href="leave-request.html"
+                    class="hr-sub-item flex items-center space-x-2 py-1 px-2 rounded-lg text-slate-300 hover:text-white hover:bg-white/10 transition-colors group cursor-pointer"
                     data-action="leave-request">
                     <span
-                      class="w-1 h-1 rounded-full border border-sky-400 bg-sky-400 transition-all flex-shrink-0"></span>
+                      class="w-1 h-1 rounded-full border border-slate-400 group-hover:border-[#FCA311] group-hover:bg-[#FCA311] transition-all flex-shrink-0"></span>
                     <span>Leave Request</span>
                   </a>
                 </div>
               </div>
 
               <!-- 6. Attendance List -->
-              <a href="javascript:void(0)"
+              <a href="attendance-list.html"
                 class="hr-sub-item flex items-center space-x-2.5 py-1.5 px-2 rounded-lg text-slate-300 hover:text-white hover:bg-white/10 transition-colors group cursor-pointer"
                 data-action="attendance-list">
                 <span
@@ -2560,7 +2560,7 @@
               </a>
 
               <!-- 7. Attendance Report -->
-              <a href="javascript:void(0)"
+              <a href="attendance-report.html"
                 class="hr-sub-item flex items-center space-x-2.5 py-1.5 px-2 rounded-lg text-slate-300 hover:text-white hover:bg-white/10 transition-colors group cursor-pointer"
                 data-action="attendance-report">
                 <span
@@ -2586,28 +2586,28 @@
                 <!-- Payroll Sub-items -->
                 <div id="nested-payroll-menu"
                   class="hidden pl-4 pr-1 py-1 space-y-1 text-xs border-l border-white/10 ml-4 mt-0.5">
-                  <a href="javascript:void(0)"
+                  <a href="salary-grade.html"
                     class="hr-sub-item flex items-center space-x-2 py-1 px-2 rounded-lg text-slate-300 hover:text-white hover:bg-white/10 transition-colors group cursor-pointer"
                     data-action="salary-grade">
                     <span
                       class="w-1 h-1 rounded-full border border-slate-400 group-hover:border-[#FCA311] group-hover:bg-[#FCA311] transition-all flex-shrink-0"></span>
                     <span>Salary Grade</span>
                   </a>
-                  <a href="javascript:void(0)"
+                  <a href="manage-salary.html"
                     class="hr-sub-item flex items-center space-x-2 py-1 px-2 rounded-lg text-slate-300 hover:text-white hover:bg-white/10 transition-colors group cursor-pointer"
                     data-action="manage-salary">
                     <span
                       class="w-1 h-1 rounded-full border border-slate-400 group-hover:border-[#FCA311] group-hover:bg-[#FCA311] transition-all flex-shrink-0"></span>
                     <span>Manage Salary</span>
                   </a>
-                  <a href="javascript:void(0)"
+                  <a href="disburse-salary-update.html"
                     class="hr-sub-item flex items-center space-x-2 py-1 px-2 rounded-lg text-slate-300 hover:text-white hover:bg-white/10 transition-colors group cursor-pointer"
                     data-action="disburse-salary-update">
                     <span
                       class="w-1 h-1 rounded-full border border-slate-400 group-hover:border-[#FCA311] group-hover:bg-[#FCA311] transition-all flex-shrink-0"></span>
                     <span>Disburse Salary Update</span>
                   </a>
-                  <a href="javascript:void(0)"
+                  <a href="pay-slip.html"
                     class="hr-sub-item flex items-center space-x-2 py-1 px-2 rounded-lg text-slate-300 hover:text-white hover:bg-white/10 transition-colors group cursor-pointer"
                     data-action="pay-slip">
                     <span
@@ -2870,48 +2870,67 @@
               </div>
 
               <form id="form-upload-hr-doc" class="space-y-4">
-                <!-- Grid Row 1: Title & Description -->
+                <!-- Grid Row 1: Employee Name & Department -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div class="space-y-1.5">
                     <label for="hr-doc-input-title" class="block text-xs font-bold text-slate-900">
-                      Title <span class="text-[#FCA311]">*</span>
+                      Employee Name <span class="text-[#FCA311]">*</span>
                     </label>
-                    <input type="text" id="hr-doc-input-title" required
-                      class="w-full text-xs py-2.5 px-3.5 font-medium rounded-xl bg-white text-slate-900 placeholder:text-slate-400 border border-white/60 shadow-sm focus:outline-none focus:ring-2 focus:ring-[#FCA311]"
-                      placeholder="Add name">
+                    <!-- Integrated input bar with little + sign at the front (matching reference) -->
+                    <div class="relative flex items-center w-full rounded-xl bg-white border border-white/60 shadow-sm focus-within:ring-2 focus-within:ring-[#FCA311] focus-within:border-transparent transition-all">
+                      <!-- Little + sign at the front for adding image -->
+                      <label for="hr-doc-input-avatar" title="Add Profile Picture / Logo"
+                        class="pl-3.5 pr-1.5 py-2.5 flex items-center justify-center cursor-pointer text-slate-400 hover:text-[#FCA311] transition-colors flex-shrink-0 group">
+                        <input type="file" id="hr-doc-input-avatar" accept="image/*" class="hidden">
+                        <div id="hr-avatar-preview-box" class="flex items-center justify-center w-5 h-5">
+                          <svg class="w-4 h-4 stroke-current stroke-[2.2] transition-transform group-hover:scale-110" fill="none" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                          </svg>
+                        </div>
+                      </label>
+
+                      <!-- Name Input Field -->
+                      <input type="text" id="hr-doc-input-title" required
+                        class="w-full text-xs py-2.5 pr-3.5 pl-1.5 font-medium bg-transparent text-slate-900 placeholder:text-slate-400 focus:outline-none border-0"
+                        placeholder="e.g. Piyush Barua">
+                    </div>
                   </div>
 
                   <div class="space-y-1.5">
-                    <label for="hr-doc-input-desc" class="block text-xs font-bold text-slate-900">
-                      Description <span class="text-[#FCA311]">*</span>
+                    <label for="hr-doc-input-dept" class="block text-xs font-bold text-slate-900">
+                      Department <span class="text-[#FCA311]">*</span>
                     </label>
-                    <input type="text" id="hr-doc-input-desc" required
-                      class="w-full text-xs py-2.5 px-3.5 font-medium rounded-xl bg-white text-slate-900 placeholder:text-slate-400 border border-white/60 shadow-sm focus:outline-none focus:ring-2 focus:ring-[#FCA311]"
-                      placeholder="Enter description">
+                    <select id="hr-doc-input-dept" required
+                      class="w-full text-xs py-2.5 px-3.5 font-semibold rounded-xl bg-white text-slate-900 border border-white/60 shadow-sm focus:outline-none focus:ring-2 focus:ring-[#FCA311] cursor-pointer">
+                      <option value="" disabled selected>Select Department</option>
+                      <option value="Front Desk" data-code="FD">Front Desk (FD)</option>
+                      <option value="Housekeeping" data-code="HK">Housekeeping (HK)</option>
+                      <option value="Food & Beverage" data-code="FB">Food & Beverage (FB)</option>
+                      <option value="Human Resources" data-code="HR">Human Resources (HR)</option>
+                      <option value="Accounts & Finance" data-code="AC">Accounts & Finance (AC)</option>
+                      <option value="Management" data-code="MG">Management (MG)</option>
+                    </select>
                   </div>
                 </div>
 
-                <!-- Grid Row 2: File & Type -->
+                <!-- Grid Row 2: File & Verification Status -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div class="space-y-1.5">
                     <label for="hr-doc-input-file" class="block text-xs font-bold text-slate-900">
-                      File <span class="text-[#FCA311]">*</span>
+                      Upload Document File (PDF, DOCX, CSV) <span class="text-[#FCA311]">*</span>
                     </label>
-                    <input type="file" id="hr-doc-input-file" required
+                    <input type="file" id="hr-doc-input-file" required accept=".pdf,.docx,.doc,.csv,.xlsx,.jpg,.jpeg,.png"
                       class="w-full text-xs py-2 px-3 rounded-xl bg-white text-slate-900 border border-white/60 shadow-sm focus:outline-none focus:ring-2 focus:ring-[#FCA311] file:mr-3 file:py-1 file:px-3.5 file:rounded-full file:border-0 file:text-[11px] file:font-bold file:bg-[#14213D] file:text-[#FCA311] file:cursor-pointer cursor-pointer">
                   </div>
 
                   <div class="space-y-1.5">
-                    <label for="hr-doc-input-type" class="block text-xs font-bold text-slate-900">
-                      Type <span class="text-[#FCA311]">*</span>
+                    <label for="hr-doc-input-verify" class="block text-xs font-bold text-slate-900">
+                      Verification Status <span class="text-[#FCA311]">*</span>
                     </label>
-                    <select id="hr-doc-input-type" required
+                    <select id="hr-doc-input-verify" required
                       class="w-full text-xs py-2.5 px-3.5 font-semibold rounded-xl bg-white text-slate-900 border border-white/60 shadow-sm focus:outline-none focus:ring-2 focus:ring-[#FCA311] cursor-pointer">
-                      <option value="" disabled selected>Select type</option>
-                      <option value="employment">Employment Contract</option>
-                      <option value="compliance">Compliance & NDA</option>
-                      <option value="policies">Policies & SOPs</option>
-                      <option value="letters">Letters & Notices</option>
+                      <option value="Verified" selected>Verified</option>
+                      <option value="Pending">Pending Verification</option>
                     </select>
                   </div>
                 </div>
@@ -2931,32 +2950,24 @@
           </div>
 
 
-          <!-- Filter Dropdown & Search Bar -->
-          <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-            <!-- Category Filter Dropdown -->
+          <!-- Filter Dropdown (Search Bar Removed as requested) -->
+          <div class="flex items-center justify-between gap-3">
+            <!-- Department Filter Dropdown -->
             <div class="relative w-full sm:w-64">
               <select id="select-hr-doc-category"
                 class="Aurelia-input w-full text-xs py-2 pl-3.5 pr-9 font-semibold cursor-pointer appearance-none bg-white dark:bg-slate-800 text-slate-800 dark:text-white rounded-full border border-[#E5E5E5] dark:border-slate-700 shadow-xs focus:outline-none">
-                <option value="all">All Templates (12)</option>
-                <option value="contracts">Employment (4)</option>
-                <option value="compliance">Compliance & NDA (3)</option>
-                <option value="policies">Policies & SOPs (3)</option>
-                <option value="letters">Letters & Notices (2)</option>
+                <option value="all">All Departments</option>
+                <option value="Front Desk">Front Desk</option>
+                <option value="Housekeeping">Housekeeping</option>
+                <option value="Food & Beverage">Food & Beverage</option>
+                <option value="Human Resources">Human Resources</option>
+                <option value="Accounts & Finance">Accounts & Finance</option>
               </select>
               <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3.5 text-slate-500 dark:text-slate-400">
                 <svg class="w-4 h-4 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
                 </svg>
               </div>
-            </div>
-
-            <!-- Search -->
-            <div class="relative w-full sm:w-72">
-              <input type="text" id="input-search-hr-docs" class="Aurelia-input w-full text-xs pl-9 font-medium"
-                placeholder="Search templates by title or keyword...">
-              <svg class="w-4 h-4 stroke-current text-slate-400 absolute left-3 top-2.5" fill="none" viewBox="0 0 24 24" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
-              </svg>
             </div>
           </div>
 
@@ -2966,12 +2977,12 @@
               <table class="w-full text-xs text-left">
                 <thead class="bg-slate-50 dark:bg-slate-800 text-slate-500 font-semibold text-[11px] border-b border-slate-200 dark:border-slate-700">
                   <tr>
-                    <th class="py-3 px-4">Document Code & Title</th>
-                    <th class="py-3 px-4">Category</th>
-                    <th class="py-3 px-4">Description</th>
-                    <th class="py-3 px-4">Pages & Format</th>
-                    <th class="py-3 px-4">Status</th>
-                    <th class="py-3 px-4 text-right">Action</th>
+                    <th class="py-3.5 px-4 font-bold text-slate-700 dark:text-slate-300">HR ID</th>
+                    <th class="py-3.5 px-4 font-bold text-slate-700 dark:text-slate-300">Employee Name</th>
+                    <th class="py-3.5 px-4 font-bold text-slate-700 dark:text-slate-300">Department</th>
+                    <th class="py-3.5 px-4 font-bold text-slate-700 dark:text-slate-300">Format</th>
+                    <th class="py-3.5 px-4 font-bold text-slate-700 dark:text-slate-300">Verification</th>
+                    <th class="py-3.5 px-4 font-bold text-slate-700 dark:text-slate-300 text-right">Action</th>
                   </tr>
                 </thead>
                 <tbody id="hr-templates-tbody" class="divide-y divide-slate-100 dark:divide-slate-800">
@@ -2997,10 +3008,6 @@
 
             <div class="p-3.5 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs text-slate-400">
               <span id="hr-templates-count-label">Showing top 4 of 12 templates</span>
-              <a href="hr-employee-list.html" class="text-xs font-semibold text-sky-600 dark:text-sky-400 hover:text-[#FCA311] transition-colors flex items-center space-x-1">
-                <span>HR Employee Lists</span>
-                <span>&rarr;</span>
-              </a>
             </div>
           </div>
         </section>
@@ -3063,11 +3070,7 @@
         </div>
 
         <div id="preview-doc-body" class="space-y-3.5 text-xs text-slate-700">
-          <!-- Filled dynamically by main.js -->
-        </div>
-
-        <!-- Signatures Block -->
-        <div class="pt-8 grid grid-cols-2 gap-8 border-t border-slate-200 text-xs">
+          <!-- Filled dynamically by main.js?v=20261106_v14"pt-8 grid grid-cols-2 gap-8 border-t border-slate-200 text-xs">
           <div>
             <div class="h-10 border-b border-slate-300 mb-1.5 flex items-end">
               <span class="font-serif italic text-slate-600 text-sm">Adaline Lively</span>
@@ -3099,9 +3102,9 @@
   <div id="print-invoice-area" class="hidden"></div>
 
   <!-- Authentication Controller -->
-  <script src="../auth.js"></script>
+  <script src="../auth.js?v=20261106_03"></script>
   <!-- Main JavaScript Logic -->
-  <script src="../main.js?v=20261106_v7"></script>
+<script src="../main.js?v=20261106_v14"></script>
 </body>
 
 </html>

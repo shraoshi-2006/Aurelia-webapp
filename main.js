@@ -554,7 +554,16 @@ $(document).ready(function () {
     'add-department': 'Create New Department',
     employees: 'Staff Directory & Shift Roster',
     'add-employee': 'Add New Employee (Staff Onboarding)',
-    holidays: 'Hotel Holiday & Observance Calendar 2026'
+    holidays: 'Hotel Holiday & Observance Calendar 2026',
+    'leave-category': 'Hotel Leave Categories & Policy 2026',
+    'leave-assign': 'Staff Leave Quota Allocation Matrix',
+    'leave-request': 'Staff Leave Requests & Approvals Queue',
+    'attendance-list': 'Daily Staff Attendance Roster',
+    'attendance-report': 'Monthly Attendance & Overtime Report',
+    'salary-grade': 'Salary Grades & Compensation Bands',
+    'manage-salary': 'Employee Salary Configurations & Setup',
+    'disburse-salary-update': 'Monthly Payroll Disbursement & Bank Batches',
+    'pay-slip': 'Official Employee Pay Slip & Salary Advice'
   };
 
   function switchSection(target) {
@@ -571,7 +580,13 @@ $(document).ready(function () {
     });
 
     // Auto-sync Human Resource submenu expansion and active pill
-    if (['hr-documents', 'employees', 'add-employee', 'holidays'].includes(target)) {
+    const allHrTargets = [
+      'hr-documents', 'employees', 'add-employee', 'holidays',
+      'leave-category', 'leave-assign', 'leave-request',
+      'attendance-list', 'attendance-report',
+      'salary-grade', 'manage-salary', 'disburse-salary-update', 'pay-slip'
+    ];
+    if (allHrTargets.includes(target)) {
       $('#submenu-human-resource').removeClass('hidden');
       $('#chevron-nav-hr').addClass('rotate-180');
 
@@ -579,12 +594,31 @@ $(document).ready(function () {
         'hr-documents': 'hr-doc-templates',
         'add-employee': 'add-employee',
         'employees': 'employee-list',
-        'holidays': 'holiday-list'
+        'holidays': 'holiday-list',
+        'leave-category': 'leave-category',
+        'leave-assign': 'leave-assign',
+        'leave-request': 'leave-request',
+        'attendance-list': 'attendance-list',
+        'attendance-report': 'attendance-report',
+        'salary-grade': 'salary-grade',
+        'manage-salary': 'manage-salary',
+        'disburse-salary-update': 'disburse-salary-update',
+        'pay-slip': 'pay-slip'
       };
-      let act = hrActionMap[target];
+      let act = hrActionMap[target] || target;
       if (window.location.pathname.includes('hr-employee-list')) {
         act = 'hr-employee-list';
       }
+
+      if (['leave-category', 'leave-assign', 'leave-request'].includes(target)) {
+        $('#nested-leave-mgmt-menu').removeClass('hidden');
+        $('#chevron-sub-leave').addClass('rotate-180');
+      }
+      if (['salary-grade', 'manage-salary', 'disburse-salary-update', 'pay-slip'].includes(target)) {
+        $('#nested-payroll-menu').removeClass('hidden');
+        $('#chevron-sub-payroll').addClass('rotate-90');
+      }
+
       $('.hr-sub-item').removeClass('text-sky-400 font-bold active').addClass('text-slate-300');
       $('.hr-sub-item span.rounded-full').removeClass('border-sky-400 bg-sky-400').addClass('border-slate-400');
       const $activeItem = $(`.hr-sub-item[data-action="${act}"]`);
@@ -626,6 +660,15 @@ $(document).ready(function () {
         'add-employee': isDeptSubdir ? '../human-resources/add-employee.html' : (isHRSubdir ? 'add-employee.html' : 'human-resources/add-employee.html'),
         'employees': isDeptSubdir ? '../human-resources/employee-list.html' : (isHRSubdir ? 'employee-list.html' : 'human-resources/employee-list.html'),
         'holidays': isDeptSubdir ? '../human-resources/holiday-list.html' : (isHRSubdir ? 'holiday-list.html' : 'human-resources/holiday-list.html'),
+        'leave-category': isDeptSubdir ? '../human-resources/leave-category.html' : (isHRSubdir ? 'leave-category.html' : 'human-resources/leave-category.html'),
+        'leave-assign': isDeptSubdir ? '../human-resources/leave-assign.html' : (isHRSubdir ? 'leave-assign.html' : 'human-resources/leave-assign.html'),
+        'leave-request': isDeptSubdir ? '../human-resources/leave-request.html' : (isHRSubdir ? 'leave-request.html' : 'human-resources/leave-request.html'),
+        'attendance-list': isDeptSubdir ? '../human-resources/attendance-list.html' : (isHRSubdir ? 'attendance-list.html' : 'human-resources/attendance-list.html'),
+        'attendance-report': isDeptSubdir ? '../human-resources/attendance-report.html' : (isHRSubdir ? 'attendance-report.html' : 'human-resources/attendance-report.html'),
+        'salary-grade': isDeptSubdir ? '../human-resources/salary-grade.html' : (isHRSubdir ? 'salary-grade.html' : 'human-resources/salary-grade.html'),
+        'manage-salary': isDeptSubdir ? '../human-resources/manage-salary.html' : (isHRSubdir ? 'manage-salary.html' : 'human-resources/manage-salary.html'),
+        'disburse-salary-update': isDeptSubdir ? '../human-resources/disburse-salary-update.html' : (isHRSubdir ? 'disburse-salary-update.html' : 'human-resources/disburse-salary-update.html'),
+        'pay-slip': isDeptSubdir ? '../human-resources/pay-slip.html' : (isHRSubdir ? 'pay-slip.html' : 'human-resources/pay-slip.html'),
         'all-departments': isDeptSubdir ? 'all_department.html' : (isHRSubdir ? '../department/all_department.html' : 'department/all_department.html'),
         'all-department': isDeptSubdir ? 'all_department.html' : (isHRSubdir ? '../department/all_department.html' : 'department/all_department.html'),
         'add-department': isDeptSubdir ? 'add_department.html' : (isHRSubdir ? '../department/add_department.html' : 'department/add_department.html')
@@ -670,7 +713,96 @@ $(document).ready(function () {
     renderSidebarBadges();
 
     window.scrollTo({ top: 0, behavior: 'instant' });
+
+    // Auto-stick and keep active sidebar item visible
+    keepActiveSidebarItemVisible(false);
+    setTimeout(() => keepActiveSidebarItemVisible(false), 50);
+    setTimeout(() => keepActiveSidebarItemVisible(false), 150);
   }
+
+  // =========================================================================
+  // SIDEBAR SCROLL PERSISTENCE & ACTIVE ITEM AUTO-STICK
+  // =========================================================================
+  function keepActiveSidebarItemVisible(isSmooth = false) {
+    const $scrollContainer = $('#sidebar-quicklinks-scroll');
+    if (!$scrollContainer.length) return;
+
+    // Search for currently active sub-item or nav item
+    const $active = $('.hr-sub-item.active, .dept-sub-item.active, .Aurelia-nav-item.active:not([data-target="dashboard"])').first();
+    if (!$active.length) return;
+
+    const container = $scrollContainer[0];
+    const elem = $active[0];
+
+    const containerRect = container.getBoundingClientRect();
+    const elemRect = elem.getBoundingClientRect();
+
+    // Distance relative to scroll container viewport
+    const diffTop = elemRect.top - containerRect.top;
+    const elemHeight = elemRect.height;
+    const containerHeight = containerRect.height;
+
+    // Check if element is out of visible bounds or too close to edges (< 25px)
+    if (diffTop < 25 || (diffTop + elemHeight) > (containerHeight - 25)) {
+      const currentScroll = container.scrollTop;
+      const targetScroll = currentScroll + diffTop - (containerHeight / 2) + (elemHeight / 2);
+      const safeScroll = Math.max(0, targetScroll);
+
+      if (isSmooth) {
+        container.scrollTo({ top: safeScroll, behavior: 'smooth' });
+      } else {
+        container.scrollTop = safeScroll;
+      }
+      try {
+        sessionStorage.setItem('aurelia_sidebar_scroll', safeScroll);
+      } catch (e) { }
+    }
+  }
+
+  function restoreSidebarScroll() {
+    const $scrollContainer = $('#sidebar-quicklinks-scroll');
+    if (!$scrollContainer.length) return;
+
+    try {
+      const savedScroll = sessionStorage.getItem('aurelia_sidebar_scroll');
+      if (savedScroll !== null && !isNaN(parseInt(savedScroll, 10))) {
+        $scrollContainer[0].scrollTop = parseInt(savedScroll, 10);
+      }
+    } catch (e) { }
+
+    // Guarantee that active item is visible
+    setTimeout(() => keepActiveSidebarItemVisible(false), 60);
+    setTimeout(() => keepActiveSidebarItemVisible(false), 200);
+  }
+
+  window.keepActiveSidebarItemVisible = keepActiveSidebarItemVisible;
+  window.restoreSidebarScroll = restoreSidebarScroll;
+
+  // Preserve scroll position whenever a user clicks any sidebar link or button
+  $(document).on('click', '#app-sidebar a, #app-sidebar button, .hr-sub-item, .dept-sub-item, .nav-link', function () {
+    const $scrollContainer = $('#sidebar-quicklinks-scroll');
+    if ($scrollContainer.length) {
+      try {
+        sessionStorage.setItem('aurelia_sidebar_scroll', $scrollContainer[0].scrollTop);
+      } catch (e) { }
+    }
+  });
+
+  // Track scroll changes on sidebar
+  $(document).on('scroll', '#sidebar-quicklinks-scroll', function () {
+    try {
+      sessionStorage.setItem('aurelia_sidebar_scroll', this.scrollTop);
+    } catch (e) { }
+  });
+
+  window.addEventListener('beforeunload', function () {
+    const $sc = document.getElementById('sidebar-quicklinks-scroll');
+    if ($sc) {
+      try {
+        sessionStorage.setItem('aurelia_sidebar_scroll', $sc.scrollTop);
+      } catch (e) { }
+    }
+  });
 
   // Expose switchSection & syncSectionWithHash for Auth controller
   window.switchSection = switchSection;
@@ -726,7 +858,7 @@ $(document).ready(function () {
   });
 
   // Nested: Leave Management Dropdown Toggle
-  $('#btn-sub-leave-mgmt').on('click', function (e) {
+  $(document).on('click', '#btn-sub-leave-mgmt', function (e) {
     e.preventDefault();
     e.stopPropagation();
 
@@ -740,11 +872,12 @@ $(document).ready(function () {
     } else {
       $nestedMenu.removeClass('hidden');
       $chevron.addClass('rotate-180');
+      setTimeout(() => keepActiveSidebarItemVisible(true), 60);
     }
   });
 
   // Nested: Payroll Dropdown Toggle
-  $('#btn-sub-payroll').on('click', function (e) {
+  $(document).on('click', '#btn-sub-payroll', function (e) {
     e.preventDefault();
     e.stopPropagation();
 
@@ -758,20 +891,45 @@ $(document).ready(function () {
     } else {
       $nestedMenu.removeClass('hidden');
       $chevron.addClass('rotate-90');
+      setTimeout(() => keepActiveSidebarItemVisible(true), 60);
     }
   });
 
   // Human Resource Sub-Items Actions
-  $('.hr-sub-item').on('click', function (e) {
+  $(document).on('click', '.hr-sub-item', function (e) {
+    const href = $(this).attr('href');
+    const isRealLink = href && href !== '#' && !href.startsWith('javascript:');
+
+    if (isRealLink) {
+      // Allow browser native navigation for clean, reliable routing
+      const targetFile = href.split('/').pop().replace('.html', '').split('#')[0];
+      const currentFile = window.location.pathname.split('/').pop().replace('.html', '');
+      if (targetFile && currentFile && targetFile === currentFile) {
+        e.preventDefault();
+        return;
+      }
+      return; // Let browser navigate natively!
+    }
+
     const action = $(this).data('action');
-    const isSubdir = window.location.pathname.includes('/human-resources');
+    const isDeptSubdir = window.location.pathname.includes('/department');
+    const isHRSubdir = window.location.pathname.includes('/human-resources');
 
     const hrPageMap = {
-      'hr-doc-templates': isSubdir ? 'hr-document-template.html' : 'human-resources/hr-document-template.html',
-      'hr-employee-list': isSubdir ? 'hr-employee-list.html' : 'human-resources/hr-employee-list.html',
-      'add-employee': isSubdir ? 'add-employee.html' : 'human-resources/add-employee.html',
-      'employee-list': isSubdir ? 'employee-list.html' : 'human-resources/employee-list.html',
-      'holiday-list': isSubdir ? 'holiday-list.html' : 'human-resources/holiday-list.html'
+      'hr-doc-templates': isDeptSubdir ? '../human-resources/hr-document-template.html' : (isHRSubdir ? 'hr-document-template.html' : 'human-resources/hr-document-template.html'),
+      'hr-employee-list': isDeptSubdir ? '../human-resources/hr-employee-list.html' : (isHRSubdir ? 'hr-employee-list.html' : 'human-resources/hr-employee-list.html'),
+      'add-employee': isDeptSubdir ? '../human-resources/add-employee.html' : (isHRSubdir ? 'add-employee.html' : 'human-resources/add-employee.html'),
+      'employee-list': isDeptSubdir ? '../human-resources/employee-list.html' : (isHRSubdir ? 'employee-list.html' : 'human-resources/employee-list.html'),
+      'holiday-list': isDeptSubdir ? '../human-resources/holiday-list.html' : (isHRSubdir ? 'holiday-list.html' : 'human-resources/holiday-list.html'),
+      'leave-category': isDeptSubdir ? '../human-resources/leave-category.html' : (isHRSubdir ? 'leave-category.html' : 'human-resources/leave-category.html'),
+      'leave-assign': isDeptSubdir ? '../human-resources/leave-assign.html' : (isHRSubdir ? 'leave-assign.html' : 'human-resources/leave-assign.html'),
+      'leave-request': isDeptSubdir ? '../human-resources/leave-request.html' : (isHRSubdir ? 'leave-request.html' : 'human-resources/leave-request.html'),
+      'attendance-list': isDeptSubdir ? '../human-resources/attendance-list.html' : (isHRSubdir ? 'attendance-list.html' : 'human-resources/attendance-list.html'),
+      'attendance-report': isDeptSubdir ? '../human-resources/attendance-report.html' : (isHRSubdir ? 'attendance-report.html' : 'human-resources/attendance-report.html'),
+      'salary-grade': isDeptSubdir ? '../human-resources/salary-grade.html' : (isHRSubdir ? 'salary-grade.html' : 'human-resources/salary-grade.html'),
+      'manage-salary': isDeptSubdir ? '../human-resources/manage-salary.html' : (isHRSubdir ? 'manage-salary.html' : 'human-resources/manage-salary.html'),
+      'disburse-salary-update': isDeptSubdir ? '../human-resources/disburse-salary-update.html' : (isHRSubdir ? 'disburse-salary-update.html' : 'human-resources/disburse-salary-update.html'),
+      'pay-slip': isDeptSubdir ? '../human-resources/pay-slip.html' : (isHRSubdir ? 'pay-slip.html' : 'human-resources/pay-slip.html')
     };
 
     if (hrPageMap[action]) {
@@ -795,7 +953,7 @@ $(document).ready(function () {
     $(this).find('span.rounded-full').addClass('border-sky-400 bg-sky-400').removeClass('border-slate-400');
 
     const hrToastMap = {
-      'hr-employee-list': ['Viewing HR Employee Document Templates', 'info'],
+      'hr-employee-list': ['Viewing HR List & Document Templates', 'info'],
       'employee-list': ['Viewing Employee Directory (48 staff members)', 'info'],
       'add-employee': ['Human Resource: Add Employee panel ready', 'info'],
       'holiday-list': ['Holiday List: 14 official paid holidays & gazetted calendar for 2026', 'info'],
@@ -4980,243 +5138,171 @@ $(document).ready(function () {
   // =========================================================================
   const DEFAULT_HR_TEMPLATES = [
     {
-      id: 'doc-emp-contract',
-      status: 'Active',
-      category: 'contracts',
-      categoryLabel: 'Employment Contract',
+      id: 'doc-emp-01',
+      empId: 'FD-26-DY01',
+      empName: 'Piyush Barua',
+      avatar: 'employees/emp-piyush.jpg',
+      initials: 'PB',
+      department: 'Front Desk',
+      deptCode: 'FD',
+      format: 'CSV',
+      isVerified: true,
+      title: 'Employment Contract & Onboarding Form',
+      body: '<div class="space-y-3"><p class="font-bold text-slate-800 uppercase tracking-wide">1. Front Desk Operations</p><p>Official employment contract for Piyush Barua assigned to Luxury Front Desk Concierge.</p></div>'
+    },
+    {
+      id: 'doc-emp-02',
+      empId: 'FD-26-DY02',
+      empName: 'Adaline Lively',
+      avatar: 'employees/badge-fo-sample.png',
+      initials: 'FO',
+      department: 'Front Desk',
+      deptCode: 'FD',
+      format: 'PDF',
+      isVerified: true,
       title: 'Executive & Staff Employment Agreement',
-      code: 'AGR-EMP-2026',
-      badge: 'PDF • DOCX',
-      pages: '4 Pages',
-      updated: '15 Oct 2026',
-      desc: 'Standard hotel permanent employment agreement outlining remuneration, probationary terms, and duty hours.',
-      body: `
-        <div class="space-y-3">
-          <p class="font-bold text-slate-800 uppercase tracking-wide">1. Engagement & Position</p>
-          <p>The Employee is appointed to the designated operational role within Aurelia Hotel & Restaurant Operations. The Employee agrees to perform duties diligently in adherence to luxury hospitality standards.</p>
-          <p class="font-bold text-slate-800 uppercase tracking-wide mt-3">2. Compensation & Allowances</p>
-          <p>Salary, HRA, shift differential, PF contribution, and gratuity are detailed under Schedule A, disbursed monthly on or before the 1st day of each subsequent calendar month.</p>
-          <p class="font-bold text-slate-800 uppercase tracking-wide mt-3">3. Code of Conduct & Termination</p>
-          <p>Either party may terminate employment with thirty (30) days prior written notice or payment of base salary in lieu thereof, subject to hotel inventory clearance.</p>
-        </div>
-      `
+      body: '<div class="space-y-3"><p class="font-bold text-slate-800 uppercase tracking-wide">1. Front Desk Management</p><p>Permanent employment agreement outlining supervisory terms for Adaline Lively.</p></div>'
     },
     {
-      id: 'doc-nda-privacy',
-      status: 'Active',
-      category: 'compliance',
-      categoryLabel: 'Compliance & NDA',
+      id: 'doc-emp-03',
+      empId: 'HK-26-DY03',
+      empName: 'Marcus Vance',
+      avatar: 'employees/emp-marcus.jpg',
+      initials: 'HK',
+      department: 'Housekeeping',
+      deptCode: 'HK',
+      format: 'DOCX',
+      isVerified: true,
       title: 'Hotel Non-Disclosure & Guest Data Privacy Agreement',
-      code: 'NDA-GST-2026',
-      badge: 'Legal Verified',
-      pages: '2 Pages',
-      updated: '12 Oct 2026',
-      desc: 'Strict non-disclosure agreement protecting high-profile guest identities, reservation logs, and payment details.',
-      body: `
-        <div class="space-y-3">
-          <p class="font-bold text-slate-800 uppercase tracking-wide">1. Confidential Information</p>
-          <p>All guest profiles, reservation data, VIP schedules, credit card tokens, and business financials constitute proprietary hotel confidential data under the Digital Data Protection Act.</p>
-          <p class="font-bold text-slate-800 uppercase tracking-wide mt-3">2. Prohibition on Disclosure</p>
-          <p>Staff members shall not photograph, record, or disclose any guest information to third parties, social media, or press under penalty of immediate termination and legal prosecution.</p>
-        </div>
-      `
+      body: '<div class="space-y-3"><p class="font-bold text-slate-800 uppercase tracking-wide">1. Confidentiality & Guest Data</p><p>Strict guest privacy undertaking executed for Housekeeping Supervisor Marcus Vance.</p></div>'
     },
     {
-      id: 'doc-offer-letter',
-      status: 'Active',
-      category: 'contracts',
-      categoryLabel: 'Offer Letter',
-      title: 'Formal Job Offer & Welcome Appointment Letter',
-      code: 'LTR-OFR-2026',
-      badge: 'Editable',
-      pages: '2 Pages',
-      updated: '20 Oct 2026',
-      desc: 'Standardized onboarding offer letter with designation, CTC breakdown, reporting station, and joining date.',
-      body: `
-        <div class="space-y-3">
-          <p>Dear Candidate,</p>
-          <p>We are pleased to extend an offer of employment with <strong>Aurelia Luxury Hotel & Restaurant</strong>. We were impressed by your hospitality background and look forward to having you on our team.</p>
-          <p class="font-bold text-slate-800 uppercase tracking-wide mt-3">Terms of Offer</p>
-          <p>• Department: Operations / Hospitality Wings<br>• Annual CTC: As outlined in Annexure I<br>• Reporting Location: Station Road Main Complex, 1st Floor</p>
-        </div>
-      `
+      id: 'doc-emp-04',
+      empId: 'HK-26-DY04',
+      empName: 'Elena Rostova',
+      avatar: null,
+      initials: 'ER',
+      department: 'Housekeeping',
+      deptCode: 'HK',
+      format: 'PDF',
+      isVerified: true,
+      title: 'Formal Job Offer & Appointment Letter',
+      body: '<div class="space-y-3"><p class="font-bold text-slate-800 uppercase tracking-wide">1. Appointment Details</p><p>Appointment letter with CTC breakdown and shift assignment for Elena Rostova.</p></div>'
     },
     {
-      id: 'doc-grooming-sop',
-      status: 'Not active',
-      category: 'policies',
-      categoryLabel: 'Hotel SOP',
-      title: 'Staff Grooming, Hygiene & Uniform Standards SOP',
-      code: 'SOP-GRM-2026',
-      badge: 'Mandatory',
-      pages: '3 Pages',
-      updated: '08 Oct 2026',
-      desc: 'Mandatory luxury hospitality grooming standards, personal hygiene, and front-of-house uniform protocols.',
-      body: `
-        <div class="space-y-3">
-          <p class="font-bold text-slate-800 uppercase tracking-wide">1. Uniform Standards</p>
-          <p>All staff on duty must wear spotless, steam-pressed Aurelia branded uniforms with polished name tags displayed on the left lapel.</p>
-          <p class="font-bold text-slate-800 uppercase tracking-wide mt-3">2. Personal Hygiene & Grooming</p>
-          <p>Hair must be neat and securely styled; kitchen personnel must wear approved hair nets and non-slip culinary footwear at all times in food preparation bays.</p>
-        </div>
-      `
-    },
-    {
-      id: 'doc-culinary-recipe',
-      status: 'Active',
-      category: 'compliance',
-      categoryLabel: 'Trade Secrets',
+      id: 'doc-emp-05',
+      empId: 'FB-26-DY05',
+      empName: 'Chef Jean-Marc',
+      avatar: null,
+      initials: 'JM',
+      department: 'Food & Beverage',
+      deptCode: 'FB',
+      format: 'PDF',
+      isVerified: true,
       title: 'Culinary Recipes & Food Formula Protection Agreement',
-      code: 'AGR-RCP-2026',
-      badge: 'Kitchen Core',
-      pages: '2 Pages',
-      updated: '01 Oct 2026',
-      desc: 'Protects proprietary sauce recipes, royal Mughlai spice blends, and signature kitchen formulations.',
-      body: `
-        <div class="space-y-3">
-          <p class="font-bold text-slate-800 uppercase tracking-wide">1. Intellectual Property</p>
-          <p>All signature recipes, spice blends, preparation marinades, and presentation guidelines developed within Aurelia kitchens remain exclusive property of the hotel.</p>
-        </div>
-      `
+      body: '<div class="space-y-3"><p class="font-bold text-slate-800 uppercase tracking-wide">1. Kitchen & Recipe IP</p><p>Protection of signature dining recipes and culinary protocols for Executive Chef Jean-Marc.</p></div>'
     },
     {
-      id: 'doc-cash-pos-sop',
-      status: 'Active',
-      category: 'policies',
-      categoryLabel: 'Finance SOP',
-      title: 'POS Terminal, Cash Drawer & Cashier Handover Policy',
-      code: 'SOP-POS-2026',
-      badge: 'Cash Desk',
-      pages: '2 Pages',
-      updated: '18 Oct 2026',
-      desc: 'Daily shift cash balancing, POS terminal settlements, Pine Labs EDC machine handling, and discrepancy procedures.',
-      body: `
-        <div class="space-y-3">
-          <p class="font-bold text-slate-800 uppercase tracking-wide">1. Shift Opening & Float</p>
-          <p>Every cashier must verify the ₹5,000 baseline cash float prior to billing commencement and sign the ledger.</p>
-          <p class="font-bold text-slate-800 uppercase tracking-wide mt-3">2. Shift Settlement</p>
-          <p>End-of-day Z-reports from EDC machines must match the Aurelia digital billing ledger exactly before handover.</p>
-        </div>
-      `
+      id: 'doc-emp-06',
+      empId: 'FB-26-DY06',
+      empName: 'Sophia Chen',
+      avatar: null,
+      initials: 'SC',
+      department: 'Food & Beverage',
+      deptCode: 'FB',
+      format: 'DOCX',
+      isVerified: false,
+      title: 'POS Terminal & Cashier Handover Policy',
+      body: '<div class="space-y-3"><p class="font-bold text-slate-800 uppercase tracking-wide">1. Cash Desk & Terminal Handover</p><p>Daily EDC terminal settlement agreement for Cafe Barista Sophia Chen.</p></div>'
     },
     {
-      id: 'doc-intern-trainee',
-      status: 'Not active',
-      category: 'contracts',
-      categoryLabel: 'Internship',
+      id: 'doc-emp-07',
+      empId: 'HR-26-DY07',
+      empName: 'Rajesh Sharma',
+      avatar: 'employees/emp-rajesh.jpg',
+      initials: 'HR',
+      department: 'Human Resources',
+      deptCode: 'HR',
+      format: 'PDF',
+      isVerified: true,
       title: 'Hospitality Internship & Industrial Trainee Agreement',
-      code: 'AGR-TRN-2026',
-      badge: 'Training',
-      pages: '2 Pages',
-      updated: '14 Oct 2026',
-      desc: 'Curriculum-accredited hotel management training contract with monthly stipend and rotation schedule.',
-      body: `
-        <div class="space-y-3">
-          <p class="font-bold text-slate-800 uppercase tracking-wide">1. Training Scope</p>
-          <p>The Trainee will rotate across Front Office, Housekeeping, Food & Beverage Service, and Kitchen operations over a 6-month period.</p>
-        </div>
-      `
+      body: '<div class="space-y-3"><p class="font-bold text-slate-800 uppercase tracking-wide">1. HR Talent Onboarding</p><p>Accredited trainee rotation agreement for HR Coordinator Rajesh Sharma.</p></div>'
     },
     {
-      id: 'doc-parttime-banquet',
-      status: 'Active',
-      category: 'contracts',
-      categoryLabel: 'Part-Time',
-      title: 'Part-Time & Event Banqueting Staff Agreement',
-      code: 'AGR-BNQ-2026',
-      badge: 'Per-Event',
-      pages: '1 Page',
-      updated: '22 Oct 2026',
-      desc: 'Flexible event-based agreement for weekend weddings, corporate banquets, and seasonal peak dining.',
-      body: `
-        <div class="space-y-3">
-          <p class="font-bold text-slate-800 uppercase tracking-wide">1. Daily Wage & Shift Commitment</p>
-          <p>Compensation is fixed per 8-hour banquet shift, disbursed via direct UPI/NEFT within 48 hours of event completion.</p>
-        </div>
-      `
+      id: 'doc-emp-08',
+      empId: 'HR-26-DY08',
+      empName: 'Sunita Rao',
+      avatar: null,
+      initials: 'SR',
+      department: 'Human Resources',
+      deptCode: 'HR',
+      format: 'CSV',
+      isVerified: true,
+      title: 'Banquet & Event On-Call Casual Staff Agreement',
+      body: '<div class="space-y-3"><p class="font-bold text-slate-800 uppercase tracking-wide">1. Duty & Call Sheet</p><p>Staff roster and emergency shift agreement for Sunita Rao.</p></div>'
     },
     {
-      id: 'doc-ethics-posh',
-      status: 'Active',
-      category: 'compliance',
-      categoryLabel: 'Ethics & POSH',
-      title: 'Workplace Ethics & POSH Compliance Policy',
-      code: 'POL-ETH-2026',
-      badge: 'Statutory',
-      pages: '3 Pages',
-      updated: '05 Oct 2026',
-      desc: 'Zero tolerance policy for workplace harassment, safety grievance mechanisms, and internal committee contacts.',
-      body: `
-        <div class="space-y-3">
-          <p class="font-bold text-slate-800 uppercase tracking-wide">1. Zero Tolerance Mandate</p>
-          <p>Aurelia maintains an absolute zero-tolerance policy against any form of discrimination, harassment, or intimidation.</p>
-        </div>
-      `
+      id: 'doc-emp-09',
+      empId: 'AC-26-DY09',
+      empName: 'Ananya Deshmukh',
+      avatar: null,
+      initials: 'AC',
+      department: 'Accounts & Finance',
+      deptCode: 'AC',
+      format: 'XLSX',
+      isVerified: true,
+      title: 'Anti-Harassment, POSH & Code of Ethics Undertaking',
+      body: '<div class="space-y-3"><p class="font-bold text-slate-800 uppercase tracking-wide">1. Ethics & Compliance</p><p>Financial compliance and hotel code of conduct signed by Accounts Officer Ananya Deshmukh.</p></div>'
     },
     {
-      id: 'doc-food-safety',
-      status: 'Not active',
-      category: 'policies',
-      categoryLabel: 'HACCP Safety',
-      title: 'FSSAI Food Safety, Sanitization & Allergen Protocol',
-      code: 'SOP-SAF-2026',
-      badge: 'Food Safety',
-      pages: '4 Pages',
-      updated: '10 Oct 2026',
-      desc: 'Cold storage temperature logs, cross-contamination prevention, raw food handling, and sanitization protocols.',
-      body: `
-        <div class="space-y-3">
-          <p class="font-bold text-slate-800 uppercase tracking-wide">1. Temperature Monitoring</p>
-          <p>Walk-in freezers must maintain -18°C or below; all dairy and fresh poultry cold storage must log at 0°C to 4°C thrice daily.</p>
-        </div>
-      `
+      id: 'doc-emp-10',
+      empId: 'AC-26-DY10',
+      empName: 'Vikramaditya Roy',
+      avatar: null,
+      initials: 'VR',
+      department: 'Accounts & Finance',
+      deptCode: 'AC',
+      format: 'PDF',
+      isVerified: false,
+      title: 'HACCP & Commercial Kitchen Food Safety Protocol',
+      body: '<div class="space-y-3"><p class="font-bold text-slate-800 uppercase tracking-wide">1. Financial Audits</p><p>Quarterly audit and inventory compliance record for Vikramaditya Roy.</p></div>'
     },
     {
-      id: 'doc-warning-letter',
-      status: 'Not active',
-      category: 'letters',
-      categoryLabel: 'Notice',
-      title: 'Official Disciplinary Warning & Incident Notice',
-      code: 'LTR-WRN-2026',
-      badge: 'Formal',
-      pages: '1 Page',
-      updated: '19 Oct 2026',
-      desc: 'Standard HR incident counseling letter for unauthorized absence, safety breach, or guest service violation.',
-      body: `
-        <div class="space-y-3">
-          <p class="font-bold text-slate-800 uppercase tracking-wide">Incident Citation</p>
-          <p>This written notice records an operational deficiency observed on duty. The Employee is given opportunity to provide written clarification within 48 hours.</p>
-        </div>
-      `
+      id: 'doc-emp-11',
+      empId: 'FB-26-DY11',
+      empName: 'Kavita Nair',
+      avatar: null,
+      initials: 'KN',
+      department: 'Food & Beverage',
+      deptCode: 'FB',
+      format: 'DOCX',
+      isVerified: false,
+      title: 'Official Performance Advisory & Warning Letter Template',
+      body: '<div class="space-y-3"><p class="font-bold text-slate-800 uppercase tracking-wide">1. Performance Appraisal</p><p>Standard performance documentation for Banquet Captain Kavita Nair.</p></div>'
     },
     {
-      id: 'doc-relieving-cert',
-      status: 'Active',
-      category: 'letters',
-      categoryLabel: 'Certificate',
-      title: 'Experience, Conduct & Relieving Certificate',
-      code: 'CRT-EXP-2026',
-      badge: 'HR Letterhead',
-      pages: '1 Page',
-      updated: '25 Oct 2026',
-      desc: 'Official hotel release certificate acknowledging employee tenure, role contributions, and satisfactory conduct.',
-      body: `
-        <div class="space-y-3">
-          <p><strong>TO WHOMSOEVER IT MAY CONCERN</strong></p>
-          <p>This is to certify that the employee was employed with Aurelia Luxury Hotel & Restaurant in good standing, exhibiting exemplary dedication to service excellence.</p>
-        </div>
-      `
+      id: 'doc-emp-12',
+      empId: 'MG-26-DY12',
+      empName: 'David Miller',
+      avatar: null,
+      initials: 'MG',
+      department: 'Management',
+      deptCode: 'MG',
+      format: 'PDF',
+      isVerified: true,
+      title: 'Employee Experience Certificate & Relieving Letter',
+      body: '<div class="space-y-3"><p class="font-bold text-slate-800 uppercase tracking-wide">1. Relieving Undertaking</p><p>General management service certificate for Operations Lead David Miller.</p></div>'
     }
   ];
 
   let HR_TEMPLATES = [];
   try {
-    const storedHrTpls = localStorage.getItem('aurelia_hr_templates');
+    const storedHrTpls = localStorage.getItem('aurelia_hr_templates_v5');
     if (storedHrTpls) {
       HR_TEMPLATES = JSON.parse(storedHrTpls);
     } else {
       HR_TEMPLATES = [...DEFAULT_HR_TEMPLATES];
-      localStorage.setItem('aurelia_hr_templates', JSON.stringify(HR_TEMPLATES));
+      localStorage.setItem('aurelia_hr_templates_v5', JSON.stringify(HR_TEMPLATES));
     }
   } catch (err) {
     HR_TEMPLATES = [...DEFAULT_HR_TEMPLATES];
@@ -5224,178 +5310,135 @@ $(document).ready(function () {
 
   let currentHrDocCategory = 'all';
 
-  // Helper to determine whether an HR document template is Active or Not active
-  function getHrTemplateActivityStatus(tpl) {
-    if (!tpl) return 'Not active';
-    if (typeof tpl.status === 'string') {
-      const s = tpl.status.trim().toLowerCase();
-      if (s === 'not active' || s === 'not-active' || s === 'inactive' || s === 'on leave' || s === 'leave') {
-        return 'Not active';
-      }
-      if (s === 'active' || s === 'on duty' || s === 'completed' || s === 'verified') {
-        return 'Active';
-      }
-    }
-    if (tpl.active === false) return 'Not active';
-    if (tpl.active === true) return 'Active';
-
-    // Explicit fallback for default template IDs
-    const inactiveIds = ['doc-grooming-sop', 'doc-intern-trainee', 'doc-food-safety', 'doc-warning-letter'];
-    if (inactiveIds.includes(tpl.id)) {
-      return 'Not active';
-    }
-    return 'Active';
-  }
-
-  // Consistent status badge matching On Duty (Green) and On Leave (Red)
-  function getHrTemplateStatusBadge(tpl) {
-    const status = getHrTemplateActivityStatus(tpl);
-    if (status === 'Active') {
-      return `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-[#15803d] text-white shadow-2xs">Active</span>`;
-    } else {
-      return `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-[#b91c1c] text-white shadow-2xs">Not active</span>`;
-    }
-  }
-
   function renderHrDocumentsSection() {
     const $tbody = $('#hr-templates-tbody');
-    const $grid = $('#hr-templates-grid');
-    if (!$tbody.length && !$grid.length) return;
+    if (!$tbody.length) return;
 
     if ($('#select-hr-doc-category').length) {
       currentHrDocCategory = $('#select-hr-doc-category').val() || 'all';
     }
 
-    // Update total template counters in metrics strip and filter tabs if present
-    if ($('#hr-total-templates-stat').length) {
-      $('#hr-total-templates-stat').text(`${HR_TEMPLATES.length} Documents`);
-    }
-    $('.hr-doc-filter-btn[data-category="all"]').text(`All Templates (${HR_TEMPLATES.length})`);
-
     const isHrDocTemplatePage = window.location.pathname.includes('hr-document-template');
     const isHrEmployeeListPage = window.location.pathname.includes('hr-employee-list');
+    const isSubdir = window.location.pathname.includes('/human-resources') || window.location.pathname.includes('/department');
+    const assetPrefix = isSubdir ? '../assets/' : 'assets/';
 
-    const query = $.trim($('#input-search-hr-docs').val()).toLowerCase();
     const filtered = HR_TEMPLATES.filter(tpl => {
-      const matchCat = (currentHrDocCategory === 'all' || tpl.category === currentHrDocCategory);
-      const matchSearch = !query || tpl.title.toLowerCase().includes(query) || tpl.code.toLowerCase().includes(query) || tpl.desc.toLowerCase().includes(query);
-      return matchCat && matchSearch;
+      if (currentHrDocCategory === 'all') return true;
+      return tpl.department === currentHrDocCategory;
     });
 
     if (filtered.length === 0) {
-      if ($tbody.length) $tbody.empty();
-      if ($grid.length) $grid.empty();
+      $tbody.html('<tr><td colspan="6" class="p-8 text-center text-xs text-slate-400">No employee records found in this department.</td></tr>');
       $('#hr-templates-empty').removeClass('hidden');
-      $('#hr-templates-count-label').text(`Showing 0 of ${HR_TEMPLATES.length} templates`);
+      $('#hr-templates-count-label').text(`Showing 0 of ${HR_TEMPLATES.length} records`);
       return;
     }
 
     $('#hr-templates-empty').addClass('hidden');
-    // On hr-document-template.html, display only top 4 rows as requested.
-    // On hr-employee-list.html, display only the remaining leftover rows (rows 5 to 12) from "See More".
-    // When a search query is typed, display all matching results on either page!
+
     let displayList = filtered;
-    if (query) {
-      displayList = filtered;
-      $('#hr-templates-count-label').text(`Found ${displayList.length} matching template${displayList.length === 1 ? '' : 's'}`);
-      $('#hr-templates-see-more-wrap').addClass('hidden');
-    } else if (isHrDocTemplatePage) {
+    if (isHrDocTemplatePage) {
       displayList = filtered.slice(0, 4);
-      $('#hr-templates-count-label').text(`Showing top ${displayList.length} of ${HR_TEMPLATES.length} templates`);
+      $('#hr-templates-count-label').text(`Showing top ${displayList.length} of ${HR_TEMPLATES.length} records`);
       $('#hr-templates-see-more-wrap').removeClass('hidden');
     } else if (isHrEmployeeListPage) {
-      // Include any newly uploaded custom templates at the top plus the leftover default templates (rows 5 to 12)
       const customTemplates = filtered.filter(t => t.id && t.id.startsWith('doc-custom-'));
       const defaultLeftover = filtered.filter(t => !t.id || !t.id.startsWith('doc-custom-')).slice(4);
       displayList = [...customTemplates, ...defaultLeftover];
-      $('#hr-templates-count-label').text(`Showing ${displayList.length} remaining templates from See More`);
+      $('#hr-templates-count-label').text(`Showing ${displayList.length} employee records from See More`);
       $('#hr-templates-see-more-wrap').addClass('hidden');
     } else {
-      $('#hr-templates-count-label').text(`Showing ${displayList.length} of ${HR_TEMPLATES.length} templates`);
-      $('#hr-templates-see-more-wrap').addClass('hidden');
+      $('#hr-templates-count-label').text(`Showing ${displayList.length} of ${HR_TEMPLATES.length} records`);
     }
 
-    if ($tbody.length) {
-      let html = '';
-      displayList.forEach(tpl => {
-        const statusDisplay = getHrTemplateActivityStatus(tpl);
-        html += `
-          <tr class="hover:bg-slate-50/70 dark:hover:bg-slate-800/50 transition-colors group">
-            <td class="py-3.5 px-4 align-top">
-              <div class="flex items-center gap-2 mb-1">
-                <span class="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-[#14213D] text-[#FCA311] inline-block shadow-xs">
-                  ${tpl.code}
-                </span>
+    let html = '';
+    displayList.forEach(tpl => {
+      const isVer = (tpl.isVerified === true || tpl.isVerified === 'Verified');
+      const verifyBadge = isVer
+        ? '<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-100 text-emerald-800 dark:bg-emerald-950/40 dark:text-emerald-400 border border-emerald-200/60"><svg class="w-3.5 h-3.5 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg>Verified</span>'
+        : '<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-amber-100 text-amber-800 dark:bg-amber-950/40 dark:text-amber-400 border border-amber-200/60"><svg class="w-3.5 h-3.5 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2.5"><circle cx="12" cy="12" r="9"/></svg>Pending</span>';
+
+      // Profile Picture or Squircle Badge Logo (exactly matching the uploaded FO badge size)
+      let avatarHtml = '';
+      if (tpl.avatar) {
+        const imgSrc = (tpl.avatar.startsWith('data:') || tpl.avatar.startsWith('http'))
+          ? tpl.avatar
+          : (assetPrefix + tpl.avatar);
+        avatarHtml = `
+          <img src="${imgSrc}" alt="${escapeHtml(tpl.empName)}"
+            class="w-9 h-9 rounded-xl object-cover object-top shadow-xs border border-white/60 dark:border-slate-700 flex-shrink-0"
+            onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\\'w-9 h-9 rounded-xl flex items-center justify-center font-bold text-xs text-white shadow-xs flex-shrink-0\\' style=\\'background: linear-gradient(135deg, #14213D 0%, #92400e 50%, #FCA311 100%);\\'><span>${tpl.initials || 'EM'}</span></div>';">
+        `;
+      } else {
+        const badgeText = tpl.initials || tpl.deptCode || 'FO';
+        avatarHtml = `
+          <div class="w-9 h-9 rounded-xl flex items-center justify-center font-black text-xs text-white shadow-xs border border-white/20 flex-shrink-0"
+            style="background: linear-gradient(135deg, #14213D 0%, #92400e 50%, #FCA311 100%); letter-spacing: -0.5px;">
+            <span>${badgeText}</span>
+          </div>
+        `;
+      }
+
+      html += `
+        <tr class="hover:bg-slate-50/70 dark:hover:bg-slate-800/50 transition-colors group">
+          <td class="py-3.5 px-4 whitespace-nowrap">
+            <span class="px-2.5 py-1 rounded text-xs font-mono font-bold bg-[#14213D] text-[#FCA311] inline-block shadow-xs tracking-wider">
+              ${tpl.empId}
+            </span>
+          </td>
+          <td class="py-3.5 px-4 whitespace-nowrap">
+            <div class="flex items-center space-x-3">
+              ${avatarHtml}
+              <div class="min-w-0">
+                <div class="font-bold text-slate-900 dark:text-white text-xs truncate">${escapeHtml(tpl.empName)}</div>
               </div>
-              <div class="font-bold text-slate-900 dark:text-white text-xs group-hover:text-[#FCA311] transition-colors leading-snug">
-                ${tpl.title}
-              </div>
-            </td>
-            <td class="py-3.5 px-4 align-top whitespace-nowrap">
-              <span class="px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-sky-50 dark:bg-sky-950/40 text-sky-700 dark:text-sky-300 border border-sky-200/60 dark:border-sky-800/60 inline-block">
-                ${tpl.categoryLabel}
-              </span>
-            </td>
-            <td class="py-3.5 px-4 align-top">
-              <p class="text-xs text-slate-500 dark:text-slate-400 line-clamp-2 max-w-sm leading-relaxed">
-                ${tpl.desc}
-              </p>
-            </td>
-            <td class="py-3.5 px-4 align-top whitespace-nowrap">
-              <div class="font-medium text-slate-700 dark:text-slate-300">${tpl.pages}</div>
-              <span class="text-[10px] font-semibold text-slate-400 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded inline-block mt-0.5">
-                ${tpl.badge}
-              </span>
-            </td>
-            <td class="py-3.5 px-4 align-top whitespace-nowrap">
-              ${getHrTemplateStatusBadge(tpl)}
-            </td>
-            <td class="py-3.5 px-4 align-top text-right whitespace-nowrap">
-              <button type="button" class="btn-preview-hr-doc btn-Aurelia-secondary text-xs py-1.5 px-3.5 inline-flex items-center space-x-1.5 shadow-xs" data-id="${tpl.id}">
-                <svg class="w-3.5 h-3.5 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2">
+            </div>
+          </td>
+          <td class="py-3.5 px-4 whitespace-nowrap">
+            <span class="px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-sky-50 dark:bg-sky-950/40 text-sky-700 dark:text-sky-300 border border-sky-200/60 dark:border-sky-800/60 inline-block">
+              ${escapeHtml(tpl.department)}
+            </span>
+          </td>
+          <td class="py-3.5 px-4 whitespace-nowrap">
+            <span class="px-2.5 py-0.5 rounded font-mono font-bold text-[11px] bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 inline-flex items-center space-x-1">
+              <svg class="w-3.5 h-3.5 stroke-current text-[#FCA311]" fill="none" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"/></svg>
+              <span>${escapeHtml(tpl.format || 'PDF')}</span>
+            </span>
+          </td>
+          <td class="py-3.5 px-4 whitespace-nowrap">
+            ${verifyBadge}
+          </td>
+          <td class="py-3.5 px-4 text-right whitespace-nowrap">
+            <div class="flex items-center justify-end space-x-1">
+              <!-- View / Eye -->
+              <button type="button" class="btn-preview-hr-doc p-2 rounded-lg text-slate-500 hover:text-sky-600 hover:bg-sky-50 dark:hover:bg-slate-800 transition-colors cursor-pointer" title="View Document" data-id="${tpl.id}">
+                <svg class="w-4 h-4 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
                   <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                 </svg>
-                <span>Preview & Use</span>
               </button>
-            </td>
-          </tr>
-        `;
-      });
-      $tbody.html(html);
-    } else if ($grid.length) {
-      let html = '';
-      displayList.forEach(tpl => {
-        const statusDisplay = getHrTemplateActivityStatus(tpl);
-        html += `
-          <div class="Aurelia-card p-5 space-y-4 flex flex-col justify-between hover:border-[#FCA311] transition-all shadow-xs group">
-            <div class="space-y-2.5">
-              <div class="flex items-center justify-between">
-                <span class="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-[#14213D] text-[#FCA311]">${tpl.code}</span>
-                <span class="text-[10px] font-semibold text-slate-400 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded-md">${tpl.badge}</span>
-              </div>
-              <h3 class="text-sm font-bold text-slate-900 dark:text-white group-hover:text-[#FCA311] transition-colors leading-snug">
-                ${tpl.title}
-              </h3>
-              <p class="text-xs text-slate-500 dark:text-slate-400 line-clamp-2 leading-relaxed">
-                ${tpl.desc}
-              </p>
-            </div>
-
-            <div class="pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-[11px] text-slate-400">
-              <span class="font-medium flex items-center gap-1.5">${tpl.pages} • ${(statusDisplay === 'Not active' || statusDisplay === 'not-active' || statusDisplay === 'Inactive') ? '<span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold bg-[#b91c1c] text-white shadow-2xs">Not active</span>' : '<span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold bg-[#15803d] text-white shadow-2xs">Active</span>'}</span>
-              <button type="button" class="btn-preview-hr-doc btn-Aurelia-secondary text-xs py-1 px-3" data-id="${tpl.id}">
-                Preview & Use
+              <!-- Edit / Pencil -->
+              <button type="button" class="btn-edit-hr-doc p-2 rounded-lg text-slate-500 hover:text-amber-600 hover:bg-amber-50 dark:hover:bg-slate-800 transition-colors cursor-pointer" title="Edit Record" data-id="${tpl.id}">
+                <svg class="w-4 h-4 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
+                </svg>
+              </button>
+              <!-- Delete / Trash -->
+              <button type="button" class="btn-delete-hr-doc p-2 rounded-lg text-slate-500 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-slate-800 transition-colors cursor-pointer" title="Delete Record" data-id="${tpl.id}">
+                <svg class="w-4 h-4 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
+                </svg>
               </button>
             </div>
-          </div>
-        `;
-      });
-      $grid.html(html);
-    }
+          </td>
+        </tr>
+      `;
+    });
+    $tbody.html(html);
   }
 
-  // Category Dropdown & Filter Buttons for HR Documents
+  // Department Dropdown Filter
   $(document).on('change', '#select-hr-doc-category', function () {
     currentHrDocCategory = $(this).val() || 'all';
     renderHrDocumentsSection();
@@ -5411,24 +5454,56 @@ $(document).ready(function () {
     renderHrDocumentsSection();
   });
 
-  // Search input for HR Documents
-  $('#input-search-hr-docs').on('input', function () {
-    renderHrDocumentsSection();
-  });
-
-  // Preview & Print HR Document
+  // Action: Preview Document (Eye Icon)
   $(document).on('click', '.btn-preview-hr-doc', function () {
     const id = $(this).data('id');
     const tpl = HR_TEMPLATES.find(t => t.id === id);
     if (!tpl) return;
 
-    const statusDisplay = getHrTemplateActivityStatus(tpl);
-    $('#preview-doc-title').text(tpl.title);
-    $('#preview-doc-meta').text(`${tpl.categoryLabel} • Code: ${tpl.code} • ${tpl.pages} • ${statusDisplay}`);
-    $('#preview-doc-ref').text(`REF: AUR/HR/2026/${tpl.code}`);
-    $('#preview-doc-body').html(tpl.body);
+    $('#preview-doc-title').text(`${tpl.empName} - ${tpl.title || 'Official Document'}`);
+    $('#preview-doc-meta').text(`${tpl.department} • ID: ${tpl.empId} • Format: ${tpl.format} • ${tpl.isVerified ? 'Verified' : 'Pending'}`);
+    $('#preview-doc-ref').text(`REF: AUR/26/${tpl.empId}`);
+    $('#preview-doc-body').html(tpl.body || `<div class="space-y-4"><p class="font-bold text-slate-800">Employee: ${escapeHtml(tpl.empName)}</p><p>Department: ${escapeHtml(tpl.department)} (ID: ${escapeHtml(tpl.empId)})</p><p class="text-xs text-slate-500">Document verified: ${tpl.isVerified ? 'Yes' : 'Pending Review'}</p></div>`);
 
     $('#modal-preview-hr-doc').removeClass('hidden');
+  });
+
+  // Action: Edit Employee Record (Pencil Icon)
+  $(document).on('click', '.btn-edit-hr-doc', function () {
+    const id = $(this).data('id');
+    const tpl = HR_TEMPLATES.find(t => t.id === id);
+    if (!tpl) return;
+
+    const newName = prompt('Update Employee Name:', tpl.empName);
+    if (newName === null) return;
+    const trimmed = $.trim(newName);
+    if (!trimmed) {
+      showToast('Employee name cannot be empty.', 'error');
+      return;
+    }
+    tpl.empName = trimmed;
+    try {
+      localStorage.setItem('aurelia_hr_templates_v5', JSON.stringify(HR_TEMPLATES));
+    } catch (e) {}
+    renderHrDocumentsSection();
+    showToast(`Updated record for ${tpl.empId}`, 'success');
+  });
+
+  // Action: Delete Employee Record (Trash Icon)
+  $(document).on('click', '.btn-delete-hr-doc', function () {
+    const id = $(this).data('id');
+    const idx = HR_TEMPLATES.findIndex(t => t.id === id);
+    if (idx === -1) return;
+
+    const item = HR_TEMPLATES[idx];
+    if (confirm(`Are you sure you want to delete employee record ${item.empName} (${item.empId})?`)) {
+      HR_TEMPLATES.splice(idx, 1);
+      try {
+        localStorage.setItem('aurelia_hr_templates_v5', JSON.stringify(HR_TEMPLATES));
+      } catch (e) {}
+      renderHrDocumentsSection();
+      showToast(`Record ${item.empId} deleted successfully.`, 'info');
+    }
   });
 
   $('#btn-print-hr-doc').on('click', function () {
@@ -5439,7 +5514,7 @@ $(document).ready(function () {
     showToast('Document exported to PDF format with hotel seal', 'success');
   });
 
-  // Redirect to HR Employee Lists page (full templates list) when clicking "See More"
+  // Redirect to HR Employee Lists page when clicking 'See More'
   $(document).on('click', '#btn-see-more-hr-docs', function (e) {
     e.preventDefault();
     const isHrFolder = window.location.pathname.includes('human-resources');
@@ -5447,71 +5522,91 @@ $(document).ready(function () {
     window.location.href = targetUrl;
   });
 
-  // Upload HR Document Template Form Submit Handler
-  $(document).on('submit', '#form-upload-hr-doc', function (e) {
-    e.preventDefault();
-    const title = $.trim($('#hr-doc-input-title').val());
-    const desc = $.trim($('#hr-doc-input-desc').val());
-    const type = $('#hr-doc-input-type').val();
-    const fileInput = document.getElementById('hr-doc-input-file');
-    const fileName = (fileInput && fileInput.files && fileInput.files[0]) ? fileInput.files[0].name : 'document.pdf';
+  // Handle Profile Picture / Logo Upload in Add Document Form (+ sign container)
+  let selectedAvatarDataUrl = null;
 
-    if (!title || !desc || !type) {
-      showToast('Please fill all required fields.', 'error');
+  $(document).on('change', '#hr-doc-input-avatar', function (e) {
+    const file = e.target.files && e.target.files[0];
+    if (!file) return;
+
+    if (!file.type.startsWith('image/')) {
+      showToast('Please select a valid image file (PNG, JPG, JPEG).', 'error');
       return;
     }
 
-    const typeLabels = {
-      employment: 'Employment Contract',
-      compliance: 'Compliance & NDA',
-      policies: 'Policies & SOPs',
-      letters: 'Letters & Notices'
+    const reader = new FileReader();
+    reader.onload = function (evt) {
+      selectedAvatarDataUrl = evt.target.result;
+      $('#hr-avatar-preview-box').html(`
+        <img src="${selectedAvatarDataUrl}" alt="Avatar Preview" class="w-5 h-5 object-cover rounded-md shadow-xs border border-amber-300" />
+      `);
+      showToast('Profile image attached!', 'success');
     };
+    reader.readAsDataURL(file);
+  });
 
-    const newCode = 'DOC-HR-' + (HR_TEMPLATES.length + 1).toString().padStart(3, '0');
+  // Form Submit: Upload & Add Employee Record
+  $(document).on('submit', '#form-upload-hr-doc', function (e) {
+    e.preventDefault();
+    const empName = $.trim($('#hr-doc-input-title').val());
+    const dept = $('#hr-doc-input-dept').val();
+    const deptCode = $('#hr-doc-input-dept option:selected').data('code') || (dept ? dept.substring(0, 2).toUpperCase() : 'FD');
+    const isVerifiedVal = $('#hr-doc-input-verify').val() === 'Verified';
+
+    const fileInput = document.getElementById('hr-doc-input-file');
+    const fileName = (fileInput && fileInput.files && fileInput.files[0]) ? fileInput.files[0].name : 'document.pdf';
+
+    let fileFormat = 'PDF';
+    const extMatch = fileName.match(/\.([a-zA-Z0-9]+)$/);
+    if (extMatch) {
+      fileFormat = extMatch[1].toUpperCase();
+    }
+
+    if (!empName || !dept) {
+      showToast('Please enter employee name and select department.', 'error');
+      return;
+    }
+
+    // Format: DE-26-DY01
+    const serialNum = String(HR_TEMPLATES.length + 1).padStart(2, '0');
+    const empId = `${deptCode}-26-DY${serialNum}`;
     const newId = 'doc-custom-' + Date.now();
 
+    const nameParts = empName.split(' ');
+    const initials = nameParts.length > 1 ? (nameParts[0][0] + nameParts[1][0]).toUpperCase() : empName.substring(0, 2).toUpperCase();
+
     const newDoc = {
-      code: newCode,
-      title: title,
-      category: type,
-      categoryLabel: typeLabels[type] || 'Standard Template',
-      desc: desc,
-      badge: fileName.toLowerCase().endsWith('.docx') ? 'DOCX • Uploaded' : (fileName.toLowerCase().endsWith('.csv') ? 'CSV • Uploaded' : 'PDF • Uploaded'),
-      pages: '1 Page',
-      updated: '31 Oct 2026',
       id: newId,
-      body: `
-        <div class="space-y-4">
-          <p class="font-bold text-slate-900">${escapeHtml(title)}</p>
-          <p>${escapeHtml(desc)}</p>
-          <p class="text-xs text-slate-500">Official attachment: ${escapeHtml(fileName)}</p>
-        </div>
-      `
+      empId: empId,
+      empName: empName,
+      avatar: selectedAvatarDataUrl || null,
+      initials: initials,
+      department: dept,
+      deptCode: deptCode,
+      format: fileFormat,
+      isVerified: isVerifiedVal,
+      title: `${dept} Official Document`,
+      body: `<div class="space-y-4"><p class="font-bold text-slate-900">${escapeHtml(empName)} (${escapeHtml(empId)})</p><p>Department: ${escapeHtml(dept)}</p><p class="text-xs text-slate-500">Uploaded File: ${escapeHtml(fileName)}</p></div>`
     };
 
     HR_TEMPLATES.unshift(newDoc);
     try {
-      localStorage.setItem('aurelia_hr_templates', JSON.stringify(HR_TEMPLATES));
+      localStorage.setItem('aurelia_hr_templates_v5', JSON.stringify(HR_TEMPLATES));
     } catch (e) {
       console.warn('Failed to save HR templates to localStorage', e);
     }
+
     renderHrDocumentsSection();
-    showToast(`Template "${title}" uploaded and added to directory!`, 'success');
+    showToast(`Employee ${empName} (${empId}) added successfully!`, 'success');
     this.reset();
+    selectedAvatarDataUrl = null;
+    $('#hr-avatar-preview-box').html(`
+      <svg class="w-4 h-4 stroke-current stroke-[2.2] transition-transform group-hover:scale-110" fill="none" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+      </svg>
+    `);
   });
 
-  $('#btn-create-custom-template').on('click', function () {
-    const $form = $('#card-add-hr-doc-form');
-    if ($form.length) {
-      $form[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
-      $('#hr-doc-input-title').focus();
-    } else {
-      showToast('Custom template upload wizard ready (Supports .docx & .pdf)', 'info');
-    }
-  });
-
-  // =========================================================================
   // 11. EMPLOYEES STANDALONE PAGE CONTROLLER
   // =========================================================================
   let currentStaffPageFilter = 'all';
@@ -5544,39 +5639,80 @@ $(document).ready(function () {
       $('#page-staff-empty').removeClass('hidden');
     } else {
       $('#page-staff-empty').addClass('hidden');
-      filtered.forEach(s => {
-        const initials = (s.name || 'Staff').split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+      const avatarGradients = [
+        'linear-gradient(135deg, #14213D 0%, #be123c 60%, #FCA311 100%)',
+        'linear-gradient(135deg, #14213D 0%, #854d0e 60%, #FCA311 100%)',
+        'linear-gradient(135deg, #14213D 0%, #0369a1 60%, #FCA311 100%)',
+        'linear-gradient(135deg, #14213D 0%, #b45309 60%, #FCA311 100%)',
+        'linear-gradient(135deg, #14213D 0%, #475569 60%, #FCA311 100%)',
+        'linear-gradient(135deg, #14213D 0%, #0d9488 60%, #FCA311 100%)',
+        'linear-gradient(135deg, #14213D 0%, #4338ca 60%, #FCA311 100%)',
+        'linear-gradient(135deg, #14213D 0%, #7e22ce 60%, #FCA311 100%)'
+      ];
+
+      filtered.forEach((s, idx) => {
+        let avatarBadgeText = (s.name || 'Staff').split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+        let avatarStyle = avatarGradients[idx % avatarGradients.length];
+
+        if (s.id === 'EMP-2026-08' || s.name === 'Tanvi Agarwal') {
+          avatarBadgeText = 'TA';
+          avatarStyle = 'linear-gradient(135deg, #14213D 0%, #be123c 60%, #FCA311 100%)';
+        } else if (s.id === 'EMP-2026-01' || s.name === 'Adaline Lively') {
+          avatarBadgeText = 'FO';
+          avatarStyle = 'linear-gradient(135deg, #14213D 0%, #854d0e 60%, #FCA311 100%)';
+        } else if (s.id === 'EMP-2026-02' || s.name === 'Vikram Malhotra') {
+          avatarBadgeText = 'VM';
+          avatarStyle = 'linear-gradient(135deg, #14213D 0%, #0369a1 60%, #FCA311 100%)';
+        } else if (s.id === 'EMP-2026-03' || s.name === 'Priyanka Sharma') {
+          avatarBadgeText = 'PS';
+          avatarStyle = 'linear-gradient(135deg, #14213D 0%, #b45309 60%, #FCA311 100%)';
+        } else if (s.id === 'EMP-2026-04' || s.name === 'Rohan Desai') {
+          avatarBadgeText = 'RD';
+          avatarStyle = 'linear-gradient(135deg, #14213D 0%, #475569 60%, #FCA311 100%)';
+        } else if (s.id === 'EMP-2026-05' || s.name === 'Ananya Sen') {
+          avatarBadgeText = 'AS';
+          avatarStyle = 'linear-gradient(135deg, #14213D 0%, #0d9488 60%, #FCA311 100%)';
+        } else if (s.id === 'EMP-2026-06' || s.name === 'Sameer Joshi') {
+          avatarBadgeText = 'SJ';
+          avatarStyle = 'linear-gradient(135deg, #14213D 0%, #4338ca 60%, #FCA311 100%)';
+        } else if (s.id === 'EMP-2026-07' || s.name === 'Neha Pillai') {
+          avatarBadgeText = 'NP';
+          avatarStyle = 'linear-gradient(135deg, #14213D 0%, #7e22ce 60%, #FCA311 100%)';
+        }
+
+        const avatarHtml = `<div class="w-9 h-9 rounded-xl flex items-center justify-center font-black text-xs text-white shadow-xs border border-white/20 flex-shrink-0" style="background: ${avatarStyle};">${avatarBadgeText}</div>`;
         const isOnDuty = s.status === 'On Duty';
 
         $tbody.append(`
           <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors">
-            <td class="py-3 px-4">
+            <td class="py-3.5 px-4 whitespace-nowrap">
+              <span class="font-mono text-slate-600 dark:text-slate-400 font-medium">${escapeHtml(s.id)}</span>
+            </td>
+            <td class="py-3.5 px-4 whitespace-nowrap">
               <div class="flex items-center space-x-3">
-                <div class="w-8 h-8 rounded-full bg-[#14213D] text-[#FCA311] font-bold text-xs flex items-center justify-center flex-shrink-0 shadow-xs">
-                  ${initials}
-                </div>
+                ${avatarHtml}
                 <div>
-                  <div class="font-bold text-slate-900 dark:text-white">${escapeHtml(s.name)}</div>
-                  <div class="text-[11px] font-mono text-slate-400">${escapeHtml(s.id)}</div>
+                  <div class="font-bold text-slate-900 dark:text-white text-xs">${escapeHtml(s.name)}</div>
+                  <div class="text-[10px] text-slate-400">${escapeHtml(s.station || s.role)}</div>
                 </div>
               </div>
             </td>
-            <td class="py-3 px-4">
-              <div class="font-semibold text-slate-800 dark:text-slate-200">${escapeHtml(s.role)}</div>
-              <div class="text-[11px] text-slate-400">${escapeHtml(s.department)}</div>
+            <td class="py-3.5 px-4 whitespace-nowrap">
+              <div class="font-semibold text-slate-800 dark:text-slate-200 text-xs">${escapeHtml(s.role)}</div>
+              <div class="text-[10px] text-slate-400">${escapeHtml(s.department)}</div>
             </td>
-            <td class="py-3 px-4 font-medium text-slate-600 dark:text-slate-300">
+            <td class="py-3.5 px-4 font-medium text-slate-600 dark:text-slate-300 text-xs whitespace-nowrap">
               ${escapeHtml(s.station)}
             </td>
-            <td class="py-3 px-4 font-mono text-xs text-slate-500 dark:text-slate-400">
+            <td class="py-3.5 px-4 font-mono text-xs text-slate-500 dark:text-slate-400 whitespace-nowrap">
               ${escapeHtml(s.shift)}
             </td>
-            <td class="py-3 px-4 text-center">
+            <td class="py-3.5 px-4 text-center whitespace-nowrap">
               <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold ${isOnDuty ? 'bg-[#15803d] text-white' : 'bg-[#b91c1c] text-white'} shadow-2xs">
                 ${escapeHtml(s.status)}
               </span>
             </td>
-            <td class="py-3 px-4 text-slate-500 font-mono text-xs">
+            <td class="py-3.5 px-4 text-slate-500 font-mono text-xs whitespace-nowrap">
               ${escapeHtml(s.phone)}
             </td>
           </tr>
@@ -5826,7 +5962,16 @@ $(document).ready(function () {
     currentPath.includes('employee-list') ||
     currentPath.includes('add-employee') ||
     currentPath.includes('hr-document') ||
-    currentPath.includes('holiday');
+    currentPath.includes('holiday') ||
+    currentPath.includes('leave-category') ||
+    currentPath.includes('leave-assign') ||
+    currentPath.includes('leave-request') ||
+    currentPath.includes('attendance-list') ||
+    currentPath.includes('attendance-report') ||
+    currentPath.includes('salary-grade') ||
+    currentPath.includes('manage-salary') ||
+    currentPath.includes('disburse-salary-update') ||
+    currentPath.includes('pay-slip');
   const isBillingPage = currentPath.includes('billing.html') || currentPath.endsWith('billing');
   const isOrdersPage = currentPath.includes('order.html') || currentPath.endsWith('order');
   const isMenuPage = currentPath.includes('menu.html') || currentPath.endsWith('menu');
@@ -5842,6 +5987,15 @@ $(document).ready(function () {
   else if (currentPath.includes('add-employee')) defaultSection = 'add-employee';
   else if (currentPath.includes('hr-document')) defaultSection = 'hr-documents';
   else if (currentPath.includes('holiday')) defaultSection = 'holidays';
+  else if (currentPath.includes('leave-category')) defaultSection = 'leave-category';
+  else if (currentPath.includes('leave-assign')) defaultSection = 'leave-assign';
+  else if (currentPath.includes('leave-request')) defaultSection = 'leave-request';
+  else if (currentPath.includes('attendance-list')) defaultSection = 'attendance-list';
+  else if (currentPath.includes('attendance-report')) defaultSection = 'attendance-report';
+  else if (currentPath.includes('salary-grade')) defaultSection = 'salary-grade';
+  else if (currentPath.includes('manage-salary')) defaultSection = 'manage-salary';
+  else if (currentPath.includes('disburse-salary-update')) defaultSection = 'disburse-salary-update';
+  else if (currentPath.includes('pay-slip')) defaultSection = 'pay-slip';
   else if (isBillingPage) defaultSection = 'billing';
   else if (isOrdersPage) defaultSection = 'orders';
   else if (isMenuPage) defaultSection = 'menu';
@@ -5861,6 +6015,7 @@ $(document).ready(function () {
 
   if (!window.Auth || window.Auth.isAuthenticated()) {
     switchSection(initHash);
+    restoreSidebarScroll();
     if (!isStandalonePage) {
       renderDashboard();
     }

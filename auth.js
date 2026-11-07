@@ -376,6 +376,15 @@
     else if (currentPath.includes('add-employee')) pageDefaultSec = 'add-employee';
     else if (currentPath.includes('hr-document')) pageDefaultSec = 'hr-documents';
     else if (currentPath.includes('holiday')) pageDefaultSec = 'holidays';
+    else if (currentPath.includes('leave-category')) pageDefaultSec = 'leave-category';
+    else if (currentPath.includes('leave-assign')) pageDefaultSec = 'leave-assign';
+    else if (currentPath.includes('leave-request')) pageDefaultSec = 'leave-request';
+    else if (currentPath.includes('attendance-list')) pageDefaultSec = 'attendance-list';
+    else if (currentPath.includes('attendance-report')) pageDefaultSec = 'attendance-report';
+    else if (currentPath.includes('salary-grade')) pageDefaultSec = 'salary-grade';
+    else if (currentPath.includes('manage-salary')) pageDefaultSec = 'manage-salary';
+    else if (currentPath.includes('disburse-salary-update')) pageDefaultSec = 'disburse-salary-update';
+    else if (currentPath.includes('pay-slip')) pageDefaultSec = 'pay-slip';
     else if (currentPath.includes('billing.html') || currentPath.endsWith('billing')) pageDefaultSec = 'billing';
     else if (currentPath.includes('order.html') || currentPath.endsWith('order')) pageDefaultSec = 'orders';
     else if (currentPath.includes('menu.html') || currentPath.endsWith('menu')) pageDefaultSec = 'menu';
@@ -467,53 +476,43 @@
     const token = AuthState.token;
     const cachedUserStr = localStorage.getItem(STORAGE_KEY_USER) || sessionStorage.getItem(STORAGE_KEY_USER);
 
-    // First try backend API if token exists and API_BASE is configured
-    if (token) {
-      if (API_BASE) {
-        try {
-          const response = await fetch(`${API_BASE}/api/auth/me`, {
-            method: 'GET',
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${token}`
-            },
-            credentials: 'include'
-          });
+    // 1. Try backend API if API_BASE is configured (using Bearer token header AND HttpOnly cookie)
+    if (API_BASE) {
+      try {
+        const headers = { 'Content-Type': 'application/json' };
+        if (token) {
+          headers['Authorization'] = `Bearer ${token}`;
+        }
 
-          if (response.ok) {
-            const data = await response.json();
-            if (data.authenticated && data.user) {
-              renderAuthenticatedState(data.user);
-              return;
+        const response = await fetch(`${API_BASE}/api/auth/me`, {
+          method: 'GET',
+          headers,
+          credentials: 'include'
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          if (data.authenticated && data.user) {
+            if (data.token) {
+              AuthState.token = data.token;
+              try { localStorage.setItem(STORAGE_KEY_TOKEN, data.token); } catch (e) { }
             }
-          } else if (response.status === 404 || response.status === 405 || response.status >= 500) {
-            // Server API missing or error: validate using cached user
-            if (cachedUserStr) {
-              try {
-                const cachedUser = JSON.parse(cachedUserStr);
-                renderAuthenticatedState(cachedUser);
-                return;
-              } catch (e) { }
-            }
-          }
-        } catch (err) {
-          // Fallback to cached user if server is offline
-          if (cachedUserStr) {
-            try {
-              const cachedUser = JSON.parse(cachedUserStr);
-              renderAuthenticatedState(cachedUser);
-              return;
-            } catch (e) { }
+            renderAuthenticatedState(data.user);
+            return;
           }
         }
-      } else if (cachedUserStr) {
-        // Pure static mode: validate directly with cached session
-        try {
-          const cachedUser = JSON.parse(cachedUserStr);
-          renderAuthenticatedState(cachedUser);
-          return;
-        } catch (e) { }
+      } catch (err) {
+        // Server offline or connection error - continue to cached validation
       }
+    }
+
+    // 2. Validate using cached session from localStorage / sessionStorage
+    if (cachedUserStr) {
+      try {
+        const cachedUser = JSON.parse(cachedUserStr);
+        renderAuthenticatedState(cachedUser);
+        return;
+      } catch (e) { }
     }
 
     // Default to unauthenticated login view
