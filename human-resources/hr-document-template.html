@@ -1075,6 +1075,9 @@
     select.Aurelia-input,
     #select-money-flow-account,
     #select-trans-account {
+      appearance: none !important;
+      -webkit-appearance: none !important;
+      -moz-appearance: none !important;
       background: rgba(255, 255, 255, 0.75) !important;
       backdrop-filter: blur(16px) !important;
       -webkit-backdrop-filter: blur(16px) !important;
@@ -2960,7 +2963,8 @@
             <!-- Department Filter Dropdown -->
             <div class="relative w-full sm:w-64">
               <select id="select-hr-doc-category"
-                class="Aurelia-input w-full text-xs py-2 pl-3.5 pr-9 font-semibold cursor-pointer appearance-none bg-white dark:bg-slate-800 text-slate-800 dark:text-white rounded-full border border-[#E5E5E5] dark:border-slate-700 shadow-xs focus:outline-none">
+                style="-webkit-appearance: none !important; -moz-appearance: none !important; appearance: none !important;"
+                class="Aurelia-input w-full text-xs py-2 pl-3.5 pr-10 font-semibold cursor-pointer bg-white dark:bg-slate-800 text-slate-800 dark:text-white rounded-full border border-[#E5E5E5] dark:border-slate-700 shadow-xs focus:outline-none">
                 <option value="all">All Departments</option>
                 <option value="Front Desk">Front Desk</option>
                 <option value="Housekeeping">Housekeeping</option>
@@ -2968,7 +2972,7 @@
                 <option value="Human Resources">Human Resources</option>
                 <option value="Accounts & Finance">Accounts & Finance</option>
               </select>
-              <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3.5 text-slate-500 dark:text-slate-400">
+              <div class="pointer-events-none absolute inset-y-0 right-1 flex items-center pr-3.5 text-slate-500 dark:text-slate-400">
                 <svg class="w-4 h-4 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
                 </svg>
@@ -3043,13 +3047,13 @@
           </div>
         </div>
         <div class="flex items-center space-x-2">
-          <button type="button" id="btn-print-hr-doc" onclick="printHrDocumentDirectly()" class="btn-Aurelia-secondary text-xs py-1.5 px-3 flex items-center space-x-1.5 cursor-pointer">
+          <button type="button" id="btn-print-hr-doc" onclick="printHrDocumentDirectly(event)" class="btn-Aurelia-secondary text-xs py-1.5 px-3 flex items-center space-x-1.5 cursor-pointer">
             <svg class="w-4 h-4 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2">
               <path stroke-linecap="round" stroke-linejoin="round" d="M6.72 13.829c-.24.03-.48.062-.72.096m.72-.096a42.415 42.415 0 0110.56 0m-10.56 0L6.34 18m10.94-4.171c.24.03.48.062.72.096m-.72-.096L17.66 18m0 0l.229 2.523a1.125 1.125 0 01-1.12 1.227H7.231c-.662 0-1.18-.568-1.12-1.227L6.34 18m11.32 0c.268-.07.534-.144.798-.222A2.25 2.25 0 0020.25 15.6V10.5a2.25 2.25 0 00-2.25-2.25h-12A2.25 2.25 0 003.75 10.5v5.1a2.25 2.25 0 001.792 2.178c.264.078.53.152.798.222" />
             </svg>
             <span>Print</span>
           </button>
-          <button type="button" id="btn-download-hr-doc" onclick="printHrDocumentDirectly()" class="btn-Aurelia-primary text-xs py-1.5 px-3 flex items-center space-x-1.5 shadow-sm shadow-[#FCA311]/20 cursor-pointer">
+          <button type="button" id="btn-download-hr-doc" onclick="printHrDocumentDirectly(event)" class="btn-Aurelia-primary text-xs py-1.5 px-3 flex items-center space-x-1.5 shadow-sm shadow-[#FCA311]/20 cursor-pointer">
             <svg class="w-4 h-4 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2">
               <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
             </svg>
@@ -3111,32 +3115,46 @@
   <div id="print-invoice-area" class="hidden"></div>
 
   <!-- Authentication Controller -->
-  <script src="../auth.js?v=20261107_v03"></script>
+  <script src="../auth.js?v=20261107_v05"></script>
   <!-- Main JavaScript Logic -->
-  <script src="../main.js?v=20261107_print_v03"></script>
+  <script src="../main.js?v=20261107_print_v05"></script>
 
   <script>
-    function printHrDocumentDirectly() {
-      const printDoc = document.getElementById('printable-hr-doc');
-      if (!printDoc) {
+    let isHrDocPrinting = false;
+    function printHrDocumentDirectly(e) {
+      if (e) {
+        if (typeof e.preventDefault === 'function') e.preventDefault();
+        if (typeof e.stopImmediatePropagation === 'function') e.stopImmediatePropagation();
+        if (typeof e.stopPropagation === 'function') e.stopPropagation();
+      }
+      if (isHrDocPrinting) return false;
+      isHrDocPrinting = true;
+      try {
+        const printDoc = document.getElementById('printable-hr-doc');
+        if (!printDoc) {
+          window.print();
+          setTimeout(function() { isHrDocPrinting = false; }, 800);
+          return;
+        }
+        let printArea = document.getElementById('print-invoice-area');
+        if (!printArea) {
+          printArea = document.createElement('div');
+          printArea.id = 'print-invoice-area';
+          document.body.appendChild(printArea);
+        }
+        printArea.innerHTML = '<div style="background:#ffffff; color:#0f172a; padding: 24px; font-family: -apple-system, BlinkMacSystemFont, sans-serif; font-size: 12px; line-height: 1.6;">' + printDoc.innerHTML + '</div>';
+        printArea.classList.remove('hidden');
+
         window.print();
-        return;
-      }
-      let printArea = document.getElementById('print-invoice-area');
-      if (!printArea) {
-        printArea = document.createElement('div');
-        printArea.id = 'print-invoice-area';
-        document.body.appendChild(printArea);
-      }
-      printArea.innerHTML = '<div style="background:#ffffff; color:#0f172a; padding: 24px; font-family: -apple-system, BlinkMacSystemFont, sans-serif; font-size: 12px; line-height: 1.6;">' + printDoc.innerHTML + '</div>';
-      printArea.classList.remove('hidden');
 
-      window.print();
-
-      setTimeout(function() {
-        printArea.classList.add('hidden');
-        printArea.innerHTML = '';
-      }, 1500);
+        setTimeout(function() {
+          printArea.classList.add('hidden');
+          printArea.innerHTML = '';
+          isHrDocPrinting = false;
+        }, 1000);
+      } catch (err) {
+        isHrDocPrinting = false;
+      }
     }
     window.printHrDocumentDirectly = printHrDocumentDirectly;
   </script>

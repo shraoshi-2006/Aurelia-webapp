@@ -3017,7 +3017,7 @@
           </div>
         </div>
         <div class="flex items-center space-x-2">
-          <button type="button" id="btn-print-hr-doc" onclick="printHrDocumentDirectly()"
+          <button type="button" id="btn-print-hr-doc" onclick="printHrDocumentDirectly(event)"
             class="btn-Aurelia-secondary text-xs py-1.5 px-3 flex items-center space-x-1.5 cursor-pointer">
             <svg class="w-4 h-4 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2">
               <path stroke-linecap="round" stroke-linejoin="round"
@@ -3025,7 +3025,7 @@
             </svg>
             <span>Print</span>
           </button>
-          <button type="button" id="btn-download-hr-doc" onclick="printHrDocumentDirectly()"
+          <button type="button" id="btn-download-hr-doc" onclick="printHrDocumentDirectly(event)"
             class="btn-Aurelia-primary text-xs py-1.5 px-3 flex items-center space-x-1.5 shadow-sm shadow-[#FCA311]/20 cursor-pointer">
             <svg class="w-4 h-4 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2">
               <path stroke-linecap="round" stroke-linejoin="round"
@@ -3098,30 +3098,44 @@
   <!-- Authentication Controller -->
   <script src="../auth.js?v=20261107_v03"></script>
   <!-- Main JavaScript Logic -->
-  <script src="../main.js?v=20261107_print_v03"></script>
+  <script src="../main.js?v=20261107_print_v05"></script>
 
   <script>
-    function printHrDocumentDirectly() {
-      const printDoc = document.getElementById('printable-hr-doc');
-      if (!printDoc) {
+    let isHrDocPrinting = false;
+    function printHrDocumentDirectly(e) {
+      if (e) {
+        if (typeof e.preventDefault === 'function') e.preventDefault();
+        if (typeof e.stopImmediatePropagation === 'function') e.stopImmediatePropagation();
+        if (typeof e.stopPropagation === 'function') e.stopPropagation();
+      }
+      if (isHrDocPrinting) return false;
+      isHrDocPrinting = true;
+      try {
+        const printDoc = document.getElementById('printable-hr-doc');
+        if (!printDoc) {
+          window.print();
+          setTimeout(function() { isHrDocPrinting = false; }, 800);
+          return;
+        }
+        let printArea = document.getElementById('print-invoice-area');
+        if (!printArea) {
+          printArea = document.createElement('div');
+          printArea.id = 'print-invoice-area';
+          document.body.appendChild(printArea);
+        }
+        printArea.innerHTML = '<div style="background:#ffffff; color:#0f172a; padding: 24px; font-family: -apple-system, BlinkMacSystemFont, sans-serif; font-size: 12px; line-height: 1.6;">' + printDoc.innerHTML + '</div>';
+        printArea.classList.remove('hidden');
+
         window.print();
-        return;
-      }
-      let printArea = document.getElementById('print-invoice-area');
-      if (!printArea) {
-        printArea = document.createElement('div');
-        printArea.id = 'print-invoice-area';
-        document.body.appendChild(printArea);
-      }
-      printArea.innerHTML = '<div style="background:#ffffff; color:#0f172a; padding: 24px; font-family: -apple-system, BlinkMacSystemFont, sans-serif; font-size: 12px; line-height: 1.6;">' + printDoc.innerHTML + '</div>';
-      printArea.classList.remove('hidden');
 
-      window.print();
-
-      setTimeout(function() {
-        printArea.classList.add('hidden');
-        printArea.innerHTML = '';
-      }, 1500);
+        setTimeout(function() {
+          printArea.classList.add('hidden');
+          printArea.innerHTML = '';
+          isHrDocPrinting = false;
+        }, 1000);
+      } catch (err) {
+        isHrDocPrinting = false;
+      }
     }
     window.printHrDocumentDirectly = printHrDocumentDirectly;
   </script>
