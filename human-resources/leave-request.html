@@ -2905,7 +2905,7 @@
           </tr>
 
           <!-- 3. Meenakshi Sundaram -->
-          <tr class="hover:bg-slate-50/70 dark:hover:bg-slate-800/40 transition-all border-b border-slate-100 dark:border-slate-800/80 group cursor-pointer" data-status="approved">
+          <tr id="row-LR-2026-087" class="hover:bg-slate-50/70 dark:hover:bg-slate-800/40 transition-all border-b border-slate-100 dark:border-slate-800/80 group cursor-pointer" data-status="approved">
             <td class="py-3 px-4 whitespace-nowrap">
               <div class="flex items-center space-x-2.5">
                 <span class="text-slate-300 text-xs">☆</span>
@@ -2926,16 +2926,16 @@
                 <span class="text-slate-500 dark:text-slate-400 truncate">Annual personal vacation; covered by Chef Priya &bull; Bakery</span>
               </div>
             </td>
-            <td class="py-3 px-4 text-center whitespace-nowrap">
+            <td class="py-3 px-4 text-center whitespace-nowrap status-col">
               <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#15803d] text-white shadow-2xs">Approved</span>
             </td>
-            <td class="py-3 px-4 text-right pr-6 whitespace-nowrap text-slate-400 text-xs font-mono">
+            <td class="py-3 px-4 text-right pr-6 whitespace-nowrap text-slate-400 text-xs font-mono action-col">
               01 Nov - 05 Nov
             </td>
           </tr>
 
           <!-- 4. Rohan Desai -->
-          <tr class="hover:bg-slate-50/70 dark:hover:bg-slate-800/40 transition-all border-b border-slate-100 dark:border-slate-800/80 group cursor-pointer" data-status="rejected">
+          <tr id="row-LR-2026-086" class="hover:bg-slate-50/70 dark:hover:bg-slate-800/40 transition-all border-b border-slate-100 dark:border-slate-800/80 group cursor-pointer" data-status="rejected">
             <td class="py-3 px-4 whitespace-nowrap">
               <div class="flex items-center space-x-2.5">
                 <span class="text-slate-300 text-xs">☆</span>
@@ -2956,16 +2956,16 @@
                 <span class="text-slate-500 dark:text-slate-400 truncate">Month-end close conflict; night auditor cover absent</span>
               </div>
             </td>
-            <td class="py-3 px-4 text-center whitespace-nowrap">
+            <td class="py-3 px-4 text-center whitespace-nowrap status-col">
               <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-100 text-rose-800">Rejected</span>
             </td>
-            <td class="py-3 px-4 text-right pr-6 whitespace-nowrap text-slate-400 text-xs font-mono">
+            <td class="py-3 px-4 text-right pr-6 whitespace-nowrap text-slate-400 text-xs font-mono action-col">
               31 Oct 2026
             </td>
           </tr>
 
           <!-- 5. Adaline Lively -->
-          <tr class="hover:bg-slate-50/70 dark:hover:bg-slate-800/40 transition-all border-b border-slate-100 dark:border-slate-800/80 group cursor-pointer" data-status="approved">
+          <tr id="row-LR-2026-085" class="hover:bg-slate-50/70 dark:hover:bg-slate-800/40 transition-all border-b border-slate-100 dark:border-slate-800/80 group cursor-pointer" data-status="approved">
             <td class="py-3 px-4 whitespace-nowrap">
               <div class="flex items-center space-x-2.5">
                 <span class="text-slate-300 text-xs">☆</span>
@@ -3260,8 +3260,12 @@
         $('.btn-lr-filter').removeClass('active border-[#FCA311] text-[#FCA311]').addClass('border-transparent text-slate-500');
         $(this).addClass('active border-[#FCA311] text-[#FCA311]').removeClass('border-transparent text-slate-500');
         const st = $(this).data('status');
-        if (st === 'all') $('#page-lr-tbody tr').show();
-        else { $('#page-lr-tbody tr').hide(); $('#page-lr-tbody tr[data-status="' + st + '"]').show(); }
+        if (st === 'all') {
+          $('#page-lr-tbody > tr[id^="row-"]:not(.is-deleted)').show();
+        } else {
+          $('#page-lr-tbody > tr[id^="row-"]').hide();
+          $('#page-lr-tbody > tr[id^="row-"][data-status="' + st + '"]:not(.is-deleted)').show();
+        }
       });
 
       // 2. SEARCH
@@ -3472,24 +3476,45 @@
 
       // Function to recalculate and refresh tab filter count badges
       function refreshFilterCounters() {
-        const totalPending = $('#tbody-leave-stream tr[id^="row-"][data-status="pending"]').length;
-        const totalApproved = $('#tbody-leave-stream tr[id^="row-"][data-status="approved"]').length;
-        const totalRejected = $('#tbody-leave-stream tr[id^="row-"][data-status="rejected"]').length;
-        const totalAll = $('#tbody-leave-stream tr[id^="row-"]:not(.is-deleted)').length;
+        let pending = 6;
+        let approved = 18;
+        let rejected = 3;
+        let total = 27;
 
-        $('#stat-pending-req').text(totalPending + ' Requests');
-        $('#stat-approved-req').text(totalApproved + ' Requests');
-        
-        // Update badges in filter buttons if present
-        $('.btn-lr-filter[data-status="all"] span:last-child').text(totalAll);
-        $('.btn-lr-filter[data-status="pending"] span:last-child').text(totalPending);
-        $('.btn-lr-filter[data-status="approved"] span:last-child').text(totalApproved);
-        $('.btn-lr-filter[data-status="rejected"] span:last-child').text(totalRejected);
+        $('#page-lr-tbody > tr[id^="row-"]').each(function() {
+          const rowId = $(this).attr('id').replace('row-', '');
+          const isDeleted = localStorage.getItem('aurelia_deleted_' + rowId) === 'true';
+          const isRejected = localStorage.getItem('aurelia_rejected_' + rowId) === 'true' || localStorage.getItem('aurelia_leave_status_' + rowId) === 'rejected';
+          const isApproved = localStorage.getItem('aurelia_approved_' + rowId) === 'true' || (rowId === 'LR-2026-089' && localStorage.getItem('aurelia_tanvi_leave_approved') === 'true');
+
+          // Originally row-LR-2026-089 and row-LR-2026-088 are pending
+          if (rowId === 'LR-2026-089' || rowId === 'LR-2026-088') {
+            if (isDeleted) {
+              pending = Math.max(0, pending - 1);
+              total = Math.max(0, total - 1);
+            } else if (isRejected) {
+              pending = Math.max(0, pending - 1);
+              rejected += 1;
+            } else if (isApproved) {
+              pending = Math.max(0, pending - 1);
+              approved += 1;
+            }
+          }
+        });
+
+        $('#stat-pending-req').text(pending + ' Requests');
+        $('#stat-approved-req').text(approved + ' Requests');
+
+        // Update badges in filter buttons
+        $('.btn-lr-filter[data-status="all"] span:last-child').text(total);
+        $('.btn-lr-filter[data-status="pending"] span:last-child').text(pending);
+        $('.btn-lr-filter[data-status="approved"] span:last-child').text(approved);
+        $('.btn-lr-filter[data-status="rejected"] span:last-child').text(rejected);
       }
 
       // Restore persisted Approved / Rejected / Deleted statuses on load
       function restorePersistedLeaveStates() {
-        $('#tbody-leave-stream tr[id^="row-"]').each(function() {
+        $('#page-lr-tbody > tr[id^="row-"]').each(function() {
           const $row = $(this);
           const rowId = $row.attr('id').replace('row-', '');
 
@@ -3523,7 +3548,7 @@
                   <svg class="w-3.5 h-3.5 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg>
                   <span>Email Dispatched</span>
                 </span>
-                <a href="leave-assign.html?emp=EMP-2026-08#row-emp-2026-08" class="text-[10px] text-sky-600 hover:underline font-bold ml-1">View Sync &rarr;</a>
+                <a href="leave-assign.html?emp=${$row.data('emp') || 'EMP-2026-08'}#row-emp-2026-08" class="text-[10px] text-sky-600 hover:underline font-bold ml-1">View Sync &rarr;</a>
               </div>
             `);
           }
