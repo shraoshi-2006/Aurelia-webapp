@@ -5141,7 +5141,7 @@ $(document).ready(function () {
       id: 'doc-emp-01',
       empId: 'FD-26-DY01',
       empName: 'Piyush Barua',
-      avatar: 'employees/emp-piyush.jpg',
+      avatar: 'images/emp-piyush.jpg',
       initials: 'PB',
       department: 'Front Desk',
       deptCode: 'FD',
@@ -5154,7 +5154,7 @@ $(document).ready(function () {
       id: 'doc-emp-02',
       empId: 'FD-26-DY02',
       empName: 'Adaline Lively',
-      avatar: 'employees/badge-fo-sample.png',
+      avatar: 'images/badge-fo-sample.png',
       initials: 'FO',
       department: 'Front Desk',
       deptCode: 'FD',
@@ -5167,7 +5167,7 @@ $(document).ready(function () {
       id: 'doc-emp-03',
       empId: 'HK-26-DY03',
       empName: 'Marcus Vance',
-      avatar: 'employees/emp-marcus.jpg',
+      avatar: 'images/emp-marcus.jpg',
       initials: 'HK',
       department: 'Housekeeping',
       deptCode: 'HK',
@@ -5219,7 +5219,7 @@ $(document).ready(function () {
       id: 'doc-emp-07',
       empId: 'HR-26-DY07',
       empName: 'Rajesh Sharma',
-      avatar: 'employees/emp-rajesh.jpg',
+      avatar: 'images/emp-rajesh.jpg',
       initials: 'HR',
       department: 'Human Resources',
       deptCode: 'HR',
@@ -5297,12 +5297,34 @@ $(document).ready(function () {
 
   let HR_TEMPLATES = [];
   try {
-    const storedHrTpls = localStorage.getItem('aurelia_hr_templates_v5');
+    let storedHrTpls = localStorage.getItem('aurelia_hr_templates_v6');
+    if (!storedHrTpls) {
+      const v5 = localStorage.getItem('aurelia_hr_templates_v5');
+      if (v5) {
+        try {
+          const parsed = JSON.parse(v5);
+          parsed.forEach(p => {
+            if (p.avatar && typeof p.avatar === 'string' && p.avatar.startsWith('employees/')) {
+              p.avatar = p.avatar.replace('employees/', 'images/');
+            }
+          });
+          storedHrTpls = JSON.stringify(parsed);
+          localStorage.setItem('aurelia_hr_templates_v6', storedHrTpls);
+        } catch (e) {}
+      }
+    }
     if (storedHrTpls) {
       HR_TEMPLATES = JSON.parse(storedHrTpls);
+      // Migrate any lingering 'employees/' avatar paths to 'images/'
+      HR_TEMPLATES.forEach(p => {
+        if (p.avatar && typeof p.avatar === 'string' && p.avatar.startsWith('employees/')) {
+          p.avatar = p.avatar.replace('employees/', 'images/');
+        }
+      });
+      localStorage.setItem('aurelia_hr_templates_v6', JSON.stringify(HR_TEMPLATES));
     } else {
       HR_TEMPLATES = [...DEFAULT_HR_TEMPLATES];
-      localStorage.setItem('aurelia_hr_templates_v5', JSON.stringify(HR_TEMPLATES));
+      localStorage.setItem('aurelia_hr_templates_v6', JSON.stringify(HR_TEMPLATES));
     }
   } catch (err) {
     HR_TEMPLATES = [...DEFAULT_HR_TEMPLATES];
@@ -5362,9 +5384,13 @@ $(document).ready(function () {
       // Profile Picture or Squircle Badge Logo (exactly matching the uploaded FO badge size)
       let avatarHtml = '';
       if (tpl.avatar) {
-        const imgSrc = (tpl.avatar.startsWith('data:') || tpl.avatar.startsWith('http'))
-          ? tpl.avatar
-          : (assetPrefix + tpl.avatar);
+        let avatarPath = tpl.avatar;
+        if (typeof avatarPath === 'string' && avatarPath.startsWith('employees/')) {
+          avatarPath = avatarPath.replace('employees/', 'images/');
+        }
+        const imgSrc = (avatarPath.startsWith('data:') || avatarPath.startsWith('http'))
+          ? avatarPath
+          : (assetPrefix + avatarPath);
         avatarHtml = `
           <img src="${imgSrc}" alt="${escapeHtml(tpl.empName)}"
             class="w-9 h-9 rounded-xl object-cover object-top shadow-xs border border-white/60 dark:border-slate-700 flex-shrink-0"
