@@ -588,9 +588,48 @@
 
     #app-sidebar.is-collapsed .sidebar-label,
     #app-sidebar.is-collapsed #sidebar-brand-title,
-    #app-sidebar.is-collapsed .sidebar-badge,
-    #app-sidebar.is-collapsed .sidebar-submenu {
+    #app-sidebar.is-collapsed .sidebar-submenu,
+    #app-sidebar.is-collapsed #chevron-nav-hr,
+    #app-sidebar.is-collapsed #chevron-nav-dept,
+    #app-sidebar.is-collapsed .Aurelia-nav-item svg.sidebar-label,
+    #app-sidebar.is-collapsed .aurelia-nav-item svg.sidebar-label,
+    #app-sidebar.is-collapsed .finset-nav-item svg.sidebar-label,
+    #app-sidebar.is-collapsed svg.sidebar-label {
       display: none !important;
+    }
+
+    /* Collapsed Sidebar: Notification Badge Dot on Icon (Number hidden, yellow dot shown) */
+    #app-sidebar.is-collapsed .sidebar-badge,
+    #app-sidebar.is-collapsed #badge-pending-orders,
+    #app-sidebar.is-collapsed #badge-menu-count,
+    #app-sidebar.is-collapsed #badge-customers-count {
+      display: block !important;
+      position: absolute !important;
+      top: 8px !important;
+      right: 8px !important;
+      width: 8px !important;
+      height: 8px !important;
+      min-width: 8px !important;
+      max-width: 8px !important;
+      padding: 0 !important;
+      margin: 0 !important;
+      border-radius: 9999px !important;
+      background: #FCA311 !important;
+      box-shadow: 0 0 0 1.5px #3F4354, 0 0 6px rgba(252, 163, 17, 0.8) !important;
+      border: none !important;
+      color: transparent !important;
+      font-size: 0 !important;
+      line-height: 0 !important;
+      overflow: hidden !important;
+      pointer-events: none !important;
+      z-index: 20 !important;
+      transform: none !important;
+    }
+
+    #app-sidebar.is-collapsed .Aurelia-nav-item.active .sidebar-badge,
+    #app-sidebar.is-collapsed .aurelia-nav-item.active .sidebar-badge,
+    #app-sidebar.is-collapsed .finset-nav-item.active .sidebar-badge {
+      box-shadow: 0 0 0 1.5px #1E212D, 0 0 6px rgba(252, 163, 17, 0.9) !important;
     }
 
     #app-sidebar.is-collapsed .sidebar-pad {
@@ -627,6 +666,7 @@
       margin-left: auto !important;
       margin-right: auto !important;
       border-radius: 12px !important;
+      position: relative !important;
     }
 
     #app-sidebar.is-collapsed .Aurelia-nav-item.active,
@@ -657,9 +697,9 @@
       height: 100% !important;
     }
 
-    #app-sidebar.is-collapsed .Aurelia-nav-item svg,
-    #app-sidebar.is-collapsed .aurelia-nav-item svg,
-    #app-sidebar.is-collapsed .finset-nav-item svg {
+    #app-sidebar.is-collapsed .Aurelia-nav-item > div > svg,
+    #app-sidebar.is-collapsed .aurelia-nav-item > div > svg,
+    #app-sidebar.is-collapsed .finset-nav-item > div > svg {
       margin: 0 !important;
       display: block !important;
     }
@@ -671,42 +711,31 @@
       transform: translateY(-50%) !important;
       z-index: 60;
       width: 20px;
-      height: 48px;
-      border-radius: 0 16px 16px 0 !important;
+      height: 72px;
       display: flex !important;
       align-items: center !important;
       justify-content: center !important;
+      padding-left: 3px !important;
       background: #494D5F !important;
       border: none !important;
       color: #FFFFFF !important;
       box-shadow: none !important;
       cursor: pointer;
+      -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 72'%3E%3Cpath d='M 0,0 C 0,10 6,17 14,20 C 18,22 20,28 20,36 C 20,44 18,50 14,52 C 6,55 0,62 0,72 Z' fill='%23000000'/%3E%3C/svg%3E");
+      mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 72'%3E%3Cpath d='M 0,0 C 0,10 6,17 14,20 C 18,22 20,28 20,36 C 20,44 18,50 14,52 C 6,55 0,62 0,72 Z' fill='%23000000'/%3E%3C/svg%3E");
+      -webkit-mask-size: 100% 100%;
+      mask-size: 100% 100%;
+      -webkit-mask-repeat: no-repeat;
+      mask-repeat: no-repeat;
+      clip-path: path('M 0,0 C 0,10 6,17 14,20 C 18,22 20,28 20,36 C 20,44 18,50 14,52 C 6,55 0,62 0,72 Z');
+      -webkit-clip-path: path('M 0,0 C 0,10 6,17 14,20 C 18,22 20,28 20,36 C 20,44 18,50 14,52 C 6,55 0,62 0,72 Z');
       transition: background 0.2s cubic-bezier(0.4, 0, 0.2, 1), color 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
-    /* Seamless concave fillets so the button flows smoothly out of the sidebar */
-    #btn-sidebar-collapse::before {
-      content: '';
-      position: absolute;
-      top: -12px;
-      left: 0;
-      width: 12px;
-      height: 12px;
-      background: radial-gradient(circle at 100% 0%, transparent 12px, #494D5F 12.5px);
-      pointer-events: none;
-      transition: background 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
+    #btn-sidebar-collapse::before,
     #btn-sidebar-collapse::after {
-      content: '';
-      position: absolute;
-      bottom: -12px;
-      left: 0;
-      width: 12px;
-      height: 12px;
-      background: radial-gradient(circle at 100% 100%, transparent 12px, #494D5F 12.5px);
-      pointer-events: none;
-      transition: background 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      display: none !important;
+      content: none !important;
     }
 
     #btn-sidebar-collapse:hover {
@@ -716,14 +745,6 @@
       box-shadow: none !important;
     }
 
-    #btn-sidebar-collapse:hover::before {
-      background: radial-gradient(circle at 100% 0%, transparent 12px, #FCA311 12.5px);
-    }
-
-    #btn-sidebar-collapse:hover::after {
-      background: radial-gradient(circle at 100% 100%, transparent 12px, #FCA311 12.5px);
-    }
-
     #app-sidebar.is-collapsed #btn-sidebar-collapse {
       position: absolute;
       right: -20px;
@@ -731,14 +752,22 @@
       transform: translateY(-50%) !important;
       z-index: 60;
       width: 20px;
-      height: 48px;
+      height: 72px;
       display: flex !important;
       align-items: center !important;
       justify-content: center !important;
+      padding-left: 3px !important;
       background: #494D5F !important;
       box-shadow: none !important;
       border: none !important;
-      border-radius: 0 16px 16px 0 !important;
+      -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 72'%3E%3Cpath d='M 0,0 C 0,10 6,17 14,20 C 18,22 20,28 20,36 C 20,44 18,50 14,52 C 6,55 0,62 0,72 Z' fill='%23000000'/%3E%3C/svg%3E");
+      mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 72'%3E%3Cpath d='M 0,0 C 0,10 6,17 14,20 C 18,22 20,28 20,36 C 20,44 18,50 14,52 C 6,55 0,62 0,72 Z' fill='%23000000'/%3E%3C/svg%3E");
+      -webkit-mask-size: 100% 100%;
+      mask-size: 100% 100%;
+      -webkit-mask-repeat: no-repeat;
+      mask-repeat: no-repeat;
+      clip-path: path('M 0,0 C 0,10 6,17 14,20 C 18,22 20,28 20,36 C 20,44 18,50 14,52 C 6,55 0,62 0,72 Z') !important;
+      -webkit-clip-path: path('M 0,0 C 0,10 6,17 14,20 C 18,22 20,28 20,36 C 20,44 18,50 14,52 C 6,55 0,62 0,72 Z') !important;
       color: #FFFFFF !important;
       cursor: pointer;
     }
