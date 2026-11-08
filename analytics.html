@@ -1162,7 +1162,7 @@
         0 6px 18px rgba(15, 23, 42, 0.08) !important;
     }
 
-    /* Universal Frosted Glass Select & Dropdowns */
+        /* Universal Frosted Glass Select & Dropdowns */
     select.Aurelia-input,
     #select-money-flow-account,
     #select-trans-account {
@@ -1172,10 +1172,11 @@
       border: 1.5px solid rgba(255, 255, 255, 0.85) !important;
       color: #0F172A !important;
       border-radius: 9999px !important;
-      padding: 6px 14px !important;
+      padding: 6px 36px 6px 16px !important;
       box-shadow:
         inset 1px 1px 1.5px rgba(255, 255, 255, 0.95),
         0 2px 6px rgba(15, 23, 42, 0.04) !important;
+      cursor: pointer;
     }
 
     select.Aurelia-input option,
@@ -2575,7 +2576,7 @@
               <a href="human-resources/hr-employee-list.html" class="hr-sub-item flex items-center space-x-2.5 py-1.5 px-2 rounded-lg text-slate-300 hover:text-white hover:bg-white/10 transition-colors group cursor-pointer" data-action="hr-employee-list">
                 <span
                   class="w-1.5 h-1.5 rounded-full border border-slate-400 group-hover:border-[#FCA311] group-hover:bg-[#FCA311] transition-all flex-shrink-0"></span>
-                <span>HR Employee Lists</span>
+                <span>HR List</span>
               </a>
 
               <!-- 3. Add Employee -->
@@ -2617,32 +2618,32 @@
                 <!-- Leave Management Sub-items -->
                 <div id="nested-leave-mgmt-menu"
                   class="pl-4 pr-1 py-1 space-y-1 text-xs border-l border-white/10 ml-4 mt-0.5">
-                  <a href="javascript:void(0)"
+                  <a href="human-resources/leave-category.html"
                     class="hr-sub-item flex items-center space-x-2 py-1 px-2 rounded-lg text-slate-300 hover:text-white hover:bg-white/10 transition-colors group cursor-pointer"
                     data-action="leave-category">
                     <span
                       class="w-1 h-1 rounded-full border border-slate-400 group-hover:border-[#FCA311] group-hover:bg-[#FCA311] transition-all flex-shrink-0"></span>
                     <span>Leave Category</span>
                   </a>
-                  <a href="javascript:void(0)"
+                  <a href="human-resources/leave-assign.html"
                     class="hr-sub-item flex items-center space-x-2 py-1 px-2 rounded-lg text-slate-300 hover:text-white hover:bg-white/10 transition-colors group cursor-pointer"
                     data-action="leave-assign">
                     <span
                       class="w-1 h-1 rounded-full border border-slate-400 group-hover:border-[#FCA311] group-hover:bg-[#FCA311] transition-all flex-shrink-0"></span>
                     <span>Leave Assign</span>
                   </a>
-                  <a href="javascript:void(0)"
-                    class="hr-sub-item flex items-center space-x-2 py-1 px-2 rounded-lg text-slate-300 hover:text-white hover:bg-white/10 transition-colors group cursor-pointer text-sky-400 font-semibold"
+                  <a href="human-resources/leave-request.html"
+                    class="hr-sub-item flex items-center space-x-2 py-1 px-2 rounded-lg text-slate-300 hover:text-white hover:bg-white/10 transition-colors group cursor-pointer"
                     data-action="leave-request">
                     <span
-                      class="w-1 h-1 rounded-full border border-sky-400 bg-sky-400 transition-all flex-shrink-0"></span>
+                      class="w-1 h-1 rounded-full border border-slate-400 group-hover:border-[#FCA311] group-hover:bg-[#FCA311] transition-all flex-shrink-0"></span>
                     <span>Leave Request</span>
                   </a>
                 </div>
               </div>
 
               <!-- 6. Attendance List -->
-              <a href="javascript:void(0)"
+              <a href="human-resources/attendance-list.html"
                 class="hr-sub-item flex items-center space-x-2.5 py-1.5 px-2 rounded-lg text-slate-300 hover:text-white hover:bg-white/10 transition-colors group cursor-pointer"
                 data-action="attendance-list">
                 <span
@@ -2651,7 +2652,7 @@
               </a>
 
               <!-- 7. Attendance Report -->
-              <a href="javascript:void(0)"
+              <a href="human-resources/attendance-report.html"
                 class="hr-sub-item flex items-center space-x-2.5 py-1.5 px-2 rounded-lg text-slate-300 hover:text-white hover:bg-white/10 transition-colors group cursor-pointer"
                 data-action="attendance-report">
                 <span
@@ -2677,28 +2678,28 @@
                 <!-- Payroll Sub-items -->
                 <div id="nested-payroll-menu"
                   class="hidden pl-4 pr-1 py-1 space-y-1 text-xs border-l border-white/10 ml-4 mt-0.5">
-                  <a href="javascript:void(0)"
+                  <a href="human-resources/salary-grade.html"
                     class="hr-sub-item flex items-center space-x-2 py-1 px-2 rounded-lg text-slate-300 hover:text-white hover:bg-white/10 transition-colors group cursor-pointer"
                     data-action="salary-grade">
                     <span
                       class="w-1 h-1 rounded-full border border-slate-400 group-hover:border-[#FCA311] group-hover:bg-[#FCA311] transition-all flex-shrink-0"></span>
                     <span>Salary Grade</span>
                   </a>
-                  <a href="javascript:void(0)"
+                  <a href="human-resources/manage-salary.html"
                     class="hr-sub-item flex items-center space-x-2 py-1 px-2 rounded-lg text-slate-300 hover:text-white hover:bg-white/10 transition-colors group cursor-pointer"
                     data-action="manage-salary">
                     <span
                       class="w-1 h-1 rounded-full border border-slate-400 group-hover:border-[#FCA311] group-hover:bg-[#FCA311] transition-all flex-shrink-0"></span>
                     <span>Manage Salary</span>
                   </a>
-                  <a href="javascript:void(0)"
+                  <a href="human-resources/disburse-salary-update.html"
                     class="hr-sub-item flex items-center space-x-2 py-1 px-2 rounded-lg text-slate-300 hover:text-white hover:bg-white/10 transition-colors group cursor-pointer"
                     data-action="disburse-salary-update">
                     <span
                       class="w-1 h-1 rounded-full border border-slate-400 group-hover:border-[#FCA311] group-hover:bg-[#FCA311] transition-all flex-shrink-0"></span>
                     <span>Disburse Salary Update</span>
                   </a>
-                  <a href="javascript:void(0)"
+                  <a href="human-resources/pay-slip.html"
                     class="hr-sub-item flex items-center space-x-2 py-1 px-2 rounded-lg text-slate-300 hover:text-white hover:bg-white/10 transition-colors group cursor-pointer"
                     data-action="pay-slip">
                     <span
@@ -3419,10 +3420,7 @@
       </div>
 
       <div id="modal-invoice-content" class="text-xs space-y-4">
-        <!-- Rendered by main.js -->
-      </div>
-
-      <div class="pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+        <!-- Rendered by main.js?v=20261106_v10"pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
         <button type="button" class="btn-close-modal btn-Aurelia-secondary text-xs py-2 px-4">Close</button>
         <div class="flex items-center space-x-2">
           <button type="button" id="btn-modal-email-bill"
@@ -3821,10 +3819,7 @@
             </tr>
           </thead>
           <tbody id="modal-billings-tbody" class="divide-y divide-slate-100 dark:divide-slate-800">
-            <!-- Populated by main.js -->
-          </tbody>
-        </table>
-        <div id="modal-billings-empty" class="p-8 text-center text-xs text-slate-400 hidden">
+            <!-- Populated by main.js?v=20261106_v10"modal-billings-empty" class="p-8 text-center text-xs text-slate-400 hidden">
           No bills match your search criteria.
         </div>
       </div>
@@ -3989,10 +3984,7 @@
             </tr>
           </thead>
           <tbody id="modal-staff-tbody" class="divide-y divide-slate-100 dark:divide-slate-800">
-            <!-- Populated by main.js -->
-          </tbody>
-        </table>
-        <div id="modal-staff-empty" class="p-8 text-center text-xs text-slate-400 hidden">
+            <!-- Populated by main.js?v=20261106_v10"modal-staff-empty" class="p-8 text-center text-xs text-slate-400 hidden">
           No staff members found matching your search.
         </div>
       </div>
@@ -4087,9 +4079,7 @@
       <!-- Department Grid (Scrollable) -->
       <div class="overflow-y-auto flex-1 rounded-2xl border border-slate-100 dark:border-slate-800 min-h-[260px] p-2">
         <div id="modal-dept-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-          <!-- Populated by main.js -->
-        </div>
-        <div id="modal-dept-empty" class="p-8 text-center text-xs text-slate-400 hidden">
+          <!-- Populated by main.js?v=20261106_v10"modal-dept-empty" class="p-8 text-center text-xs text-slate-400 hidden">
           No departments found matching your search.
         </div>
       </div>
@@ -4471,9 +4461,9 @@
   <div id="print-invoice-area" class="hidden"></div>
 
   <!-- Authentication Controller -->
-  <script src="auth.js"></script>
+  <script src="auth.js?v=20261106_03"></script>
   <!-- Main JavaScript Logic -->
-  <script src="main.js?v=20261106_v7"></script>
+<script src="main.js?v=20261106_v10"></script>
 </body>
 
 </html>

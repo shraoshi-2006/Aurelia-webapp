@@ -400,7 +400,12 @@ const server = http.createServer((req, res) => {
       if (fs.existsSync(hrCandidate) && fs.statSync(hrCandidate).isFile()) {
         fs.readFile(hrCandidate, (hrErr, hrContent) => {
           if (!hrErr) {
-            res.writeHead(200, { 'Content-Type': 'text/html; charset=UTF-8' });
+            res.writeHead(200, {
+              'Content-Type': 'text/html; charset=UTF-8',
+              'Cache-Control': 'no-cache, no-store, must-revalidate',
+              'Pragma': 'no-cache',
+              'Expires': '0'
+            });
             res.end(hrContent);
             return;
           }
@@ -415,7 +420,12 @@ const server = http.createServer((req, res) => {
           res.writeHead(404, { 'Content-Type': 'text/plain' });
           res.end('404 Not Found');
         } else {
-          res.writeHead(200, { 'Content-Type': 'text/html; charset=UTF-8' });
+          res.writeHead(200, {
+            'Content-Type': 'text/html; charset=UTF-8',
+            'Cache-Control': 'no-cache, no-store, must-revalidate',
+            'Pragma': 'no-cache',
+            'Expires': '0'
+          });
           res.end(content);
         }
       });
