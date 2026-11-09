@@ -685,13 +685,11 @@ $(document).ready(function () {
     $('main section').addClass('hidden').attr('hidden', true);
     $targetSec.removeClass('hidden').removeAttr('hidden');
 
-    if (target === 'dashboard') {
-      const activeUser = (window.Auth && window.Auth.state && window.Auth.state.currentUser) || null;
-      const firstName = activeUser ? (activeUser.name || 'Adaline').split(' ')[0] : 'Adaline';
-      $('#topbar-welcome-title').text(`Welcome back, ${firstName}!`);
-    } else {
-      $('#topbar-welcome-title').text(titles[target]);
-    }
+    // Always keep standard greeting header consistent across all pages
+    const activeUser = (window.Auth && window.Auth.state && window.Auth.state.currentUser) || null;
+    const displayName = (activeUser && activeUser.name && !activeUser.name.includes('Adaline')) ? activeUser.name : (localStorage.getItem('aurelia_profile_name') || 'Shraoshi Barua');
+    const firstName = displayName.split(' ')[0] || 'Shraoshi';
+    $('#topbar-welcome-title').text(`Welcome back, ${firstName}!`);
 
     closeSidebar();
 
@@ -712,7 +710,7 @@ $(document).ready(function () {
     if (sectionRenderers[target]) sectionRenderers[target]();
     renderSidebarBadges();
 
-    window.scrollTo({ top: 0, behavior: 'instant' });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
 
     // Auto-stick and keep active sidebar item visible
     keepActiveSidebarItemVisible(false);
@@ -1437,7 +1435,7 @@ $(document).ready(function () {
   });
 
   // Quick action navigation
-  $('.quick-nav-bill, #btn-add-new-widget').on('click', function () {
+  $('.quick-nav-bill').on('click', function () {
     window.location.hash = 'billing';
     switchSection('billing');
     switchBillingSubtab('create');
@@ -1598,23 +1596,35 @@ $(document).ready(function () {
   }
 
   // =========================================================================
-  // SAVING GOALS ENGINE (Bottom Right Card in Dashboard)
+  // UNPAID SALARY ENGINE (Bottom Right Card in Dashboard)
+  // Calculates employee salary who's salary is not paid till now
   // =========================================================================
 
   function renderSavingGoals() {
-    const goals = [
-      { id: 'macbook', val: 1650, pct: 25, width: 25 },
-      { id: 'car', val: 60000, pct: 42, width: 42 },
-      { id: 'house', val: 150000, pct: 3, width: 14 }
-    ];
-
-    goals.forEach((g, idx) => {
-      // 1. Animate target amount in top-to-bottom order
-      animateNumber(`#goal-val-${g.id}`, g.val, {
+    // 1. Animate Total Unpaid Salary KPI (₹3,42,228 for 9 unpaid staff)
+    if ($('#stat-total-unpaid-salary').length) {
+      animateNumber('#stat-total-unpaid-salary', 342228, {
         duration: 900,
-        delay: 400 + (idx * 80),
+        delay: 350,
         prefix: '₹'
       });
+    }
+
+    const groups = [
+      { id: 'culinary', val: 148240, pct: 43, width: 43 },
+      { id: 'frontoffice', val: 106080, pct: 31, width: 31 },
+      { id: 'fnb', val: 87908, pct: 26, width: 26 }
+    ];
+
+    groups.forEach((g, idx) => {
+      // 1. Animate department unpaid amount in top-to-bottom order
+      if ($(`#goal-val-${g.id}`).length) {
+        animateNumber(`#goal-val-${g.id}`, g.val, {
+          duration: 900,
+          delay: 400 + (idx * 80),
+          prefix: '₹'
+        });
+      }
 
       // 2. Animate progress bar width and internal percentage
       const $bar = $(`#goal-bar-${g.id}`);
@@ -4855,13 +4865,14 @@ $(document).ready(function () {
     const $avatarImg = $('#topbar-user-avatar-img');
     const $avatarText = $('#topbar-user-avatar-text');
 
-    const initials = (user.name || 'Adaline Lively')
+    const displayName = (user && user.name && !user.name.includes('Adaline')) ? user.name : (localStorage.getItem('aurelia_profile_name') || 'Shraoshi Barua');
+    const initials = displayName
       .split(' ')
       .filter(Boolean)
       .map(p => p[0])
       .slice(0, 2)
       .join('')
-      .toUpperCase() || 'AL';
+      .toUpperCase() || 'SB';
 
     if (user.avatar) {
       $avatarImg.attr('src', user.avatar).removeClass('hidden');
@@ -4871,11 +4882,9 @@ $(document).ready(function () {
       $avatarText.text(initials).removeClass('hidden');
     }
 
-    // Update greeting
-    const firstName = (user.name || 'Adaline').split(' ')[0];
-    const hour = new Date().getHours();
-    const timeGreeting = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening';
-    $('#topbar-welcome-title').text(`${timeGreeting}, ${firstName}!`);
+    // Update greeting consistently across all pages
+    const firstName = displayName.split(' ')[0] || 'Shraoshi';
+    $('#topbar-welcome-title').text(`Welcome back, ${firstName}!`);
   }
 
   function openUserProfileModal() {
@@ -5101,33 +5110,59 @@ $(document).ready(function () {
   });
 
   // =========================================================================
-  // LIVE SESSION TIME TRACKER (Shows Time Spent on Website)
+  // ACTIVE-ONLY SESSION TIME TRACKER (Only counts active time on website)
   // =========================================================================
   function initSessionTimeTracker() {
-    const STORAGE_KEY = 'aurelia_session_start_time';
-    let startTime = parseInt(sessionStorage.getItem(STORAGE_KEY), 10);
-    const now = Date.now();
-    // If no start time stored, or invalid, or in the future, set it now
-    if (!startTime || isNaN(startTime) || startTime > now) {
-      startTime = now;
-      try {
-        sessionStorage.setItem(STORAGE_KEY, String(startTime));
-      } catch (e) { }
+    const STORAGE_KEY = 'aurelia_active_session_seconds';
+
+    // 1. Retrieve accumulated active seconds from sessionStorage (or start at 0)
+    let activeSeconds = parseInt(sessionStorage.getItem(STORAGE_KEY), 10);
+    if (isNaN(activeSeconds) || activeSeconds < 0) {
+      activeSeconds = 0;
     }
 
     const displayEl = document.getElementById('session-time-display');
     if (!displayEl) return;
 
-    function renderTime() {
-      const elapsedSec = Math.max(0, Math.floor((Date.now() - startTime) / 1000));
-      const hrs = String(Math.floor(elapsedSec / 3600)).padStart(2, '0');
-      const mins = String(Math.floor((elapsedSec % 3600) / 60)).padStart(2, '0');
-      const secs = String(elapsedSec % 60).padStart(2, '0');
-      displayEl.textContent = `${hrs}:${mins}:${secs}`;
+    // 2. Format seconds into HH:MM:SS
+    function formatTime(totalSec) {
+      const hrs = String(Math.floor(totalSec / 3600)).padStart(2, '0');
+      const mins = String(Math.floor((totalSec % 3600) / 60)).padStart(2, '0');
+      const secs = String(totalSec % 60).padStart(2, '0');
+      return `${hrs}:${mins}:${secs}`;
     }
 
-    renderTime();
-    setInterval(renderTime, 1000);
+    function renderDisplay() {
+      displayEl.textContent = formatTime(activeSeconds);
+    }
+
+    // Initial display render
+    renderDisplay();
+
+    // 3. Track active status (document visibility & window focus)
+    let isActive = !document.hidden;
+
+    function updateActiveState() {
+      isActive = (document.visibilityState === 'visible');
+    }
+
+    // 4. Listen to tab switching, minimize, and window focus/blur events
+    document.addEventListener('visibilitychange', updateActiveState);
+    window.addEventListener('focus', function () { isActive = true; });
+    window.addEventListener('blur', function () { isActive = false; });
+
+    // 5. Active second ticker: only increments when user is actively on the website
+    setInterval(function () {
+      if (isActive && !document.hidden) {
+        activeSeconds++;
+        renderDisplay();
+
+        // Persist to sessionStorage every second so page switches stay accurate
+        try {
+          sessionStorage.setItem(STORAGE_KEY, String(activeSeconds));
+        } catch (e) { }
+      }
+    }, 1000);
   }
 
   // Start live session time tracker
@@ -6049,3 +6084,60 @@ $(document).ready(function () {
     updateTopbarAvatarUI();
   }
 });
+
+// =========================================================================
+// STICKY TOP DESKTOP HEADER (Pinned securely with opaque background)
+// =========================================================================
+(function initStickyHeader() {
+  function applyHeaderStyles() {
+    let style = document.getElementById('app-sticky-header-styles');
+    if (!style) {
+      style = document.createElement('style');
+      style.id = 'app-sticky-header-styles';
+      document.head.appendChild(style);
+    }
+    style.textContent = `
+      html {
+        scroll-behavior: smooth !important;
+      }
+      body,
+      #main-app-content,
+      .overflow-y-auto,
+      .overflow-x-auto,
+      .overflow-auto {
+        scroll-behavior: smooth;
+      }
+      .app-sticky-header,
+      #top-desktop-header {
+        position: sticky !important;
+        top: 0 !important;
+        z-index: 50 !important;
+        background: #DCE4ED !important;
+        background: linear-gradient(135deg, rgba(207, 216, 227, 0.98) 0%, rgba(220, 228, 237, 0.98) 50%, rgba(208, 217, 228, 0.98) 100%) !important;
+        backdrop-filter: blur(12px) !important;
+        -webkit-backdrop-filter: blur(12px) !important;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.85) !important;
+        box-shadow: 0 4px 16px -2px rgba(15, 23, 42, 0.08) !important;
+      }
+      .dark .app-sticky-header,
+      .dark #top-desktop-header {
+        background: #14213D !important;
+        background: linear-gradient(135deg, rgba(20, 33, 61, 0.98) 0%, rgba(15, 23, 42, 0.98) 100%) !important;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+        box-shadow: 0 4px 16px -2px rgba(0, 0, 0, 0.45) !important;
+      }
+    `;
+
+    const hdr = document.getElementById('top-desktop-header') || document.querySelector('.app-sticky-header');
+    if (hdr) {
+      hdr.classList.add('app-sticky-header');
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', applyHeaderStyles);
+  } else {
+    applyHeaderStyles();
+  }
+})();
+

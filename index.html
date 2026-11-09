@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="light">
+<html lang="en" class="scroll-smooth light">
 
 <head>
   <meta charset="UTF-8">
@@ -1888,6 +1888,43 @@
       filter: blur(0);
       transition-delay: calc(var(--item-delay, 0) * 0.05s + 0.08s);
     }
+  
+        /* Universal Smooth Scrolling */
+    html {
+      scroll-behavior: smooth !important;
+    }
+
+    body,
+    #main-app-content,
+    .overflow-y-auto,
+    .overflow-x-auto,
+    .overflow-auto {
+      scroll-behavior: smooth;
+    }
+
+        /* ========================================================================= */
+    /* STICKY TOP DESKTOP HEADER (Pinned securely with opaque background)        */
+    /* ========================================================================= */
+    .app-sticky-header,
+    #top-desktop-header {
+      position: sticky !important;
+      top: 0 !important;
+      z-index: 50 !important;
+      background: #DCE4ED !important;
+      background: linear-gradient(135deg, rgba(207, 216, 227, 0.98) 0%, rgba(220, 228, 237, 0.98) 50%, rgba(208, 217, 228, 0.98) 100%) !important;
+      backdrop-filter: blur(12px) !important;
+      -webkit-backdrop-filter: blur(12px) !important;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.85) !important;
+      box-shadow: 0 4px 16px -2px rgba(15, 23, 42, 0.08) !important;
+    }
+
+    .dark .app-sticky-header,
+    .dark #top-desktop-header {
+      background: #14213D !important;
+      background: linear-gradient(135deg, rgba(20, 33, 61, 0.98) 0%, rgba(15, 23, 42, 0.98) 100%) !important;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+      box-shadow: 0 4px 16px -2px rgba(0, 0, 0, 0.45) !important;
+    }
   </style>
 </head>
 
@@ -2845,8 +2882,8 @@
     <main id="main-app-content" class="flex-1 min-w-0 flex flex-col min-h-screen">
 
       <!-- TOP HEADER (Welcome back, Shraoshi / Adaline Lively, Search, Bell, Profile) -->
-      <header
-        class="px-6 sm:px-8 pt-6 pb-4 flex flex-col md:flex-row md:items-center md:justify-between gap-4 relative z-10">
+      <header id="top-desktop-header"
+        class="app-sticky-header px-6 sm:px-8 pt-6 pb-4 sm:pt-7 sm:pb-5 flex flex-col md:flex-row md:items-center md:justify-between gap-4 sticky top-0 z-50 border-b border-transparent transition-all duration-200">
         <div>
           <h1 class="text-2xl sm:text-3xl font-extrabold text-[#14213D] tracking-tight" id="topbar-welcome-title">
             Welcome back, Shraoshi!
@@ -2937,7 +2974,7 @@
           <button type="button" id="topbar-user-avatar"
             class="w-9 h-9 rounded-full bg-[#14213D] text-[#FCA311] font-bold text-xs flex items-center justify-center shadow-xs cursor-pointer hover:ring-2 hover:ring-[#FCA311] hover:scale-105 transition-all overflow-hidden relative group"
             title="My Profile" aria-label="Open User Profile">
-            <span id="topbar-user-avatar-text">AL</span>
+            <span id="topbar-user-avatar-text">SB</span>
             <img id="topbar-user-avatar-img" src="" alt="Profile Photo" class="w-full h-full object-cover hidden">
           </button>
 
@@ -2947,7 +2984,7 @@
 
       <!-- SUB-ACTION BAR: Date Filter Pill & Widgets Action Buttons -->
       <div
-        class="px-6 sm:px-8 pb-1.5 sm:pb-2 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 relative z-10">
+        class="px-6 sm:px-8 pt-3 sm:pt-4 pb-2 sm:pb-3 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 relative z-10">
 
         <!-- Left: Date Range Calendar ("From" this "To" this) -->
         <div class="flex flex-wrap items-center gap-2.5">
@@ -2971,18 +3008,6 @@
             </div>
             <input type="date" id="input-global-date-to" class="hidden">
           </div>
-        </div>
-
-        <!-- Right: "+ Add new widget" Button -->
-        <div class="flex items-center space-x-3">
-          <!-- + Add new widget Button (Solid Gold Pill) -->
-          <button type="button" id="btn-add-new-widget"
-            class="btn-Aurelia-primary text-xs py-2 px-4 shadow-md shadow-amber-500/20">
-            <svg class="w-4 h-4 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2.2">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-            </svg>
-            <span>Add new Order</span>
-          </button>
         </div>
 
       </div>
@@ -3601,68 +3626,125 @@
               </div>
             </div>
 
-            <!-- Right Card: "Saving goals" (4 Cols) -->
-            <div class="lg:col-span-4 Aurelia-card glass-card-animate p-6 flex flex-col justify-between relative z-10">
-              <div class="flex items-center justify-between mb-4">
-                <h3 class="text-base font-bold text-slate-900 dark:text-white">Saving goals</h3>
-                <button type="button" class="btn-circle-arrow" title="Add saving goal">
+            <!-- Right Card: "Unpaid Employee Salaries" (4 Cols) -->
+            <div class="lg:col-span-4 Aurelia-card glass-card-animate p-6 flex flex-col justify-between relative z-10 space-y-4">
+              <!-- Header -->
+              <div class="flex items-center justify-between pb-1 border-b border-slate-100 dark:border-slate-800/80">
+                <div>
+                  <h3 class="text-base font-bold text-slate-900 dark:text-white">Unpaid Salaries</h3>
+                  <p class="text-[11px] text-slate-500 dark:text-slate-400">9 Employees Pending • Oct 2026 Batch</p>
+                </div>
+                <a href="human-resources/disburse-salary-update.html" class="btn-circle-arrow flex items-center justify-center" title="Open Salary Disbursement Batch">
                   <svg class="w-3.5 h-3.5 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2.5">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25" />
                   </svg>
-                </button>
+                </a>
               </div>
 
-              <!-- Goals List -->
-              <div class="space-y-4 my-auto">
-
-                <!-- Goal 1: MacBook Pro (25%) -->
+              <!-- Unpaid Salary KPI Summary Banner -->
+              <div class="p-3.5 rounded-2xl bg-amber-500/10 border border-amber-500/20 dark:bg-amber-500/15 flex items-center justify-between">
                 <div>
-                  <div class="flex items-center justify-between text-xs mb-1.5">
-                    <span class="font-bold text-[#14213D] dark:text-white">MacBook Pro</span>
-                    <span class="text-slate-400 font-medium" id="goal-val-macbook"><span
-                        class="rupee-symbol">₹</span>1,650</span>
+                  <span class="text-[10px] font-bold uppercase tracking-wider text-amber-800 dark:text-amber-300">Total Unpaid Salary</span>
+                  <div class="text-2xl font-black text-amber-600 dark:text-amber-400 mt-0.5 tracking-tight">
+                    <span id="stat-total-unpaid-salary">₹3,42,228</span>
                   </div>
-                  <div class="spatial-progress-track w-full h-6 rounded-full p-0.5 relative overflow-hidden">
-                    <div id="goal-bar-macbook"
-                      class="spatial-progress-bar h-full bg-[#14213D] rounded-full flex items-center justify-center text-[10px] font-bold text-white transition-all duration-700 shadow-sm"
-                      style="width: 25%;">
-                      25%
+                </div>
+                <div class="text-right flex flex-col items-end">
+                  <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold bg-amber-500 text-slate-950 shadow-xs">
+                    <span class="w-1.5 h-1.5 rounded-full bg-slate-950 animate-pulse"></span>
+                    9 Pending
+                  </span>
+                  <span class="text-[10px] text-slate-500 dark:text-slate-400 mt-1 font-semibold">15.6% of ₹21.87L Pool</span>
+                </div>
+              </div>
+
+              <!-- Department Unpaid Breakdown Tracks -->
+              <div class="space-y-3.5">
+                <!-- Group 1: Culinary & Kitchen (43%) -->
+                <div>
+                  <div class="flex items-center justify-between text-xs mb-1">
+                    <span class="font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
+                      <span>Culinary &amp; Kitchen</span>
+                      <span class="text-[10px] font-medium text-slate-400">(4 Staff)</span>
+                    </span>
+                    <span class="font-mono font-bold text-slate-800 dark:text-slate-200" id="goal-val-culinary">₹1,48,240</span>
+                  </div>
+                  <div class="spatial-progress-track w-full h-5 rounded-full p-0.5 relative overflow-hidden bg-slate-100 dark:bg-slate-800/80">
+                    <div id="goal-bar-culinary"
+                      class="spatial-progress-bar h-full bg-[#14213D] dark:bg-slate-700 rounded-full flex items-center justify-center text-[10px] font-bold text-white transition-all duration-700 shadow-xs"
+                      style="width: 43%;">
+                      43%
                     </div>
                   </div>
                 </div>
 
-                <!-- Goal 2: New car (42%) -->
+                <!-- Group 2: Front Office (31%) -->
                 <div>
-                  <div class="flex items-center justify-between text-xs mb-1.5">
-                    <span class="font-bold text-[#14213D] dark:text-white">New car</span>
-                    <span class="text-slate-400 font-medium" id="goal-val-car"><span
-                        class="rupee-symbol">₹</span>60,000</span>
+                  <div class="flex items-center justify-between text-xs mb-1">
+                    <span class="font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
+                      <span>Front Office</span>
+                      <span class="text-[10px] font-medium text-slate-400">(3 Staff)</span>
+                    </span>
+                    <span class="font-mono font-bold text-slate-800 dark:text-slate-200" id="goal-val-frontoffice">₹1,06,080</span>
                   </div>
-                  <div class="spatial-progress-track w-full h-6 rounded-full p-0.5 relative overflow-hidden">
-                    <div id="goal-bar-car"
-                      class="spatial-progress-bar h-full bg-[#FCA311] rounded-full flex items-center justify-center text-[10px] font-bold text-[#000000] transition-all duration-700 shadow-sm"
-                      style="width: 42%;">
-                      42%
+                  <div class="spatial-progress-track w-full h-5 rounded-full p-0.5 relative overflow-hidden bg-slate-100 dark:bg-slate-800/80">
+                    <div id="goal-bar-frontoffice"
+                      class="spatial-progress-bar h-full bg-[#FCA311] rounded-full flex items-center justify-center text-[10px] font-bold text-slate-950 transition-all duration-700 shadow-xs"
+                      style="width: 31%;">
+                      31%
                     </div>
                   </div>
                 </div>
 
-                <!-- Goal 3: New house (3%) -->
+                <!-- Group 3: Food & Beverage (26%) -->
                 <div>
-                  <div class="flex items-center justify-between text-xs mb-1.5">
-                    <span class="font-bold text-[#14213D] dark:text-white">New house</span>
-                    <span class="text-slate-400 font-medium" id="goal-val-house"><span
-                        class="rupee-symbol">₹</span>1,50,000</span>
+                  <div class="flex items-center justify-between text-xs mb-1">
+                    <span class="font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
+                      <span>Food &amp; Beverage</span>
+                      <span class="text-[10px] font-medium text-slate-400">(2 Staff)</span>
+                    </span>
+                    <span class="font-mono font-bold text-slate-800 dark:text-slate-200" id="goal-val-fnb">₹87,908</span>
                   </div>
-                  <div class="spatial-progress-track w-full h-6 rounded-full p-0.5 relative overflow-hidden">
-                    <div id="goal-bar-house"
-                      class="spatial-progress-bar h-full bg-[#000000] rounded-full flex items-center justify-center text-[10px] font-bold text-white transition-all duration-700 shadow-sm"
-                      style="width: 14%;">
-                      3%
+                  <div class="spatial-progress-track w-full h-5 rounded-full p-0.5 relative overflow-hidden bg-slate-100 dark:bg-slate-800/80">
+                    <div id="goal-bar-fnb"
+                      class="spatial-progress-bar h-full bg-slate-900 dark:bg-white text-white dark:text-slate-950 rounded-full flex items-center justify-center text-[10px] font-bold transition-all duration-700 shadow-xs"
+                      style="width: 26%;">
+                      26%
                     </div>
                   </div>
                 </div>
+              </div>
 
+              <!-- Unpaid Employee List Preview -->
+              <div class="pt-2 border-t border-slate-100 dark:border-slate-800/80">
+                <div class="text-[11px] font-semibold text-slate-500 dark:text-slate-400 mb-2 flex items-center justify-between">
+                  <span>Pending Staff Sample</span>
+                  <span>Net Unpaid Salary</span>
+                </div>
+                <div class="space-y-1.5 text-xs">
+                  <div class="flex items-center justify-between py-1 px-2 rounded-lg bg-slate-50 dark:bg-slate-800/50">
+                    <div class="flex items-center space-x-2">
+                      <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
+                      <span class="font-medium text-slate-900 dark:text-white">Sunita Patel</span>
+                      <span class="text-[10px] text-slate-400 font-mono">AUR-0106</span>
+                    </div>
+                    <span class="font-mono font-bold text-amber-600 dark:text-amber-400 text-xs">₹35,360</span>
+                  </div>
+                  <div class="flex items-center justify-between py-1 px-2 rounded-lg bg-slate-50 dark:bg-slate-800/50">
+                    <div class="flex items-center space-x-2">
+                      <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
+                      <span class="font-medium text-slate-900 dark:text-white">Rajesh Kulkarni</span>
+                      <span class="text-[10px] text-slate-400 font-mono">AUR-0109</span>
+                    </div>
+                    <span class="font-mono font-bold text-amber-600 dark:text-amber-400 text-xs">₹48,500</span>
+                  </div>
+                </div>
+
+                <a href="human-resources/disburse-salary-update.html"
+                  class="mt-3 w-full py-2 px-3 rounded-xl bg-slate-900 hover:bg-[#FCA311] dark:bg-slate-800 dark:hover:bg-[#FCA311] text-white hover:text-slate-950 text-xs font-bold transition-all duration-200 flex items-center justify-center space-x-1.5 shadow-sm">
+                  <span>Disburse All Pending Salaries (9)</span>
+                  <span>&rarr;</span>
+                </a>
               </div>
             </div>
 
@@ -4086,7 +4168,7 @@
       </div>
 
       <div id="modal-invoice-content" class="text-xs space-y-4">
-        <!-- Rendered by main.js?v=20261106_v14"pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+        <!-- Rendered by main.js?v=20261109_v8"pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
         <button type="button" class="btn-close-modal btn-Aurelia-secondary text-xs py-2 px-4">Close</button>
         <div class="flex items-center space-x-2">
           <button type="button" id="btn-modal-email-bill"
@@ -4489,7 +4571,7 @@
             </tr>
           </thead>
           <tbody id="modal-billings-tbody" class="divide-y divide-slate-100 dark:divide-slate-800">
-            <!-- Populated by main.js?v=20261106_v14"modal-billings-empty" class="p-8 text-center text-xs text-slate-400 hidden">
+            <!-- Populated by main.js?v=20261109_v8"modal-billings-empty" class="p-8 text-center text-xs text-slate-400 hidden">
           No bills match your search criteria.
         </div>
       </div>
@@ -4654,7 +4736,7 @@
             </tr>
           </thead>
           <tbody id="modal-staff-tbody" class="divide-y divide-slate-100 dark:divide-slate-800">
-            <!-- Populated by main.js?v=20261106_v14"modal-staff-empty" class="p-8 text-center text-xs text-slate-400 hidden">
+            <!-- Populated by main.js?v=20261109_v8"modal-staff-empty" class="p-8 text-center text-xs text-slate-400 hidden">
           No staff members found matching your search.
         </div>
       </div>
@@ -4929,7 +5011,7 @@
   <!-- Authentication Controller -->
   <script src="auth.js?v=20261106_03"></script>
   <!-- Main JavaScript Logic -->
-<script src="main.js?v=20261106_v14"></script>
+<script src="main.js?v=20261109_v8"></script>
 </body>
 
 </html>
