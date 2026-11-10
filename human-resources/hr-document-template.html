@@ -1336,6 +1336,11 @@
       background: #FCA311;
     }
 
+    @page {
+      size: A4 portrait;
+      margin: 10mm 12mm;
+    }
+
     /* Print invoice area rules */
     @media print {
       body {
@@ -1354,10 +1359,13 @@
         width: 100% !important;
         max-width: 100% !important;
         margin: 0 !important;
-        padding: 24px !important;
+        padding: 16px !important;
         background: #ffffff !important;
         color: #0f172a !important;
         visibility: visible !important;
+        page-break-after: avoid !important;
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
       }
 
       #print-invoice-area * {
