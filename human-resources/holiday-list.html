@@ -2980,7 +2980,7 @@
               <p class="text-xs text-slate-400">Official hotel holiday schedule, operational public holidays & compensatory leave guidelines</p>
             </div>
             <div class="flex items-center space-x-2.5">
-              <button type="button" id="btn-download-holiday-schedule" title="Download Holiday Schedule as PDF" class="btn-Aurelia-secondary text-xs py-2 px-3.5 flex items-center space-x-1.5 cursor-pointer" onclick="if(typeof window.downloadHolidaySchedulePDF==='function'){window.downloadHolidaySchedulePDF();}else if(typeof window.printHolidaySchedule==='function'){window.printHolidaySchedule();}else{window.print();}">
+              <button type="button" id="btn-download-holiday-schedule" title="Download Holiday Schedule as PDF" class="btn-Aurelia-secondary text-xs py-2 px-3.5 flex items-center space-x-1.5 cursor-pointer" onclick="openHolidayDownloadModal(event)">
                 <svg class="w-4 h-4 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
                 </svg>
@@ -3192,7 +3192,355 @@
       }
     }
     window.printHolidayScheduleDirectly = printHolidayScheduleDirectly;
+
+    // Fullscreen Holiday Schedule Download Preview Modal Controller (Matching Image 2 Exactly)
+    function openHolidayDownloadModal(e) {
+      if (e && typeof e.preventDefault === 'function') e.preventDefault();
+      const modal = document.getElementById('modal-download-holiday-schedule');
+      const paper = document.getElementById('holiday-download-preview-paper');
+
+      let rowsHtml = '';
+      const fallbackHolidays = [
+        { date: '26 Jan 2026', day: 'Monday', name: 'Republic Day', type: 'gazetted', typeLabel: 'Gazetted Holiday', policy: 'Mandatory operational double-time pay or compensatory day off', status: 'Observed' },
+        { date: '17 Mar 2026', day: 'Tuesday', name: 'Maha Shivratri', type: 'floating', typeLabel: 'Floating Holiday', policy: 'Departmental roster rotation; floating leave option', status: 'Observed' },
+        { date: '25 Mar 2026', day: 'Wednesday', name: 'Holi (Festival of Colors)', type: 'gazetted', typeLabel: 'Gazetted Holiday', policy: 'Banquet & F&B active roster; shift bonus + comp off', status: 'Observed' },
+        { date: '03 Apr 2026', day: 'Friday', name: 'Good Friday', type: 'gazetted', typeLabel: 'Gazetted Holiday', policy: 'Normal hospitality shift timings; holiday rate applicable', status: 'Observed' },
+        { date: '11 Apr 2026', day: 'Saturday', name: 'Eid-ul-Fitr', type: 'gazetted', typeLabel: 'Gazetted Holiday', policy: 'Kitchen & banquet high coverage; compensatory credit', status: 'Observed' },
+        { date: '01 May 2026', day: 'Friday', name: 'International Labor Day', type: 'gazetted', typeLabel: 'Gazetted Holiday', policy: 'Statutory hospitality holiday pay for all active roster staff', status: 'Observed' },
+        { date: '17 Jun 2026', day: 'Wednesday', name: 'Bakrid / Eid al-Adha', type: 'floating', typeLabel: 'Floating Holiday', policy: 'Roster coverage swap allowed with 72h manager signoff', status: 'Observed' },
+        { date: '15 Aug 2026', day: 'Saturday', name: 'Independence Day', type: 'gazetted', typeLabel: 'Gazetted Holiday', policy: 'Flag hoisting ceremony at 09:00; double daily shift credit', status: 'Observed' },
+        { date: '04 Sep 2026', day: 'Friday', name: 'Janmashtami', type: 'floating', typeLabel: 'Floating Holiday', policy: 'Floating leave option upon prior supervisor approval', status: 'Observed' },
+        { date: '02 Oct 2026', day: 'Friday', name: 'Mahatma Gandhi Jayanti', type: 'gazetted', typeLabel: 'Gazetted Holiday', policy: 'Dry day observed across hotel bars; room service normal', status: 'Observed' },
+        { date: '20 Oct 2026', day: 'Tuesday', name: 'Dussehra (Vijayadashami)', type: 'gazetted', typeLabel: 'Gazetted Holiday', policy: 'High dining volume; full operational staffing bonus', status: 'Observed' },
+        { date: '08 Nov 2026', day: 'Sunday', name: 'Diwali (Deepavali)', type: 'gazetted', typeLabel: 'Gazetted Holiday', policy: 'Festive hamper bonus + 2x compensatory shift allowance', status: 'Upcoming' },
+        { date: '24 Nov 2026', day: 'Tuesday', name: 'Guru Nanak Jayanti', type: 'floating', typeLabel: 'Floating Holiday', policy: 'Floating leave selection; minimum desk skeleton crew', status: 'Upcoming' },
+        { date: '25 Dec 2026', day: 'Friday', name: 'Christmas Day', type: 'gazetted', typeLabel: 'Gazetted Holiday', policy: 'Gala Dinner peak operational schedule; festive holiday bonus', status: 'Upcoming' }
+      ];
+
+      const $tableRows = $('#page-holiday-tbody tr:visible').length > 0 ? $('#page-holiday-tbody tr:visible') : $('#page-holiday-tbody tr');
+
+      let listToPrint = [];
+      if ($tableRows.length > 0) {
+        $tableRows.each(function () {
+          const $tr = $(this);
+          const date = $tr.find('td:nth-child(1)').text().trim();
+          const name = $tr.find('td:nth-child(2)').text().trim();
+          const day = $tr.find('td:nth-child(3)').text().trim();
+          const typeLabel = $tr.find('td:nth-child(4)').text().trim();
+          const policy = $tr.find('td:nth-child(5)').text().trim();
+          const status = $tr.find('td:nth-child(6)').text().trim();
+          if (name) {
+            listToPrint.push({
+              date,
+              name,
+              day,
+              type: typeLabel.toLowerCase().includes('gazetted') ? 'gazetted' : 'floating',
+              typeLabel,
+              policy,
+              status
+            });
+          }
+        });
+      }
+
+      if (listToPrint.length === 0) {
+        listToPrint = fallbackHolidays;
+      }
+
+      listToPrint.forEach(function (h, idx) {
+        const isGazetted = h.type === 'gazetted';
+        const isUpcoming = h.status === 'Upcoming';
+        const rowBg = idx % 2 === 1 ? '#f8fafc' : '#ffffff';
+
+        rowsHtml += `
+          <tr style="background: ${rowBg}; border-bottom: 1px solid #e2e8f0; font-size: 11px;">
+            <td style="padding: 7px 9px; font-family: monospace; font-weight: bold; color: #0f172a; white-space: nowrap;">${h.date}</td>
+            <td style="padding: 7px 9px; font-weight: 700; color: #0f172a;">${h.name}</td>
+            <td style="padding: 7px 9px; color: #475569; white-space: nowrap;">${h.day}</td>
+            <td style="padding: 7px 9px; white-space: nowrap;">
+              <span style="display: inline-block; padding: 2px 8px; border-radius: 9999px; font-size: 9.5px; font-weight: 700; background: ${isGazetted ? '#ecfdf5' : '#f0f9ff'}; color: ${isGazetted ? '#047857' : '#0369a1'}; border: 1px solid ${isGazetted ? '#a7f3d0' : '#bae6fd'};">${h.typeLabel}</span>
+            </td>
+            <td style="padding: 7px 9px; color: #334155; font-size: 10.5px; line-height: 1.35;">${h.policy}</td>
+            <td style="padding: 7px 9px; text-align: center; white-space: nowrap;">
+              <span style="display: inline-block; padding: 2px 8px; border-radius: 9999px; font-size: 9.5px; font-weight: 700; background: ${isUpcoming ? '#fef3c7' : '#f1f5f9'}; color: ${isUpcoming ? '#92400e' : '#475569'}; border: 1px solid ${isUpcoming ? '#fcd34d' : '#cbd5e1'};">${isUpcoming ? '● In 8 Days' : 'Observed'}</span>
+            </td>
+          </tr>
+        `;
+      });
+
+      if (paper) {
+        paper.innerHTML = `
+          <!-- Full Page Styled Document Container (No Giant Bottom Gap) -->
+          <div id="holiday-report-sheet" style="font-family: 'Plus Jakarta Sans', Inter, -apple-system, sans-serif; color: #0f172a; background: #ffffff; display: flex; flex-direction: column; justify-content: space-between; box-sizing: border-box; min-height: 980px;">
+            <div>
+              <!-- Header -->
+              <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 2px solid #14213D; padding-bottom: 12px; margin-bottom: 14px;">
+                <div style="display: flex; align-items: center; gap: 12px;">
+                  <!-- Vector Gold Emblem Logo -->
+                  <svg viewBox="0 0 200 200" style="width: 44px; height: 44px; border-radius: 50%; shrink: 0;" role="img" aria-label="Aurelia Emblem">
+                    <circle cx="100" cy="100" r="95" fill="#FCA311"/>
+                    <circle cx="100" cy="100" r="86" fill="none" stroke="#14213D" stroke-width="2.2"/>
+                    <path d="M58 162 L100 46 L142 162" fill="none" stroke="#14213D" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+                    <line x1="71" y1="126" x2="129" y2="126" stroke="#14213D" stroke-width="6" stroke-linecap="round"/>
+                    <circle cx="100" cy="104" r="8.5" fill="#FFFFFF"/>
+                  </svg>
+                  <div>
+                    <h1 style="margin: 0; font-size: 17px; font-weight: 900; letter-spacing: 0.08em; text-transform: uppercase; color: #14213D;">AURELIA LUXURY HOTEL &amp; RESTAURANT</h1>
+                    <p style="margin: 2px 0 0 0; font-size: 10px; color: #64748b; font-weight: 500;">5-Star Heritage Wing, Financial District, New Delhi - 110001 | Official Holiday Calendar 2026</p>
+                  </div>
+                </div>
+                <div style="text-align: right; flex-shrink: 0;">
+                  <div style="display: inline-block; background: #14213D; color: #FCA311; padding-top: 3.5px; padding-bottom: 5.5px; padding-left: 12px; padding-right: 12px; border-radius: 9999px; font-size: 9.5px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.06em; line-height: 1;">
+                    <span style="display: inline-block; margin-top: -1px;">Approved Calendar</span>
+                  </div>
+                  <div style="font-size: 9.5px; color: #64748b; margin-top: 3px; font-weight: bold;">Cycle: Calendar Year 2026</div>
+                </div>
+              </div>
+
+              <!-- Metrics Strip -->
+              <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 8px; padding: 8px 12px; margin-bottom: 14px; font-size: 10.5px;">
+                <div><span style="color: #64748b; font-size: 9px; text-transform: uppercase; font-weight: bold;">Total Holidays</span><div style="font-weight: 900; color: #0f172a; font-size: 13px; margin-top: 2px;">14 Days</div></div>
+                <div><span style="color: #047857; font-size: 9px; text-transform: uppercase; font-weight: bold;">Mandatory Gazetted</span><div style="font-weight: 900; color: #047857; font-size: 13px; margin-top: 2px;">10 Days</div></div>
+                <div><span style="color: #0369a1; font-size: 9px; text-transform: uppercase; font-weight: bold;">Floating / Optional</span><div style="font-weight: 900; color: #0369a1; font-size: 13px; margin-top: 2px;">4 Days</div></div>
+                <div><span style="color: #b45309; font-size: 9px; text-transform: uppercase; font-weight: bold;">Next Upcoming</span><div style="font-weight: 900; color: #b45309; font-size: 13px; margin-top: 2px;">Diwali (Nov 08)</div></div>
+              </div>
+
+              <!-- Holiday Table -->
+              <table style="width: 100%; border-collapse: collapse; text-align: left;">
+                <thead>
+                  <tr style="background: #14213D; color: #ffffff; font-size: 9.5px; text-transform: uppercase; letter-spacing: 0.04em;">
+                    <th style="padding: 7px 9px; border: 1px solid #14213D; white-space: nowrap;">Date</th>
+                    <th style="padding: 7px 9px; border: 1px solid #14213D;">Holiday / Festival</th>
+                    <th style="padding: 7px 9px; border: 1px solid #14213D; white-space: nowrap;">Day</th>
+                    <th style="padding: 7px 9px; border: 1px solid #14213D; white-space: nowrap;">Classification</th>
+                    <th style="padding: 7px 9px; border: 1px solid #14213D;">Staffing Coverage &amp; Policy</th>
+                    <th style="padding: 7px 9px; border: 1px solid #14213D; text-align: center; white-space: nowrap;">Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${rowsHtml}
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Signatures & Footer to fill the bottom properly -->
+            <div style="margin-top: 20px; padding-top: 14px; border-top: 1.5px solid #cbd5e1;">
+              <div style="display: flex; justify-content: space-between; align-items: flex-end; font-size: 10px; margin-bottom: 12px;">
+                <div style="width: 220px;">
+                  <div style="height: 24px; border-bottom: 1px solid #94a3b8; margin-bottom: 4px; display: flex; align-items: flex-end;">
+                    <span style="font-family: serif; font-style: italic; color: #475569; font-size: 13px;">Adaline Lively</span>
+                  </div>
+                  <strong style="color: #0f172a; font-size: 10.5px;">Head of Human Resources</strong>
+                  <div style="color: #64748b; font-size: 9px;">Aurelia Hospitality Management</div>
+                </div>
+                <div style="width: 220px; text-align: right;">
+                  <div style="height: 24px; border-bottom: 1px solid #94a3b8; margin-bottom: 4px; display: flex; align-items: flex-end; justify-content: flex-end;">
+                    <span style="font-family: serif; font-style: italic; color: #475569; font-size: 13px;">Vikram Malhotra</span>
+                  </div>
+                  <strong style="color: #0f172a; font-size: 10.5px;">General Manager</strong>
+                  <div style="color: #64748b; font-size: 9px;">Executive Committee Approval</div>
+                </div>
+              </div>
+              <div style="display: flex; justify-content: space-between; font-size: 9px; color: #94a3b8; padding-top: 6px; border-top: 1px dashed #e2e8f0;">
+                <span>Aurelia Hospitality Labor Standards 2026</span>
+                <span>&copy; 2026 AURELIA. All rights reserved by Shraoshi Basak &amp; Piyush Barua.</span>
+              </div>
+            </div>
+          </div>
+        `;
+      }
+
+      if (modal) {
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+      }
+    }
+    window.openHolidayDownloadModal = openHolidayDownloadModal;
+    window.downloadHolidaySchedulePDF = openHolidayDownloadModal;
+
+    function closeHolidayDownloadModal() {
+      const modal = document.getElementById('modal-download-holiday-schedule');
+      if (modal) {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+      }
+    }
+    window.closeHolidayDownloadModal = closeHolidayDownloadModal;
+
+    async function performHolidayDownload() {
+      const btn = document.getElementById('btn-confirm-holiday-download');
+      let originalBtnHtml = '';
+      if (btn) {
+        originalBtnHtml = btn.innerHTML;
+        btn.disabled = true;
+        btn.innerHTML = `<svg class="w-4 h-4 animate-spin stroke-current mr-1.5 inline" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg><span>Downloading...</span>`;
+      }
+
+      try {
+        const paper = document.getElementById('holiday-download-preview-paper');
+        const filename = 'Aurelia_Holiday_Schedule_2026.pdf';
+
+        const JsPDFClass = (window.jspdf && window.jspdf.jsPDF) ? window.jspdf.jsPDF : window.jsPDF;
+
+        if (window.html2canvas && JsPDFClass && paper) {
+          if (document.fonts && document.fonts.ready) {
+            try { await document.fonts.ready; } catch (e) {}
+          }
+
+          const canvas = await html2canvas(paper, {
+            scale: 2.5,
+            useCORS: true,
+            allowTaint: true,
+            logging: false,
+            backgroundColor: '#ffffff'
+          });
+
+          const pdf = new JsPDFClass('p', 'mm', 'a4');
+          const pageWidth = pdf.internal.pageSize.getWidth();
+          const pageHeight = pdf.internal.pageSize.getHeight();
+
+          const renderWidth = 194;
+          const renderHeight = (canvas.height * renderWidth) / canvas.width;
+
+          // Fill page cleanly without large bottom void
+          const leftMargin = (pageWidth - renderWidth) / 2;
+          const topMargin = Math.max(8, (pageHeight - renderHeight) / 2);
+
+          const imgData = canvas.toDataURL('image/png', 1.0);
+          pdf.addImage(imgData, 'PNG', leftMargin, topMargin, renderWidth, Math.min(renderHeight, pageHeight - (topMargin * 2)));
+          pdf.save(filename);
+
+          closeHolidayDownloadModal();
+          if (typeof showToast === 'function') {
+            showToast('Holiday Schedule downloaded successfully!', 'success');
+          }
+        }
+      } catch (err) {
+        console.error('Error downloading holiday schedule:', err);
+        if (typeof showToast === 'function') {
+          showToast('Error generating PDF. Please try again.', 'error');
+        }
+      } finally {
+        if (btn) {
+          btn.disabled = false;
+          btn.innerHTML = originalBtnHtml;
+        }
+      }
+    }
+    window.performHolidayDownload = performHolidayDownload;
   </script>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL: FULLSCREEN HOLIDAY SCHEDULE DOWNLOAD PREVIEW (MATCHING IMAGE 2)    -->
+  <!-- ========================================================================= -->
+  <div id="modal-download-holiday-schedule"
+    class="fixed inset-0 z-[100] bg-[#323639] hidden flex flex-col md:flex-row overflow-hidden font-sans select-none animate-fadeIn">
+    
+    <!-- LEFT: Document Canvas Viewport (White sheet on dark background) -->
+    <div class="flex-1 h-full overflow-y-auto flex items-start sm:items-center justify-center p-4 sm:p-8 bg-[#323639] relative">
+      <!-- White Paper Document Page -->
+      <div id="holiday-download-preview-paper"
+        class="bg-white text-slate-900 w-full max-w-[760px] shadow-2xl rounded-sm p-6 sm:p-8 font-sans text-xs leading-relaxed border border-black/10 transition-transform my-auto">
+        <!-- Populated live by openHolidayDownloadModal() -->
+      </div>
+    </div>
+
+    <!-- RIGHT: Controls Sidebar (Matching Image 2, with Cancel & Download buttons) -->
+    <div
+      class="w-full md:w-[320px] lg:w-[340px] h-full bg-[#202124] text-[#e8eaed] border-l border-[#3c4043] flex flex-col justify-between p-6 flex-shrink-0 z-20 overflow-y-auto">
+      
+      <!-- Top Settings Section -->
+      <div class="space-y-5">
+        <!-- Sidebar Header: Title + Page count -->
+        <div class="flex items-center justify-between pb-3 border-b border-[#3c4043]">
+          <h2 class="text-base font-semibold text-white tracking-wide">Download</h2>
+          <span class="text-xs text-[#9aa0a6] font-medium">1 page</span>
+        </div>
+
+        <!-- Destination Dropdown -->
+        <div class="space-y-1.5">
+          <label class="block text-xs text-[#9aa0a6]">Destination</label>
+          <div
+            class="w-full bg-[#292a2d] border border-[#5f6368] rounded-lg px-3 py-2 text-xs text-white flex items-center justify-between shadow-xs">
+            <div class="flex items-center space-x-2.5 truncate">
+              <svg class="w-4 h-4 text-[#8ab4f8] flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/>
+              </svg>
+              <span class="font-medium truncate">Save as PDF</span>
+            </div>
+            <svg class="w-4 h-4 text-[#9aa0a6]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+            </svg>
+          </div>
+        </div>
+
+        <!-- Pages Dropdown -->
+        <div class="space-y-1.5">
+          <label class="block text-xs text-[#9aa0a6]">Pages</label>
+          <div
+            class="w-full bg-[#292a2d] border border-[#5f6368] rounded-lg px-3 py-2 text-xs text-white flex items-center justify-between">
+            <span>All</span>
+            <svg class="w-4 h-4 text-[#9aa0a6]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+            </svg>
+          </div>
+        </div>
+
+        <!-- Pages per sheet Dropdown -->
+        <div class="space-y-1.5">
+          <label class="block text-xs text-[#9aa0a6]">Pages per sheet</label>
+          <div
+            class="w-full bg-[#292a2d] border border-[#5f6368] rounded-lg px-3 py-2 text-xs text-white flex items-center justify-between">
+            <span>1</span>
+            <svg class="w-4 h-4 text-[#9aa0a6]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+            </svg>
+          </div>
+        </div>
+
+        <!-- Margins Dropdown -->
+        <div class="space-y-1.5">
+          <label class="block text-xs text-[#9aa0a6]">Margins</label>
+          <div
+            class="w-full bg-[#292a2d] border border-[#5f6368] rounded-lg px-3 py-2 text-xs text-white flex items-center justify-between">
+            <span>Default</span>
+            <svg class="w-4 h-4 text-[#9aa0a6]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+            </svg>
+          </div>
+        </div>
+
+        <!-- Options Checkboxes -->
+        <div class="space-y-2 pt-1">
+          <label class="block text-xs text-[#9aa0a6]">Options</label>
+          <div class="space-y-2 text-xs text-[#e8eaed]">
+            <label class="flex items-center space-x-2.5 cursor-pointer">
+              <input type="checkbox" checked class="w-4 h-4 rounded bg-[#292a2d] border-[#5f6368] text-[#8ab4f8] focus:ring-0 focus:ring-offset-0 cursor-pointer">
+              <span>Headers and footers</span>
+            </label>
+            <label class="flex items-center space-x-2.5 cursor-pointer">
+              <input type="checkbox" checked class="w-4 h-4 rounded bg-[#292a2d] border-[#5f6368] text-[#8ab4f8] focus:ring-0 focus:ring-offset-0 cursor-pointer">
+              <span>Background graphics</span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom Controls: ONLY Cancel and Download (Image 2 style) -->
+      <div class="pt-6 border-t border-[#3c4043] flex items-center justify-end space-x-3">
+        <!-- Cancel button: pill with cyan/blue outline -->
+        <button type="button" onclick="closeHolidayDownloadModal()"
+          class="h-9 px-6 rounded-full border border-[#8ab4f8] hover:bg-[#8ab4f8]/10 text-[#8ab4f8] text-xs font-semibold tracking-wide transition-colors cursor-pointer">
+          Cancel
+        </button>
+        <!-- Download button: solid baby-blue pill with dark navy text -->
+        <button type="button" id="btn-confirm-holiday-download" onclick="performHolidayDownload()"
+          class="h-9 px-6 rounded-full bg-[#8ab4f8] hover:bg-[#a8c7fa] active:bg-[#7baaf7] text-[#041e49] text-xs font-bold tracking-wide transition-colors shadow-md flex items-center space-x-1.5 cursor-pointer">
+          <span>Download</span>
+        </button>
+      </div>
+    </div>
+  </div>
 
   <!-- TOAST NOTIFICATIONS -->
   <div id="toast-container" class="fixed bottom-5 right-5 z-50 space-y-2 pointer-events-none"></div>
