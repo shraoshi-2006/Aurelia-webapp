@@ -6379,10 +6379,9 @@ $(document).ready(function () {
 
   let currentHolidayFilter = 'all';
 
-  function renderHolidaysSection() {
+  function getFilteredHolidays() {
     const search = $.trim($('#input-holiday-search').val()).toLowerCase();
-
-    const filtered = HOTEL_HOLIDAYS_2026.filter(h => {
+    return HOTEL_HOLIDAYS_2026.filter(h => {
       const matchType = (currentHolidayFilter === 'all') || (h.type === currentHolidayFilter);
       const matchSearch = !search ||
         h.name.toLowerCase().includes(search) ||
@@ -6391,6 +6390,10 @@ $(document).ready(function () {
         h.policy.toLowerCase().includes(search);
       return matchType && matchSearch;
     });
+  }
+
+  function renderHolidaysSection() {
+    const filtered = getFilteredHolidays();
 
     const $tbody = $('#page-holiday-tbody');
     $tbody.empty();
@@ -6440,6 +6443,404 @@ $(document).ready(function () {
 
     $('#page-holiday-count-label').text(`Showing ${filtered.length} of ${HOTEL_HOLIDAYS_2026.length} holidays`);
   }
+
+  function buildHolidaySchedulePrintHtml() {
+    const filtered = getFilteredHolidays();
+    const listToPrint = filtered.length > 0 ? filtered : HOTEL_HOLIDAYS_2026;
+    const totalHolidays = listToPrint.length;
+    const gazettedCount = listToPrint.filter(h => h.type === 'gazetted').length;
+    const floatingCount = listToPrint.filter(h => h.type === 'floating').length;
+    const searchVal = $.trim($('#input-holiday-search').val());
+    const filterLabel = currentHolidayFilter === 'gazetted'
+      ? 'Gazetted Holidays'
+      : (currentHolidayFilter === 'floating' ? 'Floating / Optional Holidays' : 'All Official Holidays');
+    const activeUser = typeof getActiveUserData === 'function' ? getActiveUserData() : null;
+    const printedBy = (activeUser && activeUser.name) ? activeUser.name : 'HR Administration';
+    const printedOn = new Date().toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
+
+    const rowsHtml = listToPrint.map((h, idx) => {
+      const isGazetted = h.type === 'gazetted';
+      const isUpcoming = h.status === 'Upcoming';
+      const classBg = isGazetted ? '#ecfdf5' : '#f0f9ff';
+      const classColor = isGazetted ? '#047857' : '#0369a1';
+      const classBorder = isGazetted ? '#a7f3d0' : '#bae6fd';
+      const statusBg = isUpcoming ? '#fef3c7' : '#f1f5f9';
+      const statusColor = isUpcoming ? '#92400e' : '#475569';
+      const statusBorder = isUpcoming ? '#fcd34d' : '#cbd5e1';
+      const rowBg = idx % 2 === 1 ? '#f8fafc' : '#ffffff';
+
+      return `
+        <tr style="background:${rowBg};">
+          <td style="padding:7px 8px;border:1px solid #cbd5e1;font-family:'Courier New',monospace;font-weight:700;font-size:11px;color:#0f172a;white-space:nowrap;">${escapeHtml(h.date)}</td>
+          <td style="padding:7px 8px;border:1px solid #cbd5e1;font-weight:700;font-size:11px;color:#0f172a;">${escapeHtml(h.name)}</td>
+          <td style="padding:7px 8px;border:1px solid #cbd5e1;font-size:11px;color:#334155;white-space:nowrap;">${escapeHtml(h.day)}</td>
+          <td style="padding:7px 8px;border:1px solid #cbd5e1;white-space:nowrap;">
+            <span style="display:inline-block;padding:2px 8px;border-radius:999px;font-size:10px;font-weight:700;background:${classBg};color:${classColor};border:1px solid ${classBorder};">${escapeHtml(h.typeLabel)}</span>
+          </td>
+          <td style="padding:7px 8px;border:1px solid #cbd5e1;font-size:11px;color:#334155;line-height:1.35;">${escapeHtml(h.policy)}</td>
+          <td style="padding:7px 8px;border:1px solid #cbd5e1;text-align:center;white-space:nowrap;">
+            <span style="display:inline-block;padding:2px 8px;border-radius:999px;font-size:10px;font-weight:700;background:${statusBg};color:${statusColor};border:1px solid ${statusBorder};">${isUpcoming ? '● In 8 Days' : 'Observed'}</span>
+          </td>
+        </tr>
+      `;
+    }).join('');
+
+    return `
+      <div id="holiday-print-sheet" style="font-family:'Plus Jakarta Sans','Inter',Arial,sans-serif;color:#0f172a;background:#ffffff;width:100%;box-sizing:border-box;">
+        <div style="display:flex;justify-content:space-between;align-items:flex-end;border-bottom:2px solid #14213D;padding-bottom:10px;margin-bottom:12px;">
+          <div>
+            <div style="font-size:20px;font-weight:900;letter-spacing:4px;color:#14213D;line-height:1;">AURELIA</div>
+            <div style="width:44px;height:2.5px;background:#FCA311;margin:5px 0;"></div>
+            <div style="font-size:10px;font-weight:700;letter-spacing:1.6px;color:#475569;text-transform:uppercase;">Hotel &amp; Restaurant • Human Resources</div>
+          </div>
+          <div style="text-align:right;">
+            <div style="font-size:15px;font-weight:800;color:#14213D;">Hotel Holiday &amp; Observance Calendar 2026</div>
+            <div style="font-size:10px;color:#475569;margin-top:2px;">Official Holiday Schedule &amp; Compensatory Leave Policy</div>
+          </div>
+        </div>
+
+        <table style="width:100%;border-collapse:collapse;margin-bottom:10px;font-size:10.5px;background:#f8fafc;border:1px solid #cbd5e1;">
+          <tr>
+            <td style="padding:6px 10px;border-right:1px solid #cbd5e1;"><strong>View:</strong> ${escapeHtml(filterLabel)}${searchVal ? ` (Search: "${escapeHtml(searchVal)}")` : ''}</td>
+            <td style="padding:6px 10px;border-right:1px solid #cbd5e1;"><strong>Total:</strong> ${totalHolidays} Days</td>
+            <td style="padding:6px 10px;border-right:1px solid #cbd5e1;"><strong>Gazetted:</strong> ${gazettedCount} &nbsp;|&nbsp; <strong>Floating:</strong> ${floatingCount}</td>
+            <td style="padding:6px 10px;text-align:right;"><strong>Printed:</strong> ${escapeHtml(printedOn)} (${escapeHtml(printedBy)})</td>
+          </tr>
+        </table>
+
+        <table style="width:100%;border-collapse:collapse;table-layout:auto;">
+          <thead>
+            <tr style="background:#14213D;color:#ffffff;text-align:left;">
+              <th style="padding:8px;border:1px solid #14213D;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.04em;white-space:nowrap;">Date</th>
+              <th style="padding:8px;border:1px solid #14213D;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.04em;">Holiday / Festival</th>
+              <th style="padding:8px;border:1px solid #14213D;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.04em;">Day</th>
+              <th style="padding:8px;border:1px solid #14213D;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.04em;white-space:nowrap;">Classification</th>
+              <th style="padding:8px;border:1px solid #14213D;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.04em;">Staffing Coverage &amp; Compensation Policy</th>
+              <th style="padding:8px;border:1px solid #14213D;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.04em;text-align:center;white-space:nowrap;">Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${rowsHtml}
+          </tbody>
+        </table>
+
+        <div style="margin-top:12px;padding-top:8px;border-top:1px solid #cbd5e1;display:flex;justify-content:space-between;font-size:10px;color:#64748b;">
+          <span>Aurelia Hospitality Labor Standards 2026</span>
+          <span>&copy; 2026 AURELIA. All rights reserved by Shraoshi Basak &amp; Piyush Barua.</span>
+        </div>
+      </div>
+    `;
+  }
+
+  let holidayPrintGuard = false;
+  function prepareHolidayPrintArea() {
+    const $area = $('#print-invoice-area');
+    if (!$area.length) return false;
+    $area.html(buildHolidaySchedulePrintHtml()).removeClass('hidden');
+    return true;
+  }
+
+  function printHolidaySchedule() {
+    if (holidayPrintGuard) return;
+    holidayPrintGuard = true;
+    try {
+      prepareHolidayPrintArea();
+      window.print();
+    } finally {
+      setTimeout(() => {
+        holidayPrintGuard = false;
+        $('#print-invoice-area').addClass('hidden').empty();
+      }, 1000);
+    }
+  }
+  window.printHolidaySchedule = printHolidaySchedule;
+
+  function generateDirectHolidaySchedulePDF(listToPrint, filterLabel, searchVal, printedBy, printedOn, fileName) {
+    try {
+      const { jsPDF } = window.jspdf || {};
+      if (!jsPDF) return false;
+
+      const doc = new jsPDF({
+        orientation: 'p',
+        unit: 'mm',
+        format: 'a4'
+      });
+
+      const pageW = doc.internal.pageSize.getWidth();
+      const pageH = doc.internal.pageSize.getHeight();
+      const margin = 12;
+      const contentW = pageW - margin * 2;
+      const totalHolidays = listToPrint.length;
+      const gazettedCount = listToPrint.filter(h => h.type === 'gazetted').length;
+      const floatingCount = listToPrint.filter(h => h.type === 'floating').length;
+
+      // Brand Header
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(17);
+      doc.setTextColor(20, 33, 61);
+      doc.text('A U R E L I A', margin, 17);
+
+      doc.setFillColor(252, 163, 17);
+      doc.rect(margin, 19.2, 14, 0.9, 'F');
+
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(7.5);
+      doc.setTextColor(71, 85, 105);
+      doc.text('HOTEL & RESTAURANT  •  HUMAN RESOURCES', margin, 24);
+
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(12);
+      doc.setTextColor(20, 33, 61);
+      doc.text('Hotel Holiday & Observance Calendar 2026', pageW - margin, 17.5, { align: 'right' });
+
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(8);
+      doc.setTextColor(71, 85, 105);
+      doc.text('Official Holiday Schedule & Compensatory Leave Policy', pageW - margin, 22.8, { align: 'right' });
+
+      doc.setDrawColor(20, 33, 61);
+      doc.setLineWidth(0.6);
+      doc.line(margin, 27, pageW - margin, 27);
+
+      // Summary Strip
+      const summaryY = 30.5;
+      const summaryH = 8;
+      doc.setFillColor(248, 250, 252);
+      doc.setDrawColor(203, 213, 225);
+      doc.setLineWidth(0.25);
+      doc.rect(margin, summaryY, contentW, summaryH, 'FD');
+
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(7.8);
+      doc.setTextColor(15, 23, 42);
+      const viewText = `View: ${filterLabel}${searchVal ? ` (Search: "${searchVal}")` : ''}`;
+      doc.text(viewText, margin + 2.5, summaryY + 5.2);
+      doc.text(`Total: ${totalHolidays} Days`, margin + 62, summaryY + 5.2);
+      doc.text(`Gazetted: ${gazettedCount}  |  Floating: ${floatingCount}`, margin + 94, summaryY + 5.2);
+      doc.text(`Printed: ${printedOn} (${printedBy})`, pageW - margin - 2.5, summaryY + 5.2, { align: 'right' });
+
+      if (typeof doc.autoTable === 'function') {
+        const bodyRows = listToPrint.map(h => [
+          h.date,
+          h.name,
+          h.day,
+          h.typeLabel,
+          h.policy,
+          h.status === 'Upcoming' ? 'In 8 Days' : 'Observed'
+        ]);
+
+        doc.autoTable({
+          startY: summaryY + summaryH + 3.5,
+          margin: { left: margin, right: margin, bottom: 18 },
+          head: [[
+            'DATE',
+            'HOLIDAY / FESTIVAL',
+            'DAY',
+            'CLASSIFICATION',
+            'STAFFING COVERAGE & COMPENSATION POLICY',
+            'STATUS'
+          ]],
+          body: bodyRows,
+          theme: 'grid',
+          styles: {
+            font: 'helvetica',
+            fontSize: 8,
+            cellPadding: 2.3,
+            textColor: [30, 41, 59],
+            lineColor: [203, 213, 225],
+            lineWidth: 0.2,
+            valign: 'middle'
+          },
+          headStyles: {
+            fillColor: [20, 33, 61],
+            textColor: [255, 255, 255],
+            fontStyle: 'bold',
+            fontSize: 7.5,
+            lineColor: [20, 33, 61]
+          },
+          alternateRowStyles: {
+            fillColor: [248, 250, 252]
+          },
+          columnStyles: {
+            0: { font: 'courier', fontStyle: 'bold', cellWidth: 23, textColor: [15, 23, 42] },
+            1: { fontStyle: 'bold', cellWidth: 38, textColor: [15, 23, 42] },
+            2: { cellWidth: 19 },
+            3: { fontStyle: 'bold', cellWidth: 27 },
+            4: { cellWidth: 61 },
+            5: { fontStyle: 'bold', halign: 'center', cellWidth: 18 }
+          },
+          didParseCell: function (data) {
+            if (data.section === 'body') {
+              if (data.column.index === 3) {
+                const isGaz = String(data.cell.raw).toLowerCase().includes('gazetted');
+                data.cell.styles.textColor = isGaz ? [4, 120, 87] : [3, 105, 161];
+              } else if (data.column.index === 5) {
+                const isUp = String(data.cell.raw).includes('8 Days');
+                data.cell.styles.textColor = isUp ? [146, 64, 14] : [71, 85, 105];
+                if (isUp) data.cell.styles.fillColor = [254, 243, 199];
+              }
+            }
+          }
+        });
+
+        const finalY = Math.min((doc.lastAutoTable && doc.lastAutoTable.finalY ? doc.lastAutoTable.finalY : summaryY + 25) + 6, pageH - 12);
+        doc.setDrawColor(203, 213, 225);
+        doc.setLineWidth(0.25);
+        doc.line(margin, finalY, pageW - margin, finalY);
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(7.5);
+        doc.setTextColor(100, 116, 139);
+        doc.text('Aurelia Hospitality Labor Standards 2026', margin, finalY + 4.5);
+        doc.text('© 2026 AURELIA. All rights reserved by Shraoshi Basak & Piyush Barua.', pageW - margin, finalY + 4.5, { align: 'right' });
+      }
+
+      doc.save(fileName);
+      showToast('Holiday schedule PDF downloaded!', 'success');
+      return true;
+    } catch (err) {
+      console.error('Direct Holiday PDF generation error:', err);
+      return false;
+    }
+  }
+
+  let holidayPdfDownloading = false;
+  function downloadHolidaySchedulePDF() {
+    if (holidayPdfDownloading) return;
+    holidayPdfDownloading = true;
+
+    const $btn = $('#btn-download-holiday-schedule');
+    const $btnLabel = $btn.find('span').last();
+    const originalLabel = $btnLabel.text() || 'Download Schedule';
+    $btn.prop('disabled', true).addClass('opacity-75 cursor-wait');
+    if ($btnLabel.length) $btnLabel.text('Downloading...');
+
+    const resetBtn = () => {
+      holidayPdfDownloading = false;
+      $btn.prop('disabled', false).removeClass('opacity-75 cursor-wait');
+      if ($btnLabel.length) $btnLabel.text(originalLabel);
+    };
+
+    const filtered = getFilteredHolidays();
+    const listToPrint = filtered.length > 0 ? filtered : HOTEL_HOLIDAYS_2026;
+    const searchVal = $.trim($('#input-holiday-search').val());
+    const filterLabel = currentHolidayFilter === 'gazetted'
+      ? 'Gazetted Holidays'
+      : (currentHolidayFilter === 'floating' ? 'Floating / Optional Holidays' : 'All Official Holidays');
+    const activeUser = typeof getActiveUserData === 'function' ? getActiveUserData() : null;
+    const printedBy = (activeUser && activeUser.name) ? activeUser.name : 'HR Administration';
+    const printedOn = new Date().toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
+    const fileSuffix = currentHolidayFilter && currentHolidayFilter !== 'all' ? `_${currentHolidayFilter}` : '';
+    const fileName = `Aurelia_Holiday_Schedule_2026${fileSuffix}.pdf`;
+
+    try {
+      const { jsPDF } = window.jspdf || {};
+      if (!jsPDF) {
+        resetBtn();
+        showToast('PDF library unavailable. Opening print view to Save as PDF...', 'info');
+        printHolidaySchedule();
+        return;
+      }
+
+      if (window.html2canvas) {
+        const mount = document.createElement('div');
+        mount.id = 'holiday-pdf-render-mount';
+        mount.style.position = 'fixed';
+        mount.style.left = '-9999px';
+        mount.style.top = '0';
+        mount.style.width = '794px';
+        mount.style.background = '#ffffff';
+        mount.style.color = '#0f172a';
+        mount.style.padding = '0';
+        mount.style.zIndex = '-9999';
+        mount.innerHTML = buildHolidaySchedulePrintHtml();
+        document.body.appendChild(mount);
+
+        const targetEl = mount.firstElementChild || mount;
+        window.html2canvas(targetEl, {
+          scale: 2,
+          useCORS: true,
+          logging: false,
+          backgroundColor: '#ffffff',
+          windowWidth: 794
+        }).then(canvas => {
+          try {
+            const doc = new jsPDF({
+              orientation: 'p',
+              unit: 'mm',
+              format: 'a4'
+            });
+            const pageW = doc.internal.pageSize.getWidth();
+            const pageH = doc.internal.pageSize.getHeight();
+            const margin = 12;
+            const imgWidth = pageW - margin * 2;
+            const pageContentH = pageH - margin * 2;
+            const totalImgHeight = (canvas.height * imgWidth) / canvas.width;
+
+            if (totalImgHeight <= pageContentH) {
+              const imgData = canvas.toDataURL('image/png');
+              doc.addImage(imgData, 'PNG', margin, margin, imgWidth, totalImgHeight, undefined, 'FAST');
+            } else {
+              const pagePixelH = Math.floor(canvas.width * (pageContentH / imgWidth));
+              let offsetPx = 0;
+              let pageIdx = 0;
+              while (offsetPx < canvas.height) {
+                const sliceH = Math.min(pagePixelH, canvas.height - offsetPx);
+                const sliceCanvas = document.createElement('canvas');
+                sliceCanvas.width = canvas.width;
+                sliceCanvas.height = sliceH;
+                const ctx = sliceCanvas.getContext('2d');
+                ctx.fillStyle = '#ffffff';
+                ctx.fillRect(0, 0, sliceCanvas.width, sliceCanvas.height);
+                ctx.drawImage(canvas, 0, offsetPx, canvas.width, sliceH, 0, 0, canvas.width, sliceH);
+                const sliceMmH = (sliceH * imgWidth) / canvas.width;
+                if (pageIdx > 0) doc.addPage();
+                doc.addImage(sliceCanvas.toDataURL('image/png'), 'PNG', margin, margin, imgWidth, sliceMmH, undefined, 'FAST');
+                offsetPx += sliceH;
+                pageIdx++;
+              }
+            }
+
+            doc.save(fileName);
+            showToast('Holiday schedule PDF downloaded!', 'success');
+          } catch (pdfErr) {
+            console.warn('Holiday PDF assembly error, using direct AutoTable fallback:', pdfErr);
+            generateDirectHolidaySchedulePDF(listToPrint, filterLabel, searchVal, printedBy, printedOn, fileName);
+          } finally {
+            mount.remove();
+            resetBtn();
+          }
+        }).catch(err => {
+          console.warn('html2canvas Holiday capture error, using direct AutoTable fallback:', err);
+          mount.remove();
+          generateDirectHolidaySchedulePDF(listToPrint, filterLabel, searchVal, printedBy, printedOn, fileName);
+          resetBtn();
+        });
+      } else {
+        generateDirectHolidaySchedulePDF(listToPrint, filterLabel, searchVal, printedBy, printedOn, fileName);
+        resetBtn();
+      }
+    } catch (err) {
+      console.error('Holiday PDF download error:', err);
+      showToast('Error generating Holiday Schedule PDF.', 'error');
+      resetBtn();
+    }
+  }
+  window.downloadHolidaySchedulePDF = downloadHolidaySchedulePDF;
+
+  // Support Ctrl+P / native browser print directly on Holiday List page
+  window.addEventListener('beforeprint', function () {
+    const holidaySection = document.getElementById('section-holidays');
+    const area = document.getElementById('print-invoice-area');
+    if (holidaySection && !holidaySection.classList.contains('hidden') && area && (!area.innerHTML.trim() || area.querySelector('#holiday-print-sheet'))) {
+      prepareHolidayPrintArea();
+    }
+  });
+  window.addEventListener('afterprint', function () {
+    const holidaySection = document.getElementById('section-holidays');
+    if (holidaySection && !holidaySection.classList.contains('hidden')) {
+      $('#print-invoice-area').addClass('hidden').empty();
+    }
+  });
 
   $(document).on('click', '.btn-holiday-filter', function () {
     $('.btn-holiday-filter').removeClass('active bg-[#14213D] text-white').addClass('text-slate-600 dark:text-slate-400 hover:text-slate-900');
