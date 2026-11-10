@@ -5464,7 +5464,7 @@ $(document).ready(function () {
       html += `
         <tr class="hover:bg-slate-50/70 dark:hover:bg-slate-800/50 transition-colors group">
           <td class="py-3.5 px-4 whitespace-nowrap">
-            <span class="px-2.5 py-1 rounded text-xs font-mono font-bold bg-[#FCA311] text-black inline-block shadow-2xs tracking-wider">
+            <span class="px-2.5 py-1 rounded text-xs font-mono font-bold bg-[#14213D] text-[#FCA311] inline-block shadow-xs tracking-wider">
               ${tpl.empId}
             </span>
           </td>
