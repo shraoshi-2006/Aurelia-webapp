@@ -99,14 +99,55 @@
   }
 
   function saveLocalUser(userObj) {
+    if (!userObj || !userObj.email) return;
     const list = getLocalUsers();
-    const existingIndex = list.findIndex(u => u.email.toLowerCase() === userObj.email.toLowerCase());
+    const existingIndex = list.findIndex(u => u.email && u.email.toLowerCase() === userObj.email.toLowerCase());
     if (existingIndex >= 0) {
-      list[existingIndex] = userObj;
+      list[existingIndex] = { ...list[existingIndex], ...userObj };
     } else {
       list.push(userObj);
     }
     localStorage.setItem(STORAGE_KEY_LOCAL_USERS, JSON.stringify(list));
+  }
+
+  /**
+   * Merge saved profile fields (username, avatar, phone, dept, empId, role)
+   * matching THIS exact user's email or id without cross-user leakage.
+   */
+  function enrichUserProfile(user) {
+    if (!user) return user;
+    const cleanEmail = (user.email || '').trim().toLowerCase();
+    const list = getLocalUsers();
+    const localMatch = list.find(u =>
+      (cleanEmail && u.email && u.email.toLowerCase() === cleanEmail) ||
+      (user.id && u.id === user.id)
+    ) || {};
+
+    let cachedMatch = {};
+    try {
+      const cachedRaw = localStorage.getItem(STORAGE_KEY_USER) || sessionStorage.getItem(STORAGE_KEY_USER);
+      if (cachedRaw) {
+        const parsed = JSON.parse(cachedRaw);
+        const sameEmail = cleanEmail && parsed.email && parsed.email.toLowerCase() === cleanEmail;
+        const sameId = user.id && parsed.id && parsed.id === user.id;
+        if (sameEmail || sameId) {
+          cachedMatch = parsed;
+        }
+      }
+    } catch (e) { }
+
+    const merged = {
+      id: user.id || cachedMatch.id || localMatch.id || ('usr-' + Date.now()),
+      name: (user.name || cachedMatch.name || localMatch.name || 'Aurelia Staff').trim(),
+      username: (user.username || cachedMatch.username || localMatch.username || '').trim().replace(/^@+/, ''),
+      email: (user.email || cachedMatch.email || localMatch.email || '').trim(),
+      role: (user.role || cachedMatch.role || localMatch.role || 'Front Desk Supervisor').trim(),
+      phone: user.phone || cachedMatch.phone || localMatch.phone || '',
+      department: user.department || cachedMatch.department || localMatch.department || 'Front Office',
+      empId: user.empId || cachedMatch.empId || localMatch.empId || 'EMP-2026-01',
+      avatar: user.avatar !== undefined ? user.avatar : (cachedMatch.avatar !== undefined ? cachedMatch.avatar : (localMatch.avatar || null))
+    };
+    return merged;
   }
 
   /**
@@ -121,7 +162,13 @@
         await fetch(`${API_BASE}/api/auth/register`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ name: u.name, email: u.email, password: u.password, role: u.role || 'Front Desk Supervisor' })
+          body: JSON.stringify({
+            name: u.name,
+            username: u.username || '',
+            email: u.email,
+            password: u.password,
+            role: u.role || 'Front Desk Supervisor'
+          })
         }).catch(() => { });
       }
     } catch (e) { }
@@ -143,7 +190,8 @@
     userProfileCapsule: null,
     userAvatarBadge: null,
     userNameBadge: null,
-    userRoleBadge: null
+    userRoleBadge: null,
+    userEmailBadge: null
   };
 
   function $(id) {
@@ -170,6 +218,7 @@
     DOM.userProfileCapsule = $('user-profile-capsule');
     DOM.userNameBadge = $('topbar-user-name');
     DOM.userRoleBadge = $('topbar-user-role');
+    DOM.userEmailBadge = $('topbar-user-email');
     DOM.userAvatarBadge = $('topbar-user-avatar');
   }
 
@@ -231,14 +280,19 @@
     if (!btn) return;
     if (isLoading) {
       btn.disabled = true;
-      btn.dataset.originalHtml = btn.innerHTML;
+      if (!btn.dataset.originalHtml) {
+        btn.dataset.originalHtml = btn.innerHTML;
+      }
+      const loadingLabel = btnId === 'btn-register-submit'
+        ? 'Creating Account...'
+        : (btnId === 'btn-forgot-submit' ? 'Sending...' : 'Signing In...');
       btn.innerHTML = `
         <span class="inline-flex items-center justify-center gap-2">
           <svg class="animate-spin h-4 w-4 text-white" viewBox="0 0 24 24" fill="none">
             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
             <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
           </svg>
-          <span>Signing In...</span>
+          <span>${loadingLabel}</span>
         </span>
       `;
       btn.classList.add('opacity-75', 'cursor-not-allowed');
@@ -290,40 +344,59 @@
    */
   function syncUserProfile(user) {
     if (!user) return;
+    initDOM();
+
+    const displayName = (user.name || '').trim() || 'Aurelia Staff';
+    const userRole = (user.role || '').trim() || 'Front Desk Supervisor';
+    const userEmail = (user.email || '').trim();
+    const userUsername = (user.username || '').trim().replace(/^@+/, '');
 
     if (DOM.userNameBadge) {
-      DOM.userNameBadge.textContent = user.name || 'Adaline Lively';
+      DOM.userNameBadge.textContent = displayName;
     }
 
     if (DOM.userRoleBadge) {
-      DOM.userRoleBadge.textContent = user.role || 'Front Desk Supervisor';
+      DOM.userRoleBadge.textContent = userRole;
+    }
+
+    if (DOM.userEmailBadge) {
+      DOM.userEmailBadge.textContent = userUsername && userEmail
+        ? `@${userUsername} · ${userEmail}`
+        : (userUsername ? `@${userUsername}` : (userEmail || 'Signed in'));
+    }
+
+    if (DOM.userProfileCapsule) {
+      const summary = [displayName, userRole, userUsername ? '@' + userUsername : '', userEmail].filter(Boolean).join(' • ');
+      DOM.userProfileCapsule.setAttribute('data-instant-tooltip', `${summary} (Click for Profile)`);
+      DOM.userProfileCapsule.removeAttribute('title');
     }
 
     const topGreeting = $('topbar-welcome-title');
     if (topGreeting) {
-      const firstName = (user.name || 'Adaline').split(' ')[0];
-      const hour = new Date().getHours();
-      const timeGreeting = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening';
-      topGreeting.textContent = `${timeGreeting}, ${firstName}!`;
+      const firstName = displayName.split(' ')[0] || 'Guest';
+      topGreeting.textContent = `Welcome back, ${firstName}!`;
     }
 
     const avatarBtn = $('topbar-user-avatar');
     const avatarText = $('topbar-user-avatar-text');
     const avatarImg = $('topbar-user-avatar-img');
-    const initials = (user.name || 'Adaline Lively')
+    const initials = displayName
       .split(' ')
       .filter(Boolean)
       .map(p => p[0])
       .slice(0, 2)
       .join('')
-      .toUpperCase() || 'AL';
+      .toUpperCase() || 'AU';
 
     if (user.avatar && avatarImg) {
       avatarImg.src = user.avatar;
       avatarImg.classList.remove('hidden');
       if (avatarText) avatarText.classList.add('hidden');
     } else {
-      if (avatarImg) avatarImg.classList.add('hidden');
+      if (avatarImg) {
+        avatarImg.src = '';
+        avatarImg.classList.add('hidden');
+      }
       if (avatarText) {
         avatarText.textContent = initials;
         avatarText.classList.remove('hidden');
@@ -334,11 +407,48 @@
   }
 
   /**
+   * Reset Topbar Profile Placeholders When Logged Out
+   */
+  function resetUserProfileUI() {
+    initDOM();
+    if (DOM.userNameBadge) DOM.userNameBadge.textContent = 'Aurelia Staff';
+    if (DOM.userRoleBadge) DOM.userRoleBadge.textContent = 'Staff';
+    if (DOM.userEmailBadge) DOM.userEmailBadge.textContent = 'staff@aureliahotel.com';
+    const topGreeting = $('topbar-welcome-title');
+    if (topGreeting) topGreeting.textContent = 'Welcome back!';
+    if (DOM.userProfileCapsule) {
+      DOM.userProfileCapsule.setAttribute('data-instant-tooltip', 'My Profile');
+      DOM.userProfileCapsule.removeAttribute('title');
+    }
+    const avatarText = $('topbar-user-avatar-text');
+    const avatarImg = $('topbar-user-avatar-img');
+    if (avatarImg) {
+      avatarImg.src = '';
+      avatarImg.classList.add('hidden');
+    }
+    if (avatarText) {
+      avatarText.textContent = 'AU';
+      avatarText.classList.remove('hidden');
+    }
+  }
+
+  /**
    * Show Dashboard UI & Hide Auth UI
    */
   function renderAuthenticatedState(user) {
+    const enrichedUser = enrichUserProfile(user);
     AuthState.isAuthenticated = true;
-    AuthState.currentUser = user;
+    AuthState.currentUser = enrichedUser;
+
+    // Keep cached session in sync with enriched fields
+    try {
+      if (localStorage.getItem(STORAGE_KEY_USER) || !sessionStorage.getItem(STORAGE_KEY_USER)) {
+        localStorage.setItem(STORAGE_KEY_USER, JSON.stringify(enrichedUser));
+      }
+      if (sessionStorage.getItem(STORAGE_KEY_USER)) {
+        sessionStorage.setItem(STORAGE_KEY_USER, JSON.stringify(enrichedUser));
+      }
+    } catch (e) { }
 
     initDOM();
 
@@ -366,7 +476,10 @@
     }
 
     // 5. Sync profile details
-    syncUserProfile(user);
+    syncUserProfile(enrichedUser);
+    if (typeof window.updateTopbarAvatarUI === 'function') {
+      window.updateTopbarAvatarUI(enrichedUser);
+    }
 
     // 6. Determine target section based on page path and hash
     const currentPath = (window.location.pathname || '').toLowerCase();
@@ -424,6 +537,16 @@
       window.renderSidebarBadges();
     }
 
+    if (typeof window.renderDashboard === 'function' && targetSection === 'dashboard') {
+      window.renderDashboard();
+    }
+
+    // Re-sync after section switcher in case any DOM title changed
+    syncUserProfile(enrichedUser);
+    if (typeof window.updateTopbarAvatarUI === 'function') {
+      window.updateTopbarAvatarUI(enrichedUser);
+    }
+
     // Clean any query string from URL if form submission polluted it
     if (window.location.search) {
       const cleanUrl = window.location.pathname + (window.location.hash || '#dashboard');
@@ -439,6 +562,7 @@
     AuthState.currentUser = null;
 
     initDOM();
+    resetUserProfileUI();
 
     if (DOM.sessionLoader) {
       DOM.sessionLoader.classList.add('hidden');
@@ -569,17 +693,24 @@
 
       if (matchedUser) {
         const token = 'local-token-' + Date.now();
-        const safeUser = {
+        const safeUser = enrichUserProfile({
           id: matchedUser.id || ('usr-' + Date.now()),
           name: matchedUser.name,
+          username: matchedUser.username || '',
           email: matchedUser.email,
-          role: matchedUser.role || 'Front Desk Supervisor'
-        };
+          role: matchedUser.role || 'Front Desk Supervisor',
+          phone: matchedUser.phone || '',
+          department: matchedUser.department || 'Front Office',
+          empId: matchedUser.empId || 'EMP-2026-01',
+          avatar: matchedUser.avatar || null
+        });
 
         AuthState.token = token;
         if (rememberMe) {
           localStorage.setItem(STORAGE_KEY_TOKEN, token);
           localStorage.setItem(STORAGE_KEY_USER, JSON.stringify(safeUser));
+          sessionStorage.removeItem(STORAGE_KEY_TOKEN);
+          sessionStorage.removeItem(STORAGE_KEY_USER);
         } else {
           sessionStorage.setItem(STORAGE_KEY_TOKEN, token);
           sessionStorage.setItem(STORAGE_KEY_USER, JSON.stringify(safeUser));
@@ -614,12 +745,14 @@
       if (res.ok) {
         const data = await res.json();
         const token = data.token;
-        const user = data.user;
+        const user = enrichUserProfile(data.user);
         AuthState.token = token;
 
         if (rememberMe) {
           localStorage.setItem(STORAGE_KEY_TOKEN, token);
           localStorage.setItem(STORAGE_KEY_USER, JSON.stringify(user));
+          sessionStorage.removeItem(STORAGE_KEY_TOKEN);
+          sessionStorage.removeItem(STORAGE_KEY_USER);
         } else {
           sessionStorage.setItem(STORAGE_KEY_TOKEN, token);
           sessionStorage.setItem(STORAGE_KEY_USER, JSON.stringify(user));
@@ -662,7 +795,7 @@
   }
 
   /**
-   * Perform Registration
+   * Perform Registration & Auto-Sign-In
    */
   async function handleRegister(e) {
     if (e) {
@@ -673,16 +806,22 @@
     showAlert('alert-register', '');
 
     const nameInput = $('reg-name');
+    const usernameInput = $('reg-username');
     const emailInput = $('reg-email');
     const passwordInput = $('reg-password');
     const confirmInput = $('reg-confirm-password');
     const termsInput = $('reg-terms');
+    const regAdminBtn = $('tab-reg-admin');
 
     const name = (nameInput?.value || '').trim();
+    const username = (usernameInput?.value || '').trim().replace(/^@+/, '');
     const email = (emailInput?.value || '').trim();
     const password = (passwordInput?.value || '').trim();
     const confirmPassword = (confirmInput?.value || '').trim();
     const termsAccepted = Boolean(termsInput?.checked);
+    const selectedRole = (regAdminBtn && regAdminBtn.classList.contains('bg-[#14213d]'))
+      ? 'General Manager'
+      : 'Front Desk Supervisor';
 
     if (!name) {
       showAlert('alert-register', 'Full Name is required.');
@@ -714,26 +853,26 @@
       return false;
     }
 
-    setButtonLoading('btn-register-submit', true, 'Creating Account...');
+    setButtonLoading('btn-register-submit', true, 'Create Account');
 
     const newUser = {
       id: 'usr-' + Date.now(),
       name,
+      username,
       email,
       password,
-      role: 'Front Desk Supervisor'
+      role: selectedRole
     };
 
     // 1. Try Backend API (persists into SQLite auth.db)
     let savedToDatabase = false;
-    let serverWarning = null;
 
     if (API_BASE) {
       try {
         const res = await fetch(`${API_BASE}/api/auth/register`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ name, email, password, role: newUser.role })
+          body: JSON.stringify({ name, username, email, password, role: newUser.role })
         });
 
         const data = await res.json().catch(() => ({}));
@@ -744,36 +883,73 @@
             newUser.id = data.user.id;
           }
         } else if (res.status === 404) {
-          // Endpoint not found on static/local proxy host; fallback to local storage
           console.warn('[Auth Server] Backend route 404 at ' + API_BASE + ', saving to local registry.');
         } else {
-          // Specific backend validation or duplicate error (400, 409, 500)
           showAlert('alert-register', data.error || 'Failed to create account.');
-          setButtonLoading('btn-register-submit', false, 'Create Staff Account');
+          setButtonLoading('btn-register-submit', false, 'Create Account');
           return false;
         }
       } catch (err) {
         console.warn('[Auth Server] Backend API unreachable at ' + API_BASE + ':', err);
-        serverWarning = 'Backend server (node server.js) is offline. Saved locally in browser session.';
       }
     }
 
-    // Always cache locally as well for offline resilience
+    // 2. Cache in local user registry for offline & cross-page enrichment
     saveLocalUser(newUser);
 
-    setButtonLoading('btn-register-submit', false, 'Create Staff Account');
+    // 3. Auto-Sign-In newly registered account so header reflects their details immediately
+    let sessionToken = 'local-token-' + Date.now();
+    let authenticatedUser = {
+      id: newUser.id,
+      name: newUser.name,
+      username: newUser.username,
+      email: newUser.email,
+      role: newUser.role,
+      department: selectedRole === 'General Manager' ? 'Executive Administration' : 'Front Office',
+      empId: 'EMP-2026-' + String(Math.floor(10 + Math.random() * 89)),
+      avatar: null
+    };
+
+    if (savedToDatabase && API_BASE) {
+      try {
+        const loginRes = await fetch(`${API_BASE}/api/auth/login`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password, rememberMe: true }),
+          credentials: 'include'
+        });
+        if (loginRes.ok) {
+          const loginData = await loginRes.json();
+          if (loginData.token) sessionToken = loginData.token;
+          if (loginData.user) {
+            authenticatedUser = {
+              ...authenticatedUser,
+              ...loginData.user,
+              username: loginData.user.username || newUser.username
+            };
+          }
+        }
+      } catch (loginErr) {
+        console.warn('[Auth Server] Auto-login request fell back to local token:', loginErr);
+      }
+    }
+
+    // Persist department/empId cleanly in local registry for this new user too
+    saveLocalUser({ ...newUser, ...authenticatedUser, password });
+
+    AuthState.token = sessionToken;
+    try {
+      localStorage.setItem(STORAGE_KEY_TOKEN, sessionToken);
+      localStorage.setItem(STORAGE_KEY_USER, JSON.stringify(authenticatedUser));
+      sessionStorage.setItem(STORAGE_KEY_TOKEN, sessionToken);
+      sessionStorage.setItem(STORAGE_KEY_USER, JSON.stringify(authenticatedUser));
+    } catch (storageErr) { }
+
+    setButtonLoading('btn-register-submit', false, 'Create Account');
     DOM.registerForm?.reset();
 
-    showView('login');
-    if ($('login-email')) {
-      $('login-email').value = email;
-    }
-
-    if (savedToDatabase) {
-      showAlert('alert-login', 'Staff account created and saved to auth.db! You can now sign in.', 'success');
-    } else {
-      showAlert('alert-login', serverWarning || 'Account created successfully! Please sign in with your credentials.', 'success');
-    }
+    // Immediately show dashboard & display new user's name and details on header
+    renderAuthenticatedState(authenticatedUser);
     return false;
   }
 
@@ -931,8 +1107,13 @@
     // 1. Interactive Form Focus & Click Reactions
     const emailInput = $('login-email');
     const passInput = $('login-password');
+    const regNameInput = $('reg-name');
+    const regUsernameInput = $('reg-username');
+    const regEmailInput = $('reg-email');
     const staffTab = $('tab-login-staff');
     const adminTab = $('tab-login-admin');
+    const regStaffTab = $('tab-reg-staff');
+    const regAdminTab = $('tab-reg-admin');
     const quickDemoBtn = $('btn-quick-demo');
 
     emailInput?.addEventListener('focus', () => {
@@ -949,12 +1130,41 @@
       setSpeech(defaultSpeech);
     });
 
+    regNameInput?.addEventListener('focus', () => {
+      setSpeech('Tell us your full name! 📝');
+    });
+    regNameInput?.addEventListener('blur', () => {
+      setSpeech(defaultSpeech);
+    });
+
+    regUsernameInput?.addEventListener('focus', () => {
+      setSpeech('Pick a cool username! ✨');
+    });
+    regUsernameInput?.addEventListener('blur', () => {
+      setSpeech(defaultSpeech);
+    });
+
+    regEmailInput?.addEventListener('focus', () => {
+      setSpeech('Enter your account email ✉️');
+    });
+    regEmailInput?.addEventListener('blur', () => {
+      setSpeech(defaultSpeech);
+    });
+
     staffTab?.addEventListener('click', () => {
       setSpeech('Front Desk Staff ready! 🛎️', true, 2600);
     });
 
     adminTab?.addEventListener('click', () => {
       setSpeech('Welcome Hotel Manager! 👔', true, 2600);
+    });
+
+    regStaffTab?.addEventListener('click', () => {
+      setSpeech('Staff profile selected! 🛎️', true, 2600);
+    });
+
+    regAdminTab?.addEventListener('click', () => {
+      setSpeech('Manager profile selected! 👔', true, 2600);
     });
 
     quickDemoBtn?.addEventListener('click', () => {
@@ -1288,8 +1498,11 @@
     $('btn-cancel-logout')?.addEventListener('click', hideLogoutConfirmation);
     $('modal-logout-backdrop')?.addEventListener('click', hideLogoutConfirmation);
 
-    // Profile capsule click
+    // Profile capsule click: let main.js open the User Profile Modal (fallback to logout dialog)
     DOM.userProfileCapsule?.addEventListener('click', (e) => {
+      if (typeof window.openUserProfileModal === 'function') {
+        return;
+      }
       e.stopPropagation();
       showLogoutConfirmation();
     });

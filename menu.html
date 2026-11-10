@@ -2847,7 +2847,7 @@
         class="app-sticky-header px-6 sm:px-8 pt-6 pb-4 sm:pt-7 sm:pb-5 flex flex-col md:flex-row md:items-center md:justify-between gap-4 sticky top-0 z-50 border-b border-transparent transition-all duration-200">
         <div>
           <h1 class="text-2xl sm:text-3xl font-extrabold text-[#14213D] tracking-tight" id="topbar-welcome-title">
-            Welcome back, Shraoshi!
+            Welcome back!
           </h1>
           <p class="text-xs sm:text-sm text-slate-500 mt-1 font-medium">
             It is the best time to manage your finances
@@ -2855,7 +2855,7 @@
         </div>
 
         <!-- Top Right Controls (Session Timer, Notifications, Profile Capsule) -->
-        <div class="flex items-center space-x-2.5 sm:space-x-3.5 self-start md:self-auto">
+        <div class="flex flex-wrap items-center gap-2.5 sm:gap-3.5 self-start md:self-auto">
 
           <!-- Session Time Widget (Shows time spent on website) -->
           <div id="session-time-widget"
@@ -2931,12 +2931,15 @@
             </svg>
           </button>
 
-          <!-- User Profile Capsule (Avatar Button) -->
-          <button type="button" id="topbar-user-avatar"
-            class="w-9 h-9 rounded-full bg-[#14213D] text-[#FCA311] font-bold text-xs flex items-center justify-center shadow-xs cursor-pointer hover:ring-2 hover:ring-[#FCA311] hover:scale-105 transition-all overflow-hidden relative group"
+          <!-- User Profile Avatar Button (Click to open User Profile Modal) -->
+          <button type="button" id="user-profile-capsule"
+            class="w-10 h-10 p-0.5 rounded-full flex items-center justify-center cursor-pointer group flex-shrink-0"
             title="My Profile" aria-label="Open User Profile">
-            <span id="topbar-user-avatar-text">SB</span>
-            <img id="topbar-user-avatar-img" src="" alt="Profile Photo" class="w-full h-full object-cover hidden">
+            <div id="topbar-user-avatar"
+              class="w-full h-full rounded-full bg-[#14213D] text-[#FCA311] font-bold text-xs flex items-center justify-center shadow-xs group-hover:ring-2 group-hover:ring-[#FCA311] transition-all overflow-hidden relative flex-shrink-0">
+              <span id="topbar-user-avatar-text">AU</span>
+              <img id="topbar-user-avatar-img" src="" alt="Profile Photo" class="w-full h-full object-cover hidden">
+            </div>
           </button>
 
 
@@ -2974,7 +2977,7 @@
       </div>
 
       <!-- MAIN SCROLLABLE DASHBOARD VIEW CONTAINER -->
-      <div class="px-6 sm:px-8 pb-10 flex-1">
+      <div class="px-6 sm:px-8 pb-5 flex-1">
 
         <!-- ============================================================= -->
         <!-- 4. GOALS / MENU ITEMS SECTION -->
@@ -3025,6 +3028,13 @@
 
 
       </div>
+      <!-- PAGE FOOTER -->
+      <footer id="app-page-footer"
+        class="app-page-footer mt-auto px-6 sm:px-8 pt-2 pb-5 flex items-center justify-end print:hidden">
+        <p class="text-[11px] sm:text-xs font-medium text-[#5C677D] dark:text-slate-400 text-right tracking-wide select-none">
+          &copy; 2026 AURELIA. All rights reserved by Shraoshi Basak &amp; Piyush Barua.
+        </p>
+      </footer>
     </main>
   </div>
 
@@ -3397,7 +3407,9 @@
       </div>
 
       <div id="modal-invoice-content" class="text-xs space-y-4">
-        <!-- Rendered by main.js?v=20261109_v8"pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+        <!-- Rendered by main.js -->
+      </div>
+      <div class="pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
         <button type="button" class="btn-close-modal btn-Aurelia-secondary text-xs py-2 px-4">Close</button>
         <div class="flex items-center space-x-2">
           <button type="button" id="btn-modal-email-bill"
@@ -3796,7 +3808,10 @@
             </tr>
           </thead>
           <tbody id="modal-billings-tbody" class="divide-y divide-slate-100 dark:divide-slate-800">
-            <!-- Populated by main.js?v=20261109_v8"modal-billings-empty" class="p-8 text-center text-xs text-slate-400 hidden">
+            <!-- Populated by main.js -->
+          </tbody>
+        </table>
+        <div id="modal-billings-empty" class="p-8 text-center text-xs text-slate-400 hidden">
           No bills match your search criteria.
         </div>
       </div>
@@ -3961,7 +3976,10 @@
             </tr>
           </thead>
           <tbody id="modal-staff-tbody" class="divide-y divide-slate-100 dark:divide-slate-800">
-            <!-- Populated by main.js?v=20261109_v8"modal-staff-empty" class="p-8 text-center text-xs text-slate-400 hidden">
+            <!-- Populated by main.js -->
+          </tbody>
+        </table>
+        <div id="modal-staff-empty" class="p-8 text-center text-xs text-slate-400 hidden">
           No staff members found matching your search.
         </div>
       </div>
@@ -4056,7 +4074,9 @@
       <!-- Department Grid (Scrollable) -->
       <div class="overflow-y-auto flex-1 rounded-2xl border border-slate-100 dark:border-slate-800 min-h-[260px] p-2">
         <div id="modal-dept-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-          <!-- Populated by main.js?v=20261109_v8"modal-dept-empty" class="p-8 text-center text-xs text-slate-400 hidden">
+          <!-- Populated by main.js -->
+        </div>
+        <div id="modal-dept-empty" class="p-8 text-center text-xs text-slate-400 hidden">
           No departments found matching your search.
         </div>
       </div>
@@ -4438,9 +4458,9 @@
   <div id="print-invoice-area" class="hidden"></div>
 
   <!-- Authentication Controller -->
-  <script src="auth.js?v=20261106_03"></script>
+  <script src="auth.js?v=20261110_05"></script>
   <!-- Main JavaScript Logic -->
-<script src="main.js?v=20261109_v8"></script>
+<script src="main.js?v=20261110_v15"></script>
 </body>
 
 </html>

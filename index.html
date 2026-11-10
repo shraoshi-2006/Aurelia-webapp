@@ -1383,6 +1383,62 @@
       z-index: 70 !important;
     }
 
+    #card-device-activity {
+      display: flex !important;
+      flex-direction: column !important;
+      justify-content: flex-start !important;
+      overflow: hidden !important;
+    }
+
+    #device-activity-scroll-wrap {
+      flex: 1 1 0% !important;
+      min-height: 0 !important;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(148, 163, 184, 0.65) transparent;
+    }
+
+    #device-activity-scroll-wrap::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+
+    #device-activity-scroll-wrap::-webkit-scrollbar-track {
+      background: rgba(148, 163, 184, 0.12);
+      border-radius: 9999px;
+    }
+
+    #device-activity-scroll-wrap::-webkit-scrollbar-thumb {
+      background: rgba(148, 163, 184, 0.65);
+      border-radius: 9999px;
+    }
+
+    #device-activity-scroll-wrap::-webkit-scrollbar-thumb:hover {
+      background: #FCA311;
+    }
+
+    #device-activity-scroll-wrap thead tr {
+      background: transparent !important;
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
+      border: none !important;
+    }
+
+    #device-activity-scroll-wrap thead th {
+      position: sticky;
+      top: 0;
+      z-index: 15;
+      background: rgba(242, 246, 252, 0.97) !important;
+      backdrop-filter: blur(12px) !important;
+      -webkit-backdrop-filter: blur(12px) !important;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.85);
+    }
+
+    .dark #device-activity-scroll-wrap thead th {
+      background: rgba(30, 41, 59, 0.97) !important;
+      color: #CBD5E1 !important;
+      border-bottom: 1px solid rgba(51, 65, 85, 0.85);
+    }
+
     /* Subtle custom scrollbar */
     ::-webkit-scrollbar {
       width: 6px;
@@ -2886,7 +2942,7 @@
         class="app-sticky-header px-6 sm:px-8 pt-6 pb-4 sm:pt-7 sm:pb-5 flex flex-col md:flex-row md:items-center md:justify-between gap-4 sticky top-0 z-50 border-b border-transparent transition-all duration-200">
         <div>
           <h1 class="text-2xl sm:text-3xl font-extrabold text-[#14213D] tracking-tight" id="topbar-welcome-title">
-            Welcome back, Shraoshi!
+            Welcome back!
           </h1>
           <p class="text-xs sm:text-sm text-slate-500 mt-1 font-medium">
             It is the best time to manage your finances
@@ -2894,7 +2950,7 @@
         </div>
 
         <!-- Top Right Controls (Session Timer, Notifications, Profile Capsule) -->
-        <div class="flex items-center space-x-2.5 sm:space-x-3.5 self-start md:self-auto">
+        <div class="flex flex-wrap items-center gap-2.5 sm:gap-3.5 self-start md:self-auto">
 
           <!-- Session Time Widget (Shows time spent on website) -->
           <div id="session-time-widget"
@@ -2970,12 +3026,15 @@
             </svg>
           </button>
 
-          <!-- User Profile Capsule (Avatar Button) -->
-          <button type="button" id="topbar-user-avatar"
-            class="w-9 h-9 rounded-full bg-[#14213D] text-[#FCA311] font-bold text-xs flex items-center justify-center shadow-xs cursor-pointer hover:ring-2 hover:ring-[#FCA311] hover:scale-105 transition-all overflow-hidden relative group"
+          <!-- User Profile Avatar Button (Click to open User Profile Modal) -->
+          <button type="button" id="user-profile-capsule"
+            class="w-10 h-10 p-0.5 rounded-full flex items-center justify-center cursor-pointer group flex-shrink-0"
             title="My Profile" aria-label="Open User Profile">
-            <span id="topbar-user-avatar-text">SB</span>
-            <img id="topbar-user-avatar-img" src="" alt="Profile Photo" class="w-full h-full object-cover hidden">
+            <div id="topbar-user-avatar"
+              class="w-full h-full rounded-full bg-[#14213D] text-[#FCA311] font-bold text-xs flex items-center justify-center shadow-xs group-hover:ring-2 group-hover:ring-[#FCA311] transition-all overflow-hidden relative flex-shrink-0">
+              <span id="topbar-user-avatar-text">AU</span>
+              <img id="topbar-user-avatar-img" src="" alt="Profile Photo" class="w-full h-full object-cover hidden">
+            </div>
           </button>
 
 
@@ -3013,7 +3072,7 @@
       </div>
 
       <!-- MAIN SCROLLABLE DASHBOARD VIEW CONTAINER -->
-      <div class="px-6 sm:px-8 pb-10 flex-1">
+      <div class="px-6 sm:px-8 pb-5 flex-1">
 
         <!-- ============================================================= -->
         <!-- 1. DASHBOARD VIEW (Pixel-matched to the screenshot) -->
@@ -3154,7 +3213,7 @@
           </div>
 
           <!-- ROW 2: MONEY FLOW (Glassmorphic Area Graph) + BUDGET (Doughnut Chart) -->
-          <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
 
             <!-- Left Card: "Money flow" (8 Cols with Glassmorphic Graph) -->
             <div
@@ -3363,18 +3422,18 @@
           </div>
 
           <!-- ROW 3: RECENT TRANSACTIONS + SAVING GOALS -->
-          <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          <div id="dashboard-row3-grid" class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
 
-            <!-- Left Card: "User Login & Device Activity" (8 Cols) -->
-            <div class="lg:col-span-8 Aurelia-card glass-card-animate p-6 flex flex-col justify-between relative z-10">
-              <div class="flex items-center justify-between pb-3">
+            <!-- Left Card: "User Login & Device Activity" (8 Cols - Fixed height matched to Unpaid Salaries) -->
+            <div id="card-device-activity" class="lg:col-span-8 Aurelia-card glass-card-animate p-6 flex flex-col justify-start relative z-10 min-h-0 overflow-hidden h-[480px] lg:h-[505px]">
+              <div class="flex items-center justify-between pb-3 flex-shrink-0">
                 <div>
                   <h3 class="text-base font-bold text-slate-900 dark:text-white">User Login &amp; Device Activity</h3>
                   <p class="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">Which user login from which device
                     and how much time they spent here in the website</p>
                 </div>
 
-                <div class="flex items-center space-x-3 text-xs font-semibold">
+                <div class="flex items-center text-xs font-semibold flex-shrink-0">
                   <select id="select-trans-payment-method"
                     class="Aurelia-input py-1 px-3 text-xs rounded-full font-medium cursor-pointer">
                     <option value="all">All Devices</option>
@@ -3382,34 +3441,28 @@
                     <option value="Tablet">Tablet / iPad</option>
                     <option value="Mobile">Mobile POS</option>
                   </select>
-
-                  <button type="button"
-                    class="nav-to-billing-history text-[#5C677D] hover:text-[#FCA311] transition-colors flex items-center space-x-1 font-semibold">
-                    <span>See all</span>
-                    <span>&gt;</span>
-                  </button>
                 </div>
               </div>
 
-              <!-- Login & Device Activity Table with Soft Capsule Header -->
-              <div class="overflow-x-auto mt-2">
+              <!-- Login & Device Activity Table with Soft Capsule Header & Vertical Scrollbar -->
+              <div id="device-activity-scroll-wrap" class="flex-1 min-h-0 overflow-x-auto overflow-y-auto mt-2 pr-1.5" style="scrollbar-gutter: stable;">
                 <table class="w-full text-xs text-left">
-                  <thead>
+                  <thead class="sticky top-0 z-10">
                     <tr class="Aurelia-table-header text-slate-500 dark:text-slate-400 font-semibold text-[11px]">
-                      <th class="py-2.5 px-4 rounded-l-xl uppercase">EMP ID</th>
+                      <th class="py-2.5 px-4 rounded-l-xl uppercase whitespace-nowrap">EMP ID</th>
                       <th class="py-2.5 px-4 uppercase">EMP NAME</th>
                       <th class="py-2.5 px-4 uppercase">LOGIN DETAILS</th>
                       <th class="py-2.5 px-4 uppercase">DEVICE NAME</th>
-                      <th class="py-2.5 px-4 rounded-r-xl uppercase">TIME SPENT</th>
+                      <th class="py-2.5 px-4 rounded-r-xl uppercase whitespace-nowrap">TIME SPENT</th>
                     </tr>
                   </thead>
                   <tbody id="dashboard-recent-trans-tbody" class="divide-y divide-slate-100 dark:divide-slate-800">
 
                     <!-- Row 1: Adaline Lively (Active Login) -->
                     <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors">
-                      <td class="py-3 px-4">
+                      <td class="py-3 px-4 whitespace-nowrap">
                         <span
-                          class="font-mono text-xs font-semibold text-[#14213D] dark:text-[#FCA311] bg-slate-100 dark:bg-slate-800/80 px-2.5 py-1 rounded-md border border-slate-200 dark:border-slate-700/60">EMP-2026-01</span>
+                          class="font-mono text-xs font-semibold text-[#14213D] dark:text-[#FCA311] bg-slate-100 dark:bg-slate-800/80 px-2.5 py-1 rounded-md border border-slate-200 dark:border-slate-700/60 whitespace-nowrap">EMP-2026-01</span>
                       </td>
                       <td class="py-3 px-4">
                         <div class="flex items-center space-x-2.5">
@@ -3440,10 +3493,9 @@
                             Chrome)</span>
                         </div>
                       </td>
-                      <td class="py-3 px-4">
+                      <td class="py-3 px-4 whitespace-nowrap">
                         <span
-                          class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400 border border-emerald-200/60 dark:border-emerald-800/50">
-                          <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                          class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400 border border-emerald-200/60 dark:border-emerald-800/50 whitespace-nowrap">
                           3 hrs 42 mins
                         </span>
                       </td>
@@ -3451,9 +3503,9 @@
 
                     <!-- Row 2: Vikramaditya Reddy -->
                     <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors">
-                      <td class="py-3 px-4">
+                      <td class="py-3 px-4 whitespace-nowrap">
                         <span
-                          class="font-mono text-xs font-semibold text-[#14213D] dark:text-[#FCA311] bg-slate-100 dark:bg-slate-800/80 px-2.5 py-1 rounded-md border border-slate-200 dark:border-slate-700/60">EMP-2026-04</span>
+                          class="font-mono text-xs font-semibold text-[#14213D] dark:text-[#FCA311] bg-slate-100 dark:bg-slate-800/80 px-2.5 py-1 rounded-md border border-slate-200 dark:border-slate-700/60 whitespace-nowrap">EMP-2026-04</span>
                       </td>
                       <td class="py-3 px-4">
                         <div class="flex items-center space-x-2.5">
@@ -3469,7 +3521,7 @@
                       </td>
                       <td class="py-3 px-4">
                         <div class="flex flex-col text-xs">
-                          <span class="text-slate-800 dark:text-slate-200 font-medium">vikram.reddy@techcorp.in</span>
+                          <span class="text-slate-800 dark:text-slate-200 font-medium">vikram.reddy@aureliahotel.com</span>
                           <span class="text-slate-500 dark:text-slate-400 text-[11px] font-mono">+91 97412 34567</span>
                         </div>
                       </td>
@@ -3484,10 +3536,9 @@
                             / Safari)</span>
                         </div>
                       </td>
-                      <td class="py-3 px-4">
+                      <td class="py-3 px-4 whitespace-nowrap">
                         <span
-                          class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400 border border-emerald-200/60 dark:border-emerald-800/50">
-                          <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                          class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400 border border-emerald-200/60 dark:border-emerald-800/50 whitespace-nowrap">
                           2 hrs 15 mins
                         </span>
                       </td>
@@ -3627,7 +3678,7 @@
             </div>
 
             <!-- Right Card: "Unpaid Employee Salaries" (4 Cols) -->
-            <div class="lg:col-span-4 Aurelia-card glass-card-animate p-6 flex flex-col justify-between relative z-10 space-y-4">
+            <div id="card-unpaid-salaries" class="lg:col-span-4 Aurelia-card glass-card-animate p-6 flex flex-col justify-between relative z-10 space-y-4">
               <!-- Header -->
               <div class="flex items-center justify-between pb-1 border-b border-slate-100 dark:border-slate-800/80">
                 <div>
@@ -3795,6 +3846,13 @@
         </section>
 
       </div>
+      <!-- PAGE FOOTER -->
+      <footer id="app-page-footer"
+        class="app-page-footer mt-auto px-6 sm:px-8 pt-2 pb-5 flex items-center justify-end print:hidden">
+        <p class="text-[11px] sm:text-xs font-medium text-[#5C677D] dark:text-slate-400 text-right tracking-wide select-none">
+          &copy; 2026 AURELIA. All rights reserved by Shraoshi Basak &amp; Piyush Barua.
+        </p>
+      </footer>
     </main>
   </div>
 
@@ -4168,7 +4226,9 @@
       </div>
 
       <div id="modal-invoice-content" class="text-xs space-y-4">
-        <!-- Rendered by main.js?v=20261109_v8"pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+        <!-- Rendered by main.js -->
+      </div>
+      <div class="pt-4 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
         <button type="button" class="btn-close-modal btn-Aurelia-secondary text-xs py-2 px-4">Close</button>
         <div class="flex items-center space-x-2">
           <button type="button" id="btn-modal-email-bill"
@@ -4571,7 +4631,10 @@
             </tr>
           </thead>
           <tbody id="modal-billings-tbody" class="divide-y divide-slate-100 dark:divide-slate-800">
-            <!-- Populated by main.js?v=20261109_v8"modal-billings-empty" class="p-8 text-center text-xs text-slate-400 hidden">
+            <!-- Populated by main.js -->
+          </tbody>
+        </table>
+        <div id="modal-billings-empty" class="p-8 text-center text-xs text-slate-400 hidden">
           No bills match your search criteria.
         </div>
       </div>
@@ -4736,7 +4799,10 @@
             </tr>
           </thead>
           <tbody id="modal-staff-tbody" class="divide-y divide-slate-100 dark:divide-slate-800">
-            <!-- Populated by main.js?v=20261109_v8"modal-staff-empty" class="p-8 text-center text-xs text-slate-400 hidden">
+            <!-- Populated by main.js -->
+          </tbody>
+        </table>
+        <div id="modal-staff-empty" class="p-8 text-center text-xs text-slate-400 hidden">
           No staff members found matching your search.
         </div>
       </div>
@@ -4947,6 +5013,145 @@
     </div>
   </div>
 
+  <!-- ========================================================================= -->
+  <!-- MODAL: ALL CONNECTED DEVICES & LOGIN ACTIVITY                             -->
+  <!-- ========================================================================= -->
+  <div id="modal-all-devices"
+    class="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-sm hidden flex items-center justify-center p-3 sm:p-4">
+    <div
+      class="Aurelia-card max-w-5xl w-full p-5 sm:p-6 space-y-4 shadow-2xl max-h-[92vh] flex flex-col rounded-3xl border border-slate-100 dark:border-slate-800">
+
+      <!-- Modal Header -->
+      <div
+        class="flex items-center justify-between pb-3.5 border-b border-slate-100 dark:border-slate-800 flex-shrink-0">
+        <div class="flex items-center space-x-3">
+          <div
+            class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-[#14213D] to-[#FCA311] flex items-center justify-center text-white shadow-md flex-shrink-0">
+            <svg class="w-5 h-5 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+            </svg>
+          </div>
+          <div>
+            <div class="flex items-center space-x-2">
+              <h3 class="text-base font-bold text-slate-900 dark:text-white">All Connected Devices &amp; Login Activity</h3>
+              <span id="modal-devices-count-badge"
+                class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#14213D] text-[#FCA311] whitespace-nowrap">12 Devices</span>
+            </div>
+            <p class="text-xs text-slate-400">Complete live registry of active terminals, tablets, mobile POS handhelds, and staff time spent</p>
+          </div>
+        </div>
+        <button type="button"
+          class="btn-close-modal w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-500 hover:text-slate-800 dark:text-slate-300 dark:hover:text-white flex items-center justify-center transition-colors text-sm font-semibold cursor-pointer flex-shrink-0"
+          title="Close">✕</button>
+      </div>
+
+      <!-- Device Metrics Strip -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 flex-shrink-0">
+        <div class="p-3 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-800">
+          <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-0.5">Total Terminals</span>
+          <div id="modal-devices-stat-total" class="text-lg sm:text-xl font-extrabold text-slate-900 dark:text-white">12 Devices</div>
+          <span class="text-[10px] text-slate-500 font-medium">Hotel Network</span>
+        </div>
+        <div
+          class="p-3 rounded-2xl bg-emerald-50/70 dark:bg-emerald-950/30 border border-emerald-200/50 dark:border-emerald-800/40">
+          <span
+            class="text-[10px] font-bold uppercase tracking-wider text-emerald-700 dark:text-emerald-400 block mb-0.5">Live Online</span>
+          <div id="modal-devices-stat-live"
+            class="text-lg sm:text-xl font-extrabold text-emerald-700 dark:text-emerald-400">6 Active</div>
+          <span class="text-[10px] text-emerald-600 font-semibold">● Real-time Tracking</span>
+        </div>
+        <div
+          class="p-3 rounded-2xl bg-blue-50/70 dark:bg-blue-950/30 border border-blue-200/50 dark:border-blue-800/40">
+          <span
+            class="text-[10px] font-bold uppercase tracking-wider text-blue-700 dark:text-blue-400 block mb-0.5">Desktop / PC</span>
+          <div id="modal-devices-stat-desktop"
+            class="text-lg sm:text-xl font-extrabold text-blue-700 dark:text-blue-400">5 Stations</div>
+          <span class="text-[10px] text-blue-600 dark:text-blue-400 font-semibold">Front Desk &amp; Office</span>
+        </div>
+        <div
+          class="p-3 rounded-2xl bg-amber-50/70 dark:bg-amber-950/30 border border-amber-200/50 dark:border-amber-800/40">
+          <span
+            class="text-[10px] font-bold uppercase tracking-wider text-amber-700 dark:text-amber-400 block mb-0.5">Tablets &amp; Mobile</span>
+          <div id="modal-devices-stat-portable"
+            class="text-lg sm:text-xl font-extrabold text-amber-700 dark:text-amber-400">7 Devices</div>
+          <span class="text-[10px] text-amber-600 font-semibold">iPads &amp; Handheld POS</span>
+        </div>
+      </div>
+
+      <!-- Search & Filter Controls -->
+      <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5 flex-shrink-0 pt-1">
+        <div class="relative flex-1 max-w-md">
+          <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+            <svg class="w-3.5 h-3.5 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+            </svg>
+          </div>
+          <input type="text" id="modal-devices-search" class="Aurelia-input w-full text-xs pl-9 font-medium"
+            placeholder="Search by employee, EMP ID, device name, terminal ID...">
+        </div>
+
+        <div class="flex flex-wrap items-center gap-2">
+          <div
+            class="inline-flex rounded-xl border border-slate-200 dark:border-slate-700 p-0.5 bg-slate-100 dark:bg-slate-800 text-[11px] font-bold">
+            <button type="button"
+              class="tab-device-filter px-3 py-1 rounded-lg bg-[#14213D] text-white transition-all cursor-pointer"
+              data-type="all">
+              All (<span id="modal-devices-badge-all">12</span>)
+            </button>
+            <button type="button"
+              class="tab-device-filter px-3 py-1 rounded-lg text-slate-600 dark:text-slate-300 hover:text-slate-900 transition-all cursor-pointer"
+              data-type="desktop">
+              Desktop (<span id="modal-devices-badge-desktop">5</span>)
+            </button>
+            <button type="button"
+              class="tab-device-filter px-3 py-1 rounded-lg text-slate-600 dark:text-slate-300 hover:text-slate-900 transition-all cursor-pointer"
+              data-type="tablet">
+              Tablet (<span id="modal-devices-badge-tablet">4</span>)
+            </button>
+            <button type="button"
+              class="tab-device-filter px-3 py-1 rounded-lg text-slate-600 dark:text-slate-300 hover:text-slate-900 transition-all cursor-pointer"
+              data-type="mobile">
+              Mobile (<span id="modal-devices-badge-mobile">3</span>)
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Table Container (Scrollable) -->
+      <div class="overflow-y-auto flex-1 rounded-2xl border border-slate-100 dark:border-slate-800 min-h-[240px]">
+        <table class="w-full text-xs text-left">
+          <thead
+            class="sticky top-0 z-10 bg-slate-50 dark:bg-slate-800 text-slate-500 font-semibold text-[11px] border-b border-slate-200 dark:border-slate-700">
+            <tr>
+              <th class="py-2.5 px-3 uppercase whitespace-nowrap">Terminal</th>
+              <th class="py-2.5 px-3 uppercase whitespace-nowrap">EMP ID</th>
+              <th class="py-2.5 px-3 uppercase whitespace-nowrap">Employee</th>
+              <th class="py-2.5 px-3 uppercase whitespace-nowrap">Login Details</th>
+              <th class="py-2.5 px-3 uppercase whitespace-nowrap">Device &amp; OS</th>
+              <th class="py-2.5 px-3 uppercase whitespace-nowrap">Time Spent</th>
+              <th class="py-2.5 px-3 uppercase text-center whitespace-nowrap">Status</th>
+            </tr>
+          </thead>
+          <tbody id="modal-devices-tbody" class="divide-y divide-slate-100 dark:divide-slate-800">
+            <!-- Populated dynamically by main.js -->
+          </tbody>
+        </table>
+        <div id="modal-devices-empty" class="p-8 text-center text-xs text-slate-400 hidden">
+          No devices found matching your search or filter.
+        </div>
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between flex-shrink-0">
+        <span id="modal-devices-footer-count" class="text-xs text-slate-400 font-medium">Showing 12 of 12 devices</span>
+        <button type="button" class="btn-close-modal btn-Aurelia-secondary text-xs py-2 px-5 cursor-pointer">Close</button>
+      </div>
+
+    </div>
+  </div>
+
   <!-- REUSABLE RESET DATA MODAL -->
   <div id="modal-reset-data"
     class="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-sm hidden flex items-center justify-center p-4">
@@ -5009,9 +5214,9 @@
   <div id="print-invoice-area" class="hidden"></div>
 
   <!-- Authentication Controller -->
-  <script src="auth.js?v=20261106_03"></script>
+  <script src="auth.js?v=20261110_05"></script>
   <!-- Main JavaScript Logic -->
-<script src="main.js?v=20261109_v8"></script>
+<script src="main.js?v=20261110_v15"></script>
 </body>
 
 </html>

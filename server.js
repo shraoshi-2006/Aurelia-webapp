@@ -40,6 +40,7 @@ try {
     CREATE TABLE IF NOT EXISTS users (
       id TEXT PRIMARY KEY,
       name TEXT NOT NULL,
+      username TEXT,
       email TEXT UNIQUE NOT NULL,
       password_hash TEXT NOT NULL,
       salt TEXT NOT NULL,
@@ -55,6 +56,11 @@ try {
       FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
     );
   `);
+
+  // Ensure username column exists on pre-existing databases
+  try {
+    db.exec('ALTER TABLE users ADD COLUMN username TEXT;');
+  } catch (alterErr) { /* column already exists */ }
 
   // Seed default administrative user if users table is empty
   const countStmt = db.prepare('SELECT COUNT(*) AS total FROM users');
@@ -167,7 +173,7 @@ const server = http.createServer((req, res) => {
     }
 
     const sessionStmt = db.prepare(`
-      SELECT s.token, s.expires_at, u.id, u.name, u.email, u.role
+      SELECT s.token, s.expires_at, u.id, u.name, u.username, u.email, u.role
       FROM sessions s
       JOIN users u ON s.user_id = u.id
       WHERE s.token = ?
@@ -189,6 +195,7 @@ const server = http.createServer((req, res) => {
       user: {
         id: session.id,
         name: session.name,
+        username: session.username || '',
         email: session.email,
         role: session.role
       }
@@ -205,6 +212,7 @@ const server = http.createServer((req, res) => {
       try {
         const payload = JSON.parse(body || '{}');
         const name = (payload.name || '').trim();
+        const username = (payload.username || '').trim().replace(/^@+/, '');
         const email = (payload.email || '').trim().toLowerCase();
         const password = (payload.password || '').trim();
         const role = (payload.role || 'Front Desk Supervisor').trim();
@@ -236,16 +244,16 @@ const server = http.createServer((req, res) => {
         const userId = 'usr-' + crypto.randomUUID();
 
         const insertStmt = db.prepare(`
-          INSERT INTO users (id, name, email, password_hash, salt, role, created_at)
-          VALUES (?, ?, ?, ?, ?, ?, ?)
+          INSERT INTO users (id, name, username, email, password_hash, salt, role, created_at)
+          VALUES (?, ?, ?, ?, ?, ?, ?, ?)
         `);
-        insertStmt.run(userId, name, email, hash, salt, role, new Date().toISOString());
+        insertStmt.run(userId, name, username, email, hash, salt, role, new Date().toISOString());
 
         console.log(` [Auth Server] New user registered: ${name} (${email})`);
         return sendJson(res, 201, {
           success: true,
           message: 'Account created successfully! You can now sign in with your credentials.',
-          user: { id: userId, name, email, role }
+          user: { id: userId, name, username, email, role }
         });
       } catch (err) {
         console.error(' [Auth Server Error] Register error:', err);
@@ -308,6 +316,7 @@ const server = http.createServer((req, res) => {
           user: {
             id: user.id,
             name: user.name,
+            username: user.username || '',
             email: user.email,
             role: user.role
           }

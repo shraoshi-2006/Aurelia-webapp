@@ -541,7 +541,7 @@ $(document).ready(function () {
   // =========================================================================
 
   const titles = {
-    dashboard: 'Welcome back, Adaline!',
+    dashboard: 'Welcome back!',
     billing: 'Transactions & POS Billing',
     menu: 'Product & Menu Management',
     orders: 'Order Queue & Kitchen Tickets',
@@ -685,11 +685,8 @@ $(document).ready(function () {
     $('main section').addClass('hidden').attr('hidden', true);
     $targetSec.removeClass('hidden').removeAttr('hidden');
 
-    // Always keep standard greeting header consistent across all pages
-    const activeUser = (window.Auth && window.Auth.state && window.Auth.state.currentUser) || null;
-    const displayName = (activeUser && activeUser.name && !activeUser.name.includes('Adaline')) ? activeUser.name : (localStorage.getItem('aurelia_profile_name') || 'Shraoshi Barua');
-    const firstName = displayName.split(' ')[0] || 'Shraoshi';
-    $('#topbar-welcome-title').text(`Welcome back, ${firstName}!`);
+    // Sync topbar greeting, user name, role, email/username, and avatar dynamically
+    updateTopbarAvatarUI();
 
     closeSidebar();
 
@@ -1587,6 +1584,9 @@ $(document).ready(function () {
 
     // Render Saving Goals (Row 3: Cascades at 400ms)
     renderSavingGoals();
+
+    // Keep User Login & Device Activity height synced to Unpaid Salaries
+    requestAnimationFrame(syncDeviceActivityCardHeight);
 
     // Update Badges
     renderSidebarBadges();
@@ -2642,30 +2642,27 @@ $(document).ready(function () {
   $('#modal-staff-search').on('input keyup', function () { renderModalStaffList(false); });
   $('#modal-staff-filter-dept').on('change', function () { renderModalStaffList(true); });
 
-  // User Login Sessions & Device Activity in Dashboard (Filtered by Device Type, capped at 5)
-  function renderDashboardRecentTransactions() {
-    const $tbody = $('#dashboard-recent-trans-tbody');
-    if (!$tbody.length) return;
-    $tbody.empty();
+  // Shared Live Device & Login Session Registry
+  function getAllDeviceSessions() {
+    const activeUser = getActiveUserData();
+    const displayName = (activeUser && activeUser.name) ? String(activeUser.name).trim() : 'Aurelia Staff';
+    const userEmail = (activeUser && activeUser.email) ? String(activeUser.email).trim() : 'staff@aureliahotel.com';
+    const userRole = (activeUser && activeUser.role) ? String(activeUser.role).trim() : 'Front Desk Supervisor';
+    const initials = displayName.split(' ').filter(Boolean).map(n => n[0]).join('').substring(0, 2).toUpperCase() || 'AU';
 
-    const selectedFilter = ($('#select-trans-payment-method').val() || 'all').toLowerCase();
-    const activeUser = (window.Auth && window.Auth.state && window.Auth.state.currentUser) || {
-      name: 'Adaline Lively',
-      email: 'adalinea@gmail.com',
-      role: 'Front Desk Supervisor'
-    };
-
-    // Calculate real session elapsed time on website
-    let sessionStart = sessionStorage.getItem('aurelia_session_start_time');
-    if (!sessionStart) {
-      sessionStart = Date.now() - ((3 * 60 + 42) * 60 * 1000); // 3h 42m initial baseline
-      sessionStorage.setItem('aurelia_session_start_time', sessionStart);
+    // Real active time spent on website from active-only tracker
+    const activeSecs = parseInt(sessionStorage.getItem('aurelia_active_session_seconds'), 10) || 0;
+    const hrs = Math.floor(activeSecs / 3600);
+    const mins = Math.floor((activeSecs % 3600) / 60);
+    const secs = activeSecs % 60;
+    let currentActiveTimeStr = '';
+    if (hrs > 0) {
+      currentActiveTimeStr = `${hrs} hr${hrs > 1 ? 's' : ''} ${mins} min${mins !== 1 ? 's' : ''}`;
+    } else if (mins > 0) {
+      currentActiveTimeStr = `${mins} min${mins !== 1 ? 's' : ''} ${secs}s`;
+    } else {
+      currentActiveTimeStr = `${secs} sec${secs !== 1 ? 's' : ''}`;
     }
-    const elapsedMs = Math.max(0, Date.now() - parseInt(sessionStart, 10));
-    const totalMinutes = Math.floor(elapsedMs / (60 * 1000));
-    const hours = Math.floor(totalMinutes / 60);
-    const mins = totalMinutes % 60;
-    const currentActiveTimeStr = hours > 0 ? `${hours} hrs ${mins} mins` : `${mins} mins`;
 
     // Detect browser/device
     let currentDeviceName = 'Front Desk PC (Win 11 / Chrome)';
@@ -2682,34 +2679,39 @@ $(document).ready(function () {
       currentDeviceType = 'Desktop';
     }
 
-    const sessions = [
+    return [
       {
+        terminalId: 'DEV08',
         id: 'EMP-2026-01',
-        name: activeUser.name || 'Adaline Lively',
-        role: activeUser.role || 'Front Desk Supervisor',
+        name: displayName,
+        role: userRole,
         avatarBg: 'bg-[#14213D] dark:bg-[#FCA311] text-white dark:text-[#14213D]',
-        initials: (activeUser.name || 'Adaline Lively').split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase(),
-        email: activeUser.email || 'adalinea@gmail.com',
+        initials: initials,
+        email: userEmail,
         phone: '+91 98450 11201',
         deviceName: currentDeviceName,
         deviceType: currentDeviceType,
         timeSpent: currentActiveTimeStr,
+        status: 'Active Now',
         isLive: true
       },
       {
+        terminalId: 'DEV01',
         id: 'EMP-2026-04',
         name: 'Vikramaditya Reddy',
         role: 'General Manager',
         avatarBg: 'bg-blue-600 text-white',
         initials: 'VR',
-        email: 'vikram.reddy@techcorp.in',
+        email: 'vikram.reddy@aureliahotel.com',
         phone: '+91 97412 34567',
         deviceName: 'Executive iMac 27" (macOS / Safari)',
         deviceType: 'Desktop',
         timeSpent: '2 hrs 15 mins',
+        status: 'Active Now',
         isLive: true
       },
       {
+        terminalId: 'DEV03',
         id: 'EMP-2026-07',
         name: 'Priya Sundaram',
         role: 'Guest Relations Officer',
@@ -2720,9 +2722,11 @@ $(document).ready(function () {
         deviceName: 'Reception iPad Pro (iPadOS / Safari)',
         deviceType: 'Tablet',
         timeSpent: '1 hr 45 mins',
-        isLive: false
+        status: 'Active Now',
+        isLive: true
       },
       {
+        terminalId: 'DEV04',
         id: 'EMP-2026-12',
         name: 'Rohan Desai',
         role: 'Night Auditor',
@@ -2733,9 +2737,11 @@ $(document).ready(function () {
         deviceName: 'Back Office PC #04 (Win 11 / Edge)',
         deviceType: 'Desktop',
         timeSpent: '58 mins',
+        status: 'Idle (5m)',
         isLive: false
       },
       {
+        terminalId: 'DEV02',
         id: 'EMP-2026-19',
         name: 'Kevin Peterson',
         role: 'F&B Service Captain',
@@ -2746,9 +2752,166 @@ $(document).ready(function () {
         deviceName: 'POS Handheld Dev #02 (Android 14)',
         deviceType: 'Mobile',
         timeSpent: '24 mins',
+        status: 'Active Now',
+        isLive: true
+      },
+      {
+        terminalId: 'DEV05',
+        id: 'EMP-2026-22',
+        name: 'Arjun Nair',
+        role: 'Executive Head Chef',
+        avatarBg: 'bg-amber-600 text-white',
+        initials: 'AN',
+        email: 'arjun.n@aureliahotel.com',
+        phone: '+91 98331 77420',
+        deviceName: 'Main Kitchen KDS iPad (iPadOS / Chrome)',
+        deviceType: 'Tablet',
+        timeSpent: '4 hrs 10 mins',
+        status: 'Active Now',
+        isLive: true
+      },
+      {
+        terminalId: 'DEV06',
+        id: 'EMP-2026-25',
+        name: 'Meera Kapoor',
+        role: 'Spa & Wellness Lead',
+        avatarBg: 'bg-rose-600 text-white',
+        initials: 'MK',
+        email: 'meera.k@aureliahotel.com',
+        phone: '+91 98224 61908',
+        deviceName: 'Spa Reception iPad Mini (iPadOS / Safari)',
+        deviceType: 'Tablet',
+        timeSpent: '1 hr 18 mins',
+        status: 'Idle (12m)',
+        isLive: false
+      },
+      {
+        terminalId: 'DEV07',
+        id: 'EMP-2026-31',
+        name: 'Siddharth Malhotra',
+        role: 'Banquet Operations',
+        avatarBg: 'bg-indigo-600 text-white',
+        initials: 'SM',
+        email: 'siddharth.m@aureliahotel.com',
+        phone: '+91 97654 22190',
+        deviceName: 'Banquet Hall PC #02 (Win 11 / Chrome)',
+        deviceType: 'Desktop',
+        timeSpent: '3 hrs 05 mins',
+        status: 'Active Now',
+        isLive: true
+      },
+      {
+        terminalId: 'DEV09',
+        id: 'EMP-2026-34',
+        name: 'Ananya Roy',
+        role: 'Room Service Supervisor',
+        avatarBg: 'bg-teal-600 text-white',
+        initials: 'AR',
+        email: 'ananya.r@aureliahotel.com',
+        phone: '+91 98109 88721',
+        deviceName: 'Room Service Handheld #03 (Android 14)',
+        deviceType: 'Mobile',
+        timeSpent: '42 mins',
+        status: 'Active Now',
+        isLive: true
+      },
+      {
+        terminalId: 'DEV10',
+        id: 'EMP-2026-38',
+        name: 'Kabir Verma',
+        role: 'Concierge & Valet Lead',
+        avatarBg: 'bg-cyan-600 text-white',
+        initials: 'KV',
+        email: 'kabir.v@aureliahotel.com',
+        phone: '+91 99105 44312',
+        deviceName: 'Valet Desk Mobile POS (iOS 18 / Safari)',
+        deviceType: 'Mobile',
+        timeSpent: '1 hr 12 mins',
+        status: 'Signed Out',
+        isLive: false
+      },
+      {
+        terminalId: 'DEV11',
+        id: 'EMP-2026-41',
+        name: 'Neha Sharma',
+        role: 'Accounts & Finance',
+        avatarBg: 'bg-violet-600 text-white',
+        initials: 'NS',
+        email: 'neha.s@aureliahotel.com',
+        phone: '+91 98765 10293',
+        deviceName: 'Finance Workstation #01 (Win 11 / Chrome)',
+        deviceType: 'Desktop',
+        timeSpent: '2 hrs 50 mins',
+        status: 'Active Now',
+        isLive: true
+      },
+      {
+        terminalId: 'DEV12',
+        id: 'EMP-2026-45',
+        name: 'Devendra Kulkarni',
+        role: 'Bar & Lounge Manager',
+        avatarBg: 'bg-orange-600 text-white',
+        initials: 'DK',
+        email: 'devendra.k@aureliahotel.com',
+        phone: '+91 98211 90345',
+        deviceName: 'Sky Lounge POS Tablet (Android Tab S9)',
+        deviceType: 'Tablet',
+        timeSpent: '1 hr 30 mins',
+        status: 'Idle (8m)',
         isLive: false
       }
     ];
+  }
+
+  function getDeviceTypeIconSvg(deviceType) {
+    const t = (deviceType || '').toLowerCase();
+    if (t === 'mobile') {
+      return `<svg class="w-4 h-4 text-slate-500 dark:text-slate-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>`;
+    } else if (t === 'tablet') {
+      return `<svg class="w-4 h-4 text-slate-500 dark:text-slate-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>`;
+    }
+    return `<svg class="w-4 h-4 text-slate-500 dark:text-slate-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>`;
+  }
+
+  // Sync "User Login & Device Activity" card height cleanly to match "Unpaid Salaries"
+  function syncDeviceActivityCardHeight() {
+    const deviceCard = document.getElementById('card-device-activity');
+    const unpaidCard = document.getElementById('card-unpaid-salaries');
+    if (!deviceCard || !unpaidCard) return;
+
+    const targetHeight = Math.round(unpaidCard.getBoundingClientRect().height);
+    if (window.innerWidth >= 1024) {
+      if (targetHeight > 200) {
+        deviceCard.style.height = targetHeight + 'px';
+        deviceCard.style.minHeight = targetHeight + 'px';
+        deviceCard.style.maxHeight = targetHeight + 'px';
+      }
+    } else {
+      const mobileFixed = targetHeight > 200 ? targetHeight : 480;
+      deviceCard.style.height = mobileFixed + 'px';
+      deviceCard.style.minHeight = mobileFixed + 'px';
+      deviceCard.style.maxHeight = mobileFixed + 'px';
+    }
+  }
+
+  // Observe size changes on Unpaid Salaries & window resize so cards always stay aligned
+  (function initDeviceActivityHeightSync() {
+    const unpaidCard = document.getElementById('card-unpaid-salaries');
+    if (unpaidCard && typeof ResizeObserver !== 'undefined') {
+      const ro = new ResizeObserver(() => syncDeviceActivityCardHeight());
+      ro.observe(unpaidCard);
+    }
+    window.addEventListener('resize', syncDeviceActivityCardHeight);
+  })();
+
+  // User Login Sessions & Device Activity in Dashboard (Filtered by Device Type; internal scroll handles overflow)
+  function renderDashboardRecentTransactions() {
+    const $tbody = $('#dashboard-recent-trans-tbody');
+    if (!$tbody.length) return;
+    $tbody.empty();
+
+    const selectedFilter = ($('#select-trans-payment-method').val() || 'all').toLowerCase();
+    const sessions = getAllDeviceSessions();
 
     let filtered = sessions;
     if (selectedFilter !== 'all') {
@@ -2763,27 +2926,20 @@ $(document).ready(function () {
           </td>
         </tr>
       `);
+      requestAnimationFrame(syncDeviceActivityCardHeight);
       return;
     }
 
     filtered.forEach((row) => {
-      let deviceIcon = '';
-      if (row.deviceType.toLowerCase() === 'mobile') {
-        deviceIcon = `<svg class="w-4 h-4 text-slate-500 dark:text-slate-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>`;
-      } else if (row.deviceType.toLowerCase() === 'tablet') {
-        deviceIcon = `<svg class="w-4 h-4 text-slate-500 dark:text-slate-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>`;
-      } else {
-        deviceIcon = `<svg class="w-4 h-4 text-slate-500 dark:text-slate-400 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>`;
-      }
-
+      const deviceIcon = getDeviceTypeIconSvg(row.deviceType);
       const statusBadge = row.isLive
-        ? `<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400 border border-emerald-200/60 dark:border-emerald-800/50"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>${escapeHtml(row.timeSpent)}</span>`
-        : `<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200/50 dark:border-slate-700/50">${escapeHtml(row.timeSpent)}</span>`;
+        ? `<span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400 border border-emerald-200/60 dark:border-emerald-800/50 whitespace-nowrap">${escapeHtml(row.timeSpent)}</span>`
+        : `<span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200/50 dark:border-slate-700/50 whitespace-nowrap">${escapeHtml(row.timeSpent)}</span>`;
 
       $tbody.append(`
         <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors">
-          <td class="py-3 px-4">
-            <span class="font-mono text-xs font-semibold text-[#14213D] dark:text-[#FCA311] bg-slate-100 dark:bg-slate-800/80 px-2.5 py-1 rounded-md border border-slate-200 dark:border-slate-700/60">${escapeHtml(row.id)}</span>
+          <td class="py-3 px-4 whitespace-nowrap">
+            <span class="font-mono text-xs font-semibold text-[#14213D] dark:text-[#FCA311] bg-slate-100 dark:bg-slate-800/80 px-2.5 py-1 rounded-md border border-slate-200 dark:border-slate-700/60 whitespace-nowrap">${escapeHtml(row.id)}</span>
           </td>
           <td class="py-3 px-4">
             <div class="flex items-center space-x-2.5">
@@ -2806,17 +2962,132 @@ $(document).ready(function () {
               <span class="text-slate-700 dark:text-slate-300 font-medium text-xs">${escapeHtml(row.deviceName)}</span>
             </div>
           </td>
-          <td class="py-3 px-4">
+          <td class="py-3 px-4 whitespace-nowrap">
             ${statusBadge}
+          </td>
+        </tr>
+      `);
+    });
+
+    requestAnimationFrame(syncDeviceActivityCardHeight);
+  }
+
+  // Filter login sessions on Device Type change
+  $(document).on('change', '#select-trans-payment-method', function () {
+    renderDashboardRecentTransactions();
+  });
+
+  // =========================================================================
+  // ALL CONNECTED DEVICES MODAL CONTROLLER ("See all >" Popup)
+  // =========================================================================
+  let activeModalDeviceFilter = 'all';
+
+  function renderAllDevicesModal() {
+    const $tbody = $('#modal-devices-tbody');
+    const $empty = $('#modal-devices-empty');
+    if (!$tbody.length) return;
+
+    const allDevices = getAllDeviceSessions();
+    const searchQuery = ($('#modal-devices-search').val() || '').trim().toLowerCase();
+
+    // Update top metric strip & tab counts
+    const totalCount = allDevices.length;
+    const liveCount = allDevices.filter(d => d.isLive).length;
+    const desktopCount = allDevices.filter(d => d.deviceType.toLowerCase() === 'desktop').length;
+    const tabletCount = allDevices.filter(d => d.deviceType.toLowerCase() === 'tablet').length;
+    const mobileCount = allDevices.filter(d => d.deviceType.toLowerCase() === 'mobile').length;
+
+    $('#modal-devices-count-badge').text(`${totalCount} Devices`);
+    $('#modal-devices-stat-total').text(`${totalCount} Devices`);
+    $('#modal-devices-stat-live').text(`${liveCount} Active`);
+    $('#modal-devices-stat-desktop').text(`${desktopCount} Stations`);
+    $('#modal-devices-stat-portable').text(`${tabletCount + mobileCount} Devices`);
+    $('#modal-devices-badge-all').text(totalCount);
+    $('#modal-devices-badge-desktop').text(desktopCount);
+    $('#modal-devices-badge-tablet').text(tabletCount);
+    $('#modal-devices-badge-mobile').text(mobileCount);
+
+    let filtered = allDevices;
+    if (activeModalDeviceFilter !== 'all') {
+      filtered = filtered.filter(d => d.deviceType.toLowerCase() === activeModalDeviceFilter);
+    }
+    if (searchQuery) {
+      filtered = filtered.filter(d =>
+        d.name.toLowerCase().includes(searchQuery) ||
+        d.id.toLowerCase().includes(searchQuery) ||
+        d.terminalId.toLowerCase().includes(searchQuery) ||
+        d.deviceName.toLowerCase().includes(searchQuery) ||
+        d.email.toLowerCase().includes(searchQuery) ||
+        d.role.toLowerCase().includes(searchQuery)
+      );
+    }
+
+    $tbody.empty();
+    if (filtered.length === 0) {
+      $empty.removeClass('hidden');
+      $('#modal-devices-footer-count').text(`Showing 0 of ${totalCount} devices`);
+      return;
+    }
+    $empty.addClass('hidden');
+    $('#modal-devices-footer-count').text(`Showing ${filtered.length} of ${totalCount} devices`);
+
+    filtered.forEach((row) => {
+      const deviceIcon = getDeviceTypeIconSvg(row.deviceType);
+      const statusPill = row.isLive
+        ? `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400 border border-emerald-200/70 dark:border-emerald-800/50 whitespace-nowrap">${escapeHtml(row.status)}</span>`
+        : row.status === 'Signed Out'
+          ? `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-rose-50 dark:bg-rose-950/40 text-rose-600 dark:text-rose-400 border border-rose-200/70 dark:border-rose-800/50 whitespace-nowrap">${escapeHtml(row.status)}</span>`
+          : `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-amber-50 dark:bg-amber-950/40 text-amber-700 dark:text-amber-400 border border-amber-200/70 dark:border-amber-800/50 whitespace-nowrap">${escapeHtml(row.status)}</span>`;
+
+      $tbody.append(`
+        <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors">
+          <td class="py-3 px-3 whitespace-nowrap">
+            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-extrabold bg-[#EBF1FD] dark:bg-blue-950/60 text-[#1D4ED8] dark:text-blue-300 border border-[#D7E3FC] dark:border-blue-900/60 font-mono">${escapeHtml(row.terminalId)}</span>
+          </td>
+          <td class="py-3 px-3 whitespace-nowrap">
+            <span class="font-mono text-xs font-semibold text-[#14213D] dark:text-[#FCA311] bg-slate-100 dark:bg-slate-800/80 px-2 py-0.5 rounded-md border border-slate-200 dark:border-slate-700/60">${escapeHtml(row.id)}</span>
+          </td>
+          <td class="py-3 px-3">
+            <div class="flex items-center space-x-2.5">
+              <div class="w-7 h-7 rounded-full ${row.avatarBg} flex items-center justify-center text-[10px] font-bold flex-shrink-0 shadow-xs">${escapeHtml(row.initials)}</div>
+              <div class="flex flex-col">
+                <span class="font-semibold text-slate-900 dark:text-white leading-tight whitespace-nowrap">${escapeHtml(row.name)}</span>
+                <span class="text-[10px] text-slate-500 dark:text-slate-400 whitespace-nowrap">${escapeHtml(row.role)}</span>
+              </div>
+            </div>
+          </td>
+          <td class="py-3 px-3">
+            <div class="flex flex-col text-xs">
+              <span class="text-slate-800 dark:text-slate-200 font-medium">${escapeHtml(row.email)}</span>
+              <span class="text-slate-500 dark:text-slate-400 text-[11px] font-mono">${escapeHtml(row.phone)}</span>
+            </div>
+          </td>
+          <td class="py-3 px-3">
+            <div class="flex items-center space-x-2">
+              ${deviceIcon}
+              <span class="text-slate-700 dark:text-slate-300 font-medium text-xs">${escapeHtml(row.deviceName)}</span>
+            </div>
+          </td>
+          <td class="py-3 px-3 whitespace-nowrap">
+            <span class="font-mono font-bold text-slate-800 dark:text-slate-200 text-xs">${escapeHtml(row.timeSpent)}</span>
+          </td>
+          <td class="py-3 px-3 text-center whitespace-nowrap">
+            ${statusPill}
           </td>
         </tr>
       `);
     });
   }
 
-  // Filter login sessions on Device Type change
-  $(document).on('change', '#select-trans-payment-method', function () {
-    renderDashboardRecentTransactions();
+  $(document).on('click', '.tab-device-filter', function () {
+    activeModalDeviceFilter = ($(this).data('type') || 'all').toLowerCase();
+    $('.tab-device-filter').removeClass('bg-[#14213D] text-white').addClass('text-slate-600 dark:text-slate-300');
+    $(this).addClass('bg-[#14213D] text-white').removeClass('text-slate-600 dark:text-slate-300');
+    renderAllDevicesModal();
+  });
+
+  $(document).on('input keyup', '#modal-devices-search', function () {
+    renderAllDevicesModal();
   });
 
   // =========================================================================
@@ -4823,9 +5094,10 @@ $(document).ready(function () {
     }
     if (!user) {
       user = {
-        id: 'usr-adaline',
-        name: 'Adaline Lively',
-        email: 'adalinea@gmail.com',
+        id: 'usr-guest',
+        name: 'Aurelia Staff',
+        username: '',
+        email: 'staff@aureliahotel.com',
         phone: '+91 98450 11201',
         role: 'Front Desk Supervisor',
         department: 'Front Office',
@@ -4841,13 +5113,13 @@ $(document).ready(function () {
     const $text = $('#modal-profile-avatar-text');
     const $removeBtn = $('#btn-remove-photo');
 
-    const initials = (nameStr || 'Adaline Lively')
+    const initials = (nameStr || 'Aurelia Staff')
       .split(' ')
       .filter(Boolean)
       .map(p => p[0])
       .slice(0, 2)
       .join('')
-      .toUpperCase() || 'AL';
+      .toUpperCase() || 'AU';
 
     if (avatarDataUrl) {
       $img.attr('src', avatarDataUrl).removeClass('hidden');
@@ -4865,16 +5137,19 @@ $(document).ready(function () {
     const $avatarImg = $('#topbar-user-avatar-img');
     const $avatarText = $('#topbar-user-avatar-text');
 
-    const displayName = (user && user.name && !user.name.includes('Adaline')) ? user.name : (localStorage.getItem('aurelia_profile_name') || 'Shraoshi Barua');
+    const displayName = (user && user.name ? String(user.name).trim() : '') || 'Aurelia Staff';
+    const userRole = (user && user.role ? String(user.role).trim() : '') || 'Front Desk Supervisor';
+    const userEmail = (user && user.email ? String(user.email).trim() : '');
+    const userUsername = (user && user.username ? String(user.username).trim().replace(/^@+/, '') : '');
     const initials = displayName
       .split(' ')
       .filter(Boolean)
       .map(p => p[0])
       .slice(0, 2)
       .join('')
-      .toUpperCase() || 'SB';
+      .toUpperCase() || 'AU';
 
-    if (user.avatar) {
+    if (user && user.avatar) {
       $avatarImg.attr('src', user.avatar).removeClass('hidden');
       $avatarText.addClass('hidden');
     } else {
@@ -4882,21 +5157,146 @@ $(document).ready(function () {
       $avatarText.text(initials).removeClass('hidden');
     }
 
+    const summary = [displayName, userRole, userUsername ? '@' + userUsername : '', userEmail].filter(Boolean).join(' • ');
+    $('#user-profile-capsule')
+      .attr('data-instant-tooltip', `${summary} (Click for Profile)`)
+      .removeAttr('title');
+
     // Update greeting consistently across all pages
-    const firstName = displayName.split(' ')[0] || 'Shraoshi';
+    const firstName = displayName.split(' ')[0] || 'Guest';
     $('#topbar-welcome-title').text(`Welcome back, ${firstName}!`);
   }
 
+  function ensureUserProfileModal() {
+    if ($('#modal-user-profile').length > 0) return;
+    $('body').append(`
+      <div id="modal-user-profile"
+        class="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-sm hidden flex items-center justify-center p-3 sm:p-4">
+        <div
+          class="Aurelia-card max-w-lg w-full p-6 sm:p-7 space-y-4 shadow-2xl max-h-[92vh] flex flex-col rounded-3xl border border-slate-100 dark:border-slate-800">
+          <div class="flex items-center justify-between pb-3.5 border-b border-slate-100 dark:border-slate-800 flex-shrink-0">
+            <div class="flex items-center space-x-3">
+              <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-[#14213D] to-[#FCA311] flex items-center justify-center text-white shadow-md">
+                <svg class="w-5 h-5 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+                </svg>
+              </div>
+              <div>
+                <div class="flex items-center space-x-2">
+                  <h3 class="text-base font-bold text-slate-900 dark:text-white">User Profile & Account</h3>
+                  <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800/40">Active Session</span>
+                </div>
+                <p class="text-xs text-slate-400">View and update your personal credentials, contact info, and profile photo</p>
+              </div>
+            </div>
+            <button type="button" class="btn-close-modal w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-500 hover:text-slate-800 dark:text-slate-300 dark:hover:text-white flex items-center justify-center transition-colors text-sm font-semibold" title="Close">✕</button>
+          </div>
+          <div class="p-4 rounded-2xl bg-slate-50/80 dark:bg-slate-800/40 border border-slate-100 dark:border-slate-800/60 flex flex-col sm:flex-row items-center gap-4 flex-shrink-0">
+            <div class="relative group flex-shrink-0">
+              <div id="modal-profile-avatar-preview" class="w-20 h-20 sm:w-22 sm:h-22 rounded-full bg-[#14213D] text-[#FCA311] font-extrabold text-2xl flex items-center justify-center shadow-md ring-4 ring-[#FCA311]/25 overflow-hidden relative">
+                <span id="modal-profile-avatar-text">AU</span>
+                <img id="modal-profile-avatar-img" src="" alt="Profile Photo" class="w-full h-full object-cover hidden">
+              </div>
+              <button type="button" id="btn-trigger-avatar-file" class="absolute bottom-0 right-0 w-7 h-7 rounded-full bg-[#FCA311] text-[#14213D] flex items-center justify-center shadow-md hover:scale-110 transition-transform cursor-pointer" title="Upload photo">
+                <svg class="w-3.5 h-3.5 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2.5">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M6.827 6.175A2.31 2.31 0 015.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 00-1.134-.175 2.31 2.31 0 01-1.64-1.055l-.822-1.316a2.192 2.192 0 00-1.736-1.039 48.774 48.774 0 00-5.232 0 2.192 2.192 0 00-1.736 1.039l-.821 1.316z" />
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 12.75a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0zM18.75 10.5h.008v.008h-.008V10.5z" />
+                </svg>
+              </button>
+            </div>
+            <div class="flex-1 text-center sm:text-left space-y-1.5 min-w-0">
+              <div>
+                <h4 class="text-xs font-bold text-slate-900 dark:text-slate-100">Profile Photo</h4>
+                <p class="text-[11px] text-slate-400">Upload your staff photo for receipts, kitchen orders, and staff directory</p>
+              </div>
+              <div class="flex flex-wrap items-center justify-center sm:justify-start gap-2 pt-0.5">
+                <input type="file" id="input-profile-avatar-file" accept="image/png, image/jpeg, image/jpg, image/webp" class="hidden">
+                <button type="button" id="btn-upload-photo" class="px-3 py-1.5 rounded-xl bg-[#14213D] hover:bg-[#1f325d] text-[#FCA311] text-[11px] font-bold flex items-center space-x-1.5 transition-all shadow-xs cursor-pointer">
+                  <span>Upload Photo</span>
+                </button>
+                <button type="button" id="btn-remove-photo" class="px-3 py-1.5 rounded-xl bg-slate-200/80 hover:bg-rose-100 text-slate-600 hover:text-rose-600 dark:bg-slate-700 dark:text-slate-300 text-[11px] font-semibold flex items-center space-x-1.5 transition-all cursor-pointer">
+                  <span>Remove Photo</span>
+                </button>
+              </div>
+            </div>
+          </div>
+          <form id="form-user-profile" class="space-y-3.5 overflow-y-auto flex-1 pr-1">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+              <div>
+                <label class="block text-[11px] font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">Full Name *</label>
+                <input type="text" id="input-profile-name" required class="Aurelia-input w-full text-xs font-semibold py-2 px-3">
+              </div>
+              <div>
+                <label class="block text-[11px] font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">Email Address *</label>
+                <input type="email" id="input-profile-email" required class="Aurelia-input w-full text-xs py-2 px-3">
+              </div>
+              <div>
+                <label class="block text-[11px] font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">Phone Number</label>
+                <input type="tel" id="input-profile-phone" class="Aurelia-input w-full text-xs py-2 px-3">
+              </div>
+              <div>
+                <label class="block text-[11px] font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">Employee ID</label>
+                <input type="text" id="input-profile-empid" class="Aurelia-input w-full text-xs py-2 px-3 bg-slate-100/70 dark:bg-slate-800/60 text-slate-500 cursor-not-allowed font-mono" value="EMP-2026-01" readonly>
+              </div>
+              <div>
+                <label class="block text-[11px] font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">Role / Designation</label>
+                <select id="select-profile-role" class="Aurelia-input w-full text-xs font-medium py-2 px-3">
+                  <option value="Front Desk Supervisor">Front Desk Supervisor</option>
+                  <option value="Hotel Operations Manager">Hotel Operations Manager</option>
+                  <option value="Executive Chef / F&B Manager">Executive Chef / F&B Manager</option>
+                  <option value="Night Auditor & Cashier">Night Auditor & Cashier</option>
+                  <option value="General Manager">General Manager</option>
+                  <option value="Guest Relations Executive">Guest Relations Executive</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-[11px] font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">Department</label>
+                <select id="select-profile-dept" class="Aurelia-input w-full text-xs font-medium py-2 px-3">
+                  <option value="Front Office">Front Office</option>
+                  <option value="Food & Beverage">Food & Beverage</option>
+                  <option value="Accounts & Billing">Accounts & Billing</option>
+                  <option value="Housekeeping & Operations">Housekeeping & Operations</option>
+                  <option value="Executive Administration">Executive Administration</option>
+                </select>
+              </div>
+            </div>
+            <div class="pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between flex-shrink-0">
+              <button type="button" id="btn-profile-signout" class="text-xs text-rose-600 hover:text-rose-700 dark:text-rose-400 font-semibold flex items-center space-x-1.5 px-2.5 py-1.5 rounded-lg hover:bg-rose-50 dark:hover:bg-rose-950/40 transition-colors cursor-pointer">
+                <span>Sign Out</span>
+              </button>
+              <div class="flex items-center space-x-2">
+                <button type="button" class="btn-close-modal btn-Aurelia-secondary text-xs py-2 px-4">Cancel</button>
+                <button type="submit" id="btn-save-profile" class="btn-Aurelia-primary text-xs py-2 px-5 flex items-center space-x-1.5 shadow-md">
+                  <span>Save Changes</span>
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    `);
+  }
+
   function openUserProfileModal() {
+    ensureUserProfileModal();
+    const $modal = $('#modal-user-profile');
+    // Ensure modal is always a direct child of document.body so no parent container can hide or clip it
+    if ($modal.length && document.body && $modal[0].parentElement !== document.body) {
+      $modal.appendTo('body');
+    }
     const user = getActiveUserData();
 
-    $('#input-profile-name').val(user.name || 'Adaline Lively');
-    $('#input-profile-email').val(user.email || 'adalinea@gmail.com');
+    $('#input-profile-name').val(user.name || 'Aurelia Staff');
+    $('#input-profile-email').val(user.email || '');
     $('#input-profile-phone').val(user.phone || '+91 98450 11201');
     $('#input-profile-empid').val(user.empId || 'EMP-2026-01');
 
     if (user.role) {
-      $('#select-profile-role').val(user.role);
+      const $roleSel = $('#select-profile-role');
+      if ($roleSel.find(`option[value="${user.role.replace(/"/g, '\\"')}"]`).length === 0) {
+        $roleSel.append($('<option>', { value: user.role, text: user.role }));
+      }
+      $roleSel.val(user.role);
     }
     if (user.department) {
       $('#select-profile-dept').val(user.department);
@@ -4906,25 +5306,42 @@ $(document).ready(function () {
     $('#input-profile-avatar-file').val('');
     updateModalAvatarPreview(currentPendingAvatar, user.name);
 
-    $('#modal-user-profile').removeClass('hidden');
+    $modal.removeClass('hidden');
   }
 
-  // Open modal when topbar avatar button is clicked
-  $('#topbar-user-avatar, #user-profile-capsule').on('click', function (e) {
+  window.updateTopbarAvatarUI = updateTopbarAvatarUI;
+  window.openUserProfileModal = openUserProfileModal;
+  window.renderDashboard = renderDashboard;
+
+  // Open modal when topbar profile button or avatar is clicked
+  $(document).on('click', '#user-profile-capsule, #topbar-user-avatar', function (e) {
+    if (this.id === 'topbar-user-avatar' && $(this).closest('#user-profile-capsule').length) {
+      return;
+    }
     e.preventDefault();
     e.stopPropagation();
     openUserProfileModal();
   });
 
+  // Close injected/existing user profile modal via Close buttons or backdrop
+  $(document).on('click', '#modal-user-profile .btn-close-modal', function () {
+    $('#modal-user-profile').addClass('hidden');
+  });
+  $(document).on('click', '#modal-user-profile', function (e) {
+    if (e.target && e.target.id === 'modal-user-profile') {
+      $('#modal-user-profile').addClass('hidden');
+    }
+  });
+
   // Trigger file selection
-  $('#btn-upload-photo, #btn-trigger-avatar-file').on('click', function (e) {
+  $(document).on('click', '#btn-upload-photo, #btn-trigger-avatar-file', function (e) {
     e.preventDefault();
     e.stopPropagation();
     $('#input-profile-avatar-file').trigger('click');
   });
 
   // Handle image file selection
-  $('#input-profile-avatar-file').on('change', function (e) {
+  $(document).on('change', '#input-profile-avatar-file', function (e) {
     const file = this.files && this.files[0];
     if (!file) return;
 
@@ -4951,7 +5368,7 @@ $(document).ready(function () {
   });
 
   // Remove photo
-  $('#btn-remove-photo').on('click', function (e) {
+  $(document).on('click', '#btn-remove-photo', function (e) {
     e.preventDefault();
     currentPendingAvatar = null;
     $('#input-profile-avatar-file').val('');
@@ -4960,14 +5377,14 @@ $(document).ready(function () {
   });
 
   // Update initials live if name changes without custom photo
-  $('#input-profile-name').on('input', function () {
+  $(document).on('input', '#input-profile-name', function () {
     if (!currentPendingAvatar) {
       updateModalAvatarPreview(null, $(this).val());
     }
   });
 
   // Quick Sign Out directly from profile popup
-  $('#btn-profile-signout').on('click', function (e) {
+  $(document).on('click', '#btn-profile-signout', function (e) {
     e.preventDefault();
     $('#modal-user-profile').addClass('hidden');
     if (window.Auth && typeof window.Auth.showLogoutConfirmation === 'function') {
@@ -4976,7 +5393,7 @@ $(document).ready(function () {
   });
 
   // Save Profile Form
-  $('#form-user-profile').on('submit', function (e) {
+  $(document).on('submit', '#form-user-profile', function (e) {
     e.preventDefault();
 
     const nameVal = $('#input-profile-name').val().trim();
@@ -5063,8 +5480,11 @@ $(document).ready(function () {
         }
       }
 
-      // 5. Update topbar avatar display immediately
+      // 5. Update topbar avatar & profile capsule display immediately
       updateTopbarAvatarUI(updatedUser);
+      if ($('#section-dashboard').length > 0 && typeof renderDashboard === 'function') {
+        renderDashboard();
+      }
 
       // 6. Close modal & show SweetAlert Saved!
       $('#modal-user-profile').addClass('hidden');
@@ -6126,6 +6546,43 @@ $(document).ready(function () {
         border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
         box-shadow: 0 4px 16px -2px rgba(0, 0, 0, 0.45) !important;
       }
+      .dark #topbar-welcome-title {
+        color: #FFFFFF !important;
+      }
+      .dark #topbar-welcome-title + p {
+        color: #94A3B8 !important;
+      }
+      #user-profile-capsule {
+        position: relative !important;
+        z-index: 20 !important;
+        pointer-events: auto !important;
+        cursor: pointer !important;
+      }
+      #user-profile-capsule #topbar-user-avatar,
+      #user-profile-capsule #topbar-user-avatar * {
+        pointer-events: none !important;
+      }
+      #modal-user-profile {
+        z-index: 90 !important;
+      }
+      #modal-user-profile.hidden {
+        display: none !important;
+      }
+      #modal-user-profile:not(.hidden) {
+        display: flex !important;
+      }
+      .dark #user-profile-capsule,
+      .dark #btn-top-notifications {
+        background: rgba(30, 41, 59, 0.88) !important;
+        border-color: rgba(255, 255, 255, 0.15) !important;
+        color: #F8FAFC !important;
+        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35) !important;
+      }
+      .dark #user-profile-capsule:hover,
+      .dark #btn-top-notifications:hover {
+        background: rgba(51, 65, 85, 0.94) !important;
+        border-color: rgba(252, 163, 17, 0.6) !important;
+      }
     `;
 
     const hdr = document.getElementById('top-desktop-header') || document.querySelector('.app-sticky-header');
@@ -6140,4 +6597,236 @@ $(document).ready(function () {
     applyHeaderStyles();
   }
 })();
+
+// =========================================================================
+// INSTANT ZERO-DELAY HOVER TOOLTIPS & INSTANT SIDEBAR HOVER HIGHLIGHT
+// =========================================================================
+(function initInstantTooltips() {
+  function setup() {
+    if (!document.body) return;
+
+    let style = document.getElementById('aurelia-instant-tooltip-styles');
+    if (!style) {
+      style = document.createElement('style');
+      style.id = 'aurelia-instant-tooltip-styles';
+      document.head.appendChild(style);
+    }
+    style.textContent = `
+      /* Instant 0ms hover response for sidebar navigation links */
+      #app-sidebar .Aurelia-nav-item,
+      #app-sidebar .aurelia-nav-item,
+      #app-sidebar .finset-nav-item,
+      #app-sidebar .Aurelia-nav-item svg,
+      #app-sidebar .aurelia-nav-item svg,
+      #app-sidebar .finset-nav-item svg,
+      #app-sidebar .hr-sub-item,
+      #app-sidebar .dept-sub-item,
+      #app-sidebar #btn-sidebar-help,
+      #app-sidebar #btn-sidebar-help svg,
+      #app-sidebar #btn-sidebar-logout,
+      #app-sidebar #btn-sidebar-logout svg {
+        transition: none !important;
+      }
+
+      /* Instant floating tooltip (0ms delay, portal outside overflow containers) */
+      #aurelia-instant-tooltip {
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 999999;
+        pointer-events: none;
+        display: none;
+        width: max-content;
+        max-width: 280px;
+        padding: 4px 9px;
+        border-radius: 6px;
+        background: #1B1E28;
+        color: #F8FAFC;
+        border: 1px solid rgba(255, 255, 255, 0.28);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.28);
+        font-family: 'Plus Jakarta Sans', 'Inter', system-ui, -apple-system, sans-serif;
+        font-size: 11.5px;
+        font-weight: 500;
+        line-height: 1.35;
+        letter-spacing: 0.01em;
+        white-space: normal;
+        word-break: break-word;
+        user-select: none;
+        transition: none !important;
+      }
+    `;
+
+    let tipEl = document.getElementById('aurelia-instant-tooltip');
+    if (!tipEl) {
+      tipEl = document.createElement('div');
+      tipEl.id = 'aurelia-instant-tooltip';
+      tipEl.setAttribute('role', 'tooltip');
+      document.body.appendChild(tipEl);
+    }
+
+    let activeTrigger = null;
+
+    function migrateTitleAttr(el) {
+      if (!el || el.nodeType !== 1) return '';
+      const tag = (el.tagName || '').toUpperCase();
+      if (tag === 'IFRAME' || tag === 'TITLE') return '';
+      if (el.hasAttribute('title')) {
+        const raw = el.getAttribute('title');
+        el.removeAttribute('title');
+        if (raw && raw.trim()) {
+          const clean = raw.trim();
+          el.setAttribute('data-instant-tooltip', clean);
+          if (!el.getAttribute('aria-label') && !(el.textContent || '').trim()) {
+            el.setAttribute('aria-label', clean);
+          }
+          if (el === activeTrigger && tipEl.style.display === 'block') {
+            tipEl.textContent = clean;
+          }
+        }
+      }
+      return el.getAttribute('data-instant-tooltip') || '';
+    }
+
+    function migrateAllTitles(root) {
+      if (!root || !root.querySelectorAll) return;
+      const list = root.querySelectorAll('[title]:not(iframe)');
+      for (let i = 0; i < list.length; i++) {
+        migrateTitleAttr(list[i]);
+      }
+    }
+
+    migrateAllTitles(document);
+
+    if (typeof MutationObserver !== 'undefined') {
+      const observer = new MutationObserver(function (mutations) {
+        for (let i = 0; i < mutations.length; i++) {
+          const m = mutations[i];
+          if (m.type === 'attributes' && m.attributeName === 'title' && m.target) {
+            migrateTitleAttr(m.target);
+          } else if (m.addedNodes && m.addedNodes.length) {
+            for (let j = 0; j < m.addedNodes.length; j++) {
+              const node = m.addedNodes[j];
+              if (node.nodeType === 1) {
+                if (node.hasAttribute && node.hasAttribute('title')) {
+                  migrateTitleAttr(node);
+                }
+                migrateAllTitles(node);
+              }
+            }
+          }
+        }
+      });
+      observer.observe(document.body, {
+        childList: true,
+        subtree: true,
+        attributes: true,
+        attributeFilter: ['title']
+      });
+    }
+
+    function positionTooltip(clientX, clientY, anchorEl) {
+      if (!tipEl || tipEl.style.display === 'none') return;
+      const pad = 8;
+      const tipW = tipEl.offsetWidth;
+      const tipH = tipEl.offsetHeight;
+      let left;
+      let top;
+
+      if (typeof clientX === 'number' && typeof clientY === 'number' && (clientX !== 0 || clientY !== 0)) {
+        left = clientX + 12;
+        top = clientY + 18;
+      } else if (anchorEl) {
+        const rect = anchorEl.getBoundingClientRect();
+        left = rect.left + Math.min(rect.width * 0.5, 40);
+        top = rect.bottom + 6;
+      } else {
+        return;
+      }
+
+      if (left + tipW > window.innerWidth - pad) {
+        left = Math.max(pad, window.innerWidth - tipW - pad);
+      }
+      if (left < pad) left = pad;
+
+      if (top + tipH > window.innerHeight - pad) {
+        const fallbackY = (typeof clientY === 'number' && clientY !== 0)
+          ? clientY - tipH - 10
+          : (anchorEl ? anchorEl.getBoundingClientRect().top - tipH - 6 : pad);
+        top = Math.max(pad, fallbackY);
+      }
+      if (top < pad) top = pad;
+
+      tipEl.style.transform = `translate3d(${Math.round(left)}px, ${Math.round(top)}px, 0)`;
+    }
+
+    function showTooltip(trigger, clientX, clientY) {
+      if (!trigger) return;
+      const text = migrateTitleAttr(trigger) || trigger.getAttribute('data-instant-tooltip') || '';
+      if (!text) {
+        hideTooltip();
+        return;
+      }
+      activeTrigger = trigger;
+      tipEl.textContent = text;
+      tipEl.style.display = 'block';
+      positionTooltip(clientX, clientY, trigger);
+    }
+
+    function hideTooltip() {
+      activeTrigger = null;
+      if (tipEl) {
+        tipEl.style.display = 'none';
+      }
+    }
+
+    document.addEventListener('mouseover', function (e) {
+      const target = e.target && e.target.closest ? e.target.closest('[data-instant-tooltip], [title]:not(iframe)') : null;
+      if (!target) {
+        if (activeTrigger) hideTooltip();
+        return;
+      }
+      showTooltip(target, e.clientX, e.clientY);
+    }, true);
+
+    document.addEventListener('mousemove', function (e) {
+      if (!activeTrigger) return;
+      positionTooltip(e.clientX, e.clientY, activeTrigger);
+    }, true);
+
+    document.addEventListener('mouseout', function (e) {
+      if (!activeTrigger) return;
+      const related = e.relatedTarget;
+      const nextTrigger = (related && related.closest) ? related.closest('[data-instant-tooltip], [title]:not(iframe)') : null;
+      if (nextTrigger !== activeTrigger) {
+        if (nextTrigger) {
+          showTooltip(nextTrigger, e.clientX, e.clientY);
+        } else {
+          hideTooltip();
+        }
+      }
+    }, true);
+
+    document.addEventListener('focusin', function (e) {
+      const target = e.target && e.target.closest ? e.target.closest('[data-instant-tooltip], [title]:not(iframe)') : null;
+      if (target && target.matches && target.matches(':focus-visible')) {
+        showTooltip(target, 0, 0);
+      }
+    }, true);
+
+    document.addEventListener('focusout', hideTooltip, true);
+    document.addEventListener('mousedown', hideTooltip, true);
+    document.addEventListener('scroll', hideTooltip, true);
+    window.addEventListener('blur', hideTooltip);
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') hideTooltip();
+    }, true);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', setup);
+  } else {
+    setup();
+  }
+})();
+
 
