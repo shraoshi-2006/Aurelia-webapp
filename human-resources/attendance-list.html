@@ -1276,28 +1276,40 @@
       background: #FCA311;
     }
 
+    @page {
+      size: A4 portrait;
+      margin: 10mm 12mm;
+    }
+
     /* Print invoice area rules */
     @media print {
-      body * {
-        visibility: hidden !important;
+      body {
+        background: #ffffff !important;
+        margin: 0 !important;
+        padding: 0 !important;
       }
 
-      #print-invoice-area,
-      #print-invoice-area * {
-        visibility: visible !important;
+      body > *:not(#print-invoice-area) {
+        display: none !important;
       }
 
       #print-invoice-area {
-        position: absolute !important;
-        left: 0 !important;
-        top: 0 !important;
-        width: 100% !important;
-        max-width: 800px !important;
-        margin: 0 auto !important;
-        padding: 24px !important;
-        background: #ffffff !important;
-        color: #000000 !important;
         display: block !important;
+        position: static !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+        padding: 16px !important;
+        background: #ffffff !important;
+        color: #0f172a !important;
+        visibility: visible !important;
+        page-break-after: avoid !important;
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+      }
+
+      #print-invoice-area * {
+        visibility: visible !important;
       }
     }
 
@@ -2834,7 +2846,7 @@
         <svg class="w-4 h-4 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>
         <span>Manual Clock-In</span>
       </button>
-      <button type="button" class="btn-Aurelia-secondary text-xs py-2 px-3.5 flex items-center space-x-1.5" onclick="window.print()">
+      <button type="button" id="btn-print-roster" class="btn-Aurelia-secondary text-xs py-2 px-3.5 flex items-center space-x-1.5 cursor-pointer" onclick="printDutyRosterDirectly(event)">
         <svg class="w-4 h-4 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6.72 13.829c-.24.03-.48.062-.72.096m.72-.096a42.415 42.415 0 0110.56 0m-10.56 0L6.34 18m10.94-4.171c.24.03.48.062.72.096m-.72-.096L17.66 18m0 0l.229 2.523a1.125 1.125 0 01-1.12 1.227H7.231c-.662 0-1.18-.568-1.12-1.227L6.34 18m11.32 0c.268-.07.534-.144.798-.222A2.25 2.25 0 0020.25 15.6V10.5a2.25 2.25 0 00-2.25-2.25h-12A2.25 2.25 0 003.75 10.5v5.1a2.25 2.25 0 001.792 2.178c.264.078.53.152.798.222" /></svg>
         <span>Print Roster</span>
       </button>
@@ -3059,6 +3071,151 @@
 
   
   <script>
+    let isRosterPrinting = false;
+    function printDutyRosterDirectly(e) {
+      if (e) {
+        if (typeof e.preventDefault === 'function') e.preventDefault();
+        if (typeof e.stopImmediatePropagation === 'function') e.stopImmediatePropagation();
+        if (typeof e.stopPropagation === 'function') e.stopPropagation();
+      }
+      if (isRosterPrinting) return false;
+      isRosterPrinting = true;
+      try {
+        let printArea = document.getElementById('print-invoice-area');
+        if (!printArea) {
+          printArea = document.createElement('div');
+          printArea.id = 'print-invoice-area';
+          document.body.appendChild(printArea);
+        }
+
+        // Build roster rows from visible or all rows
+        let rowsHtml = '';
+        $('#page-al-tbody tr').each(function() {
+          const empId = $(this).find('td:nth-child(1)').text().trim();
+          const name = $(this).find('td:nth-child(2) .font-bold').text().trim();
+          const role = $(this).find('td:nth-child(2) .text-\\[11px\\]').text().trim();
+          const dept = $(this).find('td:nth-child(3)').text().trim();
+          const shift = $(this).find('td:nth-child(4)').text().trim();
+          const punchIn = $(this).find('td:nth-child(5)').text().trim();
+          const punchOut = $(this).find('td:nth-child(6)').text().trim();
+          const hours = $(this).find('td:nth-child(7)').text().trim();
+          const status = $(this).find('td:nth-child(8)').text().trim();
+
+          rowsHtml += `
+            <tr style="border-bottom: 1px solid #e2e8f0;">
+              <td style="padding: 6px 8px; font-family: monospace; font-weight: bold; font-size: 11px;">${empId}</td>
+              <td style="padding: 6px 8px;">
+                <div style="font-weight: bold; font-size: 11px; color: #0f172a;">${name}</div>
+                <div style="font-size: 10px; color: #64748b;">${role}</div>
+              </td>
+              <td style="padding: 6px 8px; font-size: 11px; color: #334155;">${dept}</td>
+              <td style="padding: 6px 8px; font-size: 10px; color: #334155;">${shift}</td>
+              <td style="padding: 6px 8px; font-family: monospace; font-size: 10px; font-weight: bold; color: #047857;">${punchIn}</td>
+              <td style="padding: 6px 8px; font-family: monospace; font-size: 10px; color: #334155;">${punchOut}</td>
+              <td style="padding: 6px 8px; font-weight: bold; font-size: 11px; text-align: center;">${hours}</td>
+              <td style="padding: 6px 8px; text-align: center; font-size: 10px; font-weight: bold;">${status}</td>
+            </tr>
+          `;
+        });
+
+        const rosterContent = `
+          <div style="background: #ffffff; color: #0f172a; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 11px; line-height: 1.4;">
+            <!-- Header -->
+            <div style="border-bottom: 2px solid #14213D; padding-bottom: 10px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: flex-start;">
+              <div>
+                <h1 style="font-size: 16px; font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; color: #14213D; margin: 0 0 2px 0;">Aurelia Luxury Hotel & Resorts</h1>
+                <p style="font-size: 10px; color: #475569; margin: 0; font-weight: 600;">Department of Human Resources & Operations Management</p>
+                <p style="font-size: 9px; color: #64748b; margin: 0;">Station Rd, City Center • Reg: HR-2026-HOSP-IND • hr@aureliahotel.com</p>
+              </div>
+              <div style="text-align: right;">
+                <div style="display: inline-block; background: #14213D; color: #FCA311; font-size: 10px; font-family: monospace; font-weight: bold; padding: 2px 8px; border-radius: 4px;">REF: AUR/ROSTER/2026-11</div>
+                <p style="font-size: 10px; color: #64748b; margin: 4px 0 0 0;">Date: Friday, Nov 06, 2026</p>
+              </div>
+            </div>
+
+            <!-- Title & Operational Metrics -->
+            <div style="margin-bottom: 12px; text-align: center;">
+              <h2 style="font-size: 13px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; color: #0f172a; margin: 0 0 4px 0;">Daily Duty & Biometric Shift Attendance Roster</h2>
+              <div style="display: flex; justify-content: space-between; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 6px 12px; font-size: 10px; font-weight: 600;">
+                <span>Total Headcount: <strong style="color: #14213D;">48 Staff</strong></span>
+                <span>Present on Duty: <strong style="color: #15803d;">42 Staff (87.5%)</strong></span>
+                <span>Punctual: <strong style="color: #0284c7;">38 Staff</strong></span>
+                <span>Late Arrival: <strong style="color: #b45309;">4 Staff</strong></span>
+                <span>Approved Leave: <strong style="color: #475569;">6 Staff</strong></span>
+              </div>
+            </div>
+
+            <!-- Shift Breakdown Bar -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 12px; font-size: 10px;">
+              <div style="border: 1px solid #e2e8f0; border-left: 3px solid #0284c7; padding: 6px 8px; border-radius: 4px; background: #f8fafc;">
+                <strong style="color: #0284c7;">Morning Shift</strong> (06:00 - 14:00)<br>
+                <span style="color: #475569;">24 Staff Scheduled • Active</span>
+              </div>
+              <div style="border: 1px solid #e2e8f0; border-left: 3px solid #7c3aed; padding: 6px 8px; border-radius: 4px; background: #f8fafc;">
+                <strong style="color: #7c3aed;">Evening Shift</strong> (14:00 - 22:00)<br>
+                <span style="color: #475569;">18 Staff Scheduled • Handover</span>
+              </div>
+              <div style="border: 1px solid #e2e8f0; border-left: 3px solid #334155; padding: 6px 8px; border-radius: 4px; background: #f8fafc;">
+                <strong style="color: #334155;">Night Audit</strong> (22:00 - 06:00)<br>
+                <span style="color: #475569;">6 Staff Scheduled • Upcoming</span>
+              </div>
+            </div>
+
+            <!-- Table -->
+            <table style="width: 100%; border-collapse: collapse; margin-bottom: 14px; text-align: left; font-size: 10px;">
+              <thead>
+                <tr style="background: #f1f5f9; border-bottom: 2px solid #cbd5e1; color: #475569; font-size: 10px; text-transform: uppercase;">
+                  <th style="padding: 6px 8px;">Emp ID</th>
+                  <th style="padding: 6px 8px;">Employee & Role</th>
+                  <th style="padding: 6px 8px;">Department</th>
+                  <th style="padding: 6px 8px;">Assigned Shift</th>
+                  <th style="padding: 6px 8px;">Clock In</th>
+                  <th style="padding: 6px 8px;">Clock Out</th>
+                  <th style="padding: 6px 8px; text-align: center;">Hours</th>
+                  <th style="padding: 6px 8px; text-align: center;">Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${rowsHtml}
+              </tbody>
+            </table>
+
+            <!-- Signatures -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 32px; padding-top: 12px; border-top: 1px solid #e2e8f0; font-size: 10px;">
+              <div>
+                <div style="height: 28px; border-bottom: 1px solid #94a3b8; margin-bottom: 4px; display: flex; align-items: flex-end;">
+                  <span style="font-family: serif; font-style: italic; color: #475569;">Adaline Lively</span>
+                </div>
+                <strong style="color: #0f172a; font-size: 11px;">Duty Manager / Shift Supervisor</strong><br>
+                <span style="color: #64748b;">Prepared & Handed Over</span>
+              </div>
+              <div>
+                <div style="height: 28px; border-bottom: 1px solid #94a3b8; margin-bottom: 4px; display: flex; align-items: flex-end;">
+                  <span style="font-family: serif; font-style: italic; color: #475569;">Vikram Malhotra</span>
+                </div>
+                <strong style="color: #0f172a; font-size: 11px;">General Manager / Operations Head</strong><br>
+                <span style="color: #64748b;">Verified & Approved for Compliance</span>
+              </div>
+            </div>
+          </div>
+        `;
+
+        printArea.innerHTML = rosterContent;
+        printArea.classList.remove('hidden');
+
+        window.print();
+
+        setTimeout(function() {
+          printArea.classList.add('hidden');
+          printArea.innerHTML = '';
+          isRosterPrinting = false;
+        }, 1000);
+      } catch (err) {
+        isRosterPrinting = false;
+      }
+    }
+    window.printDutyRosterDirectly = printDutyRosterDirectly;
+
     $(document).ready(function() {
       function filterAttendanceTable() {
         const sh = $('#select-al-shift').val();
