@@ -6839,10 +6839,8 @@ $(document).ready(function () {
     }
   });
 
-  $(document).on('click', '.btn-holiday-filter', function () {
-    $('.btn-holiday-filter').removeClass('active bg-[#14213D] text-white').addClass('text-slate-600 dark:text-slate-400 hover:text-slate-900');
-    $(this).addClass('active bg-[#14213D] text-white').removeClass('text-slate-600 dark:text-slate-400 hover:text-slate-900');
-    currentHolidayFilter = $(this).data('type') || 'all';
+  $(document).on('change', '#select-holiday-filter', function () {
+    currentHolidayFilter = $(this).val() || 'all';
     renderHolidaysSection();
   });
 
