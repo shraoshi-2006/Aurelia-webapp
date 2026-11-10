@@ -2909,19 +2909,28 @@
   </div>
 
   <!-- PRINTABLE FORMAL PAY SLIP CARD -->
-  <div id="printable-pay-slip" class="Aurelia-card p-8 bg-white shadow-xl max-w-4xl mx-auto border border-slate-200 space-y-6">
+  <div id="printable-pay-slip" class="p-8 sm:p-10 bg-white shadow-xl max-w-4xl mx-auto rounded-2xl border border-slate-200 space-y-6" style="background-color: #ffffff !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important;">
     <!-- Hotel Letterhead Header -->
-    <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-6 border-b-2 border-slate-900 gap-4">
-      <div class="flex items-center space-x-3.5">
-        <img src="../assets/aurelia-mark.svg" alt="Aurelia Emblem" class="w-12 h-12 rounded-full object-contain shadow-md shadow-amber-500/20">
-        <div>
-          <h1 class="text-xl font-black text-[#14213D] tracking-[0.2em] uppercase" style="font-family: 'Cormorant Garamond', Georgia, serif;">AURELIA LUXURY HOTEL & RESTAURANT</h1>
-          <p class="text-xs text-slate-500 font-medium">5-Star Heritage Wing, Financial District, New Delhi - 110001 | GSTIN: 07AAACA1234F1Z5</p>
+    <div class="flex flex-row items-center justify-between pb-6 border-b-2 border-[#14213D] gap-4">
+      <div class="flex items-center space-x-3.5 min-w-0">
+        <!-- Aurelia Vector Gold Emblem Logo (Direct Inline SVG for 100% PDF & Canvas Fidelity) -->
+        <svg viewBox="0 0 200 200" class="w-12 h-12 rounded-full shrink-0 shadow-md shadow-amber-500/20" style="width: 48px; height: 48px; min-width: 48px; min-height: 48px; display: inline-block;" role="img" aria-label="Aurelia Emblem">
+          <circle cx="100" cy="100" r="95" fill="#FCA311"/>
+          <circle cx="100" cy="100" r="86" fill="none" stroke="#14213D" stroke-width="2.2"/>
+          <path d="M58 162 L100 46 L142 162" fill="none" stroke="#14213D" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+          <line x1="71" y1="126" x2="129" y2="126" stroke="#14213D" stroke-width="6" stroke-linecap="round"/>
+          <circle cx="100" cy="104" r="8.5" fill="#FFFFFF"/>
+        </svg>
+        <div class="min-w-0">
+          <h1 class="text-lg sm:text-xl font-extrabold text-[#14213D] tracking-wide uppercase leading-tight whitespace-nowrap" style="font-family: 'Plus Jakarta Sans', Inter, system-ui, -apple-system, sans-serif; font-weight: 800; color: #14213D !important; letter-spacing: 0.05em; -webkit-font-smoothing: antialiased;">AURELIA LUXURY HOTEL &amp; RESTAURANT</h1>
+          <p class="text-[11.5px] text-slate-600 font-medium mt-1 whitespace-nowrap" style="color: #475569 !important;">5-Star Heritage Wing, Financial District, New Delhi - 110001 | GSTIN: 07AAACA1234F1Z5</p>
         </div>
       </div>
-      <div class="text-right">
-        <span class="inline-block bg-[#14213D] text-[#FCA311] px-3 py-1 rounded-full text-xs font-black uppercase tracking-wider">Salary Statement</span>
-        <div id="slip-month" class="text-xs text-slate-500 mt-1 font-bold">Month: October 2026</div>
+      <div class="text-right shrink-0">
+        <div class="whitespace-nowrap inline-flex items-center justify-center bg-[#14213D] text-[#FCA311] px-4 rounded-full text-xs font-black uppercase tracking-wider shadow-xs" style="background-color: #14213D !important; color: #FCA311 !important; height: 28px; line-height: 1;">
+          <span style="position: relative; top: -1.5px; display: inline-block; font-weight: 900; letter-spacing: 0.06em;">SALARY STATEMENT</span>
+        </div>
+        <div id="slip-month" class="text-xs text-slate-600 mt-1.5 font-bold whitespace-nowrap" style="color: #475569 !important;">Month: October 2026</div>
       </div>
     </div>
 
@@ -3391,21 +3400,36 @@
         const filename = `Aurelia_PaySlip_${empId}_${empName}_${cycle}.pdf`;
 
         if (window.html2canvas && window.jspdf) {
+          if (document.fonts && document.fonts.ready) {
+            try { await document.fonts.ready; } catch (e) {}
+          }
+
           const clone = printDoc.cloneNode(true);
-          clone.style.width = '794px';
-          clone.style.maxWidth = '794px';
+          clone.classList.remove('Aurelia-card', 'aurelia-card');
+          clone.style.width = '840px';
+          clone.style.maxWidth = '840px';
+          clone.style.boxSizing = 'border-box';
           clone.style.maxHeight = 'none';
           clone.style.overflow = 'visible';
-          clone.style.padding = '32px';
+          clone.style.padding = '36px';
+          clone.style.margin = '0';
           clone.style.background = '#ffffff';
+          clone.style.backgroundColor = '#ffffff';
           clone.style.color = '#0f172a';
+          clone.style.borderRadius = '16px';
+          clone.style.border = '1px solid #cbd5e1';
+          clone.style.boxShadow = '0 4px 24px rgba(15, 23, 42, 0.06)';
+          clone.style.filter = 'none';
+          clone.style.backdropFilter = 'none';
+          clone.style.webkitBackdropFilter = 'none';
           clone.style.position = 'fixed';
-          clone.style.top = '-99999px';
-          clone.style.left = '-99999px';
+          clone.style.top = '0';
+          clone.style.left = '0';
+          clone.style.zIndex = '-9999';
           document.body.appendChild(clone);
 
           const canvas = await html2canvas(clone, {
-            scale: 2,
+            scale: 2.5,
             useCORS: true,
             allowTaint: true,
             logging: false,
@@ -3418,12 +3442,13 @@
           const pageWidth = pdf.internal.pageSize.getWidth();
           const pageHeight = pdf.internal.pageSize.getHeight();
 
-          const margin = 10;
+          const margin = 12;
+          const topMargin = 14;
           const renderWidth = pageWidth - (margin * 2);
           const renderHeight = (canvas.height * renderWidth) / canvas.width;
 
-          const imgData = canvas.toDataURL('image/png');
-          pdf.addImage(imgData, 'PNG', margin, margin, renderWidth, Math.min(renderHeight, pageHeight - (margin * 2)));
+          const imgData = canvas.toDataURL('image/png', 1.0);
+          pdf.addImage(imgData, 'PNG', margin, topMargin, renderWidth, Math.min(renderHeight, pageHeight - (topMargin * 2)));
           pdf.save(filename);
 
           closePaySlipDownloadModal();
