@@ -137,8 +137,13 @@
   <!-- jsPDF & AutoTable CDN -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
-  <!-- html2canvas for Pine Labs high fidelity receipt rendering -->
+  <!-- html2canvas for high fidelity document rendering -->
   <script src="../assets/html2canvas.min.js"></script>
+  <script>
+    if (typeof html2canvas === 'undefined') {
+      document.write('<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"><\/script>');
+    }
+  </script>
 
   <!-- SweetAlert2 Modal Engine -->
   <script src="../assets/sweetalert2.all.min.js"></script>
@@ -3369,64 +3374,150 @@
       if (btn) {
         originalBtnHtml = btn.innerHTML;
         btn.disabled = true;
-        btn.innerHTML = `<svg class="w-4 h-4 animate-spin stroke-current mr-1.5 inline" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg><span>Downloading...</span>`;
+        btn.innerHTML = `<svg class="w-4 h-4 animate-spin stroke-current mr-1.5 inline" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg><span>Generating PDF...</span>`;
       }
 
       try {
         const paper = document.getElementById('neft-download-preview-paper');
-        const filename = `Aurelia_NEFT_Payout_Batch_Oct2026.pdf`;
+        const dateStr = new Date().toISOString().slice(0, 10);
+        const filename = `Aurelia_NEFT_Salary_Payout_Batch_DISB-2610_${dateStr}.pdf`;
 
-        if (window.html2canvas && window.jspdf && paper) {
-          const clone = paper.cloneNode(true);
-          clone.style.width = '794px';
-          clone.style.maxWidth = '794px';
-          clone.style.maxHeight = 'none';
-          clone.style.overflow = 'visible';
-          clone.style.padding = '32px';
-          clone.style.background = '#ffffff';
-          clone.style.color = '#0f172a';
-          clone.style.position = 'fixed';
-          clone.style.top = '-99999px';
-          clone.style.left = '-99999px';
-          document.body.appendChild(clone);
+        const JsPDFClass = (window.jspdf && window.jspdf.jsPDF) ? window.jspdf.jsPDF : window.jsPDF;
+        let pdfGenerated = false;
 
-          const canvas = await html2canvas(clone, {
-            scale: 2,
-            useCORS: true,
-            allowTaint: true,
-            logging: false,
-            backgroundColor: '#ffffff'
-          });
-          document.body.removeChild(clone);
+        // High-fidelity html2canvas capture directly on the visible paper element
+        if (window.html2canvas && JsPDFClass && paper) {
+          try {
+            const canvas = await html2canvas(paper, {
+              scale: 2,
+              useCORS: true,
+              allowTaint: true,
+              logging: false,
+              backgroundColor: '#ffffff'
+            });
 
-          const { jsPDF } = window.jspdf;
-          const pdf = new jsPDF('p', 'mm', 'a4');
-          const pageWidth = pdf.internal.pageSize.getWidth();
-          const pageHeight = pdf.internal.pageSize.getHeight();
+            const pdf = new JsPDFClass('p', 'mm', 'a4');
+            const pageWidth = pdf.internal.pageSize.getWidth();
+            const pageHeight = pdf.internal.pageSize.getHeight();
+            const margin = 8;
+            const renderWidth = pageWidth - (margin * 2);
+            const renderHeight = (canvas.height * renderWidth) / canvas.width;
 
-          const margin = 10;
-          const renderWidth = pageWidth - (margin * 2);
-          const renderHeight = (canvas.height * renderWidth) / canvas.width;
+            const imgData = canvas.toDataURL('image/png', 1.0);
 
-          const imgData = canvas.toDataURL('image/png');
-          pdf.addImage(imgData, 'PNG', margin, margin, renderWidth, Math.min(renderHeight, pageHeight - (margin * 2)));
-          pdf.save(filename);
+            if (renderHeight <= pageHeight - (margin * 2)) {
+              pdf.addImage(imgData, 'PNG', margin, margin, renderWidth, renderHeight);
+            } else {
+              let heightLeft = renderHeight;
+              let position = margin;
+              pdf.addImage(imgData, 'PNG', margin, position, renderWidth, renderHeight);
+              heightLeft -= (pageHeight - margin * 2);
 
-          // Also download the NEFT CSV batch file
-          downloadNEFTFile();
+              while (heightLeft > 0) {
+                position = heightLeft - renderHeight + margin;
+                pdf.addPage();
+                pdf.addImage(imgData, 'PNG', margin, position, renderWidth, renderHeight);
+                heightLeft -= (pageHeight - margin * 2);
+              }
+            }
 
-          closeNeftDownloadModal();
-          if (typeof showToast === 'function') {
-            showToast('NEFT payout files downloaded successfully!', 'success');
+            pdf.save(filename);
+            pdfGenerated = true;
+          } catch (canvasErr) {
+            console.warn('html2canvas render failed, falling back to jsPDF autoTable:', canvasErr);
           }
-        } else {
-          downloadNEFTFile();
-          closeNeftDownloadModal();
+        }
+
+        // Direct jsPDF AutoTable generation (100% reliable fallback)
+        if (!pdfGenerated && JsPDFClass) {
+          const pdf = new JsPDFClass('p', 'mm', 'a4');
+
+          pdf.setFont('helvetica', 'bold');
+          pdf.setFontSize(16);
+          pdf.setTextColor(20, 33, 61);
+          pdf.text('AURELIA LUXURY HOTEL & RESTAURANT', 14, 18);
+
+          pdf.setFont('helvetica', 'normal');
+          pdf.setFontSize(8.5);
+          pdf.setTextColor(100, 116, 139);
+          pdf.text('5-Star Heritage Wing, Financial District, New Delhi - 110001 | Corporate Escrow Account', 14, 24);
+          pdf.text('NEFT Salary Settlement Statement & Bank Transfer Schedule', 14, 29);
+
+          pdf.setFont('helvetica', 'bold');
+          pdf.setFontSize(9.5);
+          pdf.setTextColor(252, 163, 17);
+          pdf.text('Batch Ref: #DISB-2610 | October 2026', 135, 18);
+          pdf.setTextColor(100, 116, 139);
+          pdf.setFontSize(8.5);
+          pdf.text(`Generated: ${new Date().toLocaleDateString('en-GB')}`, 135, 24);
+
+          pdf.setDrawColor(20, 33, 61);
+          pdf.setLineWidth(0.8);
+          pdf.line(14, 33, 196, 33);
+
+          pdf.setFillColor(248, 250, 252);
+          pdf.rect(14, 36, 182, 11, 'F');
+          pdf.setFontSize(8.5);
+          pdf.setTextColor(15, 23, 42);
+          pdf.text('Payout Cycle: Oct 2026', 18, 43);
+          pdf.text('Net Disbursable: INR 21,87,328', 65, 43);
+          pdf.text('Disbursed: INR 18,45,100', 125, 43);
+          pdf.text('Pending: 3,42,228', 165, 43);
+
+          const tableHeaders = [['Batch Ref', 'Beneficiary', 'Bank & Account', 'IFSC Code', 'Gross', 'Net Payout (INR)', 'Status']];
+          const tableData = [];
+
+          const $rows = $('#page-ds-tbody tr:visible').length > 0 ? $('#page-ds-tbody tr:visible') : $('#page-ds-tbody tr');
+          $rows.each(function () {
+            const $tr = $(this);
+            const batchRef = $tr.find('td:nth-child(1)').text().trim();
+            const empName = $tr.find('td:nth-child(2) .font-bold').text().trim();
+            const bankAcc = $tr.find('td:nth-child(3)').text().trim();
+            const ifsc = $tr.find('td:nth-child(4)').text().trim();
+            const gross = $tr.find('td:nth-child(5)').text().trim();
+            const netDisbursed = $tr.find('td:nth-child(7)').text().trim();
+            const status = $tr.find('td:nth-child(9)').text().trim();
+
+            tableData.push([batchRef, empName, bankAcc, ifsc, gross, netDisbursed, status]);
+          });
+
+          if (typeof pdf.autoTable === 'function') {
+            pdf.autoTable({
+              startY: 50,
+              head: tableHeaders,
+              body: tableData,
+              theme: 'grid',
+              headStyles: { fillColor: [20, 33, 61], textColor: [255, 255, 255], fontStyle: 'bold', fontSize: 8 },
+              styles: { fontSize: 7.5, cellPadding: 2.2 },
+              columnStyles: {
+                0: { fontStyle: 'bold' },
+                5: { halign: 'right', fontStyle: 'bold', textColor: [4, 120, 87] },
+                6: { halign: 'center', fontStyle: 'bold' }
+              }
+            });
+          }
+
+          const finalY = (pdf.lastAutoTable && pdf.lastAutoTable.finalY) ? pdf.lastAutoTable.finalY + 16 : 220;
+          pdf.setFontSize(8.5);
+          pdf.setTextColor(15, 23, 42);
+          pdf.line(14, finalY, 65, finalY);
+          pdf.text('Adaline Lively (Head of HR)', 14, finalY + 5);
+          pdf.line(145, finalY, 196, finalY);
+          pdf.text('Vikram Malhotra (General Manager)', 145, finalY + 5);
+
+          pdf.save(filename);
+          pdfGenerated = true;
+        }
+
+        closeNeftDownloadModal();
+        if (typeof showToast === 'function') {
+          showToast('NEFT Payout PDF downloaded successfully!', 'success');
         }
       } catch (err) {
-        console.error('Download error:', err);
-        downloadNEFTFile();
-        closeNeftDownloadModal();
+        console.error('Final download error:', err);
+        if (typeof showToast === 'function') {
+          showToast('Error generating PDF. Please try again.', 'error');
+        }
       } finally {
         if (btn) {
           btn.disabled = false;
