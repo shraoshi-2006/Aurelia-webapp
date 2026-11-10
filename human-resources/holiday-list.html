@@ -1336,7 +1336,6 @@
     /* Print invoice / schedule area rules */
     @media print {
       @page {
-<<<<<<< HEAD
         size: portrait;
         margin: 12mm;
       }
@@ -1355,18 +1354,6 @@
 
       body > *:not(#print-invoice-area) {
         display: none !important;
-=======
-        size: A4 portrait;
-        margin: 10mm;
-      }
-
-      body {
-        background: #ffffff !important;
-      }
-
-      body * {
-        visibility: hidden !important;
->>>>>>> 35435138d622041ceaf5950def0660bc8694ea61
       }
 
       #print-invoice-area,
@@ -1379,12 +1366,8 @@
       #print-invoice-area {
         position: static !important;
         width: 100% !important;
-<<<<<<< HEAD
         max-width: 100% !important;
         margin: 0 auto !important;
-=======
-        margin: 0 !important;
->>>>>>> 35435138d622041ceaf5950def0660bc8694ea61
         padding: 0 !important;
         background: #ffffff !important;
         color: #000000 !important;
@@ -2976,11 +2959,7 @@
               <p class="text-xs text-slate-400">Official hotel holiday schedule, operational public holidays & compensatory leave guidelines</p>
             </div>
             <div class="flex items-center space-x-2.5">
-<<<<<<< HEAD
               <button type="button" id="btn-download-holiday-schedule" title="Download Holiday Schedule as PDF" class="btn-Aurelia-secondary text-xs py-2 px-3.5 flex items-center space-x-1.5 cursor-pointer" onclick="if(typeof window.downloadHolidaySchedulePDF==='function'){window.downloadHolidaySchedulePDF();}else if(typeof window.printHolidaySchedule==='function'){window.printHolidaySchedule();}else{window.print();}">
-=======
-              <button type="button" id="btn-print-holiday-report" class="btn-Aurelia-secondary text-xs py-2 px-3.5 flex items-center space-x-1.5 cursor-pointer" onclick="printHolidayScheduleDirectly(event)">
->>>>>>> 35435138d622041ceaf5950def0660bc8694ea61
                 <svg class="w-4 h-4 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
                 </svg>
