@@ -2927,8 +2927,8 @@
         </div>
       </div>
       <div class="text-right shrink-0">
-        <div class="whitespace-nowrap inline-flex items-center justify-center bg-[#14213D] text-[#FCA311] px-4 rounded-full text-xs font-black uppercase tracking-wider shadow-xs" style="background-color: #14213D !important; color: #FCA311 !important; height: 28px; line-height: 1;">
-          <span style="position: relative; top: -1.5px; display: inline-block; font-weight: 900; letter-spacing: 0.06em;">SALARY STATEMENT</span>
+        <div class="whitespace-nowrap bg-[#14213D] text-[#FCA311] rounded-full text-xs font-black uppercase tracking-wider shadow-xs" style="background-color: #14213D !important; color: #FCA311 !important; display: inline-block; padding-top: 4.5px; padding-bottom: 7.5px; padding-left: 16px; padding-right: 16px; line-height: 1; vertical-align: middle; border-radius: 9999px;">
+          <span style="font-weight: 900; letter-spacing: 0.06em; display: inline-block; line-height: 1; vertical-align: top;">SALARY STATEMENT</span>
         </div>
         <div id="slip-month" class="text-xs text-slate-600 mt-1.5 font-bold whitespace-nowrap" style="color: #475569 !important;">Month: October 2026</div>
       </div>
@@ -3438,17 +3438,22 @@
           document.body.removeChild(clone);
 
           const { jsPDF } = window.jspdf;
-          const pdf = new jsPDF('p', 'mm', 'a4');
-          const pageWidth = pdf.internal.pageSize.getWidth();
-          const pageHeight = pdf.internal.pageSize.getHeight();
-
-          const margin = 12;
-          const topMargin = 14;
-          const renderWidth = pageWidth - (margin * 2);
+          
+          // Fit PDF page height cleanly to the pay slip document (no giant leftover empty white void)
+          const margin = 10;
+          const pdfWidth = 210; // Standard document width (210mm)
+          const renderWidth = pdfWidth - (margin * 2);
           const renderHeight = (canvas.height * renderWidth) / canvas.width;
+          const pdfHeight = Math.round(renderHeight + (margin * 2));
+
+          const pdf = new jsPDF({
+            orientation: 'p',
+            unit: 'mm',
+            format: [pdfWidth, pdfHeight]
+          });
 
           const imgData = canvas.toDataURL('image/png', 1.0);
-          pdf.addImage(imgData, 'PNG', margin, topMargin, renderWidth, Math.min(renderHeight, pageHeight - (topMargin * 2)));
+          pdf.addImage(imgData, 'PNG', margin, margin, renderWidth, renderHeight);
           pdf.save(filename);
 
           closePaySlipDownloadModal();
