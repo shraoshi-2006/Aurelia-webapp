@@ -2909,19 +2909,19 @@
   </div>
 
   <!-- PRINTABLE FORMAL PAY SLIP CARD -->
-  <div id="printable-pay-slip" class="Aurelia-card p-8 bg-white shadow-xl max-w-4xl mx-auto border border-slate-200 space-y-6">
+  <div id="printable-pay-slip" class="p-8 sm:p-10 bg-white shadow-xl max-w-4xl mx-auto rounded-2xl border border-slate-200 space-y-6" style="background-color: #ffffff !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important;">
     <!-- Hotel Letterhead Header -->
-    <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-6 border-b-2 border-slate-900 gap-4">
-      <div class="flex items-center space-x-3.5">
-        <img src="../assets/aurelia-mark.svg" alt="Aurelia Emblem" class="w-12 h-12 rounded-full object-contain shadow-md shadow-amber-500/20">
-        <div>
-          <h1 class="text-xl font-black text-[#14213D] tracking-[0.2em] uppercase" style="font-family: 'Cormorant Garamond', Georgia, serif;">AURELIA LUXURY HOTEL & RESTAURANT</h1>
-          <p class="text-xs text-slate-500 font-medium">5-Star Heritage Wing, Financial District, New Delhi - 110001 | GSTIN: 07AAACA1234F1Z5</p>
+    <div class="flex flex-row items-center justify-between pb-6 border-b-2 border-[#14213D] gap-4">
+      <div class="flex items-center space-x-3.5 min-w-0">
+        <img src="../assets/aurelia-mark.svg" alt="Aurelia Emblem" class="w-12 h-12 rounded-full object-contain shadow-md shadow-amber-500/20 shrink-0">
+        <div class="min-w-0">
+          <h1 class="text-lg sm:text-xl font-extrabold text-[#14213D] tracking-wide uppercase leading-tight" style="font-family: 'Plus Jakarta Sans', Inter, system-ui, -apple-system, sans-serif; font-weight: 800; color: #14213D !important; letter-spacing: 0.06em; -webkit-font-smoothing: antialiased;">AURELIA LUXURY HOTEL &amp; RESTAURANT</h1>
+          <p class="text-xs text-slate-600 font-medium mt-0.5" style="color: #475569 !important;">5-Star Heritage Wing, Financial District, New Delhi - 110001 | GSTIN: 07AAACA1234F1Z5</p>
         </div>
       </div>
-      <div class="text-right">
-        <span class="inline-block bg-[#14213D] text-[#FCA311] px-3 py-1 rounded-full text-xs font-black uppercase tracking-wider">Salary Statement</span>
-        <div id="slip-month" class="text-xs text-slate-500 mt-1 font-bold">Month: October 2026</div>
+      <div class="text-right shrink-0">
+        <span class="whitespace-nowrap inline-flex items-center justify-center bg-[#14213D] text-[#FCA311] px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-wider leading-none shadow-xs" style="background-color: #14213D !important; color: #FCA311 !important;">Salary Statement</span>
+        <div id="slip-month" class="text-xs text-slate-600 mt-1.5 font-bold whitespace-nowrap" style="color: #475569 !important;">Month: October 2026</div>
       </div>
     </div>
 
@@ -3391,21 +3391,36 @@
         const filename = `Aurelia_PaySlip_${empId}_${empName}_${cycle}.pdf`;
 
         if (window.html2canvas && window.jspdf) {
+          if (document.fonts && document.fonts.ready) {
+            try { await document.fonts.ready; } catch (e) {}
+          }
+
           const clone = printDoc.cloneNode(true);
-          clone.style.width = '794px';
-          clone.style.maxWidth = '794px';
+          clone.classList.remove('Aurelia-card', 'aurelia-card');
+          clone.style.width = '800px';
+          clone.style.maxWidth = '800px';
+          clone.style.boxSizing = 'border-box';
           clone.style.maxHeight = 'none';
           clone.style.overflow = 'visible';
-          clone.style.padding = '32px';
+          clone.style.padding = '36px';
+          clone.style.margin = '0';
           clone.style.background = '#ffffff';
+          clone.style.backgroundColor = '#ffffff';
           clone.style.color = '#0f172a';
+          clone.style.borderRadius = '0';
+          clone.style.boxShadow = 'none';
+          clone.style.border = 'none';
+          clone.style.filter = 'none';
+          clone.style.backdropFilter = 'none';
+          clone.style.webkitBackdropFilter = 'none';
           clone.style.position = 'fixed';
-          clone.style.top = '-99999px';
-          clone.style.left = '-99999px';
+          clone.style.top = '0';
+          clone.style.left = '0';
+          clone.style.zIndex = '-9999';
           document.body.appendChild(clone);
 
           const canvas = await html2canvas(clone, {
-            scale: 2,
+            scale: 2.5,
             useCORS: true,
             allowTaint: true,
             logging: false,
@@ -3422,7 +3437,7 @@
           const renderWidth = pageWidth - (margin * 2);
           const renderHeight = (canvas.height * renderWidth) / canvas.width;
 
-          const imgData = canvas.toDataURL('image/png');
+          const imgData = canvas.toDataURL('image/png', 1.0);
           pdf.addImage(imgData, 'PNG', margin, margin, renderWidth, Math.min(renderHeight, pageHeight - (margin * 2)));
           pdf.save(filename);
 
