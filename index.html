@@ -3213,11 +3213,11 @@
           </div>
 
           <!-- ROW 2: MONEY FLOW (Glassmorphic Area Graph) + BUDGET (Doughnut Chart) -->
-          <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
 
             <!-- Left Card: "Money flow" (8 Cols with Glassmorphic Graph) -->
             <div
-              class="lg:col-span-8 Aurelia-card glass-money-flow glass-card-animate p-6 flex flex-col justify-between relative overflow-hidden z-10">
+              class="lg:col-span-8 Aurelia-card glass-money-flow glass-card-animate p-6 flex flex-col justify-between h-full relative overflow-hidden z-10">
               <!-- Ambient glass light glows -->
               <div
                 class="absolute -top-16 -right-16 w-52 h-52 rounded-full bg-[#FCA311]/10 blur-3xl pointer-events-none">
@@ -3280,7 +3280,7 @@
               </div>
 
               <!-- Glassmorphic Area Graph Container -->
-              <div class="w-full h-64 relative mt-2 z-10">
+              <div class="w-full h-64 flex-1 min-h-[16rem] relative mt-2 z-10">
                 <canvas id="chart-money-flow"></canvas>
                 <!-- Glassmorphic Tooltip badge on Peak (April ₹14,500) -->
                 <div id="chart-march-tooltip" class="chart-glass-badge hidden sm:flex items-center"
@@ -3291,7 +3291,7 @@
             </div>
 
             <!-- Right Card: "Budget" (Food Sales & Budget Performance) (4 Cols) -->
-            <div class="lg:col-span-4 Aurelia-card glass-card-animate p-6 flex flex-col justify-between relative z-10">
+            <div class="lg:col-span-4 Aurelia-card glass-card-animate p-6 flex flex-col justify-between h-full relative z-10">
               <div class="flex items-center justify-between mb-2">
                 <div>
                   <h3 class="text-base font-bold text-slate-900 dark:text-white">Budget</h3>
@@ -3305,10 +3305,10 @@
               </div>
 
               <!-- Split Container: 4 Food Sales Sections on left, Doughnut Chart on right -->
-              <div class="grid grid-cols-2 gap-2 items-center flex-1 my-2">
+              <div class="grid grid-cols-2 gap-2 items-center flex-1 my-1">
 
                 <!-- 4 Sections with Color Dots & Budgets -->
-                <div class="space-y-2 text-xs font-medium text-[#14213D] dark:text-slate-200"
+                <div class="space-y-2.5 text-xs font-medium text-[#14213D] dark:text-slate-200"
                   id="food-budget-sections-list">
                   <!-- 1. Best Selling -->
                   <div
@@ -3397,7 +3397,7 @@
                 </div>
 
                 <!-- Doughnut Chart with center text -->
-                <div class="relative w-full h-44 flex items-center justify-center">
+                <div class="relative w-full h-48 flex items-center justify-center">
                   <canvas id="chart-budget-doughnut"></canvas>
 
                   <!-- Center text: Total for month & ₹5,950.00 -->
