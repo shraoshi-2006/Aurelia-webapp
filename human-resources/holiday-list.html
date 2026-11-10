@@ -3197,9 +3197,52 @@
       const paper = document.getElementById('holiday-download-preview-paper');
 
       let rowsHtml = '';
-      const listToPrint = (typeof getFilteredHolidays === 'function' && getFilteredHolidays().length > 0)
-        ? getFilteredHolidays()
-        : (window.HOTEL_HOLIDAYS_2026 || []);
+      const fallbackHolidays = [
+        { date: '26 Jan 2026', day: 'Monday', name: 'Republic Day', type: 'gazetted', typeLabel: 'Gazetted Holiday', policy: 'Mandatory operational double-time pay or compensatory day off', status: 'Observed' },
+        { date: '17 Mar 2026', day: 'Tuesday', name: 'Maha Shivratri', type: 'floating', typeLabel: 'Floating Holiday', policy: 'Departmental roster rotation; floating leave option', status: 'Observed' },
+        { date: '25 Mar 2026', day: 'Wednesday', name: 'Holi (Festival of Colors)', type: 'gazetted', typeLabel: 'Gazetted Holiday', policy: 'Banquet & F&B active roster; shift bonus + comp off', status: 'Observed' },
+        { date: '03 Apr 2026', day: 'Friday', name: 'Good Friday', type: 'gazetted', typeLabel: 'Gazetted Holiday', policy: 'Normal hospitality shift timings; holiday rate applicable', status: 'Observed' },
+        { date: '11 Apr 2026', day: 'Saturday', name: 'Eid-ul-Fitr', type: 'gazetted', typeLabel: 'Gazetted Holiday', policy: 'Kitchen & banquet high coverage; compensatory credit', status: 'Observed' },
+        { date: '01 May 2026', day: 'Friday', name: 'International Labor Day', type: 'gazetted', typeLabel: 'Gazetted Holiday', policy: 'Statutory hospitality holiday pay for all active roster staff', status: 'Observed' },
+        { date: '17 Jun 2026', day: 'Wednesday', name: 'Bakrid / Eid al-Adha', type: 'floating', typeLabel: 'Floating Holiday', policy: 'Roster coverage swap allowed with 72h manager signoff', status: 'Observed' },
+        { date: '15 Aug 2026', day: 'Saturday', name: 'Independence Day', type: 'gazetted', typeLabel: 'Gazetted Holiday', policy: 'Flag hoisting ceremony at 09:00; double daily shift credit', status: 'Observed' },
+        { date: '04 Sep 2026', day: 'Friday', name: 'Janmashtami', type: 'floating', typeLabel: 'Floating Holiday', policy: 'Floating leave option upon prior supervisor approval', status: 'Observed' },
+        { date: '02 Oct 2026', day: 'Friday', name: 'Mahatma Gandhi Jayanti', type: 'gazetted', typeLabel: 'Gazetted Holiday', policy: 'Dry day observed across hotel bars; room service normal', status: 'Observed' },
+        { date: '20 Oct 2026', day: 'Tuesday', name: 'Dussehra (Vijayadashami)', type: 'gazetted', typeLabel: 'Gazetted Holiday', policy: 'High dining volume; full operational staffing bonus', status: 'Observed' },
+        { date: '08 Nov 2026', day: 'Sunday', name: 'Diwali (Deepavali)', type: 'gazetted', typeLabel: 'Gazetted Holiday', policy: 'Festive hamper bonus + 2x compensatory shift allowance', status: 'Upcoming' },
+        { date: '24 Nov 2026', day: 'Tuesday', name: 'Guru Nanak Jayanti', type: 'floating', typeLabel: 'Floating Holiday', policy: 'Floating leave selection; minimum desk skeleton crew', status: 'Upcoming' },
+        { date: '25 Dec 2026', day: 'Friday', name: 'Christmas Day', type: 'gazetted', typeLabel: 'Gazetted Holiday', policy: 'Gala Dinner peak operational schedule; festive holiday bonus', status: 'Upcoming' }
+      ];
+
+      const $tableRows = $('#page-holiday-tbody tr:visible').length > 0 ? $('#page-holiday-tbody tr:visible') : $('#page-holiday-tbody tr');
+
+      let listToPrint = [];
+      if ($tableRows.length > 0) {
+        $tableRows.each(function () {
+          const $tr = $(this);
+          const date = $tr.find('td:nth-child(1)').text().trim();
+          const name = $tr.find('td:nth-child(2)').text().trim();
+          const day = $tr.find('td:nth-child(3)').text().trim();
+          const typeLabel = $tr.find('td:nth-child(4)').text().trim();
+          const policy = $tr.find('td:nth-child(5)').text().trim();
+          const status = $tr.find('td:nth-child(6)').text().trim();
+          if (name) {
+            listToPrint.push({
+              date,
+              name,
+              day,
+              type: typeLabel.toLowerCase().includes('gazetted') ? 'gazetted' : 'floating',
+              typeLabel,
+              policy,
+              status
+            });
+          }
+        });
+      }
+
+      if (listToPrint.length === 0) {
+        listToPrint = fallbackHolidays;
+      }
 
       listToPrint.forEach(function (h, idx) {
         const isGazetted = h.type === 'gazetted';
