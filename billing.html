@@ -2974,6 +2974,20 @@
           </div>
         </div>
 
+        <!-- Right: Billing Subtabs (Create New Bill / Billing History) -->
+        <div class="flex items-center sm:justify-end">
+          <div class="inline-flex p-1 bg-white rounded-full border border-[#E5E5E5] shadow-sm text-xs font-semibold">
+            <button id="tab-btn-create-bill" type="button"
+              class="billing-subtab-btn px-4 py-1.5 rounded-full bg-[#14213D] text-white transition-all cursor-pointer">
+              Create New Bill
+            </button>
+            <button id="tab-btn-billing-history" type="button"
+              class="billing-subtab-btn px-4 py-1.5 rounded-full text-[#14213D] hover:text-[#000000] transition-all cursor-pointer">
+              Billing History
+            </button>
+          </div>
+        </div>
+
       </div>
 
       <!-- MAIN SCROLLABLE DASHBOARD VIEW CONTAINER -->
@@ -2982,22 +2996,11 @@
         <!-- ============================================================= -->
         <!-- 2. TRANSACTIONS / BILLING SECTION -->
         <!-- ============================================================= -->
-        <section id="section-billing" class="space-y-6">
+        <section id="section-billing" class="space-y-4">
 
-          <!-- Subtabs: Create Bill vs History -->
-          <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between pb-3 gap-3">
-            <div class="inline-flex p-1 bg-white rounded-full border border-[#E5E5E5] shadow-sm text-xs font-semibold">
-              <button id="tab-btn-create-bill" type="button"
-                class="billing-subtab-btn px-4 py-2 rounded-full bg-[#14213D] text-white transition-all cursor-pointer">
-                Create New Bill
-              </button>
-              <button id="tab-btn-billing-history" type="button"
-                class="billing-subtab-btn px-4 py-2 rounded-full text-[#14213D] hover:text-[#000000] transition-all cursor-pointer">
-                Billing History
-              </button>
-            </div>
-
-            <span class="text-xs text-slate-400 font-medium">Hotel Aurelia POS & Live GST Billing Engine</span>
+          <!-- POS Engine Subtitle -->
+          <div class="flex items-center justify-between pb-1">
+            <span class="text-xs text-slate-400 font-medium">Hotel Aurelia POS &amp; Live GST Billing Engine</span>
           </div>
 
           <!-- SUBTAB 1: CREATE BILL FORM -->
