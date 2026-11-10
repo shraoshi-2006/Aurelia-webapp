@@ -5381,12 +5381,14 @@ $(document).ready(function () {
     const assetPrefix = isSubdir ? '../assets/' : 'assets/';
 
     const filtered = HR_TEMPLATES.filter(tpl => {
-      if (currentHrDocCategory === 'all') return true;
-      return tpl.department === currentHrDocCategory;
+      if (!currentHrDocCategory || currentHrDocCategory === 'all') return true;
+      const dept = (tpl.department || '').trim().toLowerCase();
+      const cat = currentHrDocCategory.trim().toLowerCase();
+      return dept === cat;
     });
 
     if (filtered.length === 0) {
-      $tbody.html('<tr><td colspan="6" class="p-8 text-center text-xs text-slate-400">No employee records found in this department.</td></tr>');
+      $tbody.empty();
       $('#hr-templates-empty').removeClass('hidden');
       $('#hr-templates-count-label').text(`Showing 0 of ${HR_TEMPLATES.length} records`);
       return;
@@ -5396,17 +5398,24 @@ $(document).ready(function () {
 
     let displayList = filtered;
     if (isHrDocTemplatePage) {
-      displayList = filtered.slice(0, 4);
-      $('#hr-templates-count-label').text(`Showing top ${displayList.length} of ${HR_TEMPLATES.length} records`);
-      $('#hr-templates-see-more-wrap').removeClass('hidden');
-    } else if (isHrEmployeeListPage) {
-      const customTemplates = filtered.filter(t => t.id && t.id.startsWith('doc-custom-'));
-      const defaultLeftover = filtered.filter(t => !t.id || !t.id.startsWith('doc-custom-')).slice(4);
-      displayList = [...customTemplates, ...defaultLeftover];
-      $('#hr-templates-count-label').text(`Showing ${displayList.length} employee records from See More`);
-      $('#hr-templates-see-more-wrap').addClass('hidden');
+      if (currentHrDocCategory === 'all') {
+        displayList = filtered.slice(0, 4);
+        $('#hr-templates-count-label').text(`Showing top ${displayList.length} of ${HR_TEMPLATES.length} records`);
+        $('#hr-templates-see-more-wrap').removeClass('hidden');
+      } else {
+        displayList = filtered;
+        $('#hr-templates-count-label').text(`Showing ${displayList.length} of ${HR_TEMPLATES.length} records for ${currentHrDocCategory}`);
+        $('#hr-templates-see-more-wrap').addClass('hidden');
+      }
     } else {
-      $('#hr-templates-count-label').text(`Showing ${displayList.length} of ${HR_TEMPLATES.length} records`);
+      // On hr-employee-list (extended page) or standalone: show ALL filtered records
+      displayList = filtered;
+      if (currentHrDocCategory === 'all') {
+        $('#hr-templates-count-label').text(`Showing all ${displayList.length} records`);
+      } else {
+        $('#hr-templates-count-label').text(`Showing ${displayList.length} of ${HR_TEMPLATES.length} records for ${currentHrDocCategory}`);
+      }
+      $('#hr-templates-see-more-wrap').addClass('hidden');
     }
 
     let html = '';
