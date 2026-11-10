@@ -697,9 +697,9 @@
       height: 100% !important;
     }
 
-    #app-sidebar.is-collapsed .Aurelia-nav-item > div > svg,
-    #app-sidebar.is-collapsed .aurelia-nav-item > div > svg,
-    #app-sidebar.is-collapsed .finset-nav-item > div > svg {
+    #app-sidebar.is-collapsed .Aurelia-nav-item>div>svg,
+    #app-sidebar.is-collapsed .aurelia-nav-item>div>svg,
+    #app-sidebar.is-collapsed .finset-nav-item>div>svg {
       margin: 0 !important;
       display: block !important;
     }
@@ -1107,7 +1107,7 @@
         0 6px 18px rgba(15, 23, 42, 0.08) !important;
     }
 
-        /* Universal Frosted Glass Select & Dropdowns */
+    /* Universal Frosted Glass Select & Dropdowns */
     select.Aurelia-input,
     #select-money-flow-account,
     #select-trans-account {
@@ -1838,8 +1838,8 @@
       filter: blur(0);
       transition-delay: calc(var(--item-delay, 0) * 0.05s + 0.08s);
     }
-  
-        /* Universal Smooth Scrolling */
+
+    /* Universal Smooth Scrolling */
     html {
       scroll-behavior: smooth !important;
     }
@@ -1852,7 +1852,7 @@
       scroll-behavior: smooth;
     }
 
-        /* ========================================================================= */
+    /* ========================================================================= */
     /* STICKY TOP DESKTOP HEADER (Pinned securely with opaque background)        */
     /* ========================================================================= */
     .app-sticky-header,
@@ -3002,7 +3002,8 @@
           <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
             <div class="Aurelia-card p-4 flex flex-col justify-between">
               <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Total Templates</span>
-              <div class="text-2xl font-black text-slate-900 dark:text-white mt-1" id="hr-total-templates-stat">12 Documents</div>
+              <div class="text-2xl font-black text-slate-900 dark:text-white mt-1" id="hr-total-templates-stat">12
+                Documents</div>
               <span class="text-[11px] text-slate-400 font-medium mt-1">4 Distinct Categories</span>
             </div>
             <div class="Aurelia-card p-4 flex flex-col justify-between">
@@ -3037,7 +3038,8 @@
                 <option value="Accounts & Finance">Accounts & Finance</option>
                 <option value="Management">Management</option>
               </select>
-              <div class="pointer-events-none absolute inset-y-0 right-4 flex items-center text-slate-500 dark:text-slate-400">
+              <div
+                class="pointer-events-none absolute inset-y-0 right-4 flex items-center text-slate-500 dark:text-slate-400">
                 <svg class="w-4 h-4 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
                 </svg>
@@ -3081,7 +3083,8 @@
       <!-- PAGE FOOTER -->
       <footer id="app-page-footer"
         class="app-page-footer mt-auto px-6 sm:px-8 pt-2 pb-5 flex items-center justify-end print:hidden">
-        <p class="text-[11px] sm:text-xs font-medium text-[#5C677D] dark:text-slate-400 text-right tracking-wide select-none">
+        <p
+          class="text-[11px] sm:text-xs font-medium text-[#5C677D] dark:text-slate-400 text-right tracking-wide select-none">
           &copy; 2026 AURELIA. All rights reserved by Shraoshi Basak &amp; Piyush Barua.
         </p>
       </footer>
@@ -3194,11 +3197,7 @@
   <!-- Authentication Controller -->
   <script src="../auth.js?v=20261110_05"></script>
   <!-- Main JavaScript Logic -->
-<<<<<<< HEAD
-  <script src="../main.js?v=20261110_v15"></script>
-=======
-  <script src="../main.js?v=20261110_v4"></script>
->>>>>>> 8bc18c6727a659ff677b14d6759260861f8aa238
+  <script src="../main.js?v=20261110_v16"></script>
 
   <script>
     let isHrDocPrinting = false;
@@ -3214,7 +3213,7 @@
         const printDoc = document.getElementById('printable-hr-doc');
         if (!printDoc) {
           window.print();
-          setTimeout(function() { isHrDocPrinting = false; }, 800);
+          setTimeout(function () { isHrDocPrinting = false; }, 800);
           return;
         }
         let printArea = document.getElementById('print-invoice-area');
@@ -3228,7 +3227,7 @@
 
         window.print();
 
-        setTimeout(function() {
+        setTimeout(function () {
           printArea.classList.add('hidden');
           printArea.innerHTML = '';
           isHrDocPrinting = false;

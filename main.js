@@ -2938,13 +2938,8 @@ $(document).ready(function () {
 
       $tbody.append(`
         <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors">
-<<<<<<< HEAD
           <td class="py-3 px-4 whitespace-nowrap">
             <span class="font-mono text-xs font-semibold text-[#14213D] dark:text-[#FCA311] bg-slate-100 dark:bg-slate-800/80 px-2.5 py-1 rounded-md border border-slate-200 dark:border-slate-700/60 whitespace-nowrap">${escapeHtml(row.id)}</span>
-=======
-          <td class="py-3 px-4">
-            <span class="px-2.5 py-1 rounded text-xs font-mono font-bold bg-[#FCA311] text-black inline-block shadow-2xs">${escapeHtml(row.id)}</span>
->>>>>>> 8bc18c6727a659ff677b14d6759260861f8aa238
           </td>
           <td class="py-3 px-4">
             <div class="flex items-center space-x-2.5">
