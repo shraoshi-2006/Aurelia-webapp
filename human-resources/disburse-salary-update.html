@@ -2834,7 +2834,7 @@
         <svg class="w-4 h-4 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
         <span>Authorize Batch Payout</span>
       </button>
-      <button type="button" id="btn-download-neft" class="btn-Aurelia-secondary text-xs py-2 px-3.5 flex items-center space-x-1.5 cursor-pointer" onclick="downloadNEFTFile(event)">
+      <button type="button" id="btn-download-neft" class="btn-Aurelia-secondary text-xs py-2 px-3.5 flex items-center space-x-1.5 cursor-pointer" onclick="openNeftDownloadModal(event)">
         <svg class="w-4 h-4 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" /></svg>
         <span>Download NEFT File</span>
       </button>
@@ -3229,6 +3229,213 @@
     }
     window.downloadNEFTFile = downloadNEFTFile;
 
+    // Fullscreen NEFT Download Preview Modal Controller (Matching Image 2)
+    function openNeftDownloadModal(e) {
+      if (e && typeof e.preventDefault === 'function') e.preventDefault();
+      const modal = document.getElementById('modal-download-neft');
+      const paper = document.getElementById('neft-download-preview-paper');
+
+      let rowsHtml = '';
+      const $rows = $('#page-ds-tbody tr:visible').length > 0 ? $('#page-ds-tbody tr:visible') : $('#page-ds-tbody tr');
+
+      $rows.each(function () {
+        const $tr = $(this);
+        const batchRef = $tr.find('td:nth-child(1)').text().trim();
+        const empName = $tr.find('td:nth-child(2) .font-bold').text().trim();
+        const empSub = $tr.find('td:nth-child(2) .text-\\[11px\\]').text().trim();
+        const bankAcc = $tr.find('td:nth-child(3)').text().trim();
+        const ifsc = $tr.find('td:nth-child(4)').text().trim();
+        const gross = $tr.find('td:nth-child(5)').text().trim();
+        const deductions = $tr.find('td:nth-child(6)').text().trim();
+        const netDisbursed = $tr.find('td:nth-child(7)').text().trim();
+        const transferDate = $tr.find('td:nth-child(8)').text().trim();
+        const status = $tr.find('td:nth-child(9)').text().trim();
+
+        rowsHtml += `
+          <tr style="border-bottom: 1px solid #e2e8f0; font-size: 10px;">
+            <td style="padding: 6px 8px; font-family: monospace; font-weight: bold; color: #1e293b;">${batchRef}</td>
+            <td style="padding: 6px 8px;">
+              <strong style="color: #0f172a; font-size: 11px;">${empName}</strong>
+              <div style="font-size: 9.5px; color: #64748b; font-family: monospace;">${empSub}</div>
+            </td>
+            <td style="padding: 6px 8px; font-weight: 500;">${bankAcc}</td>
+            <td style="padding: 6px 8px; font-family: monospace; color: #475569;">${ifsc}</td>
+            <td style="padding: 6px 8px; font-family: monospace; color: #64748b;">${gross}</td>
+            <td style="padding: 6px 8px; font-family: monospace; color: #e11d48;">${deductions}</td>
+            <td style="padding: 6px 8px; font-family: monospace; font-weight: bold; text-align: right; color: #047857; font-size: 11px;">${netDisbursed}</td>
+            <td style="padding: 6px 8px; font-size: 9.5px; text-align: center; color: #475569;">${transferDate}</td>
+            <td style="padding: 6px 8px; text-align: center; font-weight: bold; font-size: 9.5px;">${status}</td>
+          </tr>
+        `;
+      });
+
+      if (paper) {
+        paper.innerHTML = `
+          <!-- Header -->
+          <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 2px solid #0f172a; padding-bottom: 14px; margin-bottom: 18px;">
+            <div style="display: flex; align-items: center; gap: 14px;">
+              <img src="../assets/aurelia-mark.svg" alt="Aurelia Emblem" style="width: 48px; height: 48px; border-radius: 50%; object-fit: contain;">
+              <div>
+                <h1 style="margin: 0; font-size: 17px; font-weight: 900; letter-spacing: 0.15em; text-transform: uppercase; color: #14213D; font-family: 'Cormorant Garamond', Georgia, serif;">AURELIA LUXURY HOTEL & RESTAURANT</h1>
+                <p style="margin: 2px 0 0 0; font-size: 10px; color: #64748b; font-weight: 500;">5-Star Heritage Wing, Financial District, New Delhi - 110001 | Corporate Escrow Bank Account</p>
+              </div>
+            </div>
+            <div style="text-align: right;">
+              <span style="display: inline-block; background: #14213D; color: #FCA311; padding: 4px 10px; border-radius: 9999px; font-size: 9.5px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.05em;">NEFT Settlement Statement</span>
+              <div style="font-size: 10px; color: #64748b; margin-top: 4px; font-weight: bold;">Batch #DISB-2610 &bull; Oct 2026</div>
+            </div>
+          </div>
+
+          <!-- Summary Metric Strip -->
+          <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 18px;">
+            <div style="border: 1px solid #e2e8f0; border-radius: 8px; padding: 10px; background: #f8fafc;">
+              <div style="font-size: 9px; font-weight: bold; text-transform: uppercase; color: #64748b;">Payout Cycle</div>
+              <div style="font-size: 14px; font-weight: 900; color: #0f172a; margin-top: 2px;">October 2026</div>
+            </div>
+            <div style="border: 1px solid #bae6fd; border-radius: 8px; padding: 10px; background: #f0f9ff;">
+              <div style="font-size: 9px; font-weight: bold; text-transform: uppercase; color: #0369a1;">Net Disbursable</div>
+              <div style="font-size: 14px; font-weight: 900; color: #0284c7; margin-top: 2px;">₹21,87,328</div>
+            </div>
+            <div style="border: 1px solid #bbf7d0; border-radius: 8px; padding: 10px; background: #f0fdf4;">
+              <div style="font-size: 9px; font-weight: bold; text-transform: uppercase; color: #15803d;">Disbursed</div>
+              <div style="font-size: 14px; font-weight: 900; color: #16a34a; margin-top: 2px;">₹18,45,100</div>
+            </div>
+            <div style="border: 1px solid #fde68a; border-radius: 8px; padding: 10px; background: #fffbeb;">
+              <div style="font-size: 9px; font-weight: bold; text-transform: uppercase; color: #b45309;">Pending Queue</div>
+              <div style="font-size: 14px; font-weight: 900; color: #d97706; margin-top: 2px;">₹3,42,228</div>
+            </div>
+          </div>
+
+          <!-- Payout Table -->
+          <table style="width: 100%; border-collapse: collapse; text-align: left; margin-bottom: 20px;">
+            <thead>
+              <tr style="background: #f1f5f9; border-bottom: 2px solid #cbd5e1; font-size: 9.5px; text-transform: uppercase; color: #475569;">
+                <th style="padding: 7px;">Batch Ref</th>
+                <th style="padding: 7px;">Beneficiary</th>
+                <th style="padding: 7px;">Bank & Account</th>
+                <th style="padding: 7px;">IFSC Code</th>
+                <th style="padding: 7px;">Gross</th>
+                <th style="padding: 7px;">Deductions</th>
+                <th style="padding: 7px; text-align: right;">Net (₹)</th>
+                <th style="padding: 7px; text-align: center;">Date</th>
+                <th style="padding: 7px; text-align: center;">Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${rowsHtml}
+            </tbody>
+          </table>
+
+          <!-- Signatures -->
+          <div style="display: flex; justify-content: space-between; align-items: flex-end; padding-top: 18px; border-top: 1px solid #e2e8f0; font-size: 9.5px;">
+            <div style="width: 200px;">
+              <div style="height: 26px; border-bottom: 1px solid #94a3b8; margin-bottom: 3px; display: flex; align-items: flex-end;">
+                <span style="font-family: serif; font-style: italic; color: #475569;">Adaline Lively</span>
+              </div>
+              <strong style="color: #0f172a; font-size: 10.5px;">Payroll Officer / Head of HR</strong>
+            </div>
+            <div style="text-align: center; color: #94a3b8; font-size: 9px;">
+              <span>Direct Bank NEFT API Transmission &bull; ISO 20022 Verified</span>
+            </div>
+            <div style="width: 200px; text-align: right;">
+              <div style="height: 26px; border-bottom: 1px solid #94a3b8; margin-bottom: 3px; display: flex; align-items: flex-end; justify-content: flex-end;">
+                <span style="font-family: serif; font-style: italic; color: #475569;">Vikram Malhotra</span>
+              </div>
+              <strong style="color: #0f172a; font-size: 10.5px;">General Manager (Authorized Signatory)</strong>
+            </div>
+          </div>
+        `;
+      }
+
+      if (modal) {
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+      }
+    }
+    window.openNeftDownloadModal = openNeftDownloadModal;
+
+    function closeNeftDownloadModal() {
+      const modal = document.getElementById('modal-download-neft');
+      if (modal) {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+      }
+    }
+    window.closeNeftDownloadModal = closeNeftDownloadModal;
+
+    async function performNeftDownload() {
+      const btn = document.getElementById('btn-confirm-neft-download');
+      let originalBtnHtml = '';
+      if (btn) {
+        originalBtnHtml = btn.innerHTML;
+        btn.disabled = true;
+        btn.innerHTML = `<svg class="w-4 h-4 animate-spin stroke-current mr-1.5 inline" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg><span>Downloading...</span>`;
+      }
+
+      try {
+        const paper = document.getElementById('neft-download-preview-paper');
+        const filename = `Aurelia_NEFT_Payout_Batch_Oct2026.pdf`;
+
+        if (window.html2canvas && window.jspdf && paper) {
+          const clone = paper.cloneNode(true);
+          clone.style.width = '794px';
+          clone.style.maxWidth = '794px';
+          clone.style.maxHeight = 'none';
+          clone.style.overflow = 'visible';
+          clone.style.padding = '32px';
+          clone.style.background = '#ffffff';
+          clone.style.color = '#0f172a';
+          clone.style.position = 'fixed';
+          clone.style.top = '-99999px';
+          clone.style.left = '-99999px';
+          document.body.appendChild(clone);
+
+          const canvas = await html2canvas(clone, {
+            scale: 2,
+            useCORS: true,
+            allowTaint: true,
+            logging: false,
+            backgroundColor: '#ffffff'
+          });
+          document.body.removeChild(clone);
+
+          const { jsPDF } = window.jspdf;
+          const pdf = new jsPDF('p', 'mm', 'a4');
+          const pageWidth = pdf.internal.pageSize.getWidth();
+          const pageHeight = pdf.internal.pageSize.getHeight();
+
+          const margin = 10;
+          const renderWidth = pageWidth - (margin * 2);
+          const renderHeight = (canvas.height * renderWidth) / canvas.width;
+
+          const imgData = canvas.toDataURL('image/png');
+          pdf.addImage(imgData, 'PNG', margin, margin, renderWidth, Math.min(renderHeight, pageHeight - (margin * 2)));
+          pdf.save(filename);
+
+          // Also download the NEFT CSV batch file
+          downloadNEFTFile();
+
+          closeNeftDownloadModal();
+          if (typeof showToast === 'function') {
+            showToast('NEFT payout files downloaded successfully!', 'success');
+          }
+        } else {
+          downloadNEFTFile();
+          closeNeftDownloadModal();
+        }
+      } catch (err) {
+        console.error('Download error:', err);
+        downloadNEFTFile();
+        closeNeftDownloadModal();
+      } finally {
+        if (btn) {
+          btn.disabled = false;
+          btn.innerHTML = originalBtnHtml;
+        }
+      }
+    }
+    window.performNeftDownload = performNeftDownload;
+
     $(document).ready(function() {
       function updateDisburseTableFilter() {
         const st = $('#select-ds-status').val();
@@ -3271,6 +3478,118 @@
       });
     });
   </script>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL: FULLSCREEN NEFT FILE DOWNLOAD PREVIEW (MATCHING IMAGE 2 EXACTLY)    -->
+  <!-- ========================================================================= -->
+  <div id="modal-download-neft"
+    class="fixed inset-0 z-[100] bg-[#323639] hidden flex flex-col md:flex-row overflow-hidden font-sans select-none animate-fadeIn">
+    
+    <!-- LEFT: Document Canvas Viewport (White sheet on dark background) -->
+    <div class="flex-1 h-full overflow-y-auto flex items-start sm:items-center justify-center p-4 sm:p-8 bg-[#323639] relative">
+      <!-- White Paper Document Page -->
+      <div id="neft-download-preview-paper"
+        class="bg-white text-slate-900 w-full max-w-[720px] shadow-2xl rounded-sm p-8 sm:p-10 font-sans text-xs leading-relaxed space-y-4 border border-black/10 transition-transform my-auto">
+        <!-- Populated live by openNeftDownloadModal() -->
+      </div>
+    </div>
+
+    <!-- RIGHT: Controls Sidebar (Matching Image 2, with Cancel & Download buttons) -->
+    <div
+      class="w-full md:w-[320px] lg:w-[340px] h-full bg-[#202124] text-[#e8eaed] border-l border-[#3c4043] flex flex-col justify-between p-6 flex-shrink-0 z-20 overflow-y-auto">
+      
+      <!-- Top Settings Section -->
+      <div class="space-y-5">
+        <!-- Sidebar Header: Title + Page count -->
+        <div class="flex items-center justify-between pb-3 border-b border-[#3c4043]">
+          <h2 class="text-base font-semibold text-white tracking-wide">Download</h2>
+          <span class="text-xs text-[#9aa0a6] font-medium">1 page</span>
+        </div>
+
+        <!-- Destination Dropdown -->
+        <div class="space-y-1.5">
+          <label class="block text-xs text-[#9aa0a6]">Destination</label>
+          <div
+            class="w-full bg-[#292a2d] border border-[#5f6368] rounded-lg px-3 py-2 text-xs text-white flex items-center justify-between shadow-xs">
+            <div class="flex items-center space-x-2.5 truncate">
+              <svg class="w-4 h-4 text-[#8ab4f8] flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/>
+              </svg>
+              <span class="font-medium truncate">Save as PDF</span>
+            </div>
+            <svg class="w-4 h-4 text-[#9aa0a6]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+            </svg>
+          </div>
+        </div>
+
+        <!-- Pages Dropdown -->
+        <div class="space-y-1.5">
+          <label class="block text-xs text-[#9aa0a6]">Pages</label>
+          <div
+            class="w-full bg-[#292a2d] border border-[#5f6368] rounded-lg px-3 py-2 text-xs text-white flex items-center justify-between">
+            <span>All</span>
+            <svg class="w-4 h-4 text-[#9aa0a6]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+            </svg>
+          </div>
+        </div>
+
+        <!-- Pages per sheet Dropdown -->
+        <div class="space-y-1.5">
+          <label class="block text-xs text-[#9aa0a6]">Pages per sheet</label>
+          <div
+            class="w-full bg-[#292a2d] border border-[#5f6368] rounded-lg px-3 py-2 text-xs text-white flex items-center justify-between">
+            <span>1</span>
+            <svg class="w-4 h-4 text-[#9aa0a6]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+            </svg>
+          </div>
+        </div>
+
+        <!-- Margins Dropdown -->
+        <div class="space-y-1.5">
+          <label class="block text-xs text-[#9aa0a6]">Margins</label>
+          <div
+            class="w-full bg-[#292a2d] border border-[#5f6368] rounded-lg px-3 py-2 text-xs text-white flex items-center justify-between">
+            <span>Default</span>
+            <svg class="w-4 h-4 text-[#9aa0a6]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+            </svg>
+          </div>
+        </div>
+
+        <!-- Options Checkboxes -->
+        <div class="space-y-2 pt-1">
+          <label class="block text-xs text-[#9aa0a6]">Options</label>
+          <div class="space-y-2 text-xs text-[#e8eaed]">
+            <label class="flex items-center space-x-2.5 cursor-pointer">
+              <input type="checkbox" checked class="w-4 h-4 rounded bg-[#292a2d] border-[#5f6368] text-[#8ab4f8] focus:ring-0 focus:ring-offset-0 cursor-pointer">
+              <span>Headers and footers</span>
+            </label>
+            <label class="flex items-center space-x-2.5 cursor-pointer">
+              <input type="checkbox" checked class="w-4 h-4 rounded bg-[#292a2d] border-[#5f6368] text-[#8ab4f8] focus:ring-0 focus:ring-offset-0 cursor-pointer">
+              <span>Background graphics</span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom Controls: ONLY Cancel and Download (Image 2 style) -->
+      <div class="pt-6 border-t border-[#3c4043] flex items-center justify-end space-x-3">
+        <!-- Cancel button: pill with cyan/blue outline -->
+        <button type="button" onclick="closeNeftDownloadModal()"
+          class="h-9 px-6 rounded-full border border-[#8ab4f8] hover:bg-[#8ab4f8]/10 text-[#8ab4f8] text-xs font-semibold tracking-wide transition-colors cursor-pointer">
+          Cancel
+        </button>
+        <!-- Download button: solid baby-blue pill with dark navy text -->
+        <button type="button" id="btn-confirm-neft-download" onclick="performNeftDownload()"
+          class="h-9 px-6 rounded-full bg-[#8ab4f8] hover:bg-[#a8c7fa] active:bg-[#7baaf7] text-[#041e49] text-xs font-bold tracking-wide transition-colors shadow-md flex items-center space-x-1.5 cursor-pointer">
+          <span>Download</span>
+        </button>
+      </div>
+    </div>
+  </div>
 
 <!-- TOAST NOTIFICATIONS -->
   <div id="toast-container" class="fixed bottom-5 right-5 z-50 space-y-2 pointer-events-none"></div>
