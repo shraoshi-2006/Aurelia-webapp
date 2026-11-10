@@ -6955,6 +6955,15 @@ $(document).ready(function () {
         position: sticky !important;
         top: 0 !important;
         z-index: 50 !important;
+        background: transparent !important;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+        border-bottom: 1px solid transparent !important;
+        box-shadow: none !important;
+        transition: background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, backdrop-filter 0.2s ease !important;
+      }
+      .app-sticky-header.is-scrolled,
+      #top-desktop-header.is-scrolled {
         background: #DCE4ED !important;
         background: linear-gradient(135deg, rgba(207, 216, 227, 0.98) 0%, rgba(220, 228, 237, 0.98) 50%, rgba(208, 217, 228, 0.98) 100%) !important;
         backdrop-filter: blur(12px) !important;
@@ -6964,8 +6973,18 @@ $(document).ready(function () {
       }
       .dark .app-sticky-header,
       .dark #top-desktop-header {
+        background: transparent !important;
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+        border-bottom: 1px solid transparent !important;
+        box-shadow: none !important;
+      }
+      .dark .app-sticky-header.is-scrolled,
+      .dark #top-desktop-header.is-scrolled {
         background: #14213D !important;
         background: linear-gradient(135deg, rgba(20, 33, 61, 0.98) 0%, rgba(15, 23, 42, 0.98) 100%) !important;
+        backdrop-filter: blur(12px) !important;
+        -webkit-backdrop-filter: blur(12px) !important;
         border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
         box-shadow: 0 4px 16px -2px rgba(0, 0, 0, 0.45) !important;
       }
@@ -7012,12 +7031,46 @@ $(document).ready(function () {
     if (hdr) {
       hdr.classList.add('app-sticky-header');
     }
+    updateHeaderScrollState();
+  }
+
+  function updateHeaderScrollState() {
+    const hdr = document.getElementById('top-desktop-header') || document.querySelector('.app-sticky-header');
+    if (!hdr) return;
+    const mainEl = document.getElementById('main-app-content');
+    const scrollTop = Math.max(
+      window.scrollY || window.pageYOffset || 0,
+      document.documentElement ? document.documentElement.scrollTop : 0,
+      document.body ? document.body.scrollTop : 0,
+      mainEl ? mainEl.scrollTop : 0
+    );
+    hdr.classList.toggle('is-scrolled', scrollTop > 4);
+  }
+
+  if (!window.__aureliaStickyHeaderScrollBound) {
+    window.__aureliaStickyHeaderScrollBound = true;
+    window.addEventListener('scroll', updateHeaderScrollState, { passive: true });
+    window.addEventListener('resize', updateHeaderScrollState, { passive: true });
+    window.addEventListener('hashchange', () => setTimeout(updateHeaderScrollState, 30));
+    window.addEventListener('load', updateHeaderScrollState);
   }
 
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', applyHeaderStyles);
+    document.addEventListener('DOMContentLoaded', () => {
+      applyHeaderStyles();
+      const mainEl = document.getElementById('main-app-content');
+      if (mainEl && !mainEl.__aureliaScrollBound) {
+        mainEl.__aureliaScrollBound = true;
+        mainEl.addEventListener('scroll', updateHeaderScrollState, { passive: true });
+      }
+    });
   } else {
     applyHeaderStyles();
+    const mainEl = document.getElementById('main-app-content');
+    if (mainEl && !mainEl.__aureliaScrollBound) {
+      mainEl.__aureliaScrollBound = true;
+      mainEl.addEventListener('scroll', updateHeaderScrollState, { passive: true });
+    }
   }
 })();
 
