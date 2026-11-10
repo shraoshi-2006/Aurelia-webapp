@@ -1335,6 +1335,15 @@
 
     /* Print invoice area rules */
     @media print {
+      @page {
+        size: A4 portrait;
+        margin: 10mm;
+      }
+
+      body {
+        background: #ffffff !important;
+      }
+
       body * {
         visibility: hidden !important;
       }
@@ -1349,9 +1358,8 @@
         left: 0 !important;
         top: 0 !important;
         width: 100% !important;
-        max-width: 800px !important;
-        margin: 0 auto !important;
-        padding: 24px !important;
+        margin: 0 !important;
+        padding: 0 !important;
         background: #ffffff !important;
         color: #000000 !important;
         display: block !important;
@@ -2928,7 +2936,7 @@
               <p class="text-xs text-slate-400">Official hotel holiday schedule, operational public holidays & compensatory leave guidelines</p>
             </div>
             <div class="flex items-center space-x-2.5">
-              <button type="button" class="btn-Aurelia-secondary text-xs py-2 px-3.5 flex items-center space-x-1.5" onclick="window.print()">
+              <button type="button" id="btn-print-holiday-report" class="btn-Aurelia-secondary text-xs py-2 px-3.5 flex items-center space-x-1.5 cursor-pointer" onclick="printHolidayScheduleDirectly(event)">
                 <svg class="w-4 h-4 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M6.72 13.829c-.24.03-.48.062-.72.096m.72-.096a42.415 42.415 0 0110.56 0m-10.56 0L6.34 18m10.94-4.171c.24.03.48.062.72.096m-.72-.096L17.66 18m0 0l.229 2.523a1.125 1.125 0 01-1.12 1.227H7.231c-.662 0-1.18-.568-1.12-1.227L6.34 18m11.32 0c.268-.07.534-.144.798-.222A2.25 2.25 0 0020.25 15.6V10.5a2.25 2.25 0 00-2.25-2.25h-12A2.25 2.25 0 003.75 10.5v5.1a2.25 2.25 0 001.792 2.178c.264.078.53.152.798.222" />
                 </svg>
@@ -3028,6 +3036,116 @@
   </div>
 
   
+
+  <script>
+    let isHolidayPrinting = false;
+    function printHolidayScheduleDirectly(e) {
+      if (e) {
+        if (typeof e.preventDefault === 'function') e.preventDefault();
+        if (typeof e.stopImmediatePropagation === 'function') e.stopImmediatePropagation();
+        if (typeof e.stopPropagation === 'function') e.stopPropagation();
+      }
+      if (isHolidayPrinting) return false;
+      isHolidayPrinting = true;
+
+      try {
+        let printArea = document.getElementById('print-invoice-area');
+        if (!printArea) {
+          printArea = document.createElement('div');
+          printArea.id = 'print-invoice-area';
+          document.body.appendChild(printArea);
+        }
+
+        let rowsHtml = '';
+        const $rows = $('#page-holiday-tbody tr:visible').length > 0 ? $('#page-holiday-tbody tr:visible') : $('#page-holiday-tbody tr');
+
+        $rows.each(function () {
+          const $tr = $(this);
+          const name = $tr.find('td:nth-child(1)').text().trim();
+          const date = $tr.find('td:nth-child(2)').text().trim();
+          const day = $tr.find('td:nth-child(3)').text().trim();
+          const type = $tr.find('td:nth-child(4)').text().trim();
+          const policy = $tr.find('td:nth-child(5)').text().trim();
+          const status = $tr.find('td:nth-child(6)').text().trim();
+
+          rowsHtml += `
+            <tr style="border-bottom: 1px solid #e2e8f0; font-size: 11px;">
+              <td style="padding: 6px 8px; font-weight: bold; color: #0f172a;">${name}</td>
+              <td style="padding: 6px 8px; font-family: monospace; white-space: nowrap;">${date}</td>
+              <td style="padding: 6px 8px; color: #475569;">${day}</td>
+              <td style="padding: 6px 8px; color: #0f172a;">${type}</td>
+              <td style="padding: 6px 8px; color: #475569;">${policy}</td>
+              <td style="padding: 6px 8px; text-align: center; font-weight: bold;">${status}</td>
+            </tr>
+          `;
+        });
+
+        const reportContent = `
+          <div style="background: #ffffff; color: #0f172a; padding: 24px 32px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
+            <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 2px solid #0f172a; padding-bottom: 16px; margin-bottom: 20px;">
+              <div style="display: flex; align-items: center; gap: 14px;">
+                <img src="../assets/aurelia-mark.svg" alt="Aurelia Emblem" style="width: 48px; height: 48px; border-radius: 50%; object-fit: contain;">
+                <div>
+                  <h1 style="margin: 0; font-size: 18px; font-weight: 900; letter-spacing: 0.15em; text-transform: uppercase; color: #14213D; font-family: 'Cormorant Garamond', Georgia, serif;">AURELIA LUXURY HOTEL & RESTAURANT</h1>
+                  <p style="margin: 2px 0 0 0; font-size: 10px; color: #64748b; font-weight: 500;">5-Star Heritage Wing, Financial District, New Delhi - 110001 | Official Holiday Calendar 2026</p>
+                </div>
+              </div>
+              <div style="text-align: right;">
+                <span style="display: inline-block; background: #14213D; color: #FCA311; padding: 4px 10px; border-radius: 9999px; font-size: 10px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.05em;">Approved Calendar</span>
+                <div style="font-size: 10px; color: #64748b; margin-top: 4px; font-weight: bold;">Cycle: Calendar Year 2026</div>
+              </div>
+            </div>
+
+            <table style="width: 100%; border-collapse: collapse; text-align: left; margin-bottom: 24px;">
+              <thead>
+                <tr style="background: #f1f5f9; border-bottom: 2px solid #cbd5e1; font-size: 10px; text-transform: uppercase; color: #475569;">
+                  <th style="padding: 8px;">Holiday Observance</th>
+                  <th style="padding: 8px;">Date</th>
+                  <th style="padding: 8px;">Day</th>
+                  <th style="padding: 8px;">Category</th>
+                  <th style="padding: 8px;">Staffing & Comp Off Policy</th>
+                  <th style="padding: 8px; text-align: center;">Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${rowsHtml}
+              </tbody>
+            </table>
+
+            <div style="display: flex; justify-content: space-between; align-items: flex-end; padding-top: 24px; border-top: 1px solid #e2e8f0; font-size: 10px;">
+              <div style="width: 220px;">
+                <div style="height: 28px; border-bottom: 1px solid #94a3b8; margin-bottom: 4px; display: flex; align-items: flex-end;">
+                  <span style="font-family: serif; font-style: italic; color: #475569;">Adaline Lively</span>
+                </div>
+                <strong style="color: #0f172a; font-size: 11px;">Head of Human Resources</strong>
+              </div>
+              <div style="width: 220px; text-align: right;">
+                <div style="height: 28px; border-bottom: 1px solid #94a3b8; margin-bottom: 4px; display: flex; align-items: flex-end; justify-content: flex-end;">
+                  <span style="font-family: serif; font-style: italic; color: #475569;">Vikram Malhotra</span>
+                </div>
+                <strong style="color: #0f172a; font-size: 11px;">General Manager</strong>
+              </div>
+            </div>
+          </div>
+        `;
+
+        printArea.innerHTML = reportContent;
+        printArea.classList.remove('hidden');
+
+        window.print();
+
+        setTimeout(function () {
+          printArea.classList.add('hidden');
+          printArea.innerHTML = '';
+          isHolidayPrinting = false;
+        }, 1000);
+      } catch (err) {
+        console.error('Print Error:', err);
+        isHolidayPrinting = false;
+      }
+    }
+    window.printHolidayScheduleDirectly = printHolidayScheduleDirectly;
+  </script>
 
   <!-- TOAST NOTIFICATIONS -->
   <div id="toast-container" class="fixed bottom-5 right-5 z-50 space-y-2 pointer-events-none"></div>
