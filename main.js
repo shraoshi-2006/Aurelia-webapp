@@ -4200,28 +4200,25 @@ $(document).ready(function () {
 
   function renderMenuCategoryPills() {
     const categories = Storage.get(STORAGE_KEYS.CATEGORIES);
-    const $wrap = $('#menu-category-filter-pills');
-    $wrap.empty();
+    const $select = $('#select-menu-category-filter');
+    if (!$select.length) return;
 
-    $wrap.append(`
-      <button type="button" class="btn-menu-cat-pill px-4 py-1.5 rounded-full text-xs font-semibold transition-all cursor-pointer ${activeMenuCategory === 'all' ? 'bg-[#14213D] text-white shadow-sm' : 'btn-finset-secondary'}" data-cat="all">
-        All Items
-      </button>
-    `);
+    if (activeMenuCategory !== 'all' && !categories.includes(activeMenuCategory)) {
+      activeMenuCategory = 'all';
+    }
+
+    $select.empty();
+    $select.append('<option value="all">All Items</option>');
 
     categories.forEach(cat => {
-      const isActive = activeMenuCategory === cat;
-      $wrap.append(`
-        <button type="button" class="btn-menu-cat-pill px-4 py-1.5 rounded-full text-xs font-semibold transition-all cursor-pointer ${isActive ? 'bg-[#14213D] text-white shadow-sm' : 'btn-finset-secondary'}" data-cat="${escapeHtml(cat)}">
-          ${escapeHtml(cat)}
-        </button>
-      `);
+      $select.append(`<option value="${escapeHtml(cat)}">${escapeHtml(cat)}</option>`);
     });
+
+    $select.val(activeMenuCategory);
   }
 
-  $(document).on('click', '.btn-menu-cat-pill', function () {
-    activeMenuCategory = $(this).data('cat');
-    renderMenuCategoryPills();
+  $(document).on('change', '#select-menu-category-filter', function () {
+    activeMenuCategory = $(this).val() || 'all';
     renderMenuItemsGrid();
   });
 
