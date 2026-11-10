@@ -1050,7 +1050,7 @@
         0 6px 18px rgba(15, 23, 42, 0.08) !important;
     }
 
-        /* Universal Frosted Glass Select & Dropdowns */
+    /* Universal Frosted Glass Select & Dropdowns */
     select.Aurelia-input,
     #select-money-flow-account,
     #select-trans-account {
@@ -1756,8 +1756,8 @@
       filter: blur(0);
       transition-delay: calc(var(--item-delay, 0) * 0.05s + 0.08s);
     }
-  
-        /* Universal Smooth Scrolling */
+
+    /* Universal Smooth Scrolling */
     html {
       scroll-behavior: smooth !important;
     }
@@ -1770,7 +1770,7 @@
       scroll-behavior: smooth;
     }
 
-        /* ========================================================================= */
+    /* ========================================================================= */
     /* STICKY TOP DESKTOP HEADER (Pinned securely with opaque background)        */
     /* ========================================================================= */
     .app-sticky-header,
@@ -2938,27 +2938,25 @@
             </div>
           </div>
 
-          <!-- FILTER TABS & SEARCH BAR -->
+          <!-- FILTER DROPDOWN & SEARCH BAR -->
           <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pt-2">
-            <div class="flex items-center space-x-1.5 overflow-x-auto pb-1 sm:pb-0">
-              <button type="button"
-                class="btn-emp-leave-filter active text-xs font-semibold py-1.5 px-3.5 rounded-full bg-[#14213D] text-white shadow-xs cursor-pointer"
-                data-category="all">All Categories (12)</button>
-              <button type="button"
-                class="btn-emp-leave-filter text-xs font-semibold py-1.5 px-3 rounded-full text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white cursor-pointer"
-                data-category="Casual Leave (CL)">Casual Leave (6)</button>
-              <button type="button"
-                class="btn-emp-leave-filter text-xs font-semibold py-1.5 px-3 rounded-full text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white cursor-pointer"
-                data-category="Sick / Medical Leave (SL)">Sick Leave (2)</button>
-              <button type="button"
-                class="btn-emp-leave-filter text-xs font-semibold py-1.5 px-3 rounded-full text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white cursor-pointer"
-                data-category="Earned / Privilege Leave (EL)">Earned Leave (3)</button>
-              <button type="button"
-                class="btn-emp-leave-filter text-xs font-semibold py-1.5 px-3 rounded-full text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white cursor-pointer"
-                data-category="Compensatory Off (CO)">Comp Off (2)</button>
-              <button type="button"
-                class="btn-emp-leave-filter text-xs font-semibold py-1.5 px-3 rounded-full text-rose-600 hover:text-rose-700 bg-rose-50 dark:bg-rose-950/40 border border-rose-200/60 cursor-pointer"
-                data-status="onleave">On Leave Now (1)</button>
+            <!-- Category Filter Dropdown -->
+            <div class="relative w-full sm:w-64">
+              <select id="select-emp-leave-category"
+                style="-webkit-appearance: none !important; -moz-appearance: none !important; appearance: none !important;"
+                class="Aurelia-input w-full text-xs py-2 pl-3.5 pr-10 font-semibold cursor-pointer bg-white dark:bg-slate-800 text-slate-800 dark:text-white rounded-full border border-[#E5E5E5] dark:border-slate-700 shadow-xs focus:outline-none">
+                <option value="all" selected>All Categories (12)</option>
+                <option value="Casual Leave (CL)">Casual Leave (6)</option>
+                <option value="Sick / Medical Leave (SL)">Sick Leave (2)</option>
+                <option value="Earned / Privilege Leave (EL)">Earned Leave (3)</option>
+                <option value="Compensatory Off (CO)">Comp Off (2)</option>
+                <option value="onleave">On Leave Now (1)</option>
+              </select>
+              <div class="pointer-events-none absolute inset-y-0 right-4 flex items-center text-slate-500 dark:text-slate-400">
+                <svg class="w-4 h-4 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                </svg>
+              </div>
             </div>
             <div class="relative w-full sm:w-72">
               <input type="text" id="input-emp-leave-search" class="Aurelia-input w-full text-xs pl-9 pr-4 font-medium"
@@ -2978,26 +2976,28 @@
                 <thead
                   class="bg-slate-50 dark:bg-slate-800/60 text-slate-500 dark:text-slate-400 font-semibold text-[11px] border-b border-slate-200 dark:border-slate-700/60">
                   <tr>
-                    <th class="py-3 px-4">Employee ID</th>
-                    <th class="py-3 px-4">Employee Name</th>
-                    <th class="py-3 px-4">Role & Department</th>
-                    <th class="py-3 px-4">Leave Category</th>
-                    <th class="py-3 px-4">Leave Dates</th>
-                    <th class="py-3 px-4 text-center">Duration</th>
-                    <th class="py-3 px-4">Reason & Handover</th>
-                    <th class="py-3 px-4 text-center">Status</th>
-                    <th class="py-3 px-4 text-right">Action</th>
+                    <th class="py-3 px-3">Employee ID</th>
+                    <th class="py-3 px-3">Employee Name</th>
+                    <th class="py-3 px-3">Role &amp; Department</th>
+                    <th class="py-3 px-3">Leave Category</th>
+                    <th class="py-3 px-3">Leave Dates</th>
+                    <th class="py-3 px-3 text-center">Duration</th>
+                    <th class="py-3 px-3">Reason</th>
+                    <th class="py-3 px-3">Handover</th>
+                    <th class="py-3 px-3 text-center">Status</th>
+                    <th class="py-3 px-3 text-right">Action</th>
                   </tr>
                 </thead>
                 <tbody id="page-emp-leave-tbody" class="divide-y divide-slate-100 dark:divide-slate-800">
 
-                  <!-- 1. Tanvi Agarwal (Currently ON LEAVE as in Image 2) -->
+                  <!-- 1. Tanvi Agarwal  -->
                   <tr class="hover:bg-slate-50/80 dark:hover:bg-slate-800/50 transition-colors"
                     data-category="Sick / Medical Leave (SL)" data-status="onleave">
-                    <td class="py-3.5 px-4 whitespace-nowrap">
-                      <span class="font-mono text-slate-600 dark:text-slate-400 font-medium">EMP-2026-08</span>
+                    <td class="py-3 px-3 whitespace-nowrap">
+                      <span
+                        class="px-2.5 py-1 rounded text-xs font-mono font-bold bg-[#FCA311] text-black inline-block shadow-2xs">EMP-2026-08</span>
                     </td>
-                    <td class="py-3.5 px-4 whitespace-nowrap">
+                    <td class="py-3 px-3 whitespace-nowrap">
                       <div class="flex items-center space-x-3">
                         <div
                           class="w-9 h-9 rounded-xl flex items-center justify-center font-black text-xs text-white shadow-xs border border-white/20 flex-shrink-0"
@@ -3008,20 +3008,19 @@
                         </div>
                       </div>
                     </td>
-                    <td class="py-3.5 px-4 whitespace-nowrap">
+                    <td class="py-3 px-3 whitespace-nowrap">
                       <div class="font-semibold text-slate-900 dark:text-white text-xs">Front Desk Agent</div>
                       <span
                         class="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-sky-50 text-sky-700 border border-sky-200/60 dark:bg-sky-950/40 dark:text-sky-300">Front
                         Office</span>
                     </td>
-                    <td class="py-3.5 px-4 whitespace-nowrap">
+                    <td class="py-3 px-3 whitespace-nowrap">
                       <span
-                        class="px-2.5 py-1 rounded-md text-xs font-bold bg-rose-100 text-rose-800 dark:bg-rose-950/50 dark:text-rose-300 border border-rose-200/60 inline-flex items-center space-x-1.5">
-                        <span class="w-1.5 h-1.5 rounded-full bg-rose-600"></span>
+                        class="px-2.5 py-1 rounded-md text-xs font-bold bg-rose-100 text-rose-800 dark:bg-rose-950/50 dark:text-rose-300 border border-rose-200/60 inline-flex items-center">
                         <span>Sick / Medical Leave (SL)</span>
                       </span>
                     </td>
-                    <td class="py-3.5 px-4 whitespace-nowrap">
+                    <td class="py-3 px-3 whitespace-nowrap">
                       <span
                         class="font-mono font-semibold text-slate-800 dark:text-slate-200 flex items-center space-x-1.5">
                         <svg class="w-3.5 h-3.5 stroke-current text-[#FCA311]" fill="none" viewBox="0 0 24 24"
@@ -3029,24 +3028,26 @@
                           <path stroke-linecap="round" stroke-linejoin="round"
                             d="M6.75 3v2.25M17.25 3v2.253 18.75m3-18.75H3.75a2.25 2.25 0 00-2.25 2.25v13.5a2.25 2.25 0 002.25 2.25h16.5a2.25 2.25 0 002.25-2.25V5.25a2.25 2.25 0 00-2.25-2.25z" />
                         </svg>
-                        <span>06 Nov - 08 Nov 2026</span>
+                        <span>06 - 08 Nov 2026</span>
                       </span>
                     </td>
-                    <td class="py-3.5 px-4 text-center whitespace-nowrap">
+                    <td class="py-3 px-3 text-center whitespace-nowrap">
                       <span
                         class="px-2.5 py-1 rounded-md font-bold text-xs bg-rose-100 text-rose-800 dark:bg-rose-950/40 dark:text-rose-300 border border-rose-200/60 inline-block">3
                         Days</span>
                     </td>
-                    <td class="py-3.5 px-4 text-slate-600 dark:text-slate-400 text-xs">
-                      <div class="truncate max-w-[190px]" title="Seasonal viral fever; medical prescription submitted">
-                        Seasonal viral fever; medical prescription submitted</div>
+                    <td class="py-3 px-3 text-slate-700 dark:text-slate-300 text-xs font-medium whitespace-nowrap">
+                      Seasonal viral fever
                     </td>
-                    <td class="py-3.5 px-4 text-center whitespace-nowrap">
+                    <td class="py-3 px-3 text-slate-500 dark:text-slate-400 text-xs whitespace-nowrap">
+                      <span>Medical prescription submitted</span>
+                    </td>
+                    <td class="py-3 px-3 text-center whitespace-nowrap">
                       <span
                         class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-rose-100 text-rose-800 dark:bg-rose-950/60 dark:text-rose-300 border border-rose-300 animate-pulse">On
                         Leave</span>
                     </td>
-                    <td class="py-3.5 px-4 text-right whitespace-nowrap">
+                    <td class="py-3 px-3 text-right whitespace-nowrap">
                       <button type="button"
                         class="p-1.5 rounded-lg text-slate-400 hover:text-sky-600 hover:bg-sky-50 dark:hover:bg-slate-800 transition-colors"
                         title="View Details">
@@ -3062,10 +3063,11 @@
                   <!-- 2. Adaline Lively -->
                   <tr class="hover:bg-slate-50/80 dark:hover:bg-slate-800/50 transition-colors"
                     data-category="Earned / Privilege Leave (EL)">
-                    <td class="py-3.5 px-4 whitespace-nowrap">
-                      <span class="font-mono text-slate-600 dark:text-slate-400 font-medium">EMP-2026-01</span>
+                    <td class="py-3 px-3 whitespace-nowrap">
+                      <span
+                        class="px-2.5 py-1 rounded text-xs font-mono font-bold bg-[#FCA311] text-black inline-block shadow-2xs">EMP-2026-01</span>
                     </td>
-                    <td class="py-3.5 px-4 whitespace-nowrap">
+                    <td class="py-3 px-3 whitespace-nowrap">
                       <div class="flex items-center space-x-3">
                         <img src="../assets/images/badge-fo-sample.png" alt="Adaline Lively"
                           class="w-9 h-9 rounded-xl object-cover shadow-xs border border-white/60 dark:border-slate-700 flex-shrink-0"
@@ -3076,20 +3078,19 @@
                         </div>
                       </div>
                     </td>
-                    <td class="py-3.5 px-4 whitespace-nowrap">
+                    <td class="py-3 px-3 whitespace-nowrap">
                       <div class="font-semibold text-slate-900 dark:text-white text-xs">Front Desk Supervisor</div>
                       <span
                         class="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-sky-50 text-sky-700 border border-sky-200/60 dark:bg-sky-950/40 dark:text-sky-300">Front
                         Office</span>
                     </td>
-                    <td class="py-3.5 px-4 whitespace-nowrap">
+                    <td class="py-3 px-3 whitespace-nowrap">
                       <span
-                        class="px-2.5 py-1 rounded-md text-xs font-bold bg-sky-100 text-sky-800 dark:bg-sky-950/50 dark:text-sky-300 border border-sky-200/60 inline-flex items-center space-x-1.5">
-                        <span class="w-1.5 h-1.5 rounded-full bg-sky-600"></span>
+                        class="px-2.5 py-1 rounded-md text-xs font-bold bg-sky-100 text-sky-800 dark:bg-sky-950/50 dark:text-sky-300 border border-sky-200/60 inline-flex items-center">
                         <span>Earned / Privilege Leave (EL)</span>
                       </span>
                     </td>
-                    <td class="py-3.5 px-4 whitespace-nowrap">
+                    <td class="py-3 px-3 whitespace-nowrap">
                       <span
                         class="font-mono font-semibold text-slate-800 dark:text-slate-200 flex items-center space-x-1.5">
                         <svg class="w-3.5 h-3.5 stroke-current text-[#FCA311]" fill="none" viewBox="0 0 24 24"
@@ -3097,24 +3098,25 @@
                           <path stroke-linecap="round" stroke-linejoin="round"
                             d="M6.75 3v2.25M17.25 3v2.253 18.75m3-18.75H3.75a2.25 2.25 0 00-2.25 2.25v13.5a2.25 2.25 0 002.25 2.25h16.5a2.25 2.25 0 002.25-2.25V5.25a2.25 2.25 0 00-2.25-2.25z" />
                         </svg>
-                        <span>01 Nov - 05 Nov 2026</span>
+                        <span>01 - 05 Nov 2026</span>
                       </span>
                     </td>
-                    <td class="py-3.5 px-4 text-center whitespace-nowrap">
+                    <td class="py-3 px-3 text-center whitespace-nowrap">
                       <span
                         class="px-2.5 py-1 rounded-md font-bold text-xs bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-slate-700 inline-block">5
                         Days</span>
                     </td>
-                    <td class="py-3.5 px-4 text-slate-600 dark:text-slate-400 text-xs">
-                      <div class="truncate max-w-[190px]"
-                        title="Annual vacation leave; shift covered by Vikram Malhotra">Annual vacation leave; shift
-                        covered by Vikram Malhotra</div>
+                    <td class="py-3 px-3 text-slate-700 dark:text-slate-300 text-xs font-medium whitespace-nowrap">
+                      Annual vacation leave
                     </td>
-                    <td class="py-3.5 px-4 text-center whitespace-nowrap">
+                    <td class="py-3 px-3 text-slate-500 dark:text-slate-400 text-xs whitespace-nowrap">
+                      <span>Shift covered by Vikram Malhotra</span>
+                    </td>
+                    <td class="py-3 px-3 text-center whitespace-nowrap">
                       <span
                         class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300 border border-slate-200">Completed</span>
                     </td>
-                    <td class="py-3.5 px-4 text-right whitespace-nowrap">
+                    <td class="py-3 px-3 text-right whitespace-nowrap">
                       <button type="button"
                         class="p-1.5 rounded-lg text-slate-400 hover:text-sky-600 hover:bg-sky-50 dark:hover:bg-slate-800 transition-colors"
                         title="View Details">
@@ -3130,10 +3132,11 @@
                   <!-- 3. Vikram Malhotra -->
                   <tr class="hover:bg-slate-50/80 dark:hover:bg-slate-800/50 transition-colors"
                     data-category="Casual Leave (CL)">
-                    <td class="py-3.5 px-4 whitespace-nowrap">
-                      <span class="font-mono text-slate-600 dark:text-slate-400 font-medium">EMP-2026-02</span>
+                    <td class="py-3 px-3 whitespace-nowrap">
+                      <span
+                        class="px-2.5 py-1 rounded text-xs font-mono font-bold bg-[#FCA311] text-black inline-block shadow-2xs">EMP-2026-02</span>
                     </td>
-                    <td class="py-3.5 px-4 whitespace-nowrap">
+                    <td class="py-3 px-3 whitespace-nowrap">
                       <div class="flex items-center space-x-3">
                         <div
                           class="w-9 h-9 rounded-xl flex items-center justify-center font-black text-xs text-white shadow-xs border border-white/20 flex-shrink-0"
@@ -3144,20 +3147,19 @@
                         </div>
                       </div>
                     </td>
-                    <td class="py-3.5 px-4 whitespace-nowrap">
+                    <td class="py-3 px-3 whitespace-nowrap">
                       <div class="font-semibold text-slate-900 dark:text-white text-xs">Senior Concierge</div>
                       <span
                         class="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-sky-50 text-sky-700 border border-sky-200/60 dark:bg-sky-950/40 dark:text-sky-300">Front
                         Office</span>
                     </td>
-                    <td class="py-3.5 px-4 whitespace-nowrap">
+                    <td class="py-3 px-3 whitespace-nowrap">
                       <span
-                        class="px-2.5 py-1 rounded-md text-xs font-bold bg-emerald-100 text-emerald-800 dark:bg-emerald-950/50 dark:text-emerald-300 border border-emerald-200/60 inline-flex items-center space-x-1.5">
-                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span>
+                        class="px-2.5 py-1 rounded-md text-xs font-bold bg-emerald-100 text-emerald-800 dark:bg-emerald-950/50 dark:text-emerald-300 border border-emerald-200/60 inline-flex items-center">
                         <span>Casual Leave (CL)</span>
                       </span>
                     </td>
-                    <td class="py-3.5 px-4 whitespace-nowrap">
+                    <td class="py-3 px-3 whitespace-nowrap">
                       <span
                         class="font-mono font-semibold text-slate-800 dark:text-slate-200 flex items-center space-x-1.5">
                         <svg class="w-3.5 h-3.5 stroke-current text-[#FCA311]" fill="none" viewBox="0 0 24 24"
@@ -3165,24 +3167,25 @@
                           <path stroke-linecap="round" stroke-linejoin="round"
                             d="M6.75 3v2.25M17.25 3v2.253 18.75m3-18.75H3.75a2.25 2.25 0 00-2.25 2.25v13.5a2.25 2.25 0 002.25 2.25h16.5a2.25 2.25 0 002.25-2.25V5.25a2.25 2.25 0 00-2.25-2.25z" />
                         </svg>
-                        <span>10 Nov - 12 Nov 2026</span>
+                        <span>10 - 12 Nov 2026</span>
                       </span>
                     </td>
-                    <td class="py-3.5 px-4 text-center whitespace-nowrap">
+                    <td class="py-3 px-3 text-center whitespace-nowrap">
                       <span
                         class="px-2.5 py-1 rounded-md font-bold text-xs bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-slate-700 inline-block">3
                         Days</span>
                     </td>
-                    <td class="py-3.5 px-4 text-slate-600 dark:text-slate-400 text-xs">
-                      <div class="truncate max-w-[190px]"
-                        title="Family wedding function; desk handover to Priyanka Sharma">Family wedding function; desk
-                        handover to Priyanka Sharma</div>
+                    <td class="py-3 px-3 text-slate-700 dark:text-slate-300 text-xs font-medium whitespace-nowrap">
+                      Family wedding function
                     </td>
-                    <td class="py-3.5 px-4 text-center whitespace-nowrap">
+                    <td class="py-3 px-3 text-slate-500 dark:text-slate-400 text-xs whitespace-nowrap">
+                      <span>Desk handover to Priyanka Sharma</span>
+                    </td>
+                    <td class="py-3 px-3 text-center whitespace-nowrap">
                       <span
                         class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#15803d] text-white shadow-2xs">Approved</span>
                     </td>
-                    <td class="py-3.5 px-4 text-right whitespace-nowrap">
+                    <td class="py-3 px-3 text-right whitespace-nowrap">
                       <button type="button"
                         class="p-1.5 rounded-lg text-slate-400 hover:text-sky-600 hover:bg-sky-50 dark:hover:bg-slate-800 transition-colors"
                         title="View Details">
@@ -3198,10 +3201,11 @@
                   <!-- 4. Priyanka Sharma -->
                   <tr class="hover:bg-slate-50/80 dark:hover:bg-slate-800/50 transition-colors"
                     data-category="Compensatory Off (CO)">
-                    <td class="py-3.5 px-4 whitespace-nowrap">
-                      <span class="font-mono text-slate-600 dark:text-slate-400 font-medium">EMP-2026-03</span>
+                    <td class="py-3 px-3 whitespace-nowrap">
+                      <span
+                        class="px-2.5 py-1 rounded text-xs font-mono font-bold bg-[#FCA311] text-black inline-block shadow-2xs">EMP-2026-03</span>
                     </td>
-                    <td class="py-3.5 px-4 whitespace-nowrap">
+                    <td class="py-3 px-3 whitespace-nowrap">
                       <div class="flex items-center space-x-3">
                         <div
                           class="w-9 h-9 rounded-xl flex items-center justify-center font-black text-xs text-white shadow-xs border border-white/20 flex-shrink-0"
@@ -3212,20 +3216,19 @@
                         </div>
                       </div>
                     </td>
-                    <td class="py-3.5 px-4 whitespace-nowrap">
+                    <td class="py-3 px-3 whitespace-nowrap">
                       <div class="font-semibold text-slate-900 dark:text-white text-xs">Guest Relations Officer</div>
                       <span
                         class="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-sky-50 text-sky-700 border border-sky-200/60 dark:bg-sky-950/40 dark:text-sky-300">Front
                         Office</span>
                     </td>
-                    <td class="py-3.5 px-4 whitespace-nowrap">
+                    <td class="py-3 px-3 whitespace-nowrap">
                       <span
-                        class="px-2.5 py-1 rounded-md text-xs font-bold bg-amber-100 text-amber-800 dark:bg-amber-950/50 dark:text-amber-300 border border-amber-200/60 inline-flex items-center space-x-1.5">
-                        <span class="w-1.5 h-1.5 rounded-full bg-amber-600"></span>
+                        class="px-2.5 py-1 rounded-md text-xs font-bold bg-amber-100 text-amber-800 dark:bg-amber-950/50 dark:text-amber-300 border border-amber-200/60 inline-flex items-center">
                         <span>Compensatory Off (CO)</span>
                       </span>
                     </td>
-                    <td class="py-3.5 px-4 whitespace-nowrap">
+                    <td class="py-3 px-3 whitespace-nowrap">
                       <span
                         class="font-mono font-semibold text-slate-800 dark:text-slate-200 flex items-center space-x-1.5">
                         <svg class="w-3.5 h-3.5 stroke-current text-[#FCA311]" fill="none" viewBox="0 0 24 24"
@@ -3236,20 +3239,22 @@
                         <span>04 Nov 2026</span>
                       </span>
                     </td>
-                    <td class="py-3.5 px-4 text-center whitespace-nowrap">
+                    <td class="py-3 px-3 text-center whitespace-nowrap">
                       <span
                         class="px-2.5 py-1 rounded-md font-bold text-xs bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-slate-700 inline-block">1
                         Day</span>
                     </td>
-                    <td class="py-3.5 px-4 text-slate-600 dark:text-slate-400 text-xs">
-                      <div class="truncate max-w-[190px]" title="Comp off for Diwali weekend executive duty">Comp off
-                        for Diwali weekend executive duty</div>
+                    <td class="py-3 px-3 text-slate-700 dark:text-slate-300 text-xs font-medium whitespace-nowrap">
+                      Comp off (Diwali weekend)
                     </td>
-                    <td class="py-3.5 px-4 text-center whitespace-nowrap">
+                    <td class="py-3 px-3 text-slate-500 dark:text-slate-400 text-xs whitespace-nowrap">
+                      <span>Executive duty covered</span>
+                    </td>
+                    <td class="py-3 px-3 text-center whitespace-nowrap">
                       <span
                         class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#15803d] text-white shadow-2xs">Approved</span>
                     </td>
-                    <td class="py-3.5 px-4 text-right whitespace-nowrap">
+                    <td class="py-3 px-3 text-right whitespace-nowrap">
                       <button type="button"
                         class="p-1.5 rounded-lg text-slate-400 hover:text-sky-600 hover:bg-sky-50 dark:hover:bg-slate-800 transition-colors"
                         title="View Details">
@@ -3265,10 +3270,11 @@
                   <!-- 5. Rohan Desai -->
                   <tr class="hover:bg-slate-50/80 dark:hover:bg-slate-800/50 transition-colors"
                     data-category="Casual Leave (CL)">
-                    <td class="py-3.5 px-4 whitespace-nowrap">
-                      <span class="font-mono text-slate-600 dark:text-slate-400 font-medium">EMP-2026-04</span>
+                    <td class="py-3 px-3 whitespace-nowrap">
+                      <span
+                        class="px-2.5 py-1 rounded text-xs font-mono font-bold bg-[#FCA311] text-black inline-block shadow-2xs">EMP-2026-04</span>
                     </td>
-                    <td class="py-3.5 px-4 whitespace-nowrap">
+                    <td class="py-3 px-3 whitespace-nowrap">
                       <div class="flex items-center space-x-3">
                         <div
                           class="w-9 h-9 rounded-xl flex items-center justify-center font-black text-xs text-white shadow-xs border border-white/20 flex-shrink-0"
@@ -3279,20 +3285,19 @@
                         </div>
                       </div>
                     </td>
-                    <td class="py-3.5 px-4 whitespace-nowrap">
+                    <td class="py-3 px-3 whitespace-nowrap">
                       <div class="font-semibold text-slate-900 dark:text-white text-xs">Night Auditor</div>
                       <span
                         class="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-sky-50 text-sky-700 border border-sky-200/60 dark:bg-sky-950/40 dark:text-sky-300">Front
                         Office</span>
                     </td>
-                    <td class="py-3.5 px-4 whitespace-nowrap">
+                    <td class="py-3 px-3 whitespace-nowrap">
                       <span
-                        class="px-2.5 py-1 rounded-md text-xs font-bold bg-emerald-100 text-emerald-800 dark:bg-emerald-950/50 dark:text-emerald-300 border border-emerald-200/60 inline-flex items-center space-x-1.5">
-                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span>
+                        class="px-2.5 py-1 rounded-md text-xs font-bold bg-emerald-100 text-emerald-800 dark:bg-emerald-950/50 dark:text-emerald-300 border border-emerald-200/60 inline-flex items-center">
                         <span>Casual Leave (CL)</span>
                       </span>
                     </td>
-                    <td class="py-3.5 px-4 whitespace-nowrap">
+                    <td class="py-3 px-3 whitespace-nowrap">
                       <span
                         class="font-mono font-semibold text-slate-800 dark:text-slate-200 flex items-center space-x-1.5">
                         <svg class="w-3.5 h-3.5 stroke-current text-[#FCA311]" fill="none" viewBox="0 0 24 24"
@@ -3303,20 +3308,22 @@
                         <span>15 Nov 2026</span>
                       </span>
                     </td>
-                    <td class="py-3.5 px-4 text-center whitespace-nowrap">
+                    <td class="py-3 px-3 text-center whitespace-nowrap">
                       <span
                         class="px-2.5 py-1 rounded-md font-bold text-xs bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-slate-700 inline-block">1
                         Day</span>
                     </td>
-                    <td class="py-3.5 px-4 text-slate-600 dark:text-slate-400 text-xs">
-                      <div class="truncate max-w-[190px]" title="Personal banking & paperwork; night shift covered">
-                        Personal banking & paperwork; night shift covered</div>
+                    <td class="py-3 px-3 text-slate-700 dark:text-slate-300 text-xs font-medium whitespace-nowrap">
+                      Personal banking &amp; paperwork
                     </td>
-                    <td class="py-3.5 px-4 text-center whitespace-nowrap">
+                    <td class="py-3 px-3 text-slate-500 dark:text-slate-400 text-xs whitespace-nowrap">
+                      <span>Night shift covered</span>
+                    </td>
+                    <td class="py-3 px-3 text-center whitespace-nowrap">
                       <span
                         class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#15803d] text-white shadow-2xs">Approved</span>
                     </td>
-                    <td class="py-3.5 px-4 text-right whitespace-nowrap">
+                    <td class="py-3 px-3 text-right whitespace-nowrap">
                       <button type="button"
                         class="p-1.5 rounded-lg text-slate-400 hover:text-sky-600 hover:bg-sky-50 dark:hover:bg-slate-800 transition-colors"
                         title="View Details">
@@ -3332,10 +3339,11 @@
                   <!-- 6. Ananya Sen -->
                   <tr class="hover:bg-slate-50/80 dark:hover:bg-slate-800/50 transition-colors"
                     data-category="Casual Leave (CL)">
-                    <td class="py-3.5 px-4 whitespace-nowrap">
-                      <span class="font-mono text-slate-600 dark:text-slate-400 font-medium">EMP-2026-05</span>
+                    <td class="py-3 px-3 whitespace-nowrap">
+                      <span
+                        class="px-2.5 py-1 rounded text-xs font-mono font-bold bg-[#FCA311] text-black inline-block shadow-2xs">EMP-2026-05</span>
                     </td>
-                    <td class="py-3.5 px-4 whitespace-nowrap">
+                    <td class="py-3 px-3 whitespace-nowrap">
                       <div class="flex items-center space-x-3">
                         <div
                           class="w-9 h-9 rounded-xl flex items-center justify-center font-black text-xs text-white shadow-xs border border-white/20 flex-shrink-0"
@@ -3346,20 +3354,19 @@
                         </div>
                       </div>
                     </td>
-                    <td class="py-3.5 px-4 whitespace-nowrap">
+                    <td class="py-3 px-3 whitespace-nowrap">
                       <div class="font-semibold text-slate-900 dark:text-white text-xs">Front Desk Agent</div>
                       <span
                         class="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-sky-50 text-sky-700 border border-sky-200/60 dark:bg-sky-950/40 dark:text-sky-300">Front
                         Office</span>
                     </td>
-                    <td class="py-3.5 px-4 whitespace-nowrap">
+                    <td class="py-3 px-3 whitespace-nowrap">
                       <span
-                        class="px-2.5 py-1 rounded-md text-xs font-bold bg-emerald-100 text-emerald-800 dark:bg-emerald-950/50 dark:text-emerald-300 border border-emerald-200/60 inline-flex items-center space-x-1.5">
-                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span>
+                        class="px-2.5 py-1 rounded-md text-xs font-bold bg-emerald-100 text-emerald-800 dark:bg-emerald-950/50 dark:text-emerald-300 border border-emerald-200/60 inline-flex items-center">
                         <span>Casual Leave (CL)</span>
                       </span>
                     </td>
-                    <td class="py-3.5 px-4 whitespace-nowrap">
+                    <td class="py-3 px-3 whitespace-nowrap">
                       <span
                         class="font-mono font-semibold text-slate-800 dark:text-slate-200 flex items-center space-x-1.5">
                         <svg class="w-3.5 h-3.5 stroke-current text-[#FCA311]" fill="none" viewBox="0 0 24 24"
@@ -3367,23 +3374,25 @@
                           <path stroke-linecap="round" stroke-linejoin="round"
                             d="M6.75 3v2.25M17.25 3v2.253 18.75m3-18.75H3.75a2.25 2.25 0 00-2.25 2.25v13.5a2.25 2.25 0 002.25 2.25h16.5a2.25 2.25 0 002.25-2.25V5.25a2.25 2.25 0 00-2.25-2.25z" />
                         </svg>
-                        <span>18 Nov - 19 Nov 2026</span>
+                        <span>18 - 19 Nov 2026</span>
                       </span>
                     </td>
-                    <td class="py-3.5 px-4 text-center whitespace-nowrap">
+                    <td class="py-3 px-3 text-center whitespace-nowrap">
                       <span
                         class="px-2.5 py-1 rounded-md font-bold text-xs bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-slate-700 inline-block">2
                         Days</span>
                     </td>
-                    <td class="py-3.5 px-4 text-slate-600 dark:text-slate-400 text-xs">
-                      <div class="truncate max-w-[190px]" title="Personal travel; shift swapped with Sameer Joshi">
-                        Personal travel; shift swapped with Sameer Joshi</div>
+                    <td class="py-3 px-3 text-slate-700 dark:text-slate-300 text-xs font-medium whitespace-nowrap">
+                      Personal travel
                     </td>
-                    <td class="py-3.5 px-4 text-center whitespace-nowrap">
+                    <td class="py-3 px-3 text-slate-500 dark:text-slate-400 text-xs whitespace-nowrap">
+                      <span>Shift swapped with Sameer Joshi</span>
+                    </td>
+                    <td class="py-3 px-3 text-center whitespace-nowrap">
                       <span
                         class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#15803d] text-white shadow-2xs">Approved</span>
                     </td>
-                    <td class="py-3.5 px-4 text-right whitespace-nowrap">
+                    <td class="py-3 px-3 text-right whitespace-nowrap">
                       <button type="button"
                         class="p-1.5 rounded-lg text-slate-400 hover:text-sky-600 hover:bg-sky-50 dark:hover:bg-slate-800 transition-colors"
                         title="View Details">
@@ -3399,10 +3408,11 @@
                   <!-- 7. Sameer Joshi -->
                   <tr class="hover:bg-slate-50/80 dark:hover:bg-slate-800/50 transition-colors"
                     data-category="Sick / Medical Leave (SL)">
-                    <td class="py-3.5 px-4 whitespace-nowrap">
-                      <span class="font-mono text-slate-600 dark:text-slate-400 font-medium">EMP-2026-06</span>
+                    <td class="py-3 px-3 whitespace-nowrap">
+                      <span
+                        class="px-2.5 py-1 rounded text-xs font-mono font-bold bg-[#FCA311] text-black inline-block shadow-2xs">EMP-2026-06</span>
                     </td>
-                    <td class="py-3.5 px-4 whitespace-nowrap">
+                    <td class="py-3 px-3 whitespace-nowrap">
                       <div class="flex items-center space-x-3">
                         <div
                           class="w-9 h-9 rounded-xl flex items-center justify-center font-black text-xs text-white shadow-xs border border-white/20 flex-shrink-0"
@@ -3413,20 +3423,19 @@
                         </div>
                       </div>
                     </td>
-                    <td class="py-3.5 px-4 whitespace-nowrap">
+                    <td class="py-3 px-3 whitespace-nowrap">
                       <div class="font-semibold text-slate-900 dark:text-white text-xs">Bell Captain & Porter</div>
                       <span
                         class="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-sky-50 text-sky-700 border border-sky-200/60 dark:bg-sky-950/40 dark:text-sky-300">Front
                         Office</span>
                     </td>
-                    <td class="py-3.5 px-4 whitespace-nowrap">
+                    <td class="py-3 px-3 whitespace-nowrap">
                       <span
-                        class="px-2.5 py-1 rounded-md text-xs font-bold bg-rose-100 text-rose-800 dark:bg-rose-950/50 dark:text-rose-300 border border-rose-200/60 inline-flex items-center space-x-1.5">
-                        <span class="w-1.5 h-1.5 rounded-full bg-rose-600"></span>
+                        class="px-2.5 py-1 rounded-md text-xs font-bold bg-rose-100 text-rose-800 dark:bg-rose-950/50 dark:text-rose-300 border border-rose-200/60 inline-flex items-center">
                         <span>Sick / Medical Leave (SL)</span>
                       </span>
                     </td>
-                    <td class="py-3.5 px-4 whitespace-nowrap">
+                    <td class="py-3 px-3 whitespace-nowrap">
                       <span
                         class="font-mono font-semibold text-slate-800 dark:text-slate-200 flex items-center space-x-1.5">
                         <svg class="w-3.5 h-3.5 stroke-current text-[#FCA311]" fill="none" viewBox="0 0 24 24"
@@ -3434,23 +3443,25 @@
                           <path stroke-linecap="round" stroke-linejoin="round"
                             d="M6.75 3v2.25M17.25 3v2.253 18.75m3-18.75H3.75a2.25 2.25 0 00-2.25 2.25v13.5a2.25 2.25 0 002.25 2.25h16.5a2.25 2.25 0 002.25-2.25V5.25a2.25 2.25 0 00-2.25-2.25z" />
                         </svg>
-                        <span>02 Nov - 03 Nov 2026</span>
+                        <span>02 - 03 Nov 2026</span>
                       </span>
                     </td>
-                    <td class="py-3.5 px-4 text-center whitespace-nowrap">
+                    <td class="py-3 px-3 text-center whitespace-nowrap">
                       <span
                         class="px-2.5 py-1 rounded-md font-bold text-xs bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-slate-700 inline-block">2
                         Days</span>
                     </td>
-                    <td class="py-3.5 px-4 text-slate-600 dark:text-slate-400 text-xs">
-                      <div class="truncate max-w-[190px]" title="Lumbar sprain rest; medical clearance submitted">Lumbar
-                        sprain rest; medical clearance submitted</div>
+                    <td class="py-3 px-3 text-slate-700 dark:text-slate-300 text-xs font-medium whitespace-nowrap">
+                      Lumbar sprain rest
                     </td>
-                    <td class="py-3.5 px-4 text-center whitespace-nowrap">
+                    <td class="py-3 px-3 text-slate-500 dark:text-slate-400 text-xs whitespace-nowrap">
+                      <span>Medical clearance submitted</span>
+                    </td>
+                    <td class="py-3 px-3 text-center whitespace-nowrap">
                       <span
                         class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300 border border-slate-200">Completed</span>
                     </td>
-                    <td class="py-3.5 px-4 text-right whitespace-nowrap">
+                    <td class="py-3 px-3 text-right whitespace-nowrap">
                       <button type="button"
                         class="p-1.5 rounded-lg text-slate-400 hover:text-sky-600 hover:bg-sky-50 dark:hover:bg-slate-800 transition-colors"
                         title="View Details">
@@ -3466,10 +3477,11 @@
                   <!-- 8. Neha Pillai -->
                   <tr class="hover:bg-slate-50/80 dark:hover:bg-slate-800/50 transition-colors"
                     data-category="Earned / Privilege Leave (EL)">
-                    <td class="py-3.5 px-4 whitespace-nowrap">
-                      <span class="font-mono text-slate-600 dark:text-slate-400 font-medium">EMP-2026-07</span>
+                    <td class="py-3 px-3 whitespace-nowrap">
+                      <span
+                        class="px-2.5 py-1 rounded text-xs font-mono font-bold bg-[#FCA311] text-black inline-block shadow-2xs">EMP-2026-07</span>
                     </td>
-                    <td class="py-3.5 px-4 whitespace-nowrap">
+                    <td class="py-3 px-3 whitespace-nowrap">
                       <div class="flex items-center space-x-3">
                         <div
                           class="w-9 h-9 rounded-xl flex items-center justify-center font-black text-xs text-white shadow-xs border border-white/20 flex-shrink-0"
@@ -3480,20 +3492,19 @@
                         </div>
                       </div>
                     </td>
-                    <td class="py-3.5 px-4 whitespace-nowrap">
+                    <td class="py-3 px-3 whitespace-nowrap">
                       <div class="font-semibold text-slate-900 dark:text-white text-xs">VIP Reservations Executive</div>
                       <span
                         class="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-sky-50 text-sky-700 border border-sky-200/60 dark:bg-sky-950/40 dark:text-sky-300">Front
                         Office</span>
                     </td>
-                    <td class="py-3.5 px-4 whitespace-nowrap">
+                    <td class="py-3 px-3 whitespace-nowrap">
                       <span
-                        class="px-2.5 py-1 rounded-md text-xs font-bold bg-sky-100 text-sky-800 dark:bg-sky-950/50 dark:text-sky-300 border border-sky-200/60 inline-flex items-center space-x-1.5">
-                        <span class="w-1.5 h-1.5 rounded-full bg-sky-600"></span>
+                        class="px-2.5 py-1 rounded-md text-xs font-bold bg-sky-100 text-sky-800 dark:bg-sky-950/50 dark:text-sky-300 border border-sky-200/60 inline-flex items-center">
                         <span>Earned / Privilege Leave (EL)</span>
                       </span>
                     </td>
-                    <td class="py-3.5 px-4 whitespace-nowrap">
+                    <td class="py-3 px-3 whitespace-nowrap">
                       <span
                         class="font-mono font-semibold text-slate-800 dark:text-slate-200 flex items-center space-x-1.5">
                         <svg class="w-3.5 h-3.5 stroke-current text-[#FCA311]" fill="none" viewBox="0 0 24 24"
@@ -3501,23 +3512,25 @@
                           <path stroke-linecap="round" stroke-linejoin="round"
                             d="M6.75 3v2.25M17.25 3v2.253 18.75m3-18.75H3.75a2.25 2.25 0 00-2.25 2.25v13.5a2.25 2.25 0 002.25 2.25h16.5a2.25 2.25 0 002.25-2.25V5.25a2.25 2.25 0 00-2.25-2.25z" />
                         </svg>
-                        <span>20 Nov - 24 Nov 2026</span>
+                        <span>20 - 24 Nov 2026</span>
                       </span>
                     </td>
-                    <td class="py-3.5 px-4 text-center whitespace-nowrap">
+                    <td class="py-3 px-3 text-center whitespace-nowrap">
                       <span
                         class="px-2.5 py-1 rounded-md font-bold text-xs bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-slate-700 inline-block">5
                         Days</span>
                     </td>
-                    <td class="py-3.5 px-4 text-slate-600 dark:text-slate-400 text-xs">
-                      <div class="truncate max-w-[190px]" title="Family vacation travel; VIP suite bookings managed">
-                        Family vacation travel; VIP suite bookings managed</div>
+                    <td class="py-3 px-3 text-slate-700 dark:text-slate-300 text-xs font-medium whitespace-nowrap">
+                      Family vacation travel
                     </td>
-                    <td class="py-3.5 px-4 text-center whitespace-nowrap">
+                    <td class="py-3 px-3 text-slate-500 dark:text-slate-400 text-xs whitespace-nowrap">
+                      <span>VIP suite bookings managed</span>
+                    </td>
+                    <td class="py-3 px-3 text-center whitespace-nowrap">
                       <span
                         class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#15803d] text-white shadow-2xs">Approved</span>
                     </td>
-                    <td class="py-3.5 px-4 text-right whitespace-nowrap">
+                    <td class="py-3 px-3 text-right whitespace-nowrap">
                       <button type="button"
                         class="p-1.5 rounded-lg text-slate-400 hover:text-sky-600 hover:bg-sky-50 dark:hover:bg-slate-800 transition-colors"
                         title="View Details">
@@ -3533,10 +3546,11 @@
                   <!-- 9. Chef Rajesh Kulkarni -->
                   <tr class="hover:bg-slate-50/80 dark:hover:bg-slate-800/50 transition-colors"
                     data-category="Compensatory Off (CO)">
-                    <td class="py-3.5 px-4 whitespace-nowrap">
-                      <span class="font-mono text-slate-600 dark:text-slate-400 font-medium">EMP-2026-09</span>
+                    <td class="py-3 px-3 whitespace-nowrap">
+                      <span
+                        class="px-2.5 py-1 rounded text-xs font-mono font-bold bg-[#FCA311] text-black inline-block shadow-2xs">EMP-2026-09</span>
                     </td>
-                    <td class="py-3.5 px-4 whitespace-nowrap">
+                    <td class="py-3 px-3 whitespace-nowrap">
                       <div class="flex items-center space-x-3">
                         <div
                           class="w-9 h-9 rounded-xl flex items-center justify-center font-black text-xs text-white shadow-xs border border-white/20 flex-shrink-0"
@@ -3547,20 +3561,19 @@
                         </div>
                       </div>
                     </td>
-                    <td class="py-3.5 px-4 whitespace-nowrap">
+                    <td class="py-3 px-3 whitespace-nowrap">
                       <div class="font-semibold text-slate-900 dark:text-white text-xs">Executive Chef</div>
                       <span
                         class="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-amber-50 text-amber-700 border border-amber-200/60 dark:bg-amber-950/40 dark:text-amber-300">Culinary
                         & Kitchen</span>
                     </td>
-                    <td class="py-3.5 px-4 whitespace-nowrap">
+                    <td class="py-3 px-3 whitespace-nowrap">
                       <span
-                        class="px-2.5 py-1 rounded-md text-xs font-bold bg-amber-100 text-amber-800 dark:bg-amber-950/50 dark:text-amber-300 border border-amber-200/60 inline-flex items-center space-x-1.5">
-                        <span class="w-1.5 h-1.5 rounded-full bg-amber-600"></span>
+                        class="px-2.5 py-1 rounded-md text-xs font-bold bg-amber-100 text-amber-800 dark:bg-amber-950/50 dark:text-amber-300 border border-amber-200/60 inline-flex items-center">
                         <span>Compensatory Off (CO)</span>
                       </span>
                     </td>
-                    <td class="py-3.5 px-4 whitespace-nowrap">
+                    <td class="py-3 px-3 whitespace-nowrap">
                       <span
                         class="font-mono font-semibold text-slate-800 dark:text-slate-200 flex items-center space-x-1.5">
                         <svg class="w-3.5 h-3.5 stroke-current text-[#FCA311]" fill="none" viewBox="0 0 24 24"
@@ -3571,20 +3584,22 @@
                         <span>05 Nov 2026</span>
                       </span>
                     </td>
-                    <td class="py-3.5 px-4 text-center whitespace-nowrap">
+                    <td class="py-3 px-3 text-center whitespace-nowrap">
                       <span
                         class="px-2.5 py-1 rounded-md font-bold text-xs bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-slate-700 inline-block">1
                         Day</span>
                     </td>
-                    <td class="py-3.5 px-4 text-slate-600 dark:text-slate-400 text-xs">
-                      <div class="truncate max-w-[190px]" title="Off in lieu of Presidential banquet Sunday duty">Off in
-                        lieu of Presidential banquet Sunday duty</div>
+                    <td class="py-3 px-3 text-slate-700 dark:text-slate-300 text-xs font-medium whitespace-nowrap">
+                      Banquet Sunday duty comp off
                     </td>
-                    <td class="py-3.5 px-4 text-center whitespace-nowrap">
+                    <td class="py-3 px-3 text-slate-500 dark:text-slate-400 text-xs whitespace-nowrap">
+                      <span>Sunday banquet duty handover</span>
+                    </td>
+                    <td class="py-3 px-3 text-center whitespace-nowrap">
                       <span
                         class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#15803d] text-white shadow-2xs">Approved</span>
                     </td>
-                    <td class="py-3.5 px-4 text-right whitespace-nowrap">
+                    <td class="py-3 px-3 text-right whitespace-nowrap">
                       <button type="button"
                         class="p-1.5 rounded-lg text-slate-400 hover:text-sky-600 hover:bg-sky-50 dark:hover:bg-slate-800 transition-colors"
                         title="View Details">
@@ -3600,10 +3615,11 @@
                   <!-- 10. Tariq Mansoor -->
                   <tr class="hover:bg-slate-50/80 dark:hover:bg-slate-800/50 transition-colors"
                     data-category="Casual Leave (CL)">
-                    <td class="py-3.5 px-4 whitespace-nowrap">
-                      <span class="font-mono text-slate-600 dark:text-slate-400 font-medium">EMP-2026-10</span>
+                    <td class="py-3 px-3 whitespace-nowrap">
+                      <span
+                        class="px-2.5 py-1 rounded text-xs font-mono font-bold bg-[#FCA311] text-black inline-block shadow-2xs">EMP-2026-10</span>
                     </td>
-                    <td class="py-3.5 px-4 whitespace-nowrap">
+                    <td class="py-3 px-3 whitespace-nowrap">
                       <div class="flex items-center space-x-3">
                         <div
                           class="w-9 h-9 rounded-xl flex items-center justify-center font-black text-xs text-white shadow-xs border border-white/20 flex-shrink-0"
@@ -3614,20 +3630,19 @@
                         </div>
                       </div>
                     </td>
-                    <td class="py-3.5 px-4 whitespace-nowrap">
+                    <td class="py-3 px-3 whitespace-nowrap">
                       <div class="font-semibold text-slate-900 dark:text-white text-xs">Sous Chef</div>
                       <span
                         class="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-amber-50 text-amber-700 border border-amber-200/60 dark:bg-amber-950/40 dark:text-amber-300">Culinary
                         & Kitchen</span>
                     </td>
-                    <td class="py-3.5 px-4 whitespace-nowrap">
+                    <td class="py-3 px-3 whitespace-nowrap">
                       <span
-                        class="px-2.5 py-1 rounded-md text-xs font-bold bg-emerald-100 text-emerald-800 dark:bg-emerald-950/50 dark:text-emerald-300 border border-emerald-200/60 inline-flex items-center space-x-1.5">
-                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span>
+                        class="px-2.5 py-1 rounded-md text-xs font-bold bg-emerald-100 text-emerald-800 dark:bg-emerald-950/50 dark:text-emerald-300 border border-emerald-200/60 inline-flex items-center">
                         <span>Casual Leave (CL)</span>
                       </span>
                     </td>
-                    <td class="py-3.5 px-4 whitespace-nowrap">
+                    <td class="py-3 px-3 whitespace-nowrap">
                       <span
                         class="font-mono font-semibold text-slate-800 dark:text-slate-200 flex items-center space-x-1.5">
                         <svg class="w-3.5 h-3.5 stroke-current text-[#FCA311]" fill="none" viewBox="0 0 24 24"
@@ -3638,20 +3653,22 @@
                         <span>14 Nov 2026</span>
                       </span>
                     </td>
-                    <td class="py-3.5 px-4 text-center whitespace-nowrap">
+                    <td class="py-3 px-3 text-center whitespace-nowrap">
                       <span
                         class="px-2.5 py-1 rounded-md font-bold text-xs bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-slate-700 inline-block">1
                         Day</span>
                     </td>
-                    <td class="py-3.5 px-4 text-slate-600 dark:text-slate-400 text-xs">
-                      <div class="truncate max-w-[190px]" title="Urgent personal matters at residence">Urgent personal
-                        matters at residence</div>
+                    <td class="py-3 px-3 text-slate-700 dark:text-slate-300 text-xs font-medium whitespace-nowrap">
+                      Urgent personal matters
                     </td>
-                    <td class="py-3.5 px-4 text-center whitespace-nowrap">
+                    <td class="py-3 px-3 text-slate-500 dark:text-slate-400 text-xs whitespace-nowrap">
+                      <span>Hot line station cover arranged</span>
+                    </td>
+                    <td class="py-3 px-3 text-center whitespace-nowrap">
                       <span
                         class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#15803d] text-white shadow-2xs">Approved</span>
                     </td>
-                    <td class="py-3.5 px-4 text-right whitespace-nowrap">
+                    <td class="py-3 px-3 text-right whitespace-nowrap">
                       <button type="button"
                         class="p-1.5 rounded-lg text-slate-400 hover:text-sky-600 hover:bg-sky-50 dark:hover:bg-slate-800 transition-colors"
                         title="View Details">
@@ -3667,10 +3684,11 @@
                   <!-- 11. Meenakshi Sundaram -->
                   <tr class="hover:bg-slate-50/80 dark:hover:bg-slate-800/50 transition-colors"
                     data-category="Earned / Privilege Leave (EL)">
-                    <td class="py-3.5 px-4 whitespace-nowrap">
-                      <span class="font-mono text-slate-600 dark:text-slate-400 font-medium">EMP-2026-11</span>
+                    <td class="py-3 px-3 whitespace-nowrap">
+                      <span
+                        class="px-2.5 py-1 rounded text-xs font-mono font-bold bg-[#FCA311] text-black inline-block shadow-2xs">EMP-2026-11</span>
                     </td>
-                    <td class="py-3.5 px-4 whitespace-nowrap">
+                    <td class="py-3 px-3 whitespace-nowrap">
                       <div class="flex items-center space-x-3">
                         <div
                           class="w-9 h-9 rounded-xl flex items-center justify-center font-black text-xs text-white shadow-xs border border-white/20 flex-shrink-0"
@@ -3681,20 +3699,19 @@
                         </div>
                       </div>
                     </td>
-                    <td class="py-3.5 px-4 whitespace-nowrap">
+                    <td class="py-3 px-3 whitespace-nowrap">
                       <div class="font-semibold text-slate-900 dark:text-white text-xs">Head Pastry Chef</div>
                       <span
                         class="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-amber-50 text-amber-700 border border-amber-200/60 dark:bg-amber-950/40 dark:text-amber-300">Culinary
                         & Kitchen</span>
                     </td>
-                    <td class="py-3.5 px-4 whitespace-nowrap">
+                    <td class="py-3 px-3 whitespace-nowrap">
                       <span
-                        class="px-2.5 py-1 rounded-md text-xs font-bold bg-sky-100 text-sky-800 dark:bg-sky-950/50 dark:text-sky-300 border border-sky-200/60 inline-flex items-center space-x-1.5">
-                        <span class="w-1.5 h-1.5 rounded-full bg-sky-600"></span>
+                        class="px-2.5 py-1 rounded-md text-xs font-bold bg-sky-100 text-sky-800 dark:bg-sky-950/50 dark:text-sky-300 border border-sky-200/60 inline-flex items-center">
                         <span>Earned / Privilege Leave (EL)</span>
                       </span>
                     </td>
-                    <td class="py-3.5 px-4 whitespace-nowrap">
+                    <td class="py-3 px-3 whitespace-nowrap">
                       <span
                         class="font-mono font-semibold text-slate-800 dark:text-slate-200 flex items-center space-x-1.5">
                         <svg class="w-3.5 h-3.5 stroke-current text-[#FCA311]" fill="none" viewBox="0 0 24 24"
@@ -3702,24 +3719,25 @@
                           <path stroke-linecap="round" stroke-linejoin="round"
                             d="M6.75 3v2.25M17.25 3v2.253 18.75m3-18.75H3.75a2.25 2.25 0 00-2.25 2.25v13.5a2.25 2.25 0 002.25 2.25h16.5a2.25 2.25 0 002.25-2.25V5.25a2.25 2.25 0 00-2.25-2.25z" />
                         </svg>
-                        <span>25 Nov - 29 Nov 2026</span>
+                        <span>25 - 29 Nov 2026</span>
                       </span>
                     </td>
-                    <td class="py-3.5 px-4 text-center whitespace-nowrap">
+                    <td class="py-3 px-3 text-center whitespace-nowrap">
                       <span
                         class="px-2.5 py-1 rounded-md font-bold text-xs bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-slate-700 inline-block">5
                         Days</span>
                     </td>
-                    <td class="py-3.5 px-4 text-slate-600 dark:text-slate-400 text-xs">
-                      <div class="truncate max-w-[190px]"
-                        title="Family anniversary celebration; production plan arranged">Family anniversary celebration;
-                        production plan arranged</div>
+                    <td class="py-3 px-3 text-slate-700 dark:text-slate-300 text-xs font-medium whitespace-nowrap">
+                      Family anniversary celebration
                     </td>
-                    <td class="py-3.5 px-4 text-center whitespace-nowrap">
+                    <td class="py-3 px-3 text-slate-500 dark:text-slate-400 text-xs whitespace-nowrap">
+                      <span>Production plan arranged</span>
+                    </td>
+                    <td class="py-3 px-3 text-center whitespace-nowrap">
                       <span
                         class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#15803d] text-white shadow-2xs">Approved</span>
                     </td>
-                    <td class="py-3.5 px-4 text-right whitespace-nowrap">
+                    <td class="py-3 px-3 text-right whitespace-nowrap">
                       <button type="button"
                         class="p-1.5 rounded-lg text-slate-400 hover:text-sky-600 hover:bg-sky-50 dark:hover:bg-slate-800 transition-colors"
                         title="View Details">
@@ -3735,10 +3753,11 @@
                   <!-- 12. Amitava Roy -->
                   <tr class="hover:bg-slate-50/80 dark:hover:bg-slate-800/50 transition-colors"
                     data-category="Casual Leave (CL)">
-                    <td class="py-3.5 px-4 whitespace-nowrap">
-                      <span class="font-mono text-slate-600 dark:text-slate-400 font-medium">EMP-2026-12</span>
+                    <td class="py-3 px-3 whitespace-nowrap">
+                      <span
+                        class="px-2.5 py-1 rounded text-xs font-mono font-bold bg-[#FCA311] text-black inline-block shadow-2xs">EMP-2026-12</span>
                     </td>
-                    <td class="py-3.5 px-4 whitespace-nowrap">
+                    <td class="py-3 px-3 whitespace-nowrap">
                       <div class="flex items-center space-x-3">
                         <div
                           class="w-9 h-9 rounded-xl flex items-center justify-center font-black text-xs text-white shadow-xs border border-white/20 flex-shrink-0"
@@ -3749,20 +3768,19 @@
                         </div>
                       </div>
                     </td>
-                    <td class="py-3.5 px-4 whitespace-nowrap">
+                    <td class="py-3 px-3 whitespace-nowrap">
                       <div class="font-semibold text-slate-900 dark:text-white text-xs">Tandoor Master Chef</div>
                       <span
                         class="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-amber-50 text-amber-700 border border-amber-200/60 dark:bg-amber-950/40 dark:text-amber-300">Culinary
                         & Kitchen</span>
                     </td>
-                    <td class="py-3.5 px-4 whitespace-nowrap">
+                    <td class="py-3 px-3 whitespace-nowrap">
                       <span
-                        class="px-2.5 py-1 rounded-md text-xs font-bold bg-emerald-100 text-emerald-800 dark:bg-emerald-950/50 dark:text-emerald-300 border border-emerald-200/60 inline-flex items-center space-x-1.5">
-                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span>
+                        class="px-2.5 py-1 rounded-md text-xs font-bold bg-emerald-100 text-emerald-800 dark:bg-emerald-950/50 dark:text-emerald-300 border border-emerald-200/60 inline-flex items-center">
                         <span>Casual Leave (CL)</span>
                       </span>
                     </td>
-                    <td class="py-3.5 px-4 whitespace-nowrap">
+                    <td class="py-3 px-3 whitespace-nowrap">
                       <span
                         class="font-mono font-semibold text-slate-800 dark:text-slate-200 flex items-center space-x-1.5">
                         <svg class="w-3.5 h-3.5 stroke-current text-[#FCA311]" fill="none" viewBox="0 0 24 24"
@@ -3770,23 +3788,25 @@
                           <path stroke-linecap="round" stroke-linejoin="round"
                             d="M6.75 3v2.25M17.25 3v2.253 18.75m3-18.75H3.75a2.25 2.25 0 00-2.25 2.25v13.5a2.25 2.25 0 002.25 2.25h16.5a2.25 2.25 0 002.25-2.25V5.25a2.25 2.25 0 00-2.25-2.25z" />
                         </svg>
-                        <span>12 Nov - 13 Nov 2026</span>
+                        <span>12 - 13 Nov 2026</span>
                       </span>
                     </td>
-                    <td class="py-3.5 px-4 text-center whitespace-nowrap">
+                    <td class="py-3 px-3 text-center whitespace-nowrap">
                       <span
                         class="px-2.5 py-1 rounded-md font-bold text-xs bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-slate-700 inline-block">2
                         Days</span>
                     </td>
-                    <td class="py-3.5 px-4 text-slate-600 dark:text-slate-400 text-xs">
-                      <div class="truncate max-w-[190px]" title="Personal family visit; station handover complete">
-                        Personal family visit; station handover complete</div>
+                    <td class="py-3 px-3 text-slate-700 dark:text-slate-300 text-xs font-medium whitespace-nowrap">
+                      Personal family visit
                     </td>
-                    <td class="py-3.5 px-4 text-center whitespace-nowrap">
+                    <td class="py-3 px-3 text-slate-500 dark:text-slate-400 text-xs whitespace-nowrap">
+                      <span>Station handover complete</span>
+                    </td>
+                    <td class="py-3 px-3 text-center whitespace-nowrap">
                       <span
                         class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#15803d] text-white shadow-2xs">Approved</span>
                     </td>
-                    <td class="py-3.5 px-4 text-right whitespace-nowrap">
+                    <td class="py-3 px-3 text-right whitespace-nowrap">
                       <button type="button"
                         class="p-1.5 rounded-lg text-slate-400 hover:text-sky-600 hover:bg-sky-50 dark:hover:bg-slate-800 transition-colors"
                         title="View Details">
@@ -3873,39 +3893,48 @@
         if (typeof showToast === 'function') showToast('Leave Category created successfully!', 'success');
       });
 
-      // Employee Leave Records Category Filter
-      $('.btn-emp-leave-filter').on('click', function () {
-        $('.btn-emp-leave-filter').removeClass('active bg-[#14213D] text-white shadow-xs').addClass('text-slate-600 dark:text-slate-400');
-        $(this).addClass('active bg-[#14213D] text-white shadow-xs').removeClass('text-slate-600 dark:text-slate-400');
-        const cat = $(this).data('category');
-        const status = $(this).data('status');
-        if (status === 'onleave') {
-          $('#page-emp-leave-tbody tr').hide();
-          const $matched = $('#page-emp-leave-tbody tr[data-status="onleave"]');
-          $matched.show();
-          $('#emp-leave-count-label').text('Showing ' + $matched.length + ' employee currently On Leave');
-        } else if (cat === 'all') {
-          $('#page-emp-leave-tbody tr').show();
-          $('#emp-leave-count-label').text('Showing 12 employee leave records across all categories');
-        } else {
-          $('#page-emp-leave-tbody tr').hide();
-          const $matched = $('#page-emp-leave-tbody tr[data-category="' + cat + '"]');
-          $matched.show();
-          $('#emp-leave-count-label').text('Showing ' + $matched.length + ' employee records under ' + cat);
-        }
-      });
-
-      // Employee Leave Records Search
-      $('#input-emp-leave-search').on('input', function () {
-        const query = $(this).val().toLowerCase();
+      // Employee Leave Records Dropdown Category Filter & Search
+      function filterEmpLeaveTable() {
+        const catVal = $('#select-emp-leave-category').val() || 'all';
+        const query = ($('#input-emp-leave-search').val() || '').toLowerCase().trim();
         let visibleCount = 0;
+
         $('#page-emp-leave-tbody tr').each(function () {
-          const match = $(this).text().toLowerCase().includes(query);
-          $(this).toggle(match);
-          if (match) visibleCount++;
+          const $row = $(this);
+          const rowCat = $row.data('category') || '';
+          const rowStatus = $row.data('status') || '';
+          const rowText = $row.text().toLowerCase();
+
+          let matchCat = false;
+          if (catVal === 'all') {
+            matchCat = true;
+          } else if (catVal === 'onleave') {
+            matchCat = (rowStatus === 'onleave');
+          } else {
+            matchCat = (rowCat === catVal);
+          }
+
+          const matchSearch = !query || rowText.includes(query);
+
+          if (matchCat && matchSearch) {
+            $row.show();
+            visibleCount++;
+          } else {
+            $row.hide();
+          }
         });
-        $('#emp-leave-count-label').text('Showing ' + visibleCount + ' matching employee leave records');
-      });
+
+        if (catVal === 'onleave') {
+          $('#emp-leave-count-label').text('Showing ' + visibleCount + ' employee currently On Leave');
+        } else if (catVal === 'all') {
+          $('#emp-leave-count-label').text('Showing ' + visibleCount + ' employee leave records across all categories');
+        } else {
+          $('#emp-leave-count-label').text('Showing ' + visibleCount + ' employee records under ' + catVal);
+        }
+      }
+
+      $('#select-emp-leave-category').on('change', filterEmpLeaveTable);
+      $('#input-emp-leave-search').on('input', filterEmpLeaveTable);
     });
   </script>
 

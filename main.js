@@ -2938,8 +2938,13 @@ $(document).ready(function () {
 
       $tbody.append(`
         <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors">
+<<<<<<< HEAD
           <td class="py-3 px-4 whitespace-nowrap">
             <span class="font-mono text-xs font-semibold text-[#14213D] dark:text-[#FCA311] bg-slate-100 dark:bg-slate-800/80 px-2.5 py-1 rounded-md border border-slate-200 dark:border-slate-700/60 whitespace-nowrap">${escapeHtml(row.id)}</span>
+=======
+          <td class="py-3 px-4">
+            <span class="px-2.5 py-1 rounded text-xs font-mono font-bold bg-[#FCA311] text-black inline-block shadow-2xs">${escapeHtml(row.id)}</span>
+>>>>>>> 8bc18c6727a659ff677b14d6759260861f8aa238
           </td>
           <td class="py-3 px-4">
             <div class="flex items-center space-x-2.5">
@@ -5666,7 +5671,7 @@ $(document).ready(function () {
       department: 'Food & Beverage',
       deptCode: 'FB',
       format: 'DOCX',
-      isVerified: false,
+      isVerified: 'Pending',
       title: 'POS Terminal & Cashier Handover Policy',
       body: '<div class="space-y-3"><p class="font-bold text-slate-800 uppercase tracking-wide">1. Cash Desk & Terminal Handover</p><p>Daily EDC terminal settlement agreement for Cafe Barista Sophia Chen.</p></div>'
     },
@@ -5679,7 +5684,7 @@ $(document).ready(function () {
       department: 'Human Resources',
       deptCode: 'HR',
       format: 'PDF',
-      isVerified: true,
+      isVerified: 'Verified',
       title: 'Hospitality Internship & Industrial Trainee Agreement',
       body: '<div class="space-y-3"><p class="font-bold text-slate-800 uppercase tracking-wide">1. HR Talent Onboarding</p><p>Accredited trainee rotation agreement for HR Coordinator Rajesh Sharma.</p></div>'
     },
@@ -5692,7 +5697,7 @@ $(document).ready(function () {
       department: 'Human Resources',
       deptCode: 'HR',
       format: 'CSV',
-      isVerified: true,
+      isVerified: 'Verified',
       title: 'Banquet & Event On-Call Casual Staff Agreement',
       body: '<div class="space-y-3"><p class="font-bold text-slate-800 uppercase tracking-wide">1. Duty & Call Sheet</p><p>Staff roster and emergency shift agreement for Sunita Rao.</p></div>'
     },
@@ -5705,7 +5710,7 @@ $(document).ready(function () {
       department: 'Accounts & Finance',
       deptCode: 'AC',
       format: 'XLSX',
-      isVerified: true,
+      isVerified: 'Verified',
       title: 'Anti-Harassment, POSH & Code of Ethics Undertaking',
       body: '<div class="space-y-3"><p class="font-bold text-slate-800 uppercase tracking-wide">1. Ethics & Compliance</p><p>Financial compliance and hotel code of conduct signed by Accounts Officer Ananya Deshmukh.</p></div>'
     },
@@ -5718,7 +5723,7 @@ $(document).ready(function () {
       department: 'Accounts & Finance',
       deptCode: 'AC',
       format: 'PDF',
-      isVerified: false,
+      isVerified: 'Pending',
       title: 'HACCP & Commercial Kitchen Food Safety Protocol',
       body: '<div class="space-y-3"><p class="font-bold text-slate-800 uppercase tracking-wide">1. Financial Audits</p><p>Quarterly audit and inventory compliance record for Vikramaditya Roy.</p></div>'
     },
@@ -5731,7 +5736,7 @@ $(document).ready(function () {
       department: 'Food & Beverage',
       deptCode: 'FB',
       format: 'DOCX',
-      isVerified: false,
+      isVerified: 'Rejected',
       title: 'Official Performance Advisory & Warning Letter Template',
       body: '<div class="space-y-3"><p class="font-bold text-slate-800 uppercase tracking-wide">1. Performance Appraisal</p><p>Standard performance documentation for Banquet Captain Kavita Nair.</p></div>'
     },
@@ -5744,7 +5749,7 @@ $(document).ready(function () {
       department: 'Management',
       deptCode: 'MG',
       format: 'PDF',
-      isVerified: true,
+      isVerified: 'Verified',
       title: 'Employee Experience Certificate & Relieving Letter',
       body: '<div class="space-y-3"><p class="font-bold text-slate-800 uppercase tracking-wide">1. Relieving Undertaking</p><p>General management service certificate for Operations Lead David Miller.</p></div>'
     }
@@ -5752,19 +5757,22 @@ $(document).ready(function () {
 
   let HR_TEMPLATES = [];
   try {
-    let storedHrTpls = localStorage.getItem('aurelia_hr_templates_v6');
+    let storedHrTpls = localStorage.getItem('aurelia_hr_templates_v7');
     if (!storedHrTpls) {
-      const v5 = localStorage.getItem('aurelia_hr_templates_v5');
-      if (v5) {
+      const v6 = localStorage.getItem('aurelia_hr_templates_v6') || localStorage.getItem('aurelia_hr_templates_v5');
+      if (v6) {
         try {
-          const parsed = JSON.parse(v5);
+          const parsed = JSON.parse(v6);
           parsed.forEach(p => {
             if (p.avatar && typeof p.avatar === 'string' && p.avatar.startsWith('employees/')) {
               p.avatar = p.avatar.replace('employees/', 'images/');
             }
+            if (p.id === 'doc-emp-11' && (p.isVerified === false || p.isVerified === 'Pending')) {
+              p.isVerified = 'Rejected';
+            }
           });
           storedHrTpls = JSON.stringify(parsed);
-          localStorage.setItem('aurelia_hr_templates_v6', storedHrTpls);
+          localStorage.setItem('aurelia_hr_templates_v7', storedHrTpls);
         } catch (e) {}
       }
     }
@@ -5775,11 +5783,14 @@ $(document).ready(function () {
         if (p.avatar && typeof p.avatar === 'string' && p.avatar.startsWith('employees/')) {
           p.avatar = p.avatar.replace('employees/', 'images/');
         }
+        if (p.id === 'doc-emp-11' && (p.isVerified === false || p.isVerified === 'Pending')) {
+          p.isVerified = 'Rejected';
+        }
       });
-      localStorage.setItem('aurelia_hr_templates_v6', JSON.stringify(HR_TEMPLATES));
+      localStorage.setItem('aurelia_hr_templates_v7', JSON.stringify(HR_TEMPLATES));
     } else {
       HR_TEMPLATES = [...DEFAULT_HR_TEMPLATES];
-      localStorage.setItem('aurelia_hr_templates_v6', JSON.stringify(HR_TEMPLATES));
+      localStorage.setItem('aurelia_hr_templates_v7', JSON.stringify(HR_TEMPLATES));
     }
   } catch (err) {
     HR_TEMPLATES = [...DEFAULT_HR_TEMPLATES];
@@ -5801,12 +5812,14 @@ $(document).ready(function () {
     const assetPrefix = isSubdir ? '../assets/' : 'assets/';
 
     const filtered = HR_TEMPLATES.filter(tpl => {
-      if (currentHrDocCategory === 'all') return true;
-      return tpl.department === currentHrDocCategory;
+      if (!currentHrDocCategory || currentHrDocCategory === 'all') return true;
+      const dept = (tpl.department || '').trim().toLowerCase();
+      const cat = currentHrDocCategory.trim().toLowerCase();
+      return dept === cat;
     });
 
     if (filtered.length === 0) {
-      $tbody.html('<tr><td colspan="6" class="p-8 text-center text-xs text-slate-400">No employee records found in this department.</td></tr>');
+      $tbody.empty();
       $('#hr-templates-empty').removeClass('hidden');
       $('#hr-templates-count-label').text(`Showing 0 of ${HR_TEMPLATES.length} records`);
       return;
@@ -5816,25 +5829,37 @@ $(document).ready(function () {
 
     let displayList = filtered;
     if (isHrDocTemplatePage) {
-      displayList = filtered.slice(0, 4);
-      $('#hr-templates-count-label').text(`Showing top ${displayList.length} of ${HR_TEMPLATES.length} records`);
-      $('#hr-templates-see-more-wrap').removeClass('hidden');
-    } else if (isHrEmployeeListPage) {
-      const customTemplates = filtered.filter(t => t.id && t.id.startsWith('doc-custom-'));
-      const defaultLeftover = filtered.filter(t => !t.id || !t.id.startsWith('doc-custom-')).slice(4);
-      displayList = [...customTemplates, ...defaultLeftover];
-      $('#hr-templates-count-label').text(`Showing ${displayList.length} employee records from See More`);
-      $('#hr-templates-see-more-wrap').addClass('hidden');
+      if (currentHrDocCategory === 'all') {
+        displayList = filtered.slice(0, 4);
+        $('#hr-templates-count-label').text(`Showing top ${displayList.length} of ${HR_TEMPLATES.length} records`);
+        $('#hr-templates-see-more-wrap').removeClass('hidden');
+      } else {
+        displayList = filtered;
+        $('#hr-templates-count-label').text(`Showing ${displayList.length} of ${HR_TEMPLATES.length} records for ${currentHrDocCategory}`);
+        $('#hr-templates-see-more-wrap').addClass('hidden');
+      }
     } else {
-      $('#hr-templates-count-label').text(`Showing ${displayList.length} of ${HR_TEMPLATES.length} records`);
+      // On hr-employee-list (extended page) or standalone: show ALL filtered records
+      displayList = filtered;
+      if (currentHrDocCategory === 'all') {
+        $('#hr-templates-count-label').text(`Showing all ${displayList.length} records`);
+      } else {
+        $('#hr-templates-count-label').text(`Showing ${displayList.length} of ${HR_TEMPLATES.length} records for ${currentHrDocCategory}`);
+      }
+      $('#hr-templates-see-more-wrap').addClass('hidden');
     }
 
     let html = '';
     displayList.forEach(tpl => {
-      const isVer = (tpl.isVerified === true || tpl.isVerified === 'Verified');
-      const verifyBadge = isVer
-        ? '<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-100 text-emerald-800 dark:bg-emerald-950/40 dark:text-emerald-400 border border-emerald-200/60"><svg class="w-3.5 h-3.5 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg>Verified</span>'
-        : '<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-amber-100 text-amber-800 dark:bg-amber-950/40 dark:text-amber-400 border border-amber-200/60"><svg class="w-3.5 h-3.5 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2.5"><circle cx="12" cy="12" r="9"/></svg>Pending</span>';
+      const vStr = String(tpl.isVerified === undefined || tpl.isVerified === null ? '' : tpl.isVerified).toLowerCase().trim();
+      let verifyBadge = '';
+      if (vStr === 'true' || vStr === 'verified') {
+        verifyBadge = '<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-[#15803d] text-white shadow-2xs">Verified</span>';
+      } else if (vStr === 'rejected' || vStr === 'reject') {
+        verifyBadge = '<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-[#b91c1c] text-white shadow-2xs">Rejected</span>';
+      } else {
+        verifyBadge = '<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-[#d97706] text-white shadow-2xs">Pending</span>';
+      }
 
       // Profile Picture or Squircle Badge Logo (exactly matching the uploaded FO badge size)
       let avatarHtml = '';
@@ -5942,7 +5967,9 @@ $(document).ready(function () {
     if (!tpl) return;
 
     $('#preview-doc-title').text(`${tpl.empName} - ${tpl.title || 'Official Document'}`);
-    $('#preview-doc-meta').text(`${tpl.department} • ID: ${tpl.empId} • Format: ${tpl.format} • ${tpl.isVerified ? 'Verified' : 'Pending'}`);
+    const vStr = String(tpl.isVerified === undefined || tpl.isVerified === null ? '' : tpl.isVerified).toLowerCase().trim();
+    const statusLabel = (vStr === 'true' || vStr === 'verified') ? 'Verified' : (vStr === 'rejected' || vStr === 'reject' ? 'Rejected' : 'Pending');
+    $('#preview-doc-meta').text(`${tpl.department} • ID: ${tpl.empId} • Format: ${tpl.format} • ${statusLabel}`);
     $('#preview-doc-ref').text(`REF: AUR/26/${tpl.empId}`);
     $('#preview-doc-body').html(tpl.body || `<div class="space-y-4"><p class="font-bold text-slate-800">Employee: ${escapeHtml(tpl.empName)}</p><p>Department: ${escapeHtml(tpl.department)} (ID: ${escapeHtml(tpl.empId)})</p><p class="text-xs text-slate-500">Document verified: ${tpl.isVerified ? 'Yes' : 'Pending Review'}</p></div>`);
 
@@ -5964,7 +5991,7 @@ $(document).ready(function () {
     }
     tpl.empName = trimmed;
     try {
-      localStorage.setItem('aurelia_hr_templates_v5', JSON.stringify(HR_TEMPLATES));
+      localStorage.setItem('aurelia_hr_templates_v7', JSON.stringify(HR_TEMPLATES));
     } catch (e) {}
     renderHrDocumentsSection();
     showToast(`Updated record for ${tpl.empId}`, 'success');
@@ -5980,7 +6007,7 @@ $(document).ready(function () {
     if (confirm(`Are you sure you want to delete employee record ${item.empName} (${item.empId})?`)) {
       HR_TEMPLATES.splice(idx, 1);
       try {
-        localStorage.setItem('aurelia_hr_templates_v5', JSON.stringify(HR_TEMPLATES));
+        localStorage.setItem('aurelia_hr_templates_v7', JSON.stringify(HR_TEMPLATES));
       } catch (e) {}
       renderHrDocumentsSection();
       showToast(`Record ${item.empId} deleted successfully.`, 'info');
@@ -6026,7 +6053,7 @@ $(document).ready(function () {
     const empName = $.trim($('#hr-doc-input-title').val());
     const dept = $('#hr-doc-input-dept').val();
     const deptCode = $('#hr-doc-input-dept option:selected').data('code') || (dept ? dept.substring(0, 2).toUpperCase() : 'FD');
-    const isVerifiedVal = $('#hr-doc-input-verify').val() === 'Verified';
+    const isVerifiedVal = $('#hr-doc-input-verify').val() || 'Verified';
 
     const fileInput = document.getElementById('hr-doc-input-file');
     const fileName = (fileInput && fileInput.files && fileInput.files[0]) ? fileInput.files[0].name : 'document.pdf';
@@ -6066,7 +6093,7 @@ $(document).ready(function () {
 
     HR_TEMPLATES.unshift(newDoc);
     try {
-      localStorage.setItem('aurelia_hr_templates_v5', JSON.stringify(HR_TEMPLATES));
+      localStorage.setItem('aurelia_hr_templates_v7', JSON.stringify(HR_TEMPLATES));
     } catch (e) {
       console.warn('Failed to save HR templates to localStorage', e);
     }
@@ -6161,7 +6188,7 @@ $(document).ready(function () {
         $tbody.append(`
           <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors">
             <td class="py-3.5 px-4 whitespace-nowrap">
-              <span class="font-mono text-slate-600 dark:text-slate-400 font-medium">${escapeHtml(s.id)}</span>
+              <span class="px-2.5 py-1 rounded text-xs font-mono font-bold bg-[#FCA311] text-black inline-block shadow-2xs">${escapeHtml(s.id)}</span>
             </td>
             <td class="py-3.5 px-4 whitespace-nowrap">
               <div class="flex items-center space-x-3">

@@ -1111,6 +1111,9 @@
     select.Aurelia-input,
     #select-money-flow-account,
     #select-trans-account {
+      appearance: none !important;
+      -webkit-appearance: none !important;
+      -moz-appearance: none !important;
       background: rgba(255, 255, 255, 0.75) !important;
       backdrop-filter: blur(16px) !important;
       -webkit-backdrop-filter: blur(16px) !important;
@@ -3019,45 +3022,26 @@
             </div>
           </div>
 
-          <!-- Filter Pills & Search Bar -->
-          <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-            <!-- Filter Pills -->
-            <div
-              class="inline-flex p-1 bg-white dark:bg-slate-800 rounded-full border border-[#E5E5E5] dark:border-slate-700 shadow-xs text-xs font-semibold overflow-x-auto">
-              <button type="button" class="hr-doc-filter-btn active py-1.5 px-3.5 rounded-full transition-all"
-                data-category="all">
-                All Templates (12)
-              </button>
-              <button type="button"
-                class="hr-doc-filter-btn py-1.5 px-3.5 rounded-full transition-all text-slate-600 dark:text-slate-400 hover:text-slate-900"
-                data-category="contracts">
-                Employment (4)
-              </button>
-              <button type="button"
-                class="hr-doc-filter-btn py-1.5 px-3.5 rounded-full transition-all text-slate-600 dark:text-slate-400 hover:text-slate-900"
-                data-category="Front Desk">
-                Front Desk
-              </button>
-              <button type="button"
-                class="hr-doc-filter-btn py-1.5 px-3.5 rounded-full transition-all text-slate-600 dark:text-slate-400 hover:text-slate-900"
-                data-category="Housekeeping">
-                Housekeeping
-              </button>
-              <button type="button"
-                class="hr-doc-filter-btn py-1.5 px-3.5 rounded-full transition-all text-slate-600 dark:text-slate-400 hover:text-slate-900"
-                data-category="Food & Beverage">
-                Food & Beverage
-              </button>
-              <button type="button"
-                class="hr-doc-filter-btn py-1.5 px-3.5 rounded-full transition-all text-slate-600 dark:text-slate-400 hover:text-slate-900"
-                data-category="Human Resources">
-                Human Resources
-              </button>
-              <button type="button"
-                class="hr-doc-filter-btn py-1.5 px-3.5 rounded-full transition-all text-slate-600 dark:text-slate-400 hover:text-slate-900"
-                data-category="Accounts & Finance">
-                Accounts & Finance
-              </button>
+          <!-- Filter Dropdown -->
+          <div class="flex items-center justify-between gap-3">
+            <!-- Department Filter Dropdown -->
+            <div class="relative w-full sm:w-64">
+              <select id="select-hr-doc-category"
+                style="-webkit-appearance: none !important; -moz-appearance: none !important; appearance: none !important;"
+                class="Aurelia-input w-full text-xs py-2 pl-3.5 pr-10 font-semibold cursor-pointer bg-white dark:bg-slate-800 text-slate-800 dark:text-white rounded-full border border-[#E5E5E5] dark:border-slate-700 shadow-xs focus:outline-none">
+                <option value="all">All Departments</option>
+                <option value="Front Desk">Front Desk</option>
+                <option value="Housekeeping">Housekeeping</option>
+                <option value="Food & Beverage">Food & Beverage</option>
+                <option value="Human Resources">Human Resources</option>
+                <option value="Accounts & Finance">Accounts & Finance</option>
+                <option value="Management">Management</option>
+              </select>
+              <div class="pointer-events-none absolute inset-y-0 right-4 flex items-center text-slate-500 dark:text-slate-400">
+                <svg class="w-4 h-4 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                </svg>
+              </div>
             </div>
           </div>
 
@@ -3210,7 +3194,11 @@
   <!-- Authentication Controller -->
   <script src="../auth.js?v=20261110_05"></script>
   <!-- Main JavaScript Logic -->
+<<<<<<< HEAD
   <script src="../main.js?v=20261110_v15"></script>
+=======
+  <script src="../main.js?v=20261110_v4"></script>
+>>>>>>> 8bc18c6727a659ff677b14d6759260861f8aa238
 
   <script>
     let isHrDocPrinting = false;
