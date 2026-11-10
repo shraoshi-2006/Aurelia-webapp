@@ -2867,11 +2867,21 @@
 
           
   <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-    <div class="flex items-center space-x-1.5 overflow-x-auto pb-1 sm:pb-0">
-      <button type="button" class="btn-al-filter active text-xs font-semibold py-1.5 px-3 rounded-full bg-[#14213D] text-white" data-shift="all">All Shifts (48)</button>
-      <button type="button" class="btn-al-filter text-xs font-semibold py-1.5 px-3 rounded-full text-slate-600 hover:text-slate-900" data-shift="morning">Morning (06:00 - 14:00)</button>
-      <button type="button" class="btn-al-filter text-xs font-semibold py-1.5 px-3 rounded-full text-slate-600 hover:text-slate-900" data-shift="evening">Evening (14:00 - 22:00)</button>
-      <button type="button" class="btn-al-filter text-xs font-semibold py-1.5 px-3 rounded-full text-slate-600 hover:text-slate-900" data-shift="night">Night Audit (22:00 - 06:00)</button>
+    <!-- Shift Filter Dropdown -->
+    <div class="relative w-full sm:w-64">
+      <select id="select-al-shift"
+        style="-webkit-appearance: none !important; -moz-appearance: none !important; appearance: none !important;"
+        class="Aurelia-input w-full text-xs py-2 pl-3.5 pr-10 font-semibold cursor-pointer bg-white dark:bg-slate-800 text-slate-800 dark:text-white rounded-full border border-[#E5E5E5] dark:border-slate-700 shadow-xs focus:outline-none">
+        <option value="all" selected>All Shifts (48)</option>
+        <option value="morning">Morning (06:00 - 14:00)</option>
+        <option value="evening">Evening (14:00 - 22:00)</option>
+        <option value="night">Night Audit (22:00 - 06:00)</option>
+      </select>
+      <div class="pointer-events-none absolute inset-y-0 right-4 flex items-center text-slate-500 dark:text-slate-400">
+        <svg class="w-4 h-4 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+        </svg>
+      </div>
     </div>
     <div class="relative w-full sm:w-64">
       <input type="text" id="input-al-search" class="Aurelia-input w-full text-xs pl-9 font-medium" placeholder="Search staff punch...">
@@ -3005,17 +3015,19 @@
   
   <script>
     $(document).ready(function() {
-      $('.btn-al-filter').on('click', function() {
-        $('.btn-al-filter').removeClass('active bg-[#14213D] text-white').addClass('text-slate-600');
-        $(this).addClass('active bg-[#14213D] text-white').removeClass('text-slate-600');
-        const sh = $(this).data('shift');
-        if (sh === 'all') $('#page-al-tbody tr').show();
-        else { $('#page-al-tbody tr').hide(); $('#page-al-tbody tr[data-shift="' + sh + '"]').show(); }
-      });
-      $('#input-al-search').on('input', function() {
-        const q = $(this).val().toLowerCase();
-        $('#page-al-tbody tr').each(function() { $(this).toggle($(this).text().toLowerCase().includes(q)); });
-      });
+      function filterAttendanceTable() {
+        const sh = $('#select-al-shift').val();
+        const q = ($('#input-al-search').val() || '').toLowerCase().trim();
+        $('#page-al-tbody tr').each(function() {
+          const rowShift = $(this).attr('data-shift');
+          const matchesShift = (sh === 'all' || rowShift === sh);
+          const matchesSearch = !q || $(this).text().toLowerCase().includes(q);
+          $(this).toggle(matchesShift && matchesSearch);
+        });
+      }
+
+      $('#select-al-shift').on('change', filterAttendanceTable);
+      $('#input-al-search').on('input', filterAttendanceTable);
       $('#btn-manual-punch, .btn-edit-punch').on('click', function() { $('#modal-manual-punch').removeClass('hidden'); });
       $('.btn-close-modal').on('click', function() { $('#modal-manual-punch').addClass('hidden'); });
       $('#form-manual-punch').on('submit', function(e) {
