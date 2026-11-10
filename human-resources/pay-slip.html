@@ -3427,19 +3427,22 @@
 
           const clone = printDoc.cloneNode(true);
           clone.classList.remove('Aurelia-card', 'aurelia-card');
-          clone.style.width = '840px';
-          clone.style.maxWidth = '840px';
+          clone.style.width = '820px';
+          clone.style.maxWidth = '820px';
+          clone.style.minHeight = '1170px';
+          clone.style.height = '1170px';
           clone.style.boxSizing = 'border-box';
-          clone.style.maxHeight = 'none';
-          clone.style.overflow = 'visible';
-          clone.style.padding = '36px';
+          clone.style.display = 'flex';
+          clone.style.flexDirection = 'column';
+          clone.style.justifyContent = 'space-between';
+          clone.style.padding = '40px 36px';
           clone.style.margin = '0';
           clone.style.background = '#ffffff';
           clone.style.backgroundColor = '#ffffff';
           clone.style.color = '#0f172a';
           clone.style.borderRadius = '16px';
-          clone.style.border = '1px solid #cbd5e1';
-          clone.style.boxShadow = '0 4px 24px rgba(15, 23, 42, 0.06)';
+          clone.style.border = '1.5px solid #cbd5e1';
+          clone.style.boxShadow = 'none';
           clone.style.filter = 'none';
           clone.style.backdropFilter = 'none';
           clone.style.webkitBackdropFilter = 'none';
@@ -3447,6 +3450,17 @@
           clone.style.top = '0';
           clone.style.left = '0';
           clone.style.zIndex = '-9999';
+
+          // Enhance internal row spacing for full-page A4 elegance
+          clone.querySelectorAll('.space-y-2 > div').forEach(el => {
+            el.style.paddingTop = '7px';
+            el.style.paddingBottom = '7px';
+          });
+          clone.querySelectorAll('.grid-cols-2.sm\\:grid-cols-4 > div').forEach(el => {
+            el.style.paddingTop = '3px';
+            el.style.paddingBottom = '3px';
+          });
+
           document.body.appendChild(clone);
 
           const canvas = await html2canvas(clone, {
@@ -3463,12 +3477,12 @@
           const pageWidth = pdf.internal.pageSize.getWidth();
           const pageHeight = pdf.internal.pageSize.getHeight();
 
-          const renderWidth = 186;
+          const renderWidth = 194;
           const renderHeight = (canvas.height * renderWidth) / canvas.width;
 
-          // Mathematically center the pay slip card on the page (both horizontally and vertically)
+          // Fill the full page with clean, even 8-10mm margins all around (no huge empty top or bottom gap)
           const leftMargin = (pageWidth - renderWidth) / 2;
-          const topMargin = Math.max(10, (pageHeight - renderHeight) / 2);
+          const topMargin = Math.max(8, (pageHeight - renderHeight) / 2);
 
           const imgData = canvas.toDataURL('image/png', 1.0);
           pdf.addImage(imgData, 'PNG', leftMargin, topMargin, renderWidth, renderHeight);
