@@ -1276,28 +1276,40 @@
       background: #FCA311;
     }
 
+    @page {
+      size: A4 portrait;
+      margin: 10mm 12mm;
+    }
+
     /* Print invoice area rules */
     @media print {
-      body * {
-        visibility: hidden !important;
+      body {
+        background: #ffffff !important;
+        margin: 0 !important;
+        padding: 0 !important;
       }
 
-      #print-invoice-area,
-      #print-invoice-area * {
-        visibility: visible !important;
+      body > *:not(#print-invoice-area) {
+        display: none !important;
       }
 
       #print-invoice-area {
-        position: absolute !important;
-        left: 0 !important;
-        top: 0 !important;
-        width: 100% !important;
-        max-width: 800px !important;
-        margin: 0 auto !important;
-        padding: 24px !important;
-        background: #ffffff !important;
-        color: #000000 !important;
         display: block !important;
+        position: static !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+        padding: 16px !important;
+        background: #ffffff !important;
+        color: #0f172a !important;
+        visibility: visible !important;
+        page-break-after: avoid !important;
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+      }
+
+      #print-invoice-area * {
+        visibility: visible !important;
       }
     }
 
@@ -2661,32 +2673,33 @@
       </div>
 
       <!-- Bottom Sidebar Controls (Help, Log out - Fixed at bottom) -->
-      <div class="p-6 pt-3 space-y-3 sidebar-pad flex-shrink-0 border-t border-white/10" id="sidebar-bottom-controls">
+      <div class="p-6 pt-3 pb-5 sidebar-pad flex-shrink-0 border-t border-white/10" id="sidebar-bottom-controls">
+        <div class="flex items-center space-x-2.5 w-full" id="sidebar-bottom-row">
 
-        <!-- Help Action -->
-        <button type="button" id="btn-sidebar-help"
-          class="w-full flex items-center space-x-3.5 px-4 py-2.5 rounded-xl text-[#14213D] hover:text-[#000000] hover:bg-white text-sm font-semibold transition-all text-left"
-          title="Support">
-          <svg class="w-5 h-5 stroke-current flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.8">
-            <path stroke-linecap="round" stroke-linejoin="round"
-              d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M12 18h.008v.008H12V18z" />
-            <circle cx="12" cy="12" r="9" />
-          </svg>
-          <span class="sidebar-label">Support</span>
-        </button>
+          <!-- Log out Action: Red background icon at Left Bottom -->
+          <button type="button" id="btn-sidebar-logout"
+            class="flex items-center justify-center w-[42px] h-[42px] rounded-2xl bg-rose-500/20 border border-rose-500/30 text-[#FFA39E] hover:bg-rose-500/35 hover:text-white transition-all cursor-pointer flex-shrink-0"
+            title="Log out" aria-label="Log out">
+            <svg class="w-5 h-5 stroke-current flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.8">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75" />
+            </svg>
+          </button>
 
-        <!-- Log out Action -->
-        <button type="button" id="btn-sidebar-logout"
-          class="w-full flex items-center space-x-3.5 px-4 py-2.5 rounded-xl text-[#14213D] hover:text-[#000000] hover:bg-white text-sm font-semibold transition-all text-left"
-          title="Log out">
-          <svg class="w-5 h-5 stroke-current flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.8">
-            <path stroke-linecap="round" stroke-linejoin="round"
-              d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75" />
-          </svg>
-          <span class="sidebar-label">Log out</span>
-        </button>
+          <!-- Support Action: Beside the Logout Icon -->
+          <button type="button" id="btn-sidebar-help"
+            class="flex-1 flex items-center space-x-2.5 px-3.5 h-[42px] rounded-2xl text-slate-300 hover:text-white hover:bg-white/10 text-sm font-semibold transition-all text-left"
+            title="Support">
+            <svg class="w-5 h-5 stroke-current flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.8">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M12 18h.008v.008H12V18z" />
+              <circle cx="12" cy="12" r="9" />
+            </svg>
+            <span class="sidebar-label">Support</span>
+          </button>
+
+        </div>
       </div>
-
     </aside>
     <!-- MAIN CONTENT CONTAINER -->
     <main id="main-app-content" class="flex-1 min-w-0 flex flex-col min-h-screen">
@@ -2829,11 +2842,11 @@
       <p class="text-xs text-slate-400">Aggregated monthly attendance summaries, overtime hours, and compliance logs</p>
     </div>
     <div class="flex items-center space-x-2.5">
-      <button type="button" class="btn-Aurelia-secondary text-xs py-2 px-3.5 flex items-center space-x-1.5" onclick="window.print()">
+      <button type="button" id="btn-export-ar-csv" class="btn-Aurelia-secondary text-xs py-2 px-3.5 flex items-center space-x-1.5 cursor-pointer" onclick="exportAttendanceReportCSV(event)">
         <svg class="w-4 h-4 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" /></svg>
         <span>Export Monthly CSV</span>
       </button>
-      <button type="button" class="btn-Aurelia-primary text-xs py-2 px-3.5 flex items-center space-x-1.5" onclick="window.print()">
+      <button type="button" id="btn-print-ar-ledger" class="btn-Aurelia-primary text-xs py-2 px-3.5 flex items-center space-x-1.5 cursor-pointer" onclick="printAttendanceLedgerDirectly(event)">
         <svg class="w-4 h-4 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6.72 13.829c-.24.03-.48.062-.72.096m.72-.096a42.415 42.415 0 0110.56 0m-10.56 0L6.34 18m10.94-4.171c.24.03.48.062.72.096m-.72-.096L17.66 18m0 0l.229 2.523a1.125 1.125 0 01-1.12 1.227H7.231c-.662 0-1.18-.568-1.12-1.227L6.34 18m11.32 0c.268-.07.534-.144.798-.222A2.25 2.25 0 0020.25 15.6V10.5a2.25 2.25 0 00-2.25-2.25h-12A2.25 2.25 0 003.75 10.5v5.1a2.25 2.25 0 001.792 2.178c.264.078.53.152.798.222" /></svg>
         <span>Print Ledger</span>
       </button>
@@ -2868,11 +2881,19 @@
   <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
     <div class="flex items-center space-x-2">
       <span class="text-xs font-bold text-slate-500">Period:</span>
-      <select class="Aurelia-input text-xs font-bold py-1 px-3">
-        <option>October 2026</option>
-        <option>September 2026</option>
-        <option>August 2026</option>
-      </select>
+      <div class="relative inline-block">
+        <select class="Aurelia-input text-xs font-bold py-1.5 pl-3.5 pr-8 font-semibold cursor-pointer bg-white dark:bg-slate-800 text-slate-800 dark:text-white rounded-full border border-[#E5E5E5] dark:border-slate-700 shadow-xs focus:outline-none"
+          style="-webkit-appearance: none !important; -moz-appearance: none !important; appearance: none !important;">
+          <option>October 2026</option>
+          <option>September 2026</option>
+          <option>August 2026</option>
+        </select>
+        <div class="pointer-events-none absolute inset-y-0 right-3 flex items-center text-slate-500 dark:text-slate-400">
+          <svg class="w-3.5 h-3.5 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+          </svg>
+        </div>
+      </div>
     </div>
     <div class="relative w-full sm:w-64">
       <input type="text" id="input-ar-search" class="Aurelia-input w-full text-xs pl-9 font-medium" placeholder="Search staff report...">
@@ -2901,7 +2922,16 @@
         <tbody id="page-ar-tbody" class="divide-y divide-slate-100">
           <tr class="hover:bg-slate-50">
             <td class="py-3.5 px-4 whitespace-nowrap"><span class="px-2.5 py-1 rounded text-xs font-mono font-bold bg-[#FCA311] text-black inline-block shadow-2xs">EMP-2026-02</span></td>
-            <td class="py-3.5 px-4"><div class="font-bold text-slate-900">Vikram Malhotra</div><div class="text-[11px] text-slate-400">General Manager</div></td>
+            <td class="py-3.5 px-4">
+              <div class="flex items-center space-x-3">
+                <div class="w-9 h-9 rounded-xl flex items-center justify-center font-black text-xs text-white shadow-xs border border-white/20 flex-shrink-0"
+                     style="background: linear-gradient(135deg, #14213D 0%, #0369a1 60%, #FCA311 100%);">VM</div>
+                <div>
+                  <div class="font-bold text-slate-900">Vikram Malhotra</div>
+                  <div class="text-[11px] text-slate-400">General Manager</div>
+                </div>
+              </div>
+            </td>
             <td class="py-3.5 px-4"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-800">Executive</span></td>
             <td class="py-3.5 px-4 text-center font-bold">26</td>
             <td class="py-3.5 px-4 text-center font-bold text-emerald-600">25</td>
@@ -2914,7 +2944,16 @@
           </tr>
           <tr class="hover:bg-slate-50">
             <td class="py-3.5 px-4 whitespace-nowrap"><span class="px-2.5 py-1 rounded text-xs font-mono font-bold bg-[#FCA311] text-black inline-block shadow-2xs">EMP-2026-03</span></td>
-            <td class="py-3.5 px-4"><div class="font-bold text-slate-900">Priya Sharma</div><div class="text-[11px] text-slate-400">Executive Chef</div></td>
+            <td class="py-3.5 px-4">
+              <div class="flex items-center space-x-3">
+                <div class="w-9 h-9 rounded-xl flex items-center justify-center font-black text-xs text-white shadow-xs border border-white/20 flex-shrink-0"
+                     style="background: linear-gradient(135deg, #14213D 0%, #b45309 60%, #FCA311 100%);">PS</div>
+                <div>
+                  <div class="font-bold text-slate-900">Priya Sharma</div>
+                  <div class="text-[11px] text-slate-400">Executive Chef</div>
+                </div>
+              </div>
+            </td>
             <td class="py-3.5 px-4"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800">Culinary</span></td>
             <td class="py-3.5 px-4 text-center font-bold">26</td>
             <td class="py-3.5 px-4 text-center font-bold text-emerald-600">24</td>
@@ -2927,7 +2966,16 @@
           </tr>
           <tr class="hover:bg-slate-50">
             <td class="py-3.5 px-4 whitespace-nowrap"><span class="px-2.5 py-1 rounded text-xs font-mono font-bold bg-[#FCA311] text-black inline-block shadow-2xs">EMP-2026-06</span></td>
-            <td class="py-3.5 px-4"><div class="font-bold text-slate-900">Sunita Patel</div><div class="text-[11px] text-slate-400">Front Desk Associate</div></td>
+            <td class="py-3.5 px-4">
+              <div class="flex items-center space-x-3">
+                <div class="w-9 h-9 rounded-xl flex items-center justify-center font-black text-xs text-white shadow-xs border border-white/20 flex-shrink-0"
+                     style="background: linear-gradient(135deg, #14213D 0%, #d97706 60%, #FCA311 100%);">SP</div>
+                <div>
+                  <div class="font-bold text-slate-900">Sunita Patel</div>
+                  <div class="text-[11px] text-slate-400">Front Desk Associate</div>
+                </div>
+              </div>
+            </td>
             <td class="py-3.5 px-4"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-100 text-blue-800">Front Office</span></td>
             <td class="py-3.5 px-4 text-center font-bold">26</td>
             <td class="py-3.5 px-4 text-center font-bold text-emerald-600">23</td>
@@ -2940,7 +2988,16 @@
           </tr>
           <tr class="hover:bg-slate-50">
             <td class="py-3.5 px-4 whitespace-nowrap"><span class="px-2.5 py-1 rounded text-xs font-mono font-bold bg-[#FCA311] text-black inline-block shadow-2xs">EMP-2026-12</span></td>
-            <td class="py-3.5 px-4"><div class="font-bold text-slate-900">Amit Sengupta</div><div class="text-[11px] text-slate-400">Night Auditor</div></td>
+            <td class="py-3.5 px-4">
+              <div class="flex items-center space-x-3">
+                <div class="w-9 h-9 rounded-xl flex items-center justify-center font-black text-xs text-white shadow-xs border border-white/20 flex-shrink-0"
+                     style="background: linear-gradient(135deg, #14213D 0%, #334155 60%, #94a3b8 100%);">AS</div>
+                <div>
+                  <div class="font-bold text-slate-900">Amit Sengupta</div>
+                  <div class="text-[11px] text-slate-400">Night Auditor</div>
+                </div>
+              </div>
+            </td>
             <td class="py-3.5 px-4"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-800">Accounts</span></td>
             <td class="py-3.5 px-4 text-center font-bold">26</td>
             <td class="py-3.5 px-4 text-center font-bold text-emerald-600">26</td>
@@ -2975,6 +3032,238 @@
   
   
   <script>
+    // 1. Export Monthly Attendance Report to CSV
+    function exportAttendanceReportCSV(e) {
+      if (e) {
+        if (typeof e.preventDefault === 'function') e.preventDefault();
+        if (typeof e.stopPropagation === 'function') e.stopPropagation();
+      }
+      try {
+        const headers = [
+          "Employee ID",
+          "Employee Name",
+          "Designation",
+          "Department",
+          "Scheduled Days",
+          "Present Days",
+          "Absent Days",
+          "Approved Leaves",
+          "Late Days",
+          "Overtime",
+          "Attendance Rate",
+          "Compliance Rating"
+        ];
+
+        const rows = [];
+        $('#page-ar-tbody tr').each(function() {
+          const empId = $(this).find('td:nth-child(1)').text().trim();
+          const name = $(this).find('td:nth-child(2) .font-bold').text().trim();
+          const role = $(this).find('td:nth-child(2) .text-\\[11px\\]').text().trim();
+          const dept = $(this).find('td:nth-child(3)').text().trim();
+          const sched = $(this).find('td:nth-child(4)').text().trim();
+          const present = $(this).find('td:nth-child(5)').text().trim();
+          const absent = $(this).find('td:nth-child(6)').text().trim();
+          const leaves = $(this).find('td:nth-child(7)').text().trim();
+          const late = $(this).find('td:nth-child(8)').text().trim();
+          const ot = $(this).find('td:nth-child(9)').text().trim();
+          const rate = $(this).find('td:nth-child(10)').text().trim();
+          const status = $(this).find('td:nth-child(11)').text().trim();
+
+          rows.push([
+            `"${empId}"`,
+            `"${name.replace(/"/g, '""')}"`,
+            `"${role.replace(/"/g, '""')}"`,
+            `"${dept.replace(/"/g, '""')}"`,
+            `"${sched}"`,
+            `"${present}"`,
+            `"${absent}"`,
+            `"${leaves}"`,
+            `"${late}"`,
+            `"${ot}"`,
+            `"${rate}"`,
+            `"${status}"`
+          ]);
+        });
+
+        if (!rows.length) {
+          if (typeof showToast === 'function') showToast('No attendance records found to export.', 'warning');
+          return;
+        }
+
+        const csvContent = 'data:text/csv;charset=utf-8,\uFEFF' + [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
+        const encodedUri = encodeURI(csvContent);
+        const link = document.createElement('a');
+        link.setAttribute('href', encodedUri);
+        link.setAttribute('download', `Aurelia_Monthly_Attendance_Report_October_2026.csv`);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+
+        if (typeof showToast === 'function') {
+          showToast('Monthly attendance CSV report exported successfully!', 'success');
+        }
+      } catch (err) {
+        console.error(err);
+        if (typeof showToast === 'function') showToast('Failed to export CSV report.', 'error');
+      }
+    }
+    window.exportAttendanceReportCSV = exportAttendanceReportCSV;
+
+    // 2. Print Formal Monthly Attendance & Overtime Audit Ledger
+    let isLedgerPrinting = false;
+    function printAttendanceLedgerDirectly(e) {
+      if (e) {
+        if (typeof e.preventDefault === 'function') e.preventDefault();
+        if (typeof e.stopImmediatePropagation === 'function') e.stopImmediatePropagation();
+        if (typeof e.stopPropagation === 'function') e.stopPropagation();
+      }
+      if (isLedgerPrinting) return false;
+      isLedgerPrinting = true;
+      try {
+        let printArea = document.getElementById('print-invoice-area');
+        if (!printArea) {
+          printArea = document.createElement('div');
+          printArea.id = 'print-invoice-area';
+          document.body.appendChild(printArea);
+        }
+
+        let rowsHtml = '';
+        $('#page-ar-tbody tr').each(function() {
+          const empId = $(this).find('td:nth-child(1)').text().trim();
+          const name = $(this).find('td:nth-child(2) .font-bold').text().trim();
+          const role = $(this).find('td:nth-child(2) .text-\\[11px\\]').text().trim();
+          const dept = $(this).find('td:nth-child(3)').text().trim();
+          const sched = $(this).find('td:nth-child(4)').text().trim();
+          const present = $(this).find('td:nth-child(5)').text().trim();
+          const absent = $(this).find('td:nth-child(6)').text().trim();
+          const leaves = $(this).find('td:nth-child(7)').text().trim();
+          const ot = $(this).find('td:nth-child(9)').text().trim();
+          const rate = $(this).find('td:nth-child(10)').text().trim();
+          const status = $(this).find('td:nth-child(11)').text().trim();
+
+          rowsHtml += `
+            <tr style="border-bottom: 1px solid #e2e8f0;">
+              <td style="padding: 6px 8px; font-family: monospace; font-weight: bold; font-size: 11px;">${empId}</td>
+              <td style="padding: 6px 8px;">
+                <div style="font-weight: bold; font-size: 11px; color: #0f172a;">${name}</div>
+                <div style="font-size: 10px; color: #64748b;">${role}</div>
+              </td>
+              <td style="padding: 6px 8px; font-size: 11px; color: #334155;">${dept}</td>
+              <td style="padding: 6px 8px; text-align: center; font-weight: bold;">${sched}</td>
+              <td style="padding: 6px 8px; text-align: center; font-weight: bold; color: #047857;">${present}</td>
+              <td style="padding: 6px 8px; text-align: center; color: #64748b;">${absent}</td>
+              <td style="padding: 6px 8px; text-align: center; color: #0284c7;">${leaves}</td>
+              <td style="padding: 6px 8px; text-align: center; font-family: monospace; font-size: 10px;">${ot}</td>
+              <td style="padding: 6px 8px; text-align: center; font-weight: bold; color: #047857;">${rate}</td>
+              <td style="padding: 6px 8px; text-align: center; font-size: 10px; font-weight: bold;">${status}</td>
+            </tr>
+          `;
+        });
+
+        const ledgerContent = `
+          <div style="background: #ffffff; color: #0f172a; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 11px; line-height: 1.4;">
+            <!-- Header -->
+            <div style="border-bottom: 2px solid #14213D; padding-bottom: 10px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: flex-start;">
+              <div>
+                <h1 style="font-size: 16px; font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; color: #14213D; margin: 0 0 2px 0;">Aurelia Luxury Hotel & Resorts</h1>
+                <p style="font-size: 10px; color: #475569; margin: 0; font-weight: 600;">Department of Human Resources & Labor Governance</p>
+                <p style="font-size: 9px; color: #64748b; margin: 0;">Station Rd, City Center • Reg: HR-2026-HOSP-IND • hr@aureliahotel.com</p>
+              </div>
+              <div style="text-align: right;">
+                <div style="display: inline-block; background: #14213D; color: #FCA311; font-size: 10px; font-family: monospace; font-weight: bold; padding: 2px 8px; border-radius: 4px;">REF: AUR/ATTN-LEDGER/2026-10</div>
+                <p style="font-size: 10px; color: #64748b; margin: 4px 0 0 0;">Audit Cycle: October 2026</p>
+              </div>
+            </div>
+
+            <!-- Title & Operational Metrics -->
+            <div style="margin-bottom: 12px; text-align: center;">
+              <h2 style="font-size: 13px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; color: #0f172a; margin: 0 0 4px 0;">Monthly Attendance & Labor Compliance Audit Ledger</h2>
+              <div style="display: flex; justify-content: space-between; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 6px 12px; font-size: 10px; font-weight: 600;">
+                <span>Average Attendance: <strong style="color: #15803d;">94.6%</strong></span>
+                <span>Total Man-Hours: <strong style="color: #0284c7;">9,840.0 hrs</strong></span>
+                <span>Overtime Logged: <strong style="color: #b45309;">312.0 hrs</strong></span>
+                <span>Scheduled Days: <strong style="color: #14213D;">26 Days</strong></span>
+                <span>Active Headcount: <strong style="color: #475569;">48 Staff</strong></span>
+              </div>
+            </div>
+
+            <!-- Departmental Summary Strip -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 8px; margin-bottom: 12px; font-size: 10px;">
+              <div style="border: 1px solid #e2e8f0; border-left: 3px solid #0f172a; padding: 5px 8px; border-radius: 4px; background: #f8fafc;">
+                <strong>Executive Division</strong><br>
+                <span style="color: #15803d; font-weight: bold;">98.5% Rate</span> • 14.0 OT
+              </div>
+              <div style="border: 1px solid #e2e8f0; border-left: 3px solid #b45309; padding: 5px 8px; border-radius: 4px; background: #f8fafc;">
+                <strong>Culinary Division</strong><br>
+                <span style="color: #15803d; font-weight: bold;">96.2% Rate</span> • 22.5 OT
+              </div>
+              <div style="border: 1px solid #e2e8f0; border-left: 3px solid #0284c7; padding: 5px 8px; border-radius: 4px; background: #f8fafc;">
+                <strong>Front Office</strong><br>
+                <span style="color: #b45309; font-weight: bold;">91.4% Rate</span> • 6.0 OT
+              </div>
+              <div style="border: 1px solid #e2e8f0; border-left: 3px solid #7c3aed; padding: 5px 8px; border-radius: 4px; background: #f8fafc;">
+                <strong>Accounts & Audit</strong><br>
+                <span style="color: #15803d; font-weight: bold;">100.0% Rate</span> • 18.0 OT
+              </div>
+            </div>
+
+            <!-- Table -->
+            <table style="width: 100%; border-collapse: collapse; margin-bottom: 14px; text-align: left; font-size: 10px;">
+              <thead>
+                <tr style="background: #f1f5f9; border-bottom: 2px solid #cbd5e1; color: #475569; font-size: 10px; text-transform: uppercase;">
+                  <th style="padding: 6px 8px;">Emp ID</th>
+                  <th style="padding: 6px 8px;">Employee & Role</th>
+                  <th style="padding: 6px 8px;">Dept</th>
+                  <th style="padding: 6px 8px; text-align: center;">Sched</th>
+                  <th style="padding: 6px 8px; text-align: center;">Present</th>
+                  <th style="padding: 6px 8px; text-align: center;">Absent</th>
+                  <th style="padding: 6px 8px; text-align: center;">Leaves</th>
+                  <th style="padding: 6px 8px; text-align: center;">OT Hours</th>
+                  <th style="padding: 6px 8px; text-align: center;">Rate %</th>
+                  <th style="padding: 6px 8px; text-align: center;">Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${rowsHtml}
+              </tbody>
+            </table>
+
+            <!-- Signatures -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 32px; padding-top: 12px; border-top: 1px solid #e2e8f0; font-size: 10px;">
+              <div>
+                <div style="height: 28px; border-bottom: 1px solid #94a3b8; margin-bottom: 4px; display: flex; align-items: flex-end;">
+                  <span style="font-family: serif; font-style: italic; color: #475569;">Adaline Lively</span>
+                </div>
+                <strong style="color: #0f172a; font-size: 11px;">Head of Human Resources</strong><br>
+                <span style="color: #64748b;">Audited & Certified for Payroll Processing</span>
+              </div>
+              <div>
+                <div style="height: 28px; border-bottom: 1px solid #94a3b8; margin-bottom: 4px; display: flex; align-items: flex-end;">
+                  <span style="font-family: serif; font-style: italic; color: #475569;">Vikram Malhotra</span>
+                </div>
+                <strong style="color: #0f172a; font-size: 11px;">General Manager / Managing Director</strong><br>
+                <span style="color: #64748b;">Approved for Operational Clearance</span>
+              </div>
+            </div>
+          </div>
+        `;
+
+        printArea.innerHTML = ledgerContent;
+        printArea.classList.remove('hidden');
+
+        window.print();
+
+        setTimeout(function() {
+          printArea.classList.add('hidden');
+          printArea.innerHTML = '';
+          isLedgerPrinting = false;
+        }, 1000);
+      } catch (err) {
+        isLedgerPrinting = false;
+      }
+    }
+    window.printAttendanceLedgerDirectly = printAttendanceLedgerDirectly;
+
     $(document).ready(function() {
       $('#input-ar-search').on('input', function() {
         const q = $(this).val().toLowerCase();

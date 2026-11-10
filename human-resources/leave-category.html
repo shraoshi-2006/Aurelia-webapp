@@ -1285,6 +1285,15 @@
 
     /* Print invoice area rules */
     @media print {
+      @page {
+        size: A4 portrait;
+        margin: 10mm;
+      }
+
+      body {
+        background: #ffffff !important;
+      }
+
       body * {
         visibility: hidden !important;
       }
@@ -1299,9 +1308,8 @@
         left: 0 !important;
         top: 0 !important;
         width: 100% !important;
-        max-width: 800px !important;
-        margin: 0 auto !important;
-        padding: 24px !important;
+        margin: 0 !important;
+        padding: 0 !important;
         background: #ffffff !important;
         color: #000000 !important;
         display: block !important;
@@ -2720,32 +2728,33 @@
       </div>
 
       <!-- Bottom Sidebar Controls (Help, Log out - Fixed at bottom) -->
-      <div class="p-6 pt-3 space-y-3 sidebar-pad flex-shrink-0 border-t border-white/10" id="sidebar-bottom-controls">
+      <div class="p-6 pt-3 pb-5 sidebar-pad flex-shrink-0 border-t border-white/10" id="sidebar-bottom-controls">
+        <div class="flex items-center space-x-2.5 w-full" id="sidebar-bottom-row">
 
-        <!-- Help Action -->
-        <button type="button" id="btn-sidebar-help"
-          class="w-full flex items-center space-x-3.5 px-4 py-2.5 rounded-xl text-[#14213D] hover:text-[#000000] hover:bg-white text-sm font-semibold transition-all text-left"
-          title="Support">
-          <svg class="w-5 h-5 stroke-current flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.8">
-            <path stroke-linecap="round" stroke-linejoin="round"
-              d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M12 18h.008v.008H12V18z" />
-            <circle cx="12" cy="12" r="9" />
-          </svg>
-          <span class="sidebar-label">Support</span>
-        </button>
+          <!-- Log out Action: Red background icon at Left Bottom -->
+          <button type="button" id="btn-sidebar-logout"
+            class="flex items-center justify-center w-[42px] h-[42px] rounded-2xl bg-rose-500/20 border border-rose-500/30 text-[#FFA39E] hover:bg-rose-500/35 hover:text-white transition-all cursor-pointer flex-shrink-0"
+            title="Log out" aria-label="Log out">
+            <svg class="w-5 h-5 stroke-current flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.8">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75" />
+            </svg>
+          </button>
 
-        <!-- Log out Action -->
-        <button type="button" id="btn-sidebar-logout"
-          class="w-full flex items-center space-x-3.5 px-4 py-2.5 rounded-xl text-[#14213D] hover:text-[#000000] hover:bg-white text-sm font-semibold transition-all text-left"
-          title="Log out">
-          <svg class="w-5 h-5 stroke-current flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.8">
-            <path stroke-linecap="round" stroke-linejoin="round"
-              d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75" />
-          </svg>
-          <span class="sidebar-label">Log out</span>
-        </button>
+          <!-- Support Action: Beside the Logout Icon -->
+          <button type="button" id="btn-sidebar-help"
+            class="flex-1 flex items-center space-x-2.5 px-3.5 h-[42px] rounded-2xl text-slate-300 hover:text-white hover:bg-white/10 text-sm font-semibold transition-all text-left"
+            title="Support">
+            <svg class="w-5 h-5 stroke-current flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.8">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M12 18h.008v.008H12V18z" />
+              <circle cx="12" cy="12" r="9" />
+            </svg>
+            <span class="sidebar-label">Support</span>
+          </button>
+
+        </div>
       </div>
-
     </aside>
     <!-- MAIN CONTENT CONTAINER -->
     <main id="main-app-content" class="flex-1 min-w-0 flex flex-col min-h-screen">
@@ -2896,9 +2905,14 @@
                 categories — showing which staff took leave, scheduled dates, and duration</p>
             </div>
             <div class="flex items-center space-x-2.5">
+<<<<<<< HEAD
               <button type="button" id="btn-download-leave-report" title="Download Leave Report as CSV"
                 class="btn-Aurelia-secondary text-xs py-2 px-3.5 flex items-center space-x-1.5 cursor-pointer"
                 onclick="if(typeof window.downloadLeaveCategoryCSV==='function'){window.downloadLeaveCategoryCSV();}">
+=======
+              <button type="button" id="btn-print-leave-report" class="btn-Aurelia-secondary text-xs py-2 px-3.5 flex items-center space-x-1.5 cursor-pointer"
+                onclick="printLeaveCategoryReportDirectly(event)">
+>>>>>>> 35435138d622041ceaf5950def0660bc8694ea61
                 <svg class="w-4 h-4 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2">
                   <path stroke-linecap="round" stroke-linejoin="round"
                     d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
@@ -3040,7 +3054,7 @@
                     </td>
                     <td class="py-3 px-3 text-center whitespace-nowrap">
                       <span
-                        class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-rose-100 text-rose-800 dark:bg-rose-950/60 dark:text-rose-300 border border-rose-300 animate-pulse">On
+                        class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#b91c1c] text-white shadow-2xs">On
                         Leave</span>
                     </td>
                   </tr>
@@ -3704,6 +3718,152 @@
 
 
   <script>
+    let isLeaveReportPrinting = false;
+    function printLeaveCategoryReportDirectly(e) {
+      if (e) {
+        if (typeof e.preventDefault === 'function') e.preventDefault();
+        if (typeof e.stopImmediatePropagation === 'function') e.stopImmediatePropagation();
+        if (typeof e.stopPropagation === 'function') e.stopPropagation();
+      }
+      if (isLeaveReportPrinting) return false;
+      isLeaveReportPrinting = true;
+
+      try {
+        let printArea = document.getElementById('print-invoice-area');
+        if (!printArea) {
+          printArea = document.createElement('div');
+          printArea.id = 'print-invoice-area';
+          document.body.appendChild(printArea);
+        }
+
+        let rowsHtml = '';
+        const $rows = $('#page-emp-leave-tbody tr:visible').length > 0 ? $('#page-emp-leave-tbody tr:visible') : $('#page-emp-leave-tbody tr');
+
+        $rows.each(function () {
+          const $tr = $(this);
+          const empId = $tr.find('td:nth-child(1)').text().trim();
+          const name = $tr.find('td:nth-child(2) .font-bold').text().trim();
+          const role = $tr.find('td:nth-child(3) .font-semibold').text().trim();
+          const dept = $tr.find('td:nth-child(3) span').text().trim();
+          const cat = $tr.find('td:nth-child(4)').text().trim();
+          const dates = $tr.find('td:nth-child(5)').text().trim();
+          const duration = $tr.find('td:nth-child(6)').text().trim();
+          const reason = $tr.find('td:nth-child(7)').text().trim();
+          const handover = $tr.find('td:nth-child(8)').text().trim();
+          const status = $tr.find('td:nth-child(9)').text().trim();
+
+          rowsHtml += `
+            <tr style="border-bottom: 1px solid #e2e8f0; font-size: 11px;">
+              <td style="padding: 6px 8px; font-family: monospace; font-weight: bold; color: #b45309;">${empId}</td>
+              <td style="padding: 6px 8px; font-weight: bold; color: #0f172a;">${name}</td>
+              <td style="padding: 6px 8px; color: #334155;">${role} <span style="font-size: 10px; color: #64748b;">(${dept})</span></td>
+              <td style="padding: 6px 8px; color: #0f172a;">${cat}</td>
+              <td style="padding: 6px 8px; font-family: monospace; white-space: nowrap;">${dates}</td>
+              <td style="padding: 6px 8px; text-align: center; font-weight: bold;">${duration}</td>
+              <td style="padding: 6px 8px; color: #475569; max-width: 140px;">${reason}</td>
+              <td style="padding: 6px 8px; color: #475569;">${handover}</td>
+              <td style="padding: 6px 8px; text-align: center; font-weight: bold;">${status}</td>
+            </tr>
+          `;
+        });
+
+        const reportContent = `
+          <div style="background: #ffffff; color: #0f172a; padding: 24px 32px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
+            <!-- Hotel Letterhead Header -->
+            <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 2px solid #0f172a; padding-bottom: 16px; margin-bottom: 20px;">
+              <div style="display: flex; align-items: center; gap: 14px;">
+                <img src="../assets/aurelia-mark.svg" alt="Aurelia Emblem" style="width: 48px; height: 48px; border-radius: 50%; object-fit: contain;">
+                <div>
+                  <h1 style="margin: 0; font-size: 18px; font-weight: 900; letter-spacing: 0.15em; text-transform: uppercase; color: #14213D; font-family: 'Cormorant Garamond', Georgia, serif;">AURELIA LUXURY HOTEL & RESTAURANT</h1>
+                  <p style="margin: 2px 0 0 0; font-size: 10px; color: #64748b; font-weight: 500;">5-Star Heritage Wing, Financial District, New Delhi - 110001 | Reg: HR-2026-LEAVE-POLICY</p>
+                </div>
+              </div>
+              <div style="text-align: right;">
+                <span style="display: inline-block; background: #14213D; color: #FCA311; padding: 4px 10px; border-radius: 9999px; font-size: 10px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.05em;">Staff Leave Audit Report</span>
+                <div style="font-size: 10px; color: #64748b; margin-top: 4px; font-weight: bold;">Generated: ${new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}</div>
+              </div>
+            </div>
+
+            <!-- Summary Metrics Cards -->
+            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 20px;">
+              <div style="border: 1px solid #e2e8f0; border-radius: 10px; padding: 10px; background: #f8fafc;">
+                <div style="font-size: 9px; font-weight: bold; text-transform: uppercase; color: #64748b;">Total Records</div>
+                <div style="font-size: 16px; font-weight: 900; color: #0f172a; margin-top: 2px;">12 Active</div>
+              </div>
+              <div style="border: 1px solid #bbf7d0; border-radius: 10px; padding: 10px; background: #f0fdf4;">
+                <div style="font-size: 9px; font-weight: bold; text-transform: uppercase; color: #15803d;">Staff On Duty</div>
+                <div style="font-size: 16px; font-weight: 900; color: #16a34a; margin-top: 2px;">42 Staff</div>
+              </div>
+              <div style="border: 1px solid #fecdd3; border-radius: 10px; padding: 10px; background: #fff1f2;">
+                <div style="font-size: 9px; font-weight: bold; text-transform: uppercase; color: #be123c;">Currently On Leave</div>
+                <div style="font-size: 16px; font-weight: 900; color: #e11d48; margin-top: 2px;">1 Staff</div>
+              </div>
+              <div style="border: 1px solid #bae6fd; border-radius: 10px; padding: 10px; background: #f0f9ff;">
+                <div style="font-size: 9px; font-weight: bold; text-transform: uppercase; color: #0369a1;">Total Days Taken</div>
+                <div style="font-size: 16px; font-weight: 900; color: #0284c7; margin-top: 2px;">31 Days</div>
+              </div>
+            </div>
+
+            <!-- Report Table -->
+            <table style="width: 100%; border-collapse: collapse; text-align: left; margin-bottom: 24px;">
+              <thead>
+                <tr style="background: #f1f5f9; border-bottom: 2px solid #cbd5e1; font-size: 10px; text-transform: uppercase; color: #475569;">
+                  <th style="padding: 8px;">Emp ID</th>
+                  <th style="padding: 8px;">Employee</th>
+                  <th style="padding: 8px;">Role & Dept</th>
+                  <th style="padding: 8px;">Category</th>
+                  <th style="padding: 8px;">Dates</th>
+                  <th style="padding: 8px; text-align: center;">Duration</th>
+                  <th style="padding: 8px;">Reason</th>
+                  <th style="padding: 8px;">Handover</th>
+                  <th style="padding: 8px; text-align: center;">Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${rowsHtml}
+              </tbody>
+            </table>
+
+            <!-- Footer Signatures -->
+            <div style="display: flex; justify-content: space-between; align-items: flex-end; padding-top: 24px; border-top: 1px solid #e2e8f0; font-size: 10px;">
+              <div style="width: 220px;">
+                <div style="height: 28px; border-bottom: 1px solid #94a3b8; margin-bottom: 4px; display: flex; align-items: flex-end;">
+                  <span style="font-family: serif; font-style: italic; color: #475569;">Adaline Lively</span>
+                </div>
+                <strong style="color: #0f172a; font-size: 11px;">Head of Human Resources</strong><br>
+                <span style="color: #64748b;">Aurelia Luxury Hotel Operations</span>
+              </div>
+              <div style="text-align: center; color: #94a3b8; font-size: 9px;">
+                <span>Verified for operational hospitality compliance &bull; Ref: OCT-NOV 2026</span>
+              </div>
+              <div style="width: 220px; text-align: right;">
+                <div style="height: 28px; border-bottom: 1px solid #94a3b8; margin-bottom: 4px; display: flex; align-items: flex-end; justify-content: flex-end;">
+                  <span style="font-family: serif; font-style: italic; color: #475569;">Vikram Malhotra</span>
+                </div>
+                <strong style="color: #0f172a; font-size: 11px;">General Manager</strong><br>
+                <span style="color: #64748b;">Executive Sanction</span>
+              </div>
+            </div>
+          </div>
+        `;
+
+        printArea.innerHTML = reportContent;
+        printArea.classList.remove('hidden');
+
+        window.print();
+
+        setTimeout(function () {
+          printArea.classList.add('hidden');
+          printArea.innerHTML = '';
+          isLeaveReportPrinting = false;
+        }, 1000);
+      } catch (err) {
+        console.error('Print Error:', err);
+        isLeaveReportPrinting = false;
+      }
+    }
+    window.printLeaveCategoryReportDirectly = printLeaveCategoryReportDirectly;
+
     $(document).ready(function () {
       $('.btn-lc-filter').on('click', function () {
         $('.btn-lc-filter').removeClass('active bg-[#14213D] text-white').addClass('text-slate-600');

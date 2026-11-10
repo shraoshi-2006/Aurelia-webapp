@@ -2661,32 +2661,33 @@
       </div>
 
       <!-- Bottom Sidebar Controls (Help, Log out - Fixed at bottom) -->
-      <div class="p-6 pt-3 space-y-3 sidebar-pad flex-shrink-0 border-t border-white/10" id="sidebar-bottom-controls">
+      <div class="p-6 pt-3 pb-5 sidebar-pad flex-shrink-0 border-t border-white/10" id="sidebar-bottom-controls">
+        <div class="flex items-center space-x-2.5 w-full" id="sidebar-bottom-row">
 
-        <!-- Help Action -->
-        <button type="button" id="btn-sidebar-help"
-          class="w-full flex items-center space-x-3.5 px-4 py-2.5 rounded-xl text-[#14213D] hover:text-[#000000] hover:bg-white text-sm font-semibold transition-all text-left"
-          title="Support">
-          <svg class="w-5 h-5 stroke-current flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.8">
-            <path stroke-linecap="round" stroke-linejoin="round"
-              d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M12 18h.008v.008H12V18z" />
-            <circle cx="12" cy="12" r="9" />
-          </svg>
-          <span class="sidebar-label">Support</span>
-        </button>
+          <!-- Log out Action: Red background icon at Left Bottom -->
+          <button type="button" id="btn-sidebar-logout"
+            class="flex items-center justify-center w-[42px] h-[42px] rounded-2xl bg-rose-500/20 border border-rose-500/30 text-[#FFA39E] hover:bg-rose-500/35 hover:text-white transition-all cursor-pointer flex-shrink-0"
+            title="Log out" aria-label="Log out">
+            <svg class="w-5 h-5 stroke-current flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.8">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75" />
+            </svg>
+          </button>
 
-        <!-- Log out Action -->
-        <button type="button" id="btn-sidebar-logout"
-          class="w-full flex items-center space-x-3.5 px-4 py-2.5 rounded-xl text-[#14213D] hover:text-[#000000] hover:bg-white text-sm font-semibold transition-all text-left"
-          title="Log out">
-          <svg class="w-5 h-5 stroke-current flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.8">
-            <path stroke-linecap="round" stroke-linejoin="round"
-              d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75" />
-          </svg>
-          <span class="sidebar-label">Log out</span>
-        </button>
+          <!-- Support Action: Beside the Logout Icon -->
+          <button type="button" id="btn-sidebar-help"
+            class="flex-1 flex items-center space-x-2.5 px-3.5 h-[42px] rounded-2xl text-slate-300 hover:text-white hover:bg-white/10 text-sm font-semibold transition-all text-left"
+            title="Support">
+            <svg class="w-5 h-5 stroke-current flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.8">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M12 18h.008v.008H12V18z" />
+              <circle cx="12" cy="12" r="9" />
+            </svg>
+            <span class="sidebar-label">Support</span>
+          </button>
+
+        </div>
       </div>
-
     </aside>
     <!-- MAIN CONTENT CONTAINER -->
     <main id="main-app-content" class="flex-1 min-w-0 flex flex-col min-h-screen">
@@ -2829,11 +2830,11 @@
       <p class="text-xs text-slate-400">Formal hotel salary statement with itemized earnings, statutory withholdings & verified seal</p>
     </div>
     <div class="flex items-center space-x-2.5">
-      <button type="button" class="btn-Aurelia-primary text-xs py-2 px-3.5 flex items-center space-x-1.5 cursor-pointer" onclick="window.print()">
+      <button type="button" id="btn-print-pay-slip" onclick="printPaySlipDirectly(event)" class="btn-Aurelia-primary text-xs py-2 px-3.5 flex items-center space-x-1.5 cursor-pointer shadow-sm shadow-[#FCA311]/20">
         <svg class="w-4 h-4 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6.72 13.829c-.24.03-.48.062-.72.096m.72-.096a42.415 42.415 0 0110.56 0m-10.56 0L6.34 18m10.94-4.171c.24.03.48.062.72.096m-.72-.096L17.66 18m0 0l.229 2.523a1.125 1.125 0 01-1.12 1.227H7.231c-.662 0-1.18-.568-1.12-1.227L6.34 18m11.32 0c.268-.07.534-.144.798-.222A2.25 2.25 0 0020.25 15.6V10.5a2.25 2.25 0 00-2.25-2.25h-12A2.25 2.25 0 003.75 10.5v5.1a2.25 2.25 0 001.792 2.178c.264.078.53.152.798.222" /></svg>
         <span>Print Pay Slip</span>
       </button>
-      <button type="button" class="btn-Aurelia-secondary text-xs py-2 px-3.5 flex items-center space-x-1.5" onclick="alert('Downloading PDF salary slip...')">
+      <button type="button" id="btn-download-pay-slip" onclick="openPaySlipDownloadModal(event)" class="btn-Aurelia-secondary text-xs py-2 px-3.5 flex items-center space-x-1.5 cursor-pointer">
         <svg class="w-4 h-4 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" /></svg>
         <span>Download PDF</span>
       </button>
@@ -2870,27 +2871,45 @@
     <div class="flex flex-wrap items-center gap-3">
       <div class="flex items-center space-x-2">
         <span class="text-xs font-bold text-slate-500">Employee:</span>
-        <select id="select-slip-employee" class="Aurelia-input text-xs font-bold py-1.5 px-3">
-          <option value="vikram">AUR-0101 - Vikram Malhotra (General Manager)</option>
-          <option value="priya">AUR-0102 - Priya Sharma (Executive Chef)</option>
-          <option value="rajesh">AUR-0104 - Rajesh Verma (Front Desk Manager)</option>
-          <option value="sunita">AUR-0106 - Sunita Patel (Front Desk Associate)</option>
-        </select>
+        <div class="relative inline-block">
+          <select id="select-slip-employee" class="Aurelia-input text-xs font-bold py-1.5 pl-3.5 pr-8 font-semibold cursor-pointer bg-white dark:bg-slate-800 text-slate-800 dark:text-white rounded-full border border-[#E5E5E5] dark:border-slate-700 shadow-xs focus:outline-none"
+            style="-webkit-appearance: none !important; -moz-appearance: none !important; appearance: none !important;">
+            <option value="priya" selected>EMP-2026-03 - Priya Sharma (Executive Chef)</option>
+            <option value="vikram">EMP-2026-02 - Vikram Malhotra (General Manager)</option>
+            <option value="rajesh">EMP-2026-04 - Rajesh Verma (Front Desk Manager)</option>
+            <option value="sunita">EMP-2026-06 - Sunita Patel (Front Desk Associate)</option>
+            <option value="ananya">EMP-2026-08 - Ananya Roy (Head Sommelier)</option>
+            <option value="amit">EMP-2026-12 - Amit Sengupta (Night Auditor)</option>
+          </select>
+          <div class="pointer-events-none absolute inset-y-0 right-3 flex items-center text-slate-500 dark:text-slate-400">
+            <svg class="w-3.5 h-3.5 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+            </svg>
+          </div>
+        </div>
       </div>
       <div class="flex items-center space-x-2">
         <span class="text-xs font-bold text-slate-500">Cycle:</span>
-        <select class="Aurelia-input text-xs font-bold py-1.5 px-3">
-          <option>October 2026</option>
-          <option>September 2026</option>
-          <option>August 2026</option>
-        </select>
+        <div class="relative inline-block">
+          <select id="select-slip-cycle" class="Aurelia-input text-xs font-bold py-1.5 pl-3.5 pr-8 font-semibold cursor-pointer bg-white dark:bg-slate-800 text-slate-800 dark:text-white rounded-full border border-[#E5E5E5] dark:border-slate-700 shadow-xs focus:outline-none"
+            style="-webkit-appearance: none !important; -moz-appearance: none !important; appearance: none !important;">
+            <option value="October 2026">October 2026</option>
+            <option value="September 2026">September 2026</option>
+            <option value="August 2026">August 2026</option>
+          </select>
+          <div class="pointer-events-none absolute inset-y-0 right-3 flex items-center text-slate-500 dark:text-slate-400">
+            <svg class="w-3.5 h-3.5 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+            </svg>
+          </div>
+        </div>
       </div>
     </div>
     <span class="text-xs text-slate-400 font-medium">Official Confidential Document</span>
   </div>
 
   <!-- PRINTABLE FORMAL PAY SLIP CARD -->
-  <div class="Aurelia-card p-8 bg-white shadow-xl max-w-4xl mx-auto border border-slate-200 space-y-6">
+  <div id="printable-pay-slip" class="Aurelia-card p-8 bg-white shadow-xl max-w-4xl mx-auto border border-slate-200 space-y-6">
     <!-- Hotel Letterhead Header -->
     <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-6 border-b-2 border-slate-900 gap-4">
       <div class="flex items-center space-x-3.5">
@@ -2902,21 +2921,21 @@
       </div>
       <div class="text-right">
         <span class="inline-block bg-[#14213D] text-[#FCA311] px-3 py-1 rounded-full text-xs font-black uppercase tracking-wider">Salary Statement</span>
-        <div class="text-xs text-slate-500 mt-1 font-bold">Month: October 2026</div>
+        <div id="slip-month" class="text-xs text-slate-500 mt-1 font-bold">Month: October 2026</div>
       </div>
     </div>
 
     <!-- Employee Information Grid -->
     <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 p-4 rounded-xl bg-slate-50 border border-slate-200 text-xs">
-      <div><span class="text-[10px] text-slate-400 font-bold uppercase">Employee Name</span><div id="slip-name" class="font-bold text-slate-900 text-sm mt-0.5">Vikram Malhotra</div></div>
-      <div><span class="text-[10px] text-slate-400 font-bold uppercase">Employee ID</span><div id="slip-id" class="font-bold text-slate-900 font-mono mt-0.5">AUR-0101</div></div>
-      <div><span class="text-[10px] text-slate-400 font-bold uppercase">Designation</span><div id="slip-role" class="font-bold text-slate-900 mt-0.5">General Manager</div></div>
-      <div><span class="text-[10px] text-slate-400 font-bold uppercase">Department</span><div id="slip-dept" class="font-bold text-slate-900 mt-0.5">Executive Management</div></div>
+      <div><span class="text-[10px] text-slate-400 font-bold uppercase">Employee Name</span><div id="slip-name" class="font-bold text-slate-900 text-sm mt-0.5">Priya Sharma</div></div>
+      <div><span class="text-[10px] text-slate-400 font-bold uppercase">Employee ID</span><div id="slip-id" class="font-bold text-slate-900 font-mono mt-0.5">EMP-2026-03</div></div>
+      <div><span class="text-[10px] text-slate-400 font-bold uppercase">Designation</span><div id="slip-role" class="font-bold text-slate-900 mt-0.5">Executive Chef</div></div>
+      <div><span class="text-[10px] text-slate-400 font-bold uppercase">Department</span><div id="slip-dept" class="font-bold text-slate-900 mt-0.5">Culinary Division</div></div>
 
-      <div><span class="text-[10px] text-slate-400 font-bold uppercase">Bank Account</span><div class="font-mono text-slate-700 mt-0.5">HDFC Bank ••••4812</div></div>
-      <div><span class="text-[10px] text-slate-400 font-bold uppercase">IFSC Code</span><div class="font-mono text-slate-700 mt-0.5">HDFC0000240</div></div>
-      <div><span class="text-[10px] text-slate-400 font-bold uppercase">PF / UAN No.</span><div class="font-mono text-slate-700 mt-0.5">100928419283</div></div>
-      <div><span class="text-[10px] text-slate-400 font-bold uppercase">Days Worked</span><div class="font-bold text-emerald-600 mt-0.5">31 / 31 Days</div></div>
+      <div><span class="text-[10px] text-slate-400 font-bold uppercase">Bank Account</span><div id="slip-bank" class="font-mono text-slate-700 mt-0.5">HDFC Bank ••••4812</div></div>
+      <div><span class="text-[10px] text-slate-400 font-bold uppercase">IFSC Code</span><div id="slip-ifsc" class="font-mono text-slate-700 mt-0.5">HDFC0000240</div></div>
+      <div><span class="text-[10px] text-slate-400 font-bold uppercase">PF / UAN No.</span><div id="slip-uan" class="font-mono text-slate-700 mt-0.5">100928419283</div></div>
+      <div><span class="text-[10px] text-slate-400 font-bold uppercase">Days Worked</span><div id="slip-days" class="font-bold text-emerald-600 mt-0.5">31 / 31 Days</div></div>
     </div>
 
     <!-- Earnings & Deductions Tables (Two Columns) -->
@@ -2927,14 +2946,14 @@
           <span>EARNINGS (₹)</span><span>AMOUNT</span>
         </div>
         <div class="p-3 space-y-2 text-xs">
-          <div class="flex justify-between py-1 border-b border-slate-100"><span class="text-slate-600">Basic Salary</span><span class="font-mono font-bold">₹1,10,000.00</span></div>
-          <div class="flex justify-between py-1 border-b border-slate-100"><span class="text-slate-600">House Rent Allowance (HRA)</span><span class="font-mono font-bold">₹44,000.00</span></div>
-          <div class="flex justify-between py-1 border-b border-slate-100"><span class="text-slate-600">Special Hospitality Bonus</span><span class="font-mono font-bold">₹15,000.00</span></div>
-          <div class="flex justify-between py-1 border-b border-slate-100"><span class="text-slate-600">Conveyance Allowance</span><span class="font-mono font-bold">₹5,000.00</span></div>
-          <div class="flex justify-between py-1"><span class="text-slate-600">Medical Allowance</span><span class="font-mono font-bold">₹5,000.00</span></div>
+          <div class="flex justify-between py-1 border-b border-slate-100"><span class="text-slate-600">Basic Salary</span><span id="slip-basic" class="font-mono font-bold">₹1,10,000.00</span></div>
+          <div class="flex justify-between py-1 border-b border-slate-100"><span class="text-slate-600">House Rent Allowance (HRA)</span><span id="slip-hra" class="font-mono font-bold">₹44,000.00</span></div>
+          <div class="flex justify-between py-1 border-b border-slate-100"><span class="text-slate-600">Special Hospitality Bonus</span><span id="slip-bonus" class="font-mono font-bold">₹15,000.00</span></div>
+          <div class="flex justify-between py-1 border-b border-slate-100"><span class="text-slate-600">Conveyance Allowance</span><span id="slip-conveyance" class="font-mono font-bold">₹5,000.00</span></div>
+          <div class="flex justify-between py-1"><span class="text-slate-600">Medical Allowance</span><span id="slip-medical" class="font-mono font-bold">₹5,000.00</span></div>
         </div>
         <div class="bg-slate-50 px-4 py-2.5 border-t border-slate-200 flex justify-between text-xs font-bold text-slate-900">
-          <span>TOTAL GROSS EARNINGS</span><span class="font-mono text-emerald-600">₹1,79,000.00</span>
+          <span>TOTAL GROSS EARNINGS</span><span id="slip-gross" class="font-mono text-emerald-600">₹1,79,000.00</span>
         </div>
       </div>
 
@@ -2944,14 +2963,14 @@
           <span>DEDUCTIONS (₹)</span><span>AMOUNT</span>
         </div>
         <div class="p-3 space-y-2 text-xs">
-          <div class="flex justify-between py-1 border-b border-slate-100"><span class="text-slate-600">Employee Provident Fund (EPF 12%)</span><span class="font-mono font-bold text-rose-600">₹13,200.00</span></div>
-          <div class="flex justify-between py-1 border-b border-slate-100"><span class="text-slate-600">Professional Tax (PT)</span><span class="font-mono font-bold text-rose-600">₹200.00</span></div>
-          <div class="flex justify-between py-1 border-b border-slate-100"><span class="text-slate-600">Income Tax (TDS / Withholding)</span><span class="font-mono font-bold text-rose-600">₹10,000.00</span></div>
-          <div class="flex justify-between py-1 border-b border-slate-100"><span class="text-slate-600">Staff Welfare / Mess</span><span class="font-mono font-bold text-slate-400">₹0.00</span></div>
-          <div class="flex justify-between py-1"><span class="text-slate-600">Salary Advances</span><span class="font-mono font-bold text-slate-400">₹0.00</span></div>
+          <div class="flex justify-between py-1 border-b border-slate-100"><span class="text-slate-600">Employee Provident Fund (EPF 12%)</span><span id="slip-epf" class="font-mono font-bold text-rose-600">₹13,200.00</span></div>
+          <div class="flex justify-between py-1 border-b border-slate-100"><span class="text-slate-600">Professional Tax (PT)</span><span id="slip-pt" class="font-mono font-bold text-rose-600">₹200.00</span></div>
+          <div class="flex justify-between py-1 border-b border-slate-100"><span class="text-slate-600">Income Tax (TDS / Withholding)</span><span id="slip-tds" class="font-mono font-bold text-rose-600">₹10,000.00</span></div>
+          <div class="flex justify-between py-1 border-b border-slate-100"><span class="text-slate-600">Staff Welfare / Mess</span><span id="slip-welfare" class="font-mono font-bold text-slate-400">₹0.00</span></div>
+          <div class="flex justify-between py-1"><span class="text-slate-600">Salary Advances</span><span id="slip-advances" class="font-mono font-bold text-slate-400">₹0.00</span></div>
         </div>
         <div class="bg-slate-50 px-4 py-2.5 border-t border-slate-200 flex justify-between text-xs font-bold text-slate-900">
-          <span>TOTAL DEDUCTIONS</span><span class="font-mono text-rose-600">₹23,400.00</span>
+          <span>TOTAL DEDUCTIONS</span><span id="slip-deductions" class="font-mono text-rose-600">₹23,400.00</span>
         </div>
       </div>
     </div>
@@ -2960,9 +2979,9 @@
     <div class="p-5 rounded-2xl bg-[#14213D] text-white flex flex-col sm:flex-row items-center justify-between gap-4">
       <div>
         <div class="text-[11px] font-bold tracking-widest uppercase text-[#FCA311]">NET TAKE-HOME PAYABLE</div>
-        <div class="text-xs text-slate-300 italic mt-0.5">Amount in words: Rupees One Lakh Fifty-Five Thousand Six Hundred Only</div>
+        <div id="slip-words" class="text-xs text-slate-300 italic mt-0.5">Amount in words: Rupees One Lakh Fifty-Five Thousand Six Hundred Only</div>
       </div>
-      <div class="text-3xl font-black text-[#FCA311] font-mono">
+      <div id="slip-net" class="text-3xl font-black text-[#FCA311] font-mono">
         ₹1,55,600.00
       </div>
     </div>
@@ -2997,25 +3016,484 @@
 
   
   
+  <!-- ========================================================================= -->
+  <!-- MODAL: FULLSCREEN PAY SLIP DOWNLOAD PREVIEW (MATCHING IMAGE 1 EXACTLY)    -->
+  <!-- ========================================================================= -->
+  <div id="modal-download-pay-slip"
+    class="fixed inset-0 z-[100] bg-[#323639] hidden flex flex-col md:flex-row overflow-hidden font-sans select-none animate-fadeIn">
+    
+    <!-- LEFT: Document Canvas Viewport (White sheet on dark background) -->
+    <div class="flex-1 h-full overflow-y-auto flex items-start sm:items-center justify-center p-4 sm:p-8 bg-[#323639] relative">
+      <!-- White Paper Document Page -->
+      <div id="payslip-download-preview-paper"
+        class="bg-white text-slate-900 w-full max-w-[780px] shadow-2xl rounded-sm p-8 sm:p-10 font-sans text-xs leading-relaxed space-y-5 border border-black/10 transition-transform my-auto">
+        <!-- Populated live with printable-pay-slip HTML -->
+      </div>
+    </div>
+
+    <!-- RIGHT: Controls Sidebar (Matching Image 1, without system dialogue & preview links) -->
+    <div
+      class="w-full md:w-[320px] lg:w-[340px] h-full bg-[#202124] text-[#e8eaed] border-l border-[#3c4043] flex flex-col justify-between p-6 flex-shrink-0 z-20 overflow-y-auto">
+      
+      <!-- Top Settings Section -->
+      <div class="space-y-5">
+        <!-- Sidebar Header: Title + Page count -->
+        <div class="flex items-center justify-between pb-3 border-b border-[#3c4043]">
+          <h2 class="text-base font-semibold text-white tracking-wide">Download</h2>
+          <span class="text-xs text-[#9aa0a6] font-medium">1 page</span>
+        </div>
+
+        <!-- Destination Dropdown -->
+        <div class="space-y-1.5">
+          <label class="block text-xs text-[#9aa0a6]">Destination</label>
+          <div
+            class="w-full bg-[#292a2d] border border-[#5f6368] rounded-lg px-3 py-2 text-xs text-white flex items-center justify-between shadow-xs">
+            <div class="flex items-center space-x-2.5 truncate">
+              <svg class="w-4 h-4 text-[#8ab4f8] flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/>
+              </svg>
+              <span class="font-medium truncate">Save as PDF</span>
+            </div>
+            <svg class="w-4 h-4 text-[#9aa0a6]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+            </svg>
+          </div>
+        </div>
+
+        <!-- Pages Dropdown -->
+        <div class="space-y-1.5">
+          <label class="block text-xs text-[#9aa0a6]">Pages</label>
+          <div
+            class="w-full bg-[#292a2d] border border-[#5f6368] rounded-lg px-3 py-2 text-xs text-white flex items-center justify-between">
+            <span>All</span>
+            <svg class="w-4 h-4 text-[#9aa0a6]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+            </svg>
+          </div>
+        </div>
+
+        <!-- Pages per sheet Dropdown -->
+        <div class="space-y-1.5">
+          <label class="block text-xs text-[#9aa0a6]">Pages per sheet</label>
+          <div
+            class="w-full bg-[#292a2d] border border-[#5f6368] rounded-lg px-3 py-2 text-xs text-white flex items-center justify-between">
+            <span>1</span>
+            <svg class="w-4 h-4 text-[#9aa0a6]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+            </svg>
+          </div>
+        </div>
+
+        <!-- Margins Dropdown -->
+        <div class="space-y-1.5">
+          <label class="block text-xs text-[#9aa0a6]">Margins</label>
+          <div
+            class="w-full bg-[#292a2d] border border-[#5f6368] rounded-lg px-3 py-2 text-xs text-white flex items-center justify-between">
+            <span>Default</span>
+            <svg class="w-4 h-4 text-[#9aa0a6]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+            </svg>
+          </div>
+        </div>
+
+        <!-- Options Checkboxes -->
+        <div class="space-y-2 pt-1">
+          <label class="block text-xs text-[#9aa0a6]">Options</label>
+          <div class="space-y-2 text-xs text-[#e8eaed]">
+            <label class="flex items-center space-x-2.5 cursor-pointer">
+              <input type="checkbox" checked class="w-4 h-4 rounded bg-[#292a2d] border-[#5f6368] text-[#8ab4f8] focus:ring-0 focus:ring-offset-0 cursor-pointer">
+              <span>Headers and footers</span>
+            </label>
+            <label class="flex items-center space-x-2.5 cursor-pointer">
+              <input type="checkbox" checked class="w-4 h-4 rounded bg-[#292a2d] border-[#5f6368] text-[#8ab4f8] focus:ring-0 focus:ring-offset-0 cursor-pointer">
+              <span>Background graphics</span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom Controls: ONLY Cancel and Download (Image 3 style) -->
+      <div class="pt-6 border-t border-[#3c4043] flex items-center justify-end space-x-3">
+        <!-- Cancel button: pill with cyan/blue outline -->
+        <button type="button" onclick="closePaySlipDownloadModal()"
+          class="h-9 px-6 rounded-full border border-[#8ab4f8] hover:bg-[#8ab4f8]/10 text-[#8ab4f8] text-xs font-semibold tracking-wide transition-colors cursor-pointer">
+          Cancel
+        </button>
+        <!-- Download button: solid baby-blue pill with dark navy text -->
+        <button type="button" id="btn-confirm-payslip-download" onclick="performPaySlipPdfDownload()"
+          class="h-9 px-6 rounded-full bg-[#8ab4f8] hover:bg-[#a8c7fa] active:bg-[#7baaf7] text-[#041e49] text-xs font-bold tracking-wide transition-colors shadow-md flex items-center space-x-1.5 cursor-pointer">
+          <span>Download</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
   <script>
+    const staffSlips = {
+      'priya': {
+        name: 'Priya Sharma',
+        id: 'EMP-2026-03',
+        role: 'Executive Chef',
+        dept: 'Culinary Division',
+        bank: 'HDFC Bank ••••4812',
+        ifsc: 'HDFC0000240',
+        uan: '100928419283',
+        days: '31 / 31 Days',
+        basic: '₹1,10,000.00',
+        hra: '₹44,000.00',
+        bonus: '₹15,000.00',
+        conveyance: '₹5,000.00',
+        medical: '₹5,000.00',
+        gross: '₹1,79,000.00',
+        epf: '₹13,200.00',
+        pt: '₹200.00',
+        tds: '₹10,000.00',
+        welfare: '₹0.00',
+        advances: '₹0.00',
+        deductions: '₹23,400.00',
+        words: 'Rupees One Lakh Fifty-Five Thousand Six Hundred Only',
+        net: '₹1,55,600.00'
+      },
+      'vikram': {
+        name: 'Vikram Malhotra',
+        id: 'EMP-2026-02',
+        role: 'General Manager',
+        dept: 'Executive Management',
+        bank: 'HDFC Bank ••••4812',
+        ifsc: 'HDFC0000240',
+        uan: '100928419283',
+        days: '31 / 31 Days',
+        basic: '₹1,40,000.00',
+        hra: '₹56,000.00',
+        bonus: '₹25,000.00',
+        conveyance: '₹8,000.00',
+        medical: '₹5,000.00',
+        gross: '₹2,34,000.00',
+        epf: '₹16,800.00',
+        pt: '₹200.00',
+        tds: '₹22,000.00',
+        welfare: '₹0.00',
+        advances: '₹0.00',
+        deductions: '₹39,000.00',
+        words: 'Rupees One Lakh Ninety-Five Thousand Only',
+        net: '₹1,95,000.00'
+      },
+      'rajesh': {
+        name: 'Rajesh Verma',
+        id: 'EMP-2026-04',
+        role: 'Front Desk Manager',
+        dept: 'Front Office',
+        bank: 'SBI ••••8821',
+        ifsc: 'SBIN0004122',
+        uan: '100874109218',
+        days: '30 / 31 Days',
+        basic: '₹68,000.00',
+        hra: '₹27,200.00',
+        bonus: '₹8,000.00',
+        conveyance: '₹3,000.00',
+        medical: '₹3,000.00',
+        gross: '₹1,09,200.00',
+        epf: '₹8,160.00',
+        pt: '₹200.00',
+        tds: '₹4,490.00',
+        welfare: '₹0.00',
+        advances: '₹0.00',
+        deductions: '₹12,850.00',
+        words: 'Rupees Ninety-Six Thousand Three Hundred Fifty Only',
+        net: '₹96,350.00'
+      },
+      'sunita': {
+        name: 'Sunita Patel',
+        id: 'EMP-2026-06',
+        role: 'Front Desk Associate',
+        dept: 'Front Office',
+        bank: 'Axis Bank ••••7109',
+        ifsc: 'UTIB0001092',
+        uan: '100761298410',
+        days: '31 / 31 Days',
+        basic: '₹26,000.00',
+        hra: '₹10,400.00',
+        bonus: '₹1,000.00',
+        conveyance: '₹1,000.00',
+        medical: '₹800.00',
+        gross: '₹39,200.00',
+        epf: '₹3,120.00',
+        pt: '₹200.00',
+        tds: '₹520.00',
+        welfare: '₹0.00',
+        advances: '₹0.00',
+        deductions: '₹3,840.00',
+        words: 'Rupees Thirty-Five Thousand Three Hundred Sixty Only',
+        net: '₹35,360.00'
+      },
+      'ananya': {
+        name: 'Ananya Roy',
+        id: 'EMP-2026-08',
+        role: 'Head Sommelier',
+        dept: 'Food & Beverage',
+        bank: 'Kotak Bank ••••3419',
+        ifsc: 'KKBK0000129',
+        uan: '100912487192',
+        days: '31 / 31 Days',
+        basic: '₹52,000.00',
+        hra: '₹20,800.00',
+        bonus: '₹5,000.00',
+        conveyance: '₹2,500.00',
+        medical: '₹2,500.00',
+        gross: '₹82,800.00',
+        epf: '₹6,240.00',
+        pt: '₹200.00',
+        tds: '₹2,860.00',
+        welfare: '₹0.00',
+        advances: '₹0.00',
+        deductions: '₹9,300.00',
+        words: 'Rupees Seventy-Three Thousand Five Hundred Only',
+        net: '₹73,500.00'
+      },
+      'amit': {
+        name: 'Amit Sengupta',
+        id: 'EMP-2026-12',
+        role: 'Night Auditor',
+        dept: 'Finance & Accounts',
+        bank: 'Punjab National Bank ••••9912',
+        ifsc: 'PUNB0182700',
+        uan: '100651294871',
+        days: '31 / 31 Days',
+        basic: '₹45,000.00',
+        hra: '₹18,000.00',
+        bonus: '₹4,000.00',
+        conveyance: '₹2,000.00',
+        medical: '₹2,000.00',
+        gross: '₹71,000.00',
+        epf: '₹5,400.00',
+        pt: '₹200.00',
+        tds: '₹1,900.00',
+        welfare: '₹0.00',
+        advances: '₹0.00',
+        deductions: '₹7,500.00',
+        words: 'Rupees Sixty-Three Thousand Five Hundred Only',
+        net: '₹63,500.00'
+      }
+    };
+
+    function updatePaySlipUI(key) {
+      const data = staffSlips[key] || staffSlips['priya'];
+      if (!data) return;
+
+      $('#slip-name').text(data.name);
+      $('#slip-id').text(data.id);
+      $('#slip-role').text(data.role);
+      $('#slip-dept').text(data.dept);
+      $('#slip-bank').text(data.bank);
+      $('#slip-ifsc').text(data.ifsc);
+      $('#slip-uan').text(data.uan);
+      $('#slip-days').text(data.days);
+
+      $('#slip-basic').text(data.basic);
+      $('#slip-hra').text(data.hra);
+      $('#slip-bonus').text(data.bonus);
+      $('#slip-conveyance').text(data.conveyance);
+      $('#slip-medical').text(data.medical);
+      $('#slip-gross').text(data.gross);
+
+      $('#slip-epf').text(data.epf);
+      $('#slip-pt').text(data.pt);
+      $('#slip-tds').text(data.tds);
+      $('#slip-welfare').text(data.welfare);
+      $('#slip-advances').text(data.advances);
+      $('#slip-deductions').text(data.deductions);
+
+      $('#slip-words').text('Amount in words: ' + data.words);
+      $('#slip-net').text(data.net);
+    }
+
+    let isPaySlipPrinting = false;
+    function printPaySlipDirectly(e) {
+      if (e) {
+        if (typeof e.preventDefault === 'function') e.preventDefault();
+        if (typeof e.stopImmediatePropagation === 'function') e.stopImmediatePropagation();
+        if (typeof e.stopPropagation === 'function') e.stopPropagation();
+      }
+      if (isPaySlipPrinting) return false;
+      isPaySlipPrinting = true;
+      try {
+        const printDoc = document.getElementById('printable-pay-slip');
+        if (!printDoc) {
+          window.print();
+          setTimeout(function () { isPaySlipPrinting = false; }, 800);
+          return;
+        }
+        let printArea = document.getElementById('print-invoice-area');
+        if (!printArea) {
+          printArea = document.createElement('div');
+          printArea.id = 'print-invoice-area';
+          document.body.appendChild(printArea);
+        }
+        printArea.innerHTML = '<div style="background:#ffffff; color:#0f172a; padding: 20px; font-family: -apple-system, BlinkMacSystemFont, sans-serif;">' + printDoc.innerHTML + '</div>';
+        printArea.classList.remove('hidden');
+
+        window.print();
+
+        setTimeout(function () {
+          printArea.classList.add('hidden');
+          printArea.innerHTML = '';
+          isPaySlipPrinting = false;
+        }, 1000);
+      } catch (err) {
+        isPaySlipPrinting = false;
+      }
+    }
+    window.printPaySlipDirectly = printPaySlipDirectly;
+
+    function openPaySlipDownloadModal(e) {
+      if (e && typeof e.preventDefault === 'function') e.preventDefault();
+      const modal = document.getElementById('modal-download-pay-slip');
+      const printDoc = document.getElementById('printable-pay-slip');
+      const paper = document.getElementById('payslip-download-preview-paper');
+      if (paper && printDoc) {
+        paper.innerHTML = printDoc.innerHTML;
+      }
+      if (modal) {
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+      }
+    }
+    window.openPaySlipDownloadModal = openPaySlipDownloadModal;
+
+    function closePaySlipDownloadModal() {
+      const modal = document.getElementById('modal-download-pay-slip');
+      if (modal) {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+      }
+    }
+    window.closePaySlipDownloadModal = closePaySlipDownloadModal;
+
+    async function performPaySlipPdfDownload() {
+      const btn = document.getElementById('btn-confirm-payslip-download');
+      let originalBtnHtml = '';
+      if (btn) {
+        originalBtnHtml = btn.innerHTML;
+        btn.disabled = true;
+        btn.innerHTML = `<svg class="w-4 h-4 animate-spin stroke-current mr-1.5 inline" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg><span>Downloading...</span>`;
+      }
+
+      try {
+        const printDoc = document.getElementById('printable-pay-slip');
+        if (!printDoc) {
+          if (typeof showToast === 'function') showToast('No pay slip found to download', 'error');
+          return;
+        }
+
+        const empName = ($('#slip-name').text() || 'Employee').trim().replace(/[^a-zA-Z0-9_-]/g, '_');
+        const empId = ($('#slip-id').text() || 'AUR').trim().replace(/[^a-zA-Z0-9_-]/g, '_');
+        const cycle = ($('#select-slip-cycle').val() || 'October_2026').trim().replace(/[^a-zA-Z0-9_-]/g, '_');
+        const filename = `Aurelia_PaySlip_${empId}_${empName}_${cycle}.pdf`;
+
+        if (window.html2canvas && window.jspdf) {
+          const clone = printDoc.cloneNode(true);
+          clone.style.width = '794px';
+          clone.style.maxWidth = '794px';
+          clone.style.maxHeight = 'none';
+          clone.style.overflow = 'visible';
+          clone.style.padding = '32px';
+          clone.style.background = '#ffffff';
+          clone.style.color = '#0f172a';
+          clone.style.position = 'fixed';
+          clone.style.top = '-99999px';
+          clone.style.left = '-99999px';
+          document.body.appendChild(clone);
+
+          const canvas = await html2canvas(clone, {
+            scale: 2,
+            useCORS: true,
+            allowTaint: true,
+            logging: false,
+            backgroundColor: '#ffffff'
+          });
+          document.body.removeChild(clone);
+
+          const { jsPDF } = window.jspdf;
+          const pdf = new jsPDF('p', 'mm', 'a4');
+          const pageWidth = pdf.internal.pageSize.getWidth();
+          const pageHeight = pdf.internal.pageSize.getHeight();
+
+          const margin = 10;
+          const renderWidth = pageWidth - (margin * 2);
+          const renderHeight = (canvas.height * renderWidth) / canvas.width;
+
+          const imgData = canvas.toDataURL('image/png');
+          pdf.addImage(imgData, 'PNG', margin, margin, renderWidth, Math.min(renderHeight, pageHeight - (margin * 2)));
+          pdf.save(filename);
+
+          closePaySlipDownloadModal();
+          if (typeof showToast === 'function') {
+            showToast(`Pay slip for ${$('#slip-name').text()} downloaded successfully!`, 'success');
+          }
+        } else {
+          // Fallback if CDN unavailable
+          const htmlContent = `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Pay Slip - ${empName}</title><style>body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;padding:32px;color:#0f172a;max-width:800px;margin:0 auto;}</style></head><body>${printDoc.innerHTML}</body></html>`;
+          const blob = new Blob([htmlContent], { type: 'text/html;charset=utf-8;' });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `${filename}.html`;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          URL.revokeObjectURL(url);
+          closePaySlipDownloadModal();
+          if (typeof showToast === 'function') {
+            showToast('Pay slip downloaded successfully!', 'success');
+          }
+        }
+      } catch (err) {
+        console.error('Error generating Pay Slip PDF:', err);
+        if (typeof showToast === 'function') {
+          showToast('Error generating Pay Slip PDF. Please try again.', 'error');
+        }
+      } finally {
+        if (btn) {
+          btn.disabled = false;
+          btn.innerHTML = originalBtnHtml;
+        }
+      }
+    }
+    window.performPaySlipPdfDownload = performPaySlipPdfDownload;
+
     $(document).ready(function() {
-      const staffSlips = {
-        'vikram': { name: 'Vikram Malhotra', id: 'AUR-0101', role: 'General Manager', dept: 'Executive Management' },
-        'priya': { name: 'Priya Sharma', id: 'AUR-0102', role: 'Executive Chef', dept: 'Culinary Division' },
-        'rajesh': { name: 'Rajesh Verma', id: 'AUR-0104', role: 'Front Desk Manager', dept: 'Front Office' },
-        'sunita': { name: 'Sunita Patel', id: 'AUR-0106', role: 'Front Desk Associate', dept: 'Front Office' }
-      };
+      // Event handler for employee dropdown
       $('#select-slip-employee').on('change', function() {
         const key = $(this).val();
+        updatePaySlipUI(key);
         const data = staffSlips[key];
-        if (data) {
-          $('#slip-name').text(data.name);
-          $('#slip-id').text(data.id);
-          $('#slip-role').text(data.role);
-          $('#slip-dept').text(data.dept);
-          if (typeof showToast === 'function') showToast('Loaded pay slip for ' + data.name, 'info');
+        if (data && typeof showToast === 'function') {
+          showToast('Loaded pay slip for ' + data.name, 'info');
         }
       });
+
+      // Event handler for cycle dropdown
+      $('#select-slip-cycle').on('change', function() {
+        const cycle = $(this).val();
+        $('#slip-month').text('Month: ' + cycle);
+      });
+
+      // Check URL parameters (e.g. ?emp=priya or ?emp=AUR-0102)
+      const urlParams = new URLSearchParams(window.location.search);
+      const empParam = urlParams.get('emp');
+      if (empParam) {
+        const cleanParam = empParam.toLowerCase().trim();
+        for (const [key, data] of Object.entries(staffSlips)) {
+          if (key === cleanParam || data.id.toLowerCase() === cleanParam || data.name.toLowerCase().includes(cleanParam)) {
+            $('#select-slip-employee').val(key);
+            updatePaySlipUI(key);
+            break;
+          }
+        }
+      } else {
+        // Default to Priya Sharma matching the user's uploaded reference
+        updatePaySlipUI('priya');
+      }
     });
   </script>
 
