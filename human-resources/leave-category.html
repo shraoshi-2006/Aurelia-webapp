@@ -2935,27 +2935,25 @@
             </div>
           </div>
 
-          <!-- FILTER TABS & SEARCH BAR -->
+          <!-- FILTER DROPDOWN & SEARCH BAR -->
           <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pt-2">
-            <div class="flex items-center space-x-1.5 overflow-x-auto pb-1 sm:pb-0">
-              <button type="button"
-                class="btn-emp-leave-filter active text-xs font-semibold py-1.5 px-3.5 rounded-full bg-[#14213D] text-white shadow-xs cursor-pointer"
-                data-category="all">All Categories (12)</button>
-              <button type="button"
-                class="btn-emp-leave-filter text-xs font-semibold py-1.5 px-3 rounded-full text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white cursor-pointer"
-                data-category="Casual Leave (CL)">Casual Leave (6)</button>
-              <button type="button"
-                class="btn-emp-leave-filter text-xs font-semibold py-1.5 px-3 rounded-full text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white cursor-pointer"
-                data-category="Sick / Medical Leave (SL)">Sick Leave (2)</button>
-              <button type="button"
-                class="btn-emp-leave-filter text-xs font-semibold py-1.5 px-3 rounded-full text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white cursor-pointer"
-                data-category="Earned / Privilege Leave (EL)">Earned Leave (3)</button>
-              <button type="button"
-                class="btn-emp-leave-filter text-xs font-semibold py-1.5 px-3 rounded-full text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white cursor-pointer"
-                data-category="Compensatory Off (CO)">Comp Off (2)</button>
-              <button type="button"
-                class="btn-emp-leave-filter text-xs font-semibold py-1.5 px-3 rounded-full text-rose-600 hover:text-rose-700 bg-rose-50 dark:bg-rose-950/40 border border-rose-200/60 cursor-pointer"
-                data-status="onleave">On Leave Now (1)</button>
+            <!-- Category Filter Dropdown -->
+            <div class="relative w-full sm:w-64">
+              <select id="select-emp-leave-category"
+                style="-webkit-appearance: none !important; -moz-appearance: none !important; appearance: none !important;"
+                class="Aurelia-input w-full text-xs py-2 pl-3.5 pr-10 font-semibold cursor-pointer bg-white dark:bg-slate-800 text-slate-800 dark:text-white rounded-full border border-[#E5E5E5] dark:border-slate-700 shadow-xs focus:outline-none">
+                <option value="all" selected>All Categories (12)</option>
+                <option value="Casual Leave (CL)">Casual Leave (6)</option>
+                <option value="Sick / Medical Leave (SL)">Sick Leave (2)</option>
+                <option value="Earned / Privilege Leave (EL)">Earned Leave (3)</option>
+                <option value="Compensatory Off (CO)">Comp Off (2)</option>
+                <option value="onleave">On Leave Now (1)</option>
+              </select>
+              <div class="pointer-events-none absolute inset-y-0 right-4 flex items-center text-slate-500 dark:text-slate-400">
+                <svg class="w-4 h-4 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                </svg>
+              </div>
             </div>
             <div class="relative w-full sm:w-72">
               <input type="text" id="input-emp-leave-search" class="Aurelia-input w-full text-xs pl-9 pr-4 font-medium"
@@ -3885,39 +3883,48 @@
         if (typeof showToast === 'function') showToast('Leave Category created successfully!', 'success');
       });
 
-      // Employee Leave Records Category Filter
-      $('.btn-emp-leave-filter').on('click', function () {
-        $('.btn-emp-leave-filter').removeClass('active bg-[#14213D] text-white shadow-xs').addClass('text-slate-600 dark:text-slate-400');
-        $(this).addClass('active bg-[#14213D] text-white shadow-xs').removeClass('text-slate-600 dark:text-slate-400');
-        const cat = $(this).data('category');
-        const status = $(this).data('status');
-        if (status === 'onleave') {
-          $('#page-emp-leave-tbody tr').hide();
-          const $matched = $('#page-emp-leave-tbody tr[data-status="onleave"]');
-          $matched.show();
-          $('#emp-leave-count-label').text('Showing ' + $matched.length + ' employee currently On Leave');
-        } else if (cat === 'all') {
-          $('#page-emp-leave-tbody tr').show();
-          $('#emp-leave-count-label').text('Showing 12 employee leave records across all categories');
-        } else {
-          $('#page-emp-leave-tbody tr').hide();
-          const $matched = $('#page-emp-leave-tbody tr[data-category="' + cat + '"]');
-          $matched.show();
-          $('#emp-leave-count-label').text('Showing ' + $matched.length + ' employee records under ' + cat);
-        }
-      });
-
-      // Employee Leave Records Search
-      $('#input-emp-leave-search').on('input', function () {
-        const query = $(this).val().toLowerCase();
+      // Employee Leave Records Dropdown Category Filter & Search
+      function filterEmpLeaveTable() {
+        const catVal = $('#select-emp-leave-category').val() || 'all';
+        const query = ($('#input-emp-leave-search').val() || '').toLowerCase().trim();
         let visibleCount = 0;
+
         $('#page-emp-leave-tbody tr').each(function () {
-          const match = $(this).text().toLowerCase().includes(query);
-          $(this).toggle(match);
-          if (match) visibleCount++;
+          const $row = $(this);
+          const rowCat = $row.data('category') || '';
+          const rowStatus = $row.data('status') || '';
+          const rowText = $row.text().toLowerCase();
+
+          let matchCat = false;
+          if (catVal === 'all') {
+            matchCat = true;
+          } else if (catVal === 'onleave') {
+            matchCat = (rowStatus === 'onleave');
+          } else {
+            matchCat = (rowCat === catVal);
+          }
+
+          const matchSearch = !query || rowText.includes(query);
+
+          if (matchCat && matchSearch) {
+            $row.show();
+            visibleCount++;
+          } else {
+            $row.hide();
+          }
         });
-        $('#emp-leave-count-label').text('Showing ' + visibleCount + ' matching employee leave records');
-      });
+
+        if (catVal === 'onleave') {
+          $('#emp-leave-count-label').text('Showing ' + visibleCount + ' employee currently On Leave');
+        } else if (catVal === 'all') {
+          $('#emp-leave-count-label').text('Showing ' + visibleCount + ' employee leave records across all categories');
+        } else {
+          $('#emp-leave-count-label').text('Showing ' + visibleCount + ' employee records under ' + catVal);
+        }
+      }
+
+      $('#select-emp-leave-category').on('change', filterEmpLeaveTable);
+      $('#input-emp-leave-search').on('input', filterEmpLeaveTable);
     });
   </script>
 
