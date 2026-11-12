@@ -122,14 +122,47 @@ $(document).ready(function () {
   });
 
   const DEFAULT_ORDERS = [
+    makeOrder('ORD-0089', 'Rohan Mehta', '9845123490', 'Table 2', 'Pending', '2026-10-27T11:20:00', 'Serve starters first, medium spice level', [
+      { id: 'item-7', name: 'Paneer Tikka Angara', price: 14.00, qty: 2 },
+      { id: 'item-13', name: 'Garlic Naan', price: 4.50, qty: 3 },
+      { id: 'item-25', name: 'Fresh Lime Soda', price: 4.50, qty: 2 }
+    ]),
+    makeOrder('ORD-0088', 'Meera Nair', '9886234510', 'Suite 402', 'Preparing', '2026-10-27T11:05:00', 'Extra raita on the side for room service', [
+      { id: 'item-18', name: 'Mutton Gosht Biryani', price: 23.50, qty: 1 },
+      { id: 'item-9', name: 'Hara Bhara Kabab', price: 11.50, qty: 1 },
+      { id: 'item-24', name: 'Masala Chai Pot', price: 3.50, qty: 2 }
+    ]),
+    makeOrder('ORD-0087', 'Karan Malhotra', '9741998877', 'Table 9', 'Served', '2026-10-27T10:50:00', 'No onions in Kadai Paneer', [
+      { id: 'item-5', name: 'Kadai Paneer', price: 15.00, qty: 2 },
+      { id: 'item-15', name: 'Lachha Paratha', price: 4.00, qty: 4 },
+      { id: 'item-20', name: 'Gulab Jamun with Rabri', price: 7.50, qty: 2 }
+    ]),
+    makeOrder('ORD-0086', 'Priya Sundaram', '9886167890', 'Room 204', 'Pending', '2026-10-27T10:35:00', 'Deliver hot to Deluxe Room 204', [
+      { id: 'item-27', name: 'Executive Club Sandwich', price: 13.50, qty: 2 },
+      { id: 'item-23', name: 'South Indian Filter Coffee', price: 4.00, qty: 2 }
+    ]),
+    makeOrder('ORD-0085', 'Siddharth Rao', '9900445566', 'Table 11', 'Cancelled', '2026-10-27T10:20:00', 'Guest rescheduled dinner reservation to evening', [
+      { id: 'item-3', name: 'Chicken Tikka Masala', price: 18.50, qty: 1 },
+      { id: 'item-12', name: 'Butter Naan', price: 3.50, qty: 3 }
+    ]),
+    makeOrder('ORD-0084', 'Amit Patel', '9823045678', 'Table 5', 'Served', '2026-10-27T10:15:00', 'Extra chutney with starters', [
+      { id: 'item-10', name: 'Crispy Corn Pepper Salt', price: 10.50, qty: 2 },
+      { id: 'item-17', name: 'Royal Veg Dum Biryani', price: 14.50, qty: 2 },
+      { id: 'item-21', name: 'Kesar Rasmalai (2 Pcs)', price: 8.00, qty: 2 }
+    ]),
+    makeOrder('ORD-0083', 'Sunita Kulkarni', '9448123409', 'Suite 301', 'Completed', '2026-10-27T10:10:00', 'Settled to room folio invoice', [
+      { id: 'item-6', name: 'Butter Chicken Grand Style', price: 19.50, qty: 1 },
+      { id: 'item-19', name: 'Jeera Basmati Rice', price: 8.50, qty: 1 },
+      { id: 'item-22', name: 'Shahi Matka Kulfi', price: 6.50, qty: 2 }
+    ], 'INV-2026-0141'),
+    makeOrder('ORD-0082', 'Vikramaditya Reddy', '9741234567', 'Room 304', 'Preparing', '2026-10-27T10:05:00', 'Serve warm with lime wedges and onion rings', [
+      { id: 'item-16', name: 'Hyderabadi Chicken Dum Biryani', price: 19.00, qty: 2 },
+      { id: 'item-26', name: 'Mango Lassi', price: 6.00, qty: 2 }
+    ]),
     makeOrder('ORD-0081', 'Rajesh Sharma', '9845012345', 'Table 4', 'Pending', '2026-10-27T09:45:00', 'Less oil in Dal Makhani, extra butter on naan', [
       { id: 'item-2', name: 'Dal Makhani', price: 12.00, qty: 1 },
       { id: 'item-1', name: 'Paneer Butter Masala', price: 16.50, qty: 1 },
       { id: 'item-12', name: 'Butter Naan', price: 3.50, qty: 4 }
-    ]),
-    makeOrder('ORD-0082', 'Vikramaditya Reddy', '9741234567', 'Room 304', 'Preparing', '2026-10-27T10:05:00', 'Serve warm with lime wedges and onion rings', [
-      { id: 'item-16', name: 'Hyderabadi Chicken Dum Biryani', price: 19.00, qty: 2 },
-      { id: 'item-26', name: 'Mango Lassi', price: 6.00, qty: 2 }
     ]),
     makeOrder('ORD-0080', 'Ananya Deshmukh', '9900298765', 'Table 7', 'Completed', '2026-10-27T08:20:00', 'Table cleared, invoice settled via UPI', [
       { id: 'item-28', name: 'Continental Breakfast Tray', price: 18.00, qty: 2 },
@@ -254,8 +287,16 @@ $(document).ready(function () {
       if (!Storage.get(STORAGE_KEYS.MENU, []).length) {
         Storage.set(STORAGE_KEYS.MENU, DEFAULT_MENU_ITEMS);
       }
-      if (!Storage.get(STORAGE_KEYS.ORDERS, []).length) {
+      const storedOrders = Storage.get(STORAGE_KEYS.ORDERS, []);
+      if (!storedOrders.length) {
         Storage.set(STORAGE_KEYS.ORDERS, DEFAULT_ORDERS);
+      } else if (!localStorage.getItem('finset_orders_seed_v31')) {
+        const existingIds = new Set(storedOrders.map(o => o.id));
+        const missingDefaults = DEFAULT_ORDERS.filter(o => !existingIds.has(o.id));
+        if (missingDefaults.length) {
+          Storage.set(STORAGE_KEYS.ORDERS, [...storedOrders, ...missingDefaults]);
+        }
+        localStorage.setItem('finset_orders_seed_v31', 'true');
       }
       if (!Storage.get(STORAGE_KEYS.CUSTOMERS, []).length) {
         Storage.set(STORAGE_KEYS.CUSTOMERS, DEFAULT_CUSTOMERS);
@@ -4572,12 +4613,7 @@ $(document).ready(function () {
     orders.forEach(ord => {
       const estTotal = (ord.items || []).reduce((acc, it) => acc + (Number(it.price || 0) * Number(it.qty || 1)), 0);
       const isBilled = !!ord.billNumber;
-
-      const itemsSummary = (ord.items || []).map(it => `
-        <span class="inline-block mr-2.5 text-xs py-0.5">
-          <strong class="font-bold text-[#14213D] dark:text-white">${it.qty}×</strong> <span class="text-slate-700 dark:text-slate-300">${escapeHtml(it.name)}</span>
-        </span>
-      `).join('');
+      const itemCount = (ord.items || []).reduce((sum, it) => sum + (Number(it.qty) || 1), 0);
 
       $tbody.append(`
         <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors">
@@ -4591,10 +4627,11 @@ $(document).ready(function () {
             <div class="font-bold text-slate-900 dark:text-white">${escapeHtml(ord.customerName)}</div>
             <div class="text-[11px] text-slate-400 font-medium">${escapeHtml(ord.tableRoom)}</div>
           </td>
-          <td class="py-3 px-4 max-w-sm">
-            <div class="flex flex-wrap items-center">
-              ${itemsSummary}
-            </div>
+          <td class="py-3 px-4 text-left whitespace-nowrap">
+            <button type="button" class="btn-view-order-items btn-finset-secondary inline-flex items-center gap-1.5 text-xs py-1 px-3 cursor-pointer" data-id="${ord.id}" title="View ordered items list">
+              <span>Click here to see</span>
+              <span class="inline-flex items-center justify-center px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-[#14213D]/10 dark:bg-slate-700 text-[#14213D] dark:text-slate-200">${itemCount}</span>
+            </button>
           </td>
           <td class="py-3 px-4 text-right font-black text-[#14213D] dark:text-white whitespace-nowrap">
             ${formatMoney(estTotal)}
@@ -4777,6 +4814,93 @@ $(document).ready(function () {
     renderOrdersSection();
     renderSidebarBadges();
     renderDashboard();
+  });
+
+  // View Ordered Items List Popup ("Click here to see")
+  function openOrderItemsListModal(orderId) {
+    const orders = Storage.get(STORAGE_KEYS.ORDERS) || [];
+    const ord = orders.find(o => o.id === orderId || o.orderNumber === orderId);
+    if (!ord) return;
+
+    let $modal = $('#modal-order-items-list');
+    if (!$modal.length) {
+      $('body').append(`
+        <div id="modal-order-items-list" class="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-sm hidden flex items-center justify-center p-4">
+          <div class="Aurelia-card max-w-md w-full p-6 space-y-4 shadow-2xl">
+            <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
+              <div>
+                <h3 id="modal-order-items-title" class="text-base font-bold text-slate-900 dark:text-white">Ordered Items</h3>
+                <p id="modal-order-items-subtitle" class="text-[11px] text-slate-400 font-medium"></p>
+              </div>
+              <button type="button" class="btn-close-modal w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-500 hover:text-slate-800 dark:text-slate-300 dark:hover:text-white flex items-center justify-center transition-colors text-sm font-semibold cursor-pointer" title="Close">&times;</button>
+            </div>
+            <div class="overflow-x-auto max-h-72 overflow-y-auto rounded-xl border border-slate-100 dark:border-slate-800">
+              <table class="w-full text-xs text-left">
+                <thead>
+                  <tr class="Aurelia-table-header text-slate-500 font-semibold text-[11px]">
+                    <th class="py-2 px-3">#</th>
+                    <th class="py-2 px-3">Item</th>
+                    <th class="py-2 px-2">Qty</th>
+                    <th class="py-2 px-3">Price</th>
+                    <th class="py-2 px-3">Subtotal</th>
+                  </tr>
+                </thead>
+                <tbody id="modal-order-items-tbody" class="divide-y divide-slate-100 dark:divide-slate-800"></tbody>
+              </table>
+            </div>
+            <div class="flex items-center justify-between text-xs font-semibold pt-1">
+              <span id="modal-order-items-count" class="text-slate-500 dark:text-slate-400"></span>
+              <div>
+                <span class="text-slate-500 mr-1.5">Total:</span>
+                <span id="modal-order-items-total" class="text-base text-[#14213D] dark:text-white font-bold">₹0.00</span>
+              </div>
+            </div>
+            <div class="pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-end">
+              <button type="button" class="btn-close-modal btn-Aurelia-secondary text-xs py-1.5 px-4 cursor-pointer">Close</button>
+            </div>
+          </div>
+        </div>
+      `);
+      $modal = $('#modal-order-items-list');
+      $modal.on('click', '.btn-close-modal', function () {
+        $modal.addClass('hidden');
+      });
+      $modal.on('click', function (e) {
+        if (e.target === this) $(this).addClass('hidden');
+      });
+    }
+
+    $('#modal-order-items-title').text(`Ordered Items — ${ord.orderNumber}`);
+    $('#modal-order-items-subtitle').text(`${ord.customerName} • ${ord.tableRoom}`);
+
+    const $tbody = $('#modal-order-items-tbody');
+    $tbody.empty();
+    let total = 0;
+    let totalQty = 0;
+    (ord.items || []).forEach((it, idx) => {
+      const qty = Number(it.qty) || 1;
+      const price = Number(it.price) || 0;
+      const line = qty * price;
+      total += line;
+      totalQty += qty;
+      $tbody.append(`
+        <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40">
+          <td class="py-2 px-3 text-slate-400 font-mono">${idx + 1}</td>
+          <td class="py-2 px-3 font-semibold text-slate-800 dark:text-white">${escapeHtml(it.name)}</td>
+          <td class="py-2 px-2 font-bold text-slate-700 dark:text-slate-200">${qty}</td>
+          <td class="py-2 px-3 text-slate-500">${formatMoney(price)}</td>
+          <td class="py-2 px-3 font-bold text-slate-900 dark:text-white">${formatMoney(line)}</td>
+        </tr>
+      `);
+    });
+
+    $('#modal-order-items-count').text(`${(ord.items || []).length} dish(es) • ${totalQty} qty`);
+    $('#modal-order-items-total').text(formatMoney(total));
+    $modal.removeClass('hidden');
+  }
+
+  $(document).on('click', '.btn-view-order-items', function () {
+    openOrderItemsListModal($(this).data('id'));
   });
 
   // View Order Details Modal
