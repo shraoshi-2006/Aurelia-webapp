@@ -519,19 +519,19 @@ $(document).ready(function () {
         return `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-[#b91c1c] text-white shadow-2xs">On Leave</span>`;
       case 'paid':
       case 'completed':
-        return `<span class="px-2.5 py-0.5 text-xs font-semibold rounded-full bg-[#ECFDF3] text-[#12B76A] dark:bg-emerald-950/50 dark:text-emerald-300">${escapeHtml(status)}</span>`;
+        return `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-[#15803d] text-white shadow-2xs">${escapeHtml(status)}</span>`;
       case 'available':
-        return `<span class="px-2.5 py-0.5 text-xs font-semibold rounded-full bg-[#ECFDF3] text-[#12B76A] dark:bg-emerald-950/50 dark:text-emerald-300">${escapeHtml(status)}</span>`;
+        return `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-[#15803d] text-white shadow-2xs">${escapeHtml(status)}</span>`;
       case 'pending':
-        return `<span class="px-2.5 py-0.5 text-xs font-semibold rounded-full bg-[#FFF5E6] text-[#B26A00] border border-[#FCA311]/30">${escapeHtml(status)}</span>`;
+        return `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-[#ea580c] text-white shadow-2xs">${escapeHtml(status)}</span>`;
       case 'preparing':
-        return `<span class="px-2.5 py-0.5 text-xs font-semibold rounded-full bg-amber-50 text-amber-700 dark:bg-amber-950/50 dark:text-amber-300">${escapeHtml(status)}</span>`;
+        return `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-[#ca8a04] text-white shadow-2xs">${escapeHtml(status)}</span>`;
       case 'served':
-        return `<span class="px-2.5 py-0.5 text-xs font-semibold rounded-full bg-blue-50 text-blue-700 dark:bg-blue-950/50 dark:text-blue-300">${escapeHtml(status)}</span>`;
+        return `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-[#0284c7] text-white shadow-2xs">${escapeHtml(status)}</span>`;
       case 'cancelled':
       case 'unavailable':
       case 'refunded':
-        return `<span class="px-2.5 py-0.5 text-xs font-semibold rounded-full bg-rose-50 text-rose-700 dark:bg-rose-950/50 dark:text-rose-300">${escapeHtml(status)}</span>`;
+        return `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-[#b91c1c] text-white shadow-2xs">${escapeHtml(status)}</span>`;
       default:
         return `<span class="px-2.5 py-0.5 text-xs font-semibold rounded-full bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300">${escapeHtml(status)}</span>`;
     }
@@ -3904,10 +3904,10 @@ $(document).ready(function () {
         <table style="width: 100%; font-size: 12px; border-collapse: collapse; margin-bottom: 16px;">
           <thead>
             <tr style="border-top: 1px solid #222; border-bottom: 1px solid #222; text-align: left; font-size: 11px;">
-              <th style="padding: 6px 0;">Item</th>
-              <th style="padding: 6px 0; text-align: center;">Qty</th>
-              <th style="padding: 6px 0; text-align: right;">Price</th>
-              <th style="padding: 6px 0; text-align: right;">Subtotal</th>
+              <th style="padding: 6px 0; text-align: left;">Item</th>
+              <th style="padding: 6px 0; text-align: left;">Qty</th>
+              <th style="padding: 6px 0; text-align: left;">Price</th>
+              <th style="padding: 6px 0; text-align: left;">Subtotal</th>
             </tr>
           </thead>
           <tbody>
@@ -4600,7 +4600,7 @@ $(document).ready(function () {
             ${formatMoney(estTotal)}
           </td>
           <td class="py-3 px-4 text-center whitespace-nowrap">
-            <select class="order-status-inline-change finset-input py-1 px-2.5 text-xs font-semibold rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-white cursor-pointer" data-id="${ord.id}">
+            <select class="order-status-inline-change finset-input py-1 px-2.5 text-xs font-semibold rounded-lg border border-slate-200 dark:border-slate-700 cursor-pointer" data-id="${ord.id}" data-status="${escapeHtml((ord.status || 'Pending').toLowerCase())}">
               <option value="Pending" ${ord.status === 'Pending' ? 'selected' : ''}>Pending</option>
               <option value="Preparing" ${ord.status === 'Preparing' ? 'selected' : ''}>Preparing</option>
               <option value="Served" ${ord.status === 'Served' ? 'selected' : ''}>Served</option>
@@ -4627,8 +4627,10 @@ $(document).ready(function () {
 
   // Inline Status Change
   $(document).on('change', '.order-status-inline-change', function () {
-    const id = $(this).data('id');
-    const newStatus = $(this).val();
+    const $sel = $(this);
+    const id = $sel.data('id');
+    const newStatus = $sel.val();
+    $sel.attr('data-status', String(newStatus || 'Pending').toLowerCase());
     const orders = Storage.get(STORAGE_KEYS.ORDERS);
     const ord = orders.find(o => o.id === id);
     if (ord) {
@@ -6610,12 +6612,12 @@ $(document).ready(function () {
         <table style="width:100%;border-collapse:collapse;table-layout:auto;">
           <thead>
             <tr style="background:#14213D;color:#ffffff;text-align:left;">
-              <th style="padding:8px;border:1px solid #14213D;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.04em;white-space:nowrap;">Date</th>
-              <th style="padding:8px;border:1px solid #14213D;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.04em;">Holiday / Festival</th>
-              <th style="padding:8px;border:1px solid #14213D;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.04em;">Day</th>
-              <th style="padding:8px;border:1px solid #14213D;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.04em;white-space:nowrap;">Classification</th>
-              <th style="padding:8px;border:1px solid #14213D;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.04em;">Staffing Coverage &amp; Compensation Policy</th>
-              <th style="padding:8px;border:1px solid #14213D;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.04em;text-align:center;white-space:nowrap;">Status</th>
+              <th style="padding:8px;border:1px solid #14213D;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.04em;text-align:left;white-space:nowrap;">Date</th>
+              <th style="padding:8px;border:1px solid #14213D;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.04em;text-align:left;">Holiday / Festival</th>
+              <th style="padding:8px;border:1px solid #14213D;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.04em;text-align:left;">Day</th>
+              <th style="padding:8px;border:1px solid #14213D;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.04em;text-align:left;white-space:nowrap;">Classification</th>
+              <th style="padding:8px;border:1px solid #14213D;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.04em;text-align:left;">Staffing Coverage &amp; Compensation Policy</th>
+              <th style="padding:8px;border:1px solid #14213D;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.04em;text-align:left;white-space:nowrap;">Status</th>
             </tr>
           </thead>
           <tbody>
@@ -7122,6 +7124,66 @@ $(document).ready(function () {
       .dark #btn-top-notifications:hover {
         background: rgba(51, 65, 85, 0.94) !important;
         border-color: rgba(252, 163, 17, 0.6) !important;
+      }
+      table th,
+      table thead th {
+        text-align: left !important;
+      }
+      select.order-status-inline-change {
+        border-radius: 9999px !important;
+        padding-left: 0.75rem !important;
+        padding-right: 0.75rem !important;
+        border-color: transparent !important;
+        color: #FFFFFF !important;
+        font-weight: 600 !important;
+      }
+      select.order-status-inline-change[data-status="completed"],
+      select.order-status-inline-change[data-status="completed"]:focus,
+      .dark select.order-status-inline-change[data-status="completed"],
+      .dark select.order-status-inline-change[data-status="completed"]:focus {
+        background: #15803d !important;
+        border-color: #15803d !important;
+        color: #FFFFFF !important;
+      }
+      select.order-status-inline-change[data-status="cancelled"],
+      select.order-status-inline-change[data-status="cancelled"]:focus,
+      .dark select.order-status-inline-change[data-status="cancelled"],
+      .dark select.order-status-inline-change[data-status="cancelled"]:focus {
+        background: #b91c1c !important;
+        border-color: #b91c1c !important;
+        color: #FFFFFF !important;
+      }
+      select.order-status-inline-change[data-status="preparing"],
+      select.order-status-inline-change[data-status="preparing"]:focus,
+      .dark select.order-status-inline-change[data-status="preparing"],
+      .dark select.order-status-inline-change[data-status="preparing"]:focus {
+        background: #ca8a04 !important;
+        border-color: #ca8a04 !important;
+        color: #FFFFFF !important;
+      }
+      select.order-status-inline-change[data-status="pending"],
+      select.order-status-inline-change[data-status="pending"]:focus,
+      .dark select.order-status-inline-change[data-status="pending"],
+      .dark select.order-status-inline-change[data-status="pending"]:focus {
+        background: #ea580c !important;
+        border-color: #ea580c !important;
+        color: #FFFFFF !important;
+      }
+      select.order-status-inline-change[data-status="served"],
+      select.order-status-inline-change[data-status="served"]:focus,
+      .dark select.order-status-inline-change[data-status="served"],
+      .dark select.order-status-inline-change[data-status="served"]:focus {
+        background: #0284c7 !important;
+        border-color: #0284c7 !important;
+        color: #FFFFFF !important;
+      }
+      select.order-status-inline-change option {
+        background-color: #FFFFFF !important;
+        color: #1E293B !important;
+      }
+      .dark select.order-status-inline-change option {
+        background-color: #1E293B !important;
+        color: #F8FAFC !important;
       }
     `;
 
