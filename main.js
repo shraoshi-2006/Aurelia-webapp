@@ -4381,6 +4381,73 @@ $(document).ready(function () {
     renderMenuItemsGrid();
   });
 
+  function getMenuDishMeta(item) {
+    const rawName = String(item.name || '').toLowerCase();
+    const rawDesc = String(item.description || '').toLowerCase();
+    const rawCat = String(item.category || '').toLowerCase();
+    const combined = `${rawName} ${rawDesc}`;
+
+    const isNonVeg = /\b(chicken|mutton|lamb|gosht|fish|prawn|prawns|shrimp|egg|eggs|meat|keema|bacon|turkey|seafood|crab)\b/.test(combined);
+
+    let emoji = '🍽️';
+    if (rawName.includes('biryani')) emoji = '🍲';
+    else if (rawName.includes('rice')) emoji = '🍚';
+    else if (rawName.includes('naan') || rawName.includes('roti') || rawName.includes('paratha')) emoji = '🫓';
+    else if (rawName.includes('coffee')) emoji = '☕';
+    else if (rawName.includes('chai') || rawName.includes('tea')) emoji = '🫖';
+    else if (rawName.includes('lime') || rawName.includes('lemon')) emoji = '🍋';
+    else if (rawName.includes('lassi') || rawName.includes('mango')) emoji = '🥭';
+    else if (rawName.includes('sandwich')) emoji = '🥪';
+    else if (rawName.includes('breakfast') || rawName.includes('croissant')) emoji = '🥐';
+    else if (rawName.includes('kulfi') || rawName.includes('ice cream')) emoji = '🍨';
+    else if (rawName.includes('jamun') || rawName.includes('rasmalai') || rawCat.includes('dessert')) emoji = '🍮';
+    else if (rawName.includes('chicken') || rawName.includes('tandoori')) emoji = '🍗';
+    else if (rawName.includes('mutton') || rawName.includes('lamb') || rawName.includes('gosht')) emoji = '🍖';
+    else if (rawName.includes('corn')) emoji = '🌽';
+    else if (rawName.includes('tikka') || rawName.includes('kabab') || rawName.includes('kebab')) emoji = '🍢';
+    else if (rawCat.includes('main')) emoji = '🍛';
+    else if (rawCat.includes('starter')) emoji = '🥟';
+    else if (rawCat.includes('bread')) emoji = '🫓';
+    else if (rawCat.includes('rice') || rawCat.includes('biryani')) emoji = '🍲';
+    else if (rawCat.includes('beverage')) emoji = '🥤';
+    else if (rawCat.includes('room')) emoji = '🛎️';
+
+    let tileTheme = 'from-slate-50 to-slate-100 border-slate-200/80 dark:from-slate-800 dark:to-slate-700/70 dark:border-slate-600/50';
+    if (rawCat.includes('main')) {
+      tileTheme = 'from-amber-50 to-orange-100/90 border-amber-200/80 dark:from-amber-950/60 dark:to-orange-900/40 dark:border-amber-700/40';
+    } else if (rawCat.includes('starter')) {
+      tileTheme = 'from-rose-50 to-orange-100/80 border-rose-200/80 dark:from-rose-950/60 dark:to-orange-900/40 dark:border-rose-700/40';
+    } else if (rawCat.includes('bread')) {
+      tileTheme = 'from-yellow-50 to-amber-100/80 border-yellow-200/80 dark:from-yellow-950/60 dark:to-amber-900/40 dark:border-yellow-700/40';
+    } else if (rawCat.includes('rice') || rawCat.includes('biryani')) {
+      tileTheme = 'from-orange-50 to-amber-100/90 border-orange-200/80 dark:from-orange-950/60 dark:to-amber-900/40 dark:border-orange-700/40';
+    } else if (rawCat.includes('dessert')) {
+      tileTheme = 'from-pink-50 to-rose-100/80 border-pink-200/80 dark:from-pink-950/60 dark:to-rose-900/40 dark:border-pink-700/40';
+    } else if (rawCat.includes('beverage')) {
+      tileTheme = 'from-sky-50 to-cyan-100/80 border-sky-200/80 dark:from-sky-950/60 dark:to-cyan-900/40 dark:border-sky-700/40';
+    } else if (rawCat.includes('room')) {
+      tileTheme = 'from-indigo-50 to-slate-100/90 border-indigo-200/80 dark:from-indigo-950/60 dark:to-slate-800/60 dark:border-indigo-700/40';
+    }
+
+    let badge = null;
+    if (rawName.includes('grand') || rawName.includes('royal') || rawName.includes('shahi') || rawName.includes('signature')) {
+      badge = { label: "Chef's Signature", cls: 'bg-[#FCA311]/15 text-[#b45309] dark:text-[#FCA311] border border-[#FCA311]/30' };
+    } else if (['item-1', 'item-2', 'item-12', 'item-16', 'item-20', 'item-26'].includes(item.id)) {
+      badge = { label: 'Bestseller', cls: 'bg-[#14213D]/10 text-[#14213D] dark:bg-slate-700 dark:text-amber-300 border border-[#14213D]/15 dark:border-slate-600' };
+    } else if (rawName.includes('tandoori') || rawName.includes('angara') || rawName.includes('clay oven') || rawDesc.includes('clay oven')) {
+      badge = { label: 'Clay Oven', cls: 'bg-orange-50 text-orange-700 dark:bg-orange-950/50 dark:text-orange-300 border border-orange-200/70 dark:border-orange-800/50' };
+    } else if (rawName.includes('dum')) {
+      badge = { label: 'Slow Dum', cls: 'bg-amber-50 text-amber-700 dark:bg-amber-950/50 dark:text-amber-300 border border-amber-200/70 dark:border-amber-800/50' };
+    } else if (rawCat.includes('room')) {
+      badge = { label: 'In-Room 24×7', cls: 'bg-indigo-50 text-indigo-700 dark:bg-indigo-950/50 dark:text-indigo-300 border border-indigo-200/70 dark:border-indigo-800/50' };
+    }
+
+    const codeNum = String(item.id || '').replace(/^item-?/i, '');
+    const code = codeNum && /^\d+$/.test(codeNum) ? `MN-${codeNum.padStart(2, '0')}` : String(item.id || 'DISH').toUpperCase().slice(0, 8);
+
+    return { isNonVeg, emoji, tileTheme, badge, code };
+  }
+
   function renderMenuItemsGrid() {
     const menu = Storage.get(STORAGE_KEYS.MENU);
     const $tbody = $('#menu-items-tbody');
@@ -4402,10 +4469,31 @@ $(document).ready(function () {
 
     filtered.forEach(item => {
       const isAvail = !!item.available;
+      const meta = getMenuDishMeta(item);
+      const dietaryMark = meta.isNonVeg
+        ? `<span class="inline-flex items-center justify-center w-3.5 h-3.5 rounded-[3px] border border-rose-600 bg-white dark:bg-slate-900 flex-shrink-0" title="Non-Vegetarian" aria-label="Non-Vegetarian"><svg class="w-2 h-2 text-rose-600 fill-current" viewBox="0 0 10 10"><polygon points="5,1.5 9,8.5 1,8.5"/></svg></span>`
+        : `<span class="inline-flex items-center justify-center w-3.5 h-3.5 rounded-[3px] border border-emerald-600 bg-white dark:bg-slate-900 flex-shrink-0" title="Vegetarian" aria-label="Vegetarian"><span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span></span>`;
+
       $tbody.append(`
-        <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors">
-          <td class="py-3 px-4 font-bold text-slate-900 dark:text-white ${!isAvail ? 'opacity-65' : ''}">
-            ${escapeHtml(item.name)}
+        <tr class="group hover:bg-slate-50/90 dark:hover:bg-slate-800/40 transition-colors">
+          <td class="py-3 px-4 ${!isAvail ? 'opacity-65' : ''}">
+            <div class="flex items-center gap-3 min-w-[220px]">
+              <div class="relative w-10 h-10 rounded-xl bg-gradient-to-br ${meta.tileTheme} border flex items-center justify-center flex-shrink-0 shadow-sm group-hover:scale-105 group-hover:shadow transition-all duration-200">
+                <span class="text-lg leading-none select-none" aria-hidden="true">${meta.emoji}</span>
+              </div>
+              <div class="min-w-0">
+                <div class="flex items-center gap-1.5">
+                  ${dietaryMark}
+                  <span class="font-bold text-slate-900 dark:text-white group-hover:text-[#14213D] dark:group-hover:text-[#FCA311] transition-colors truncate">
+                    ${escapeHtml(item.name)}
+                  </span>
+                </div>
+                <div class="flex items-center gap-1.5 mt-0.5">
+                  <span class="text-[10px] font-semibold font-mono tracking-wider text-slate-400 dark:text-slate-500">#${escapeHtml(meta.code)}</span>
+                  ${meta.badge ? `<span class="inline-flex items-center px-1.5 py-0 rounded-md text-[10px] font-semibold leading-4 ${meta.badge.cls}">${escapeHtml(meta.badge.label)}</span>` : ''}
+                </div>
+              </div>
+            </div>
           </td>
           <td class="py-3 px-4 whitespace-nowrap ${!isAvail ? 'opacity-65' : ''}">
             <span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-[#E5E5E5]/60 dark:bg-slate-700 text-[#14213D] dark:text-slate-200 uppercase tracking-wider">
