@@ -3268,7 +3268,7 @@
                   </div>
                 </div>
 
-                <!-- Right Controls: 'All accounts' and Calendar Date Range in ONE single line aligned with Money flow -->
+                <!-- Right Controls: 'All accounts' aligned with Money flow -->
                 <div class="money-flow-controls flex items-center gap-2.5 text-xs font-semibold flex-shrink-0">
                   <!-- All accounts dropdown -->
                   <select id="select-money-flow-account"
@@ -3278,26 +3278,6 @@
                     <option value="restaurant">Restaurant Bar</option>
                     <option value="bank">HDFC Hotel Vault</option>
                   </select>
-
-                  <!-- Calendar Date Range Capsule in same line -->
-                  <div
-                    class="calendar-range-capsule h-8 flex items-center bg-white/80 dark:bg-slate-800/80 backdrop-blur-md rounded-full px-3 border border-[#E5E5E5]/90 dark:border-slate-700/90 hover:border-[#FCA311] shadow-xs cursor-pointer">
-                    <!-- First Calendar Symbol (Live, Clickable) -->
-                    <button type="button"
-                      class="calendar-icon-trigger p-0.5 mr-1 text-[#FCA311] cursor-pointer flex items-center justify-center"
-                      title="Choose date">
-                      <svg class="w-3.5 h-3.5 stroke-current flex-shrink-0" fill="none" viewBox="0 0 24 24"
-                        stroke-width="1.8">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                          d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
-                      </svg>
-                    </button>
-                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mr-1">From</span>
-                    <input type="date" id="input-graph-date-from" value="2026-01-01"
-                      class="date-picker-input text-xs font-bold text-[#14213D] dark:text-white bg-transparent border-0 focus:outline-none cursor-pointer p-0"
-                      title="Graph date">
-                    <input type="date" id="input-graph-date-to" class="hidden">
-                  </div>
                 </div>
               </div>
 
