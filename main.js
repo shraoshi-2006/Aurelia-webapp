@@ -4351,9 +4351,29 @@ $(document).ready(function () {
   // =========================================================================
 
   let activeMenuCategory = 'all';
+  let activeMenuDiet = 'all';
+
+  function syncMenuDietButtons() {
+    const configs = [
+      { id: '#btn-filter-diet-veg', diet: 'veg', activeBg: '#008000', textCls: 'text-[#008000] dark:text-emerald-400' },
+      { id: '#btn-filter-diet-nonveg', diet: 'nonveg', activeBg: '#b91c1c', textCls: 'text-[#b91c1c] dark:text-rose-400' }
+    ];
+    configs.forEach(cfg => {
+      const $btn = $(cfg.id);
+      if (!$btn.length) return;
+      const isActive = activeMenuDiet === cfg.diet;
+      $btn.attr('aria-pressed', isActive ? 'true' : 'false');
+      $btn.find('[data-switch-track]').css('background-color', isActive ? cfg.activeBg : '');
+      $btn.find('[data-switch-knob]').css('transform', isActive ? 'translateX(20px)' : 'translateX(0px)');
+      const $label = $btn.find('[data-switch-label]');
+      $label.removeClass('text-slate-700 dark:text-slate-200 text-[#008000] dark:text-emerald-400 text-[#b91c1c] dark:text-rose-400');
+      $label.addClass(isActive ? cfg.textCls : 'text-slate-700 dark:text-slate-200');
+    });
+  }
 
   function renderMenuSection() {
     renderMenuCategoryPills();
+    syncMenuDietButtons();
     renderMenuItemsGrid();
   }
 
@@ -4378,6 +4398,13 @@ $(document).ready(function () {
 
   $(document).on('change', '#select-menu-category-filter', function () {
     activeMenuCategory = $(this).val() || 'all';
+    renderMenuItemsGrid();
+  });
+
+  $(document).on('click', '#btn-filter-diet-veg, #btn-filter-diet-nonveg', function () {
+    const diet = $(this).data('diet');
+    activeMenuDiet = (activeMenuDiet === diet) ? 'all' : diet;
+    syncMenuDietButtons();
     renderMenuItemsGrid();
   });
 
@@ -4449,19 +4476,25 @@ $(document).ready(function () {
   }
 
   function renderMenuItemsGrid() {
+    syncMenuDietButtons();
     const menu = Storage.get(STORAGE_KEYS.MENU);
     const $tbody = $('#menu-items-tbody');
     $tbody.empty();
 
     let filtered = menu;
     if (activeMenuCategory !== 'all') {
-      filtered = menu.filter(m => m.category === activeMenuCategory);
+      filtered = filtered.filter(m => m.category === activeMenuCategory);
+    }
+    if (activeMenuDiet === 'veg') {
+      filtered = filtered.filter(m => !getMenuDishMeta(m).isNonVeg);
+    } else if (activeMenuDiet === 'nonveg') {
+      filtered = filtered.filter(m => getMenuDishMeta(m).isNonVeg);
     }
 
     if (filtered.length === 0) {
       $tbody.append(`
         <tr>
-          <td colspan="6" class="py-8 text-center text-slate-400">No items found in this category. Click "+ Add Item" to add delicious dishes.</td>
+          <td colspan="6" class="py-8 text-center text-slate-400">No items match the current category or Veg / Non-Veg filter.</td>
         </tr>
       `);
       return;

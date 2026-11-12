@@ -2967,38 +2967,8 @@
         </div>
       </header>
 
-      <!-- SUB-ACTION BAR: Date Filter Pill & Widgets Action Buttons -->
-      <div
-        class="px-6 sm:px-8 pt-3 sm:pt-4 pb-2 sm:pb-3 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 relative z-10">
-
-        <!-- Left: Date Range Calendar ("From" this "To" this) -->
-        <div class="flex flex-wrap items-center gap-2.5">
-          <!-- Calendar Range Capsule -->
-          <div
-            class="calendar-range-capsule flex items-center bg-white rounded-full px-3 py-1.5 border border-[#E5E5E5] shadow-xs hover:border-[#FCA311] transition-all cursor-pointer">
-            <!-- First Calendar Symbol (Live, Clickable) -->
-            <button type="button" class="calendar-icon-trigger p-1 mr-1.5 text-[#FCA311] cursor-pointer"
-              title="Choose date">
-              <svg class="w-4 h-4 stroke-current flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.8">
-                <path stroke-linecap="round" stroke-linejoin="round"
-                  d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
-              </svg>
-            </button>
-            <!-- From Date Input -->
-            <div class="flex items-center space-x-1">
-              <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">From</span>
-              <input type="date" id="input-global-date-from" value="2026-01-01"
-                class="date-picker-input text-xs font-bold text-[#14213D] bg-transparent border-0 focus:outline-none cursor-pointer"
-                title="Select date">
-            </div>
-            <input type="date" id="input-global-date-to" class="hidden">
-          </div>
-        </div>
-
-      </div>
-
       <!-- MAIN SCROLLABLE DASHBOARD VIEW CONTAINER -->
-      <div class="px-6 sm:px-8 pb-5 flex-1">
+      <div class="px-6 sm:px-8 pt-4 sm:pt-5 pb-5 flex-1">
 
         <!-- ============================================================= -->
         <!-- 4. GOALS / MENU ITEMS SECTION -->
@@ -3019,8 +2989,8 @@
             </div>
           </div>
 
-          <!-- Category Filter Dropdown -->
-          <div id="menu-category-filter-pills" class="flex items-center">
+          <!-- Category & Dietary Filter Bar -->
+          <div id="menu-category-filter-pills" class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
             <div class="relative w-full sm:w-64">
               <select id="select-menu-category-filter" aria-label="Filter menu items by category"
                 style="-webkit-appearance: none !important; -moz-appearance: none !important; appearance: none !important;"
@@ -3032,6 +3002,37 @@
                   <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
                 </svg>
               </div>
+            </div>
+
+            <!-- Veg / Non-Veg Toggle Switches -->
+            <div class="flex items-center gap-3 self-end sm:self-auto bg-white dark:bg-slate-800/90 px-3.5 py-1.5 rounded-full border border-[#E5E5E5] dark:border-slate-700 shadow-xs">
+              <button type="button" id="btn-filter-diet-veg" data-diet="veg" aria-pressed="false"
+                class="group inline-flex items-center gap-2.5 cursor-pointer focus:outline-none" title="Toggle Veg items only">
+                <span class="relative inline-flex items-center w-11 h-5 rounded-full bg-slate-200 dark:bg-slate-700 transition-colors duration-200" data-switch-track>
+                  <span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-[#fff5f5] dark:bg-slate-900 border border-emerald-500/30 shadow-sm transform translate-x-0 transition-transform duration-200" data-switch-knob>
+                    <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none">
+                      <rect x="3" y="3" width="18" height="18" rx="4" stroke="#22a559" stroke-width="2.4" fill="none" />
+                      <circle cx="12" cy="12" r="4.5" fill="#22a559" />
+                    </svg>
+                  </span>
+                </span>
+                <span class="text-xs font-bold text-slate-700 dark:text-slate-200 select-none" data-switch-label>Veg</span>
+              </button>
+
+              <span class="w-px h-4 bg-slate-200 dark:bg-slate-700" aria-hidden="true"></span>
+
+              <button type="button" id="btn-filter-diet-nonveg" data-diet="nonveg" aria-pressed="false"
+                class="group inline-flex items-center gap-2.5 cursor-pointer focus:outline-none" title="Toggle Non-Veg items only">
+                <span class="relative inline-flex items-center w-11 h-5 rounded-full bg-slate-200 dark:bg-slate-700 transition-colors duration-200" data-switch-track>
+                  <span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-[#fff5f5] dark:bg-slate-900 border border-rose-500/30 shadow-sm transform translate-x-0 transition-transform duration-200" data-switch-knob>
+                    <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none">
+                      <rect x="3" y="3" width="18" height="18" rx="4" stroke="#dc2626" stroke-width="2.4" fill="none" />
+                      <polygon points="12,7 17,16 7,16" fill="#dc2626" />
+                    </svg>
+                  </span>
+                </span>
+                <span class="text-xs font-bold text-slate-700 dark:text-slate-200 select-none" data-switch-label>Non-Veg</span>
+              </button>
             </div>
           </div>
 
@@ -4492,7 +4493,7 @@
   <!-- Authentication Controller -->
   <script src="auth.js?v=20261110_05"></script>
   <!-- Main JavaScript Logic -->
-<script src="main.js?v=20261110_v33"></script>
+<script src="main.js?v=20261110_v34"></script>
 </body>
 
 </html>
