@@ -4608,17 +4608,19 @@ $(document).ready(function () {
               <option value="Cancelled" ${ord.status === 'Cancelled' ? 'selected' : ''}>Cancelled</option>
             </select>
           </td>
-          <td class="py-3 px-4 text-right whitespace-nowrap space-x-1.5">
-            <button type="button" class="btn-view-order-details btn-finset-secondary text-xs py-1 px-3" data-id="${ord.id}">
-              Details
-            </button>
-            ${!isBilled && ord.status !== 'Cancelled' ? `
-              <button type="button" class="btn-order-to-bill btn-finset-primary text-xs py-1 px-3" data-id="${ord.id}">
-                Bill &rarr;
+          <td class="py-3 px-4 text-left whitespace-nowrap">
+            <div class="inline-flex items-center gap-2">
+              <button type="button" class="btn-view-order-details btn-finset-secondary text-xs py-1 px-3" data-id="${ord.id}">
+                Details
               </button>
-            ` : `
-              <span class="text-[11px] text-slate-400 font-mono font-bold px-2">${escapeHtml(ord.billNumber || 'Settled')}</span>
-            `}
+              ${!isBilled && ord.status !== 'Cancelled' ? `
+                <button type="button" class="btn-order-to-bill btn-finset-primary text-xs py-1 px-3" data-id="${ord.id}">
+                  Bill &rarr;
+                </button>
+              ` : `
+                <span class="text-[11px] text-slate-400 font-mono font-bold px-1">${escapeHtml(ord.billNumber || 'Settled')}</span>
+              `}
+            </div>
           </td>
         </tr>
       `);
