@@ -4403,28 +4403,28 @@ $(document).ready(function () {
     filtered.forEach(item => {
       const isAvail = !!item.available;
       $tbody.append(`
-        <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors ${!isAvail ? 'opacity-65' : ''}">
-          <td class="py-3 px-4 font-bold text-slate-900 dark:text-white">
+        <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors">
+          <td class="py-3 px-4 font-bold text-slate-900 dark:text-white ${!isAvail ? 'opacity-65' : ''}">
             ${escapeHtml(item.name)}
           </td>
-          <td class="py-3 px-4 whitespace-nowrap">
+          <td class="py-3 px-4 whitespace-nowrap ${!isAvail ? 'opacity-65' : ''}">
             <span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-[#E5E5E5]/60 dark:bg-slate-700 text-[#14213D] dark:text-slate-200 uppercase tracking-wider">
               ${escapeHtml(item.category)}
             </span>
           </td>
-          <td class="py-3 px-4 text-slate-500 max-w-sm truncate" title="${escapeHtml(item.description || '')}">
+          <td class="py-3 px-4 text-slate-500 max-w-sm truncate ${!isAvail ? 'opacity-65' : ''}" title="${escapeHtml(item.description || '')}">
             ${escapeHtml(item.description || 'Prepared fresh upon order.')}
           </td>
-          <td class="py-3 px-4 text-right font-black text-[#14213D] dark:text-white whitespace-nowrap">
+          <td class="py-3 px-4 text-right font-black text-[#14213D] dark:text-white whitespace-nowrap ${!isAvail ? 'opacity-65' : ''}">
             ${formatMoney(item.price)}
           </td>
           <td class="py-3 px-4 text-center whitespace-nowrap">
             ${isAvail ? `
-              <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-[#ECFDF3] text-[#12B76A]">
+              <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-[#15803d] text-white shadow-2xs">
                 Available
               </span>
             ` : `
-              <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-slate-100 dark:bg-slate-800 text-slate-400">
+              <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-[#b91c1c] text-white shadow-2xs">
                 Unavailable
               </span>
             `}
