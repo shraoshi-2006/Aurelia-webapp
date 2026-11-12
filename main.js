@@ -41,7 +41,8 @@ $(document).ready(function () {
     CUSTOMERS: 'finset_hotel_customers_v26',
     CATEGORIES: 'finset_hotel_categories_v26',
     STAFF: 'finset_hotel_staff_v26',
-    INITIALIZED: 'finset_hotel_init_v26'
+    INITIALIZED: 'finset_hotel_init_v26',
+    PENDING_ORDER_BILL: 'finset_pending_order_bill_v26'
   };
 
   const Storage = {
@@ -3097,6 +3098,102 @@ $(document).ready(function () {
   function initBillingSection() {
     initNewBillForm();
     renderBillingHistory();
+    consumePendingOrderForBilling();
+  }
+
+  function populateBillingFromOrder(ord) {
+    if (!ord) return;
+    switchBillingSubtab('create');
+    clearBillForm();
+
+    const customers = Storage.get(STORAGE_KEYS.CUSTOMERS) || [];
+    const ordPhoneDigits = String(ord.customerPhone || '').replace(/\D/g, '');
+    const ordNameNorm = String(ord.customerName || '').trim().toLowerCase();
+    const matchedCust = customers.find(c =>
+      (ordPhoneDigits && c.phone && String(c.phone).replace(/\D/g, '') === ordPhoneDigits) ||
+      (ordNameNorm && c.name && c.name.trim().toLowerCase() === ordNameNorm)
+    );
+
+    if (matchedCust && $(`#select-customer-dropdown option[value="${matchedCust.id}"]`).length) {
+      $('input[name="customer-type"][value="existing"]').prop('checked', true);
+      $('#wrapper-walkin-customer').addClass('hidden');
+      $('#wrapper-existing-customer').removeClass('hidden');
+      $('#select-customer-dropdown').val(matchedCust.id).trigger('change');
+    } else {
+      $('input[name="customer-type"][value="walkin"]').prop('checked', true);
+      $('#wrapper-existing-customer').addClass('hidden');
+      $('#wrapper-walkin-customer').removeClass('hidden');
+      $('#input-walkin-name').val(ord.customerName || '');
+      $('#input-walkin-phone').val(ord.customerPhone || '');
+      $('#input-walkin-email').val(ord.customerEmail || '');
+    }
+
+    $('#input-bill-tableref').val(ord.tableRoom || '');
+    $('#linked-order-banner').removeClass('hidden');
+    $('#linked-order-id-label').text(ord.orderNumber || ord.id);
+    $('#input-linked-order-id').val(ord.id);
+
+    const menuItems = Storage.get(STORAGE_KEYS.MENU) || [];
+    currentBillItems = (ord.items || []).map(it => {
+      const menuMatch = menuItems.find(m => m.id === it.id || (m.name && it.name && m.name.toLowerCase() === it.name.toLowerCase()));
+      const price = Number(it.price) || 0;
+      const qty = Number(it.qty) || 1;
+      return {
+        id: it.id || ('item-' + Date.now() + '-' + Math.random().toString(36).slice(2, 6)),
+        name: it.name,
+        category: (menuMatch && menuMatch.category) || it.category || 'Dining',
+        price: price,
+        qty: qty,
+        subtotal: Math.round(price * qty * 100) / 100
+      };
+    });
+
+    renderBillDraftItems();
+    calculateLiveBillTotals();
+    showToast(`Order ${ord.orderNumber || ord.id} loaded into billing draft.`, 'success');
+  }
+
+  function consumePendingOrderForBilling() {
+    let pendingOrderId = null;
+    try {
+      pendingOrderId = localStorage.getItem(STORAGE_KEYS.PENDING_ORDER_BILL);
+    } catch (e) {
+      pendingOrderId = null;
+    }
+    if (!pendingOrderId || $('#form-create-bill').length === 0) return false;
+
+    try {
+      localStorage.removeItem(STORAGE_KEYS.PENDING_ORDER_BILL);
+    } catch (e) { /* ignore */ }
+
+    const orders = Storage.get(STORAGE_KEYS.ORDERS) || [];
+    const ord = orders.find(o => o.id === pendingOrderId || o.orderNumber === pendingOrderId);
+    if (!ord) return false;
+
+    populateBillingFromOrder(ord);
+    return true;
+  }
+
+  function convertOrderToBilling(orderId) {
+    if (!orderId) return;
+    const orders = Storage.get(STORAGE_KEYS.ORDERS) || [];
+    const ord = orders.find(o => o.id === orderId || o.orderNumber === orderId);
+    if (!ord) {
+      showToast('Unable to locate order for billing.', 'error');
+      return;
+    }
+
+    if ($('#section-billing').length === 0) {
+      try {
+        localStorage.setItem(STORAGE_KEYS.PENDING_ORDER_BILL, ord.id);
+      } catch (e) { /* ignore */ }
+      switchSection('billing');
+      return;
+    }
+
+    window.location.hash = 'billing';
+    switchSection('billing');
+    populateBillingFromOrder(ord);
   }
 
   function switchBillingSubtab(subtab) {
@@ -4519,43 +4616,7 @@ $(document).ready(function () {
   // Convert Order to Bill
   $(document).on('click', '.btn-order-to-bill', function () {
     const id = $(this).data('id');
-    const orders = Storage.get(STORAGE_KEYS.ORDERS);
-    const ord = orders.find(o => o.id === id);
-    if (!ord) return;
-
-    window.location.hash = 'billing';
-    switchSection('billing');
-    switchBillingSubtab('create');
-
-    clearBillForm();
-
-    // Prefill Walkin guest
-    $('input[name="customer-type"][value="walkin"]').prop('checked', true);
-    $('#wrapper-existing-customer').addClass('hidden');
-    $('#wrapper-walkin-customer').removeClass('hidden');
-
-    $('#input-walkin-name').val(ord.customerName);
-    $('#input-walkin-phone').val(ord.customerPhone || '');
-    $('#input-bill-tableref').val(ord.tableRoom);
-
-    $('#linked-order-banner').removeClass('hidden');
-    $('#linked-order-id-label').text(ord.orderNumber);
-    $('#input-linked-order-id').val(ord.id);
-
-    // Populate Items
-    currentBillItems = (ord.items || []).map(it => ({
-      id: it.id || ('item-' + Date.now()),
-      name: it.name,
-      category: 'Dining',
-      price: Number(it.price) || 0,
-      qty: Number(it.qty) || 1,
-      subtotal: (Number(it.price) || 0) * (Number(it.qty) || 1)
-    }));
-
-    renderBillDraftItems();
-    calculateLiveBillTotals();
-
-    showToast(`Order ${ord.orderNumber} loaded into billing draft.`, 'success');
+    convertOrderToBilling(id);
   });
 
   // Open New Order Modal
@@ -4732,7 +4793,7 @@ $(document).ready(function () {
   $('#btn-order-generate-bill').on('click', function () {
     const id = $(this).data('id');
     $('#modal-view-order').addClass('hidden');
-    $(`.btn-order-to-bill[data-id="${id}"]`).trigger('click');
+    convertOrderToBilling(id);
   });
 
   // =========================================================================
@@ -6907,12 +6968,13 @@ $(document).ready(function () {
   renderSidebarBadges();
 
   if (!window.Auth || window.Auth.isAuthenticated()) {
+    const hasPendingOrderBill = !!localStorage.getItem(STORAGE_KEYS.PENDING_ORDER_BILL);
     switchSection(initHash);
     restoreSidebarScroll();
     if (!isStandalonePage) {
       renderDashboard();
     }
-    if (isBillingPage && hashSec === 'history') {
+    if (isBillingPage && hashSec === 'history' && !hasPendingOrderBill) {
       switchBillingSubtab('history');
     }
     if (isAllDeptPage) {
