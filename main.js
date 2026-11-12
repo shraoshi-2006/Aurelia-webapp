@@ -1508,6 +1508,10 @@ $(document).ready(function () {
 
   function animateBillingMetrics(bills = Storage.get(STORAGE_KEYS.BILLS) || []) {
     const totalBillingVal = bills.reduce((sum, b) => sum + (Number(b.grandTotal) || 0), 0);
+    const totalTaxVal = bills.reduce((sum, b) => sum + (Number(b.taxAmount) || 0), 0);
+    const invoiceCount = bills.length;
+    const avgBillVal = invoiceCount > 0 ? totalBillingVal / invoiceCount : 0;
+
     animateNumber('#stat-total-billing, #stat-total-balance', totalBillingVal, {
       duration: 1200,
       decimals: 2,
@@ -1515,6 +1519,16 @@ $(document).ready(function () {
       decimalClass: 'text-slate-400 font-normal'
     });
     animateNumber('#stat-billing-growth', 12.1, { duration: 900, decimals: 1, prefix: '↑ ', suffix: '%', useLocale: false });
+    animateNumber('#stat-billing-count', invoiceCount, { duration: 900, decimals: 0, suffix: ' Settled', useLocale: false });
+    animateNumber('#stat-billing-tax', totalTaxVal, {
+      duration: 1100,
+      decimals: 2,
+      prefix: '₹',
+      decimalClass: 'text-slate-400 font-normal'
+    });
+    if ($('#stat-billing-avg').length) {
+      $('#stat-billing-avg').text('Avg ' + formatMoney(avgBillVal));
+    }
   }
 
   function animateProfitMetrics() {
@@ -1557,6 +1571,9 @@ $(document).ready(function () {
     const totalEmployees = staffList.length;
     const onDutyEmployees = staffList.filter(s => s.status === 'On Duty').length;
     const onLeaveEmployees = totalEmployees - onDutyEmployees;
+    const attendancePct = totalEmployees > 0 ? (onDutyEmployees / totalEmployees) * 100 : 0;
+    const deptCount = new Set(staffList.map(s => s.department).filter(Boolean)).size || 6;
+
     animateNumber('#stat-total-employee, #stat-total-savings', totalEmployees, {
       duration: 900,
       decimals: 0,
@@ -1564,7 +1581,11 @@ $(document).ready(function () {
       suffixClass: 'text-slate-400 font-semibold text-lg ml-1.5'
     });
     animateNumber('#stat-employee-onduty', onDutyEmployees, { duration: 900, decimals: 0, prefix: '● ', suffix: ' On Duty' });
-    animateNumber('#stat-employee-leave', onLeaveEmployees, { duration: 900, decimals: 0, suffix: ' on leave today' });
+    animateNumber('#stat-employee-attendance', attendancePct, { duration: 900, decimals: 1, suffix: '%', useLocale: false });
+    animateNumber('#stat-employee-leave', onLeaveEmployees, { duration: 900, decimals: 0, suffix: ' Staff' });
+    if ($('#stat-employee-depts').length) {
+      $('#stat-employee-depts').text(`${deptCount} Depts`);
+    }
   }
 
   function renderDashboard() {
