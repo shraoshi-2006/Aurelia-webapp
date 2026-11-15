@@ -2988,7 +2988,7 @@ $(document).ready(function () {
       $tbody.append(`
         <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors">
           <td class="py-3 px-4 whitespace-nowrap">
-            <span class="font-mono text-xs font-semibold text-[#14213D] dark:text-[#FCA311] bg-slate-100 dark:bg-slate-800/80 px-2.5 py-1 rounded-md border border-slate-200 dark:border-slate-700/60 whitespace-nowrap">${escapeHtml(row.id)}</span>
+            <span class="px-2.5 py-1 rounded text-xs font-mono font-bold bg-[#FCA311] text-black inline-block shadow-2xs whitespace-nowrap">${escapeHtml(row.id)}</span>
           </td>
           <td class="py-3 px-4">
             <div class="flex items-center space-x-2.5">
@@ -3091,7 +3091,7 @@ $(document).ready(function () {
             <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-extrabold bg-[#EBF1FD] dark:bg-blue-950/60 text-[#1D4ED8] dark:text-blue-300 border border-[#D7E3FC] dark:border-blue-900/60 font-mono">${escapeHtml(row.terminalId)}</span>
           </td>
           <td class="py-3 px-3 whitespace-nowrap">
-            <span class="font-mono text-xs font-semibold text-[#14213D] dark:text-[#FCA311] bg-slate-100 dark:bg-slate-800/80 px-2 py-0.5 rounded-md border border-slate-200 dark:border-slate-700/60">${escapeHtml(row.id)}</span>
+            <span class="px-2.5 py-1 rounded text-xs font-mono font-bold bg-[#FCA311] text-black inline-block shadow-2xs whitespace-nowrap">${escapeHtml(row.id)}</span>
           </td>
           <td class="py-3 px-3">
             <div class="flex items-center space-x-2.5">
