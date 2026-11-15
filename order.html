@@ -1192,6 +1192,86 @@
       color: #14213D !important;
     }
 
+/* Outlined Capsule Status Dropdowns (White Body, Colored Border & Font) */
+    select.order-status-inline-change {
+      border-radius: 9999px !important;
+      padding-left: 0.85rem !important;
+      padding-right: 1.85rem !important;
+      padding-top: 0.25rem !important;
+      padding-bottom: 0.25rem !important;
+      background-color: #FFFFFF !important;
+      background-repeat: no-repeat !important;
+      background-position: right 0.55rem center !important;
+      background-size: 1.1em 1.1em !important;
+      font-weight: 700 !important;
+      font-size: 11.5px !important;
+      border-width: 1.5px !important;
+      border-style: solid !important;
+      box-shadow: 0 1px 2px rgba(15, 23, 42, 0.05) !important;
+      transition: all 0.15s ease-in-out !important;
+      -webkit-appearance: none !important;
+      -moz-appearance: none !important;
+      appearance: none !important;
+      cursor: pointer !important;
+    }
+    select.order-status-inline-change:hover {
+      box-shadow: 0 2px 6px rgba(15, 23, 42, 0.08) !important;
+      transform: translateY(-0.5px);
+    }
+    select.order-status-inline-change[data-status="completed"],
+    select.order-status-inline-change[data-status="completed"]:focus,
+    .dark select.order-status-inline-change[data-status="completed"],
+    .dark select.order-status-inline-change[data-status="completed"]:focus {
+      background-color: #FFFFFF !important;
+      border-color: #15803d !important;
+      color: #15803d !important;
+      background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%2315803d' stroke-linecap='round' stroke-linejoin='round' stroke-width='2.2' d='M6 8l4 4 4-4'/%3e%3c/svg%3e") !important;
+    }
+    select.order-status-inline-change[data-status="cancelled"],
+    select.order-status-inline-change[data-status="cancelled"]:focus,
+    .dark select.order-status-inline-change[data-status="cancelled"],
+    .dark select.order-status-inline-change[data-status="cancelled"]:focus {
+      background-color: #FFFFFF !important;
+      border-color: #b91c1c !important;
+      color: #b91c1c !important;
+      background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23b91c1c' stroke-linecap='round' stroke-linejoin='round' stroke-width='2.2' d='M6 8l4 4 4-4'/%3e%3c/svg%3e") !important;
+    }
+    select.order-status-inline-change[data-status="preparing"],
+    select.order-status-inline-change[data-status="preparing"]:focus,
+    .dark select.order-status-inline-change[data-status="preparing"],
+    .dark select.order-status-inline-change[data-status="preparing"]:focus {
+      background-color: #FFFFFF !important;
+      border-color: #ca8a04 !important;
+      color: #ca8a04 !important;
+      background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23ca8a04' stroke-linecap='round' stroke-linejoin='round' stroke-width='2.2' d='M6 8l4 4 4-4'/%3e%3c/svg%3e") !important;
+    }
+    select.order-status-inline-change[data-status="pending"],
+    select.order-status-inline-change[data-status="pending"]:focus,
+    .dark select.order-status-inline-change[data-status="pending"],
+    .dark select.order-status-inline-change[data-status="pending"]:focus {
+      background-color: #FFFFFF !important;
+      border-color: #ea580c !important;
+      color: #ea580c !important;
+      background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23ea580c' stroke-linecap='round' stroke-linejoin='round' stroke-width='2.2' d='M6 8l4 4 4-4'/%3e%3c/svg%3e") !important;
+    }
+    select.order-status-inline-change[data-status="served"],
+    select.order-status-inline-change[data-status="served"]:focus,
+    .dark select.order-status-inline-change[data-status="served"],
+    .dark select.order-status-inline-change[data-status="served"]:focus {
+      background-color: #FFFFFF !important;
+      border-color: #0284c7 !important;
+      color: #0284c7 !important;
+      background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%230284c7' stroke-linecap='round' stroke-linejoin='round' stroke-width='2.2' d='M6 8l4 4 4-4'/%3e%3c/svg%3e") !important;
+    }
+    select.order-status-inline-change option {
+      background-color: #FFFFFF !important;
+      color: #1E293B !important;
+    }
+    .dark select.order-status-inline-change option {
+      background-color: #1E293B !important;
+      color: #F8FAFC !important;
+    }
+
     /* Top Welcome Titles */
     #topbar-welcome-title {
       color: #14213D !important;
@@ -4488,7 +4568,7 @@
   <!-- Authentication Controller -->
   <script src="auth.js?v=20261110_05"></script>
   <!-- Main JavaScript Logic -->
-<script src="main.js?v=20261110_v39"></script>
+<script src="main.js?v=20261110_v40"></script>
 </body>
 
 </html>

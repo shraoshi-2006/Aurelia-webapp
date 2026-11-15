@@ -546,35 +546,35 @@ $(document).ready(function () {
     status = status || 'Pending';
     switch (status.toLowerCase()) {
       case 'active':
-        return `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-[#15803d] text-white shadow-2xs">Active</span>`;
+        return `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-white text-[#15803d] border border-[#15803d] shadow-2xs">Active</span>`;
       case 'not active':
       case 'not-active':
       case 'inactive':
-        return `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-[#b91c1c] text-white shadow-2xs">${escapeHtml(status)}</span>`;
+        return `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-white text-[#b91c1c] border border-[#b91c1c] shadow-2xs">${escapeHtml(status)}</span>`;
       case 'on duty':
       case 'onduty':
-        return `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-[#15803d] text-white shadow-2xs">On Duty</span>`;
+        return `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-white text-[#15803d] border border-[#15803d] shadow-2xs">On Duty</span>`;
       case 'on leave':
       case 'onleave':
       case 'leave':
-        return `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-[#b91c1c] text-white shadow-2xs">On Leave</span>`;
+        return `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-white text-[#b91c1c] border border-[#b91c1c] shadow-2xs">On Leave</span>`;
       case 'paid':
       case 'completed':
-        return `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-[#15803d] text-white shadow-2xs">${escapeHtml(status)}</span>`;
+        return `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-white text-[#15803d] border border-[#15803d] shadow-2xs">${escapeHtml(status)}</span>`;
       case 'available':
-        return `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-[#15803d] text-white shadow-2xs">${escapeHtml(status)}</span>`;
+        return `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-white text-[#15803d] border border-[#15803d] shadow-2xs">${escapeHtml(status)}</span>`;
       case 'pending':
-        return `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-[#ea580c] text-white shadow-2xs">${escapeHtml(status)}</span>`;
+        return `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-white text-[#ea580c] border border-[#ea580c] shadow-2xs">${escapeHtml(status)}</span>`;
       case 'preparing':
-        return `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-[#ca8a04] text-white shadow-2xs">${escapeHtml(status)}</span>`;
+        return `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-white text-[#ca8a04] border border-[#ca8a04] shadow-2xs">${escapeHtml(status)}</span>`;
       case 'served':
-        return `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-[#0284c7] text-white shadow-2xs">${escapeHtml(status)}</span>`;
+        return `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-white text-[#0284c7] border border-[#0284c7] shadow-2xs">${escapeHtml(status)}</span>`;
       case 'cancelled':
       case 'unavailable':
       case 'refunded':
-        return `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-[#b91c1c] text-white shadow-2xs">${escapeHtml(status)}</span>`;
+        return `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-white text-[#b91c1c] border border-[#b91c1c] shadow-2xs">${escapeHtml(status)}</span>`;
       default:
-        return `<span class="px-2.5 py-0.5 text-xs font-semibold rounded-full bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300">${escapeHtml(status)}</span>`;
+        return `<span class="px-2.5 py-0.5 text-xs font-semibold rounded-full bg-white text-slate-700 border border-slate-300 dark:bg-slate-800 dark:text-slate-300">${escapeHtml(status)}</span>`;
     }
   }
 
@@ -4524,11 +4524,11 @@ $(document).ready(function () {
           </td>
           <td class="py-3 px-4 text-center whitespace-nowrap">
             ${isAvail ? `
-              <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-[#15803d] text-white shadow-2xs">
+              <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-white text-[#15803d] border border-[#15803d] shadow-2xs">
                 Available
               </span>
             ` : `
-              <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-[#b91c1c] text-white shadow-2xs">
+              <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-white text-[#b91c1c] border border-[#b91c1c] shadow-2xs">
                 Unavailable
               </span>
             `}
@@ -7306,51 +7306,73 @@ $(document).ready(function () {
       }
       select.order-status-inline-change {
         border-radius: 9999px !important;
-        padding-left: 0.75rem !important;
-        padding-right: 0.75rem !important;
-        border-color: transparent !important;
-        color: #FFFFFF !important;
-        font-weight: 600 !important;
+        padding-left: 0.85rem !important;
+        padding-right: 1.85rem !important;
+        padding-top: 0.25rem !important;
+        padding-bottom: 0.25rem !important;
+        background-color: #FFFFFF !important;
+        background-repeat: no-repeat !important;
+        background-position: right 0.55rem center !important;
+        background-size: 1.1em 1.1em !important;
+        font-weight: 700 !important;
+        font-size: 11.5px !important;
+        border-width: 1.5px !important;
+        border-style: solid !important;
+        box-shadow: 0 1px 2px rgba(15, 23, 42, 0.05) !important;
+        transition: all 0.15s ease-in-out !important;
+        -webkit-appearance: none !important;
+        -moz-appearance: none !important;
+        appearance: none !important;
+        cursor: pointer !important;
+      }
+      select.order-status-inline-change:hover {
+        box-shadow: 0 2px 6px rgba(15, 23, 42, 0.08) !important;
+        transform: translateY(-0.5px);
       }
       select.order-status-inline-change[data-status="completed"],
       select.order-status-inline-change[data-status="completed"]:focus,
       .dark select.order-status-inline-change[data-status="completed"],
       .dark select.order-status-inline-change[data-status="completed"]:focus {
-        background: #15803d !important;
+        background-color: #FFFFFF !important;
         border-color: #15803d !important;
-        color: #FFFFFF !important;
+        color: #15803d !important;
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%2315803d' stroke-linecap='round' stroke-linejoin='round' stroke-width='2.2' d='M6 8l4 4 4-4'/%3e%3c/svg%3e") !important;
       }
       select.order-status-inline-change[data-status="cancelled"],
       select.order-status-inline-change[data-status="cancelled"]:focus,
       .dark select.order-status-inline-change[data-status="cancelled"],
       .dark select.order-status-inline-change[data-status="cancelled"]:focus {
-        background: #b91c1c !important;
+        background-color: #FFFFFF !important;
         border-color: #b91c1c !important;
-        color: #FFFFFF !important;
+        color: #b91c1c !important;
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23b91c1c' stroke-linecap='round' stroke-linejoin='round' stroke-width='2.2' d='M6 8l4 4 4-4'/%3e%3c/svg%3e") !important;
       }
       select.order-status-inline-change[data-status="preparing"],
       select.order-status-inline-change[data-status="preparing"]:focus,
       .dark select.order-status-inline-change[data-status="preparing"],
       .dark select.order-status-inline-change[data-status="preparing"]:focus {
-        background: #ca8a04 !important;
+        background-color: #FFFFFF !important;
         border-color: #ca8a04 !important;
-        color: #FFFFFF !important;
+        color: #ca8a04 !important;
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23ca8a04' stroke-linecap='round' stroke-linejoin='round' stroke-width='2.2' d='M6 8l4 4 4-4'/%3e%3c/svg%3e") !important;
       }
       select.order-status-inline-change[data-status="pending"],
       select.order-status-inline-change[data-status="pending"]:focus,
       .dark select.order-status-inline-change[data-status="pending"],
       .dark select.order-status-inline-change[data-status="pending"]:focus {
-        background: #ea580c !important;
+        background-color: #FFFFFF !important;
         border-color: #ea580c !important;
-        color: #FFFFFF !important;
+        color: #ea580c !important;
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23ea580c' stroke-linecap='round' stroke-linejoin='round' stroke-width='2.2' d='M6 8l4 4 4-4'/%3e%3c/svg%3e") !important;
       }
       select.order-status-inline-change[data-status="served"],
       select.order-status-inline-change[data-status="served"]:focus,
       .dark select.order-status-inline-change[data-status="served"],
       .dark select.order-status-inline-change[data-status="served"]:focus {
-        background: #0284c7 !important;
+        background-color: #FFFFFF !important;
         border-color: #0284c7 !important;
-        color: #FFFFFF !important;
+        color: #0284c7 !important;
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%230284c7' stroke-linecap='round' stroke-linejoin='round' stroke-width='2.2' d='M6 8l4 4 4-4'/%3e%3c/svg%3e") !important;
       }
       select.order-status-inline-change option {
         background-color: #FFFFFF !important;
