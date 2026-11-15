@@ -2813,39 +2813,8 @@
           </p>
         </div>
 
-        <!-- Top Right Controls (Session Timer, Notifications, Profile Capsule) -->
+        <!-- Top Right Controls (Notifications, Profile Capsule) -->
         <div class="flex flex-wrap items-center gap-2.5 sm:gap-3.5 self-start md:self-auto">
-
-          <!-- Session Time Widget (Shows time spent on website) -->
-          <div id="session-time-widget"
-            class="flex items-center space-x-2 sm:space-x-2.5 py-1 px-2.5 sm:px-3 rounded-2xl bg-white/90 dark:bg-slate-800/90 border border-[#E5E5E5] dark:border-slate-700/80 shadow-xs hover:border-[#FCA311] transition-all cursor-default select-none flex-shrink-0"
-            title="Time spent on website in current session">
-            <!-- Clock Icon (Left dashed purple arc, right solid navy arc, hands at 12 & 7) -->
-            <div class="relative w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center flex-shrink-0">
-              <svg class="w-full h-full" viewBox="0 0 32 32" fill="none">
-                <!-- Left half dashed arc (purple/indigo) -->
-                <path d="M16 3.5 A 12.5 12.5 0 0 0 16 28.5" stroke="#7C3AED" stroke-width="2.2" stroke-dasharray="3 2.5"
-                  stroke-linecap="round" />
-                <!-- Right half solid arc (navy/slate) -->
-                <path d="M16 3.5 A 12.5 12.5 0 0 1 16 28.5" stroke="#14213D" stroke-width="2.2" stroke-linecap="round"
-                  class="dark:stroke-slate-200" />
-                <!-- Clock hands (from top to center, then angled to 7 o'clock) -->
-                <path d="M16 8.5 V 16 L 12.5 19.5" stroke="#14213D" stroke-width="2.2" stroke-linecap="round"
-                  stroke-linejoin="round" class="dark:stroke-slate-200" />
-              </svg>
-            </div>
-            <!-- Labels & Live Counter -->
-            <div class="flex flex-col justify-center">
-              <span
-                class="text-[9px] sm:text-[10px] font-bold text-slate-400 dark:text-slate-400 uppercase tracking-wider leading-none mb-0.5">
-                SESSION TIME:
-              </span>
-              <span id="session-time-display"
-                class="text-base sm:text-xl font-extrabold text-[#14213D] dark:text-white tabular-nums tracking-tight leading-none num-font">
-                00:00:00
-              </span>
-            </div>
-          </div>
 
           <!-- Device ID Capsule Pill (Matches FinSet DEV08 Badge) -->
           <div id="topbar-device-id-badge"
@@ -3069,7 +3038,7 @@
   <!-- Authentication Controller -->
   <script src="../auth.js?v=20261110_05"></script>
   <!-- Main JavaScript Logic -->
-<script src="../main.js?v=20261110_v32"></script>
+<script src="../main.js?v=20261110_v36"></script>
 </body>
 
 </html>

@@ -2713,19 +2713,8 @@ $(document).ready(function () {
     const userRole = (activeUser && activeUser.role) ? String(activeUser.role).trim() : 'Front Desk Supervisor';
     const initials = displayName.split(' ').filter(Boolean).map(n => n[0]).join('').substring(0, 2).toUpperCase() || 'AU';
 
-    // Real active time spent on website from active-only tracker
-    const activeSecs = parseInt(sessionStorage.getItem('aurelia_active_session_seconds'), 10) || 0;
-    const hrs = Math.floor(activeSecs / 3600);
-    const mins = Math.floor((activeSecs % 3600) / 60);
-    const secs = activeSecs % 60;
-    let currentActiveTimeStr = '';
-    if (hrs > 0) {
-      currentActiveTimeStr = `${hrs} hr${hrs > 1 ? 's' : ''} ${mins} min${mins !== 1 ? 's' : ''}`;
-    } else if (mins > 0) {
-      currentActiveTimeStr = `${mins} min${mins !== 1 ? 's' : ''} ${secs}s`;
-    } else {
-      currentActiveTimeStr = `${secs} sec${secs !== 1 ? 's' : ''}`;
-    }
+    try { sessionStorage.removeItem('aurelia_active_session_seconds'); } catch (e) { }
+    const currentActiveTimeStr = 'Active now';
 
     // Detect browser/device
     let currentDeviceName = 'Front Desk PC (Win 11 / Chrome)';
@@ -4718,7 +4707,13 @@ $(document).ready(function () {
   // =========================================================================
 
   function renderOrdersSection() {
-    const orders = Storage.get(STORAGE_KEYS.ORDERS);
+    const rawOrders = Storage.get(STORAGE_KEYS.ORDERS) || [];
+    const orders = [...rawOrders].sort((a, b) => {
+      const na = parseInt(String(a.orderNumber || a.id || '').replace(/\D+/g, ''), 10) || 0;
+      const nb = parseInt(String(b.orderNumber || b.id || '').replace(/\D+/g, ''), 10) || 0;
+      if (nb !== na) return nb - na;
+      return new Date(b.timestamp || 0).getTime() - new Date(a.timestamp || 0).getTime();
+    });
     const $tbody = $('#orders-tbody');
     $tbody.empty();
 
@@ -4734,7 +4729,6 @@ $(document).ready(function () {
     orders.forEach(ord => {
       const estTotal = (ord.items || []).reduce((acc, it) => acc + (Number(it.price || 0) * Number(it.qty || 1)), 0);
       const isBilled = !!ord.billNumber;
-      const itemCount = (ord.items || []).reduce((sum, it) => sum + (Number(it.qty) || 1), 0);
 
       $tbody.append(`
         <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors">
@@ -4749,9 +4743,8 @@ $(document).ready(function () {
             <div class="text-[11px] text-slate-400 font-medium">${escapeHtml(ord.tableRoom)}</div>
           </td>
           <td class="py-3 px-4 text-left whitespace-nowrap">
-            <button type="button" class="btn-view-order-items btn-finset-secondary inline-flex items-center gap-1.5 text-xs py-1 px-3 cursor-pointer" data-id="${ord.id}" title="View ordered items list">
-              <span>Click here to see</span>
-              <span class="inline-flex items-center justify-center px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-[#14213D]/10 dark:bg-slate-700 text-[#14213D] dark:text-slate-200">${itemCount}</span>
+            <button type="button" class="btn-view-order-items btn-finset-primary text-xs py-1 px-3 cursor-pointer" data-id="${ord.id}" title="View ordered items list">
+              Click here to see &rarr;
             </button>
           </td>
           <td class="py-3 px-4 text-right font-black text-[#14213D] dark:text-white whitespace-nowrap">
@@ -5876,65 +5869,6 @@ $(document).ready(function () {
       applyProfileChanges();
     }
   });
-
-  // =========================================================================
-  // ACTIVE-ONLY SESSION TIME TRACKER (Only counts active time on website)
-  // =========================================================================
-  function initSessionTimeTracker() {
-    const STORAGE_KEY = 'aurelia_active_session_seconds';
-
-    // 1. Retrieve accumulated active seconds from sessionStorage (or start at 0)
-    let activeSeconds = parseInt(sessionStorage.getItem(STORAGE_KEY), 10);
-    if (isNaN(activeSeconds) || activeSeconds < 0) {
-      activeSeconds = 0;
-    }
-
-    const displayEl = document.getElementById('session-time-display');
-    if (!displayEl) return;
-
-    // 2. Format seconds into HH:MM:SS
-    function formatTime(totalSec) {
-      const hrs = String(Math.floor(totalSec / 3600)).padStart(2, '0');
-      const mins = String(Math.floor((totalSec % 3600) / 60)).padStart(2, '0');
-      const secs = String(totalSec % 60).padStart(2, '0');
-      return `${hrs}:${mins}:${secs}`;
-    }
-
-    function renderDisplay() {
-      displayEl.textContent = formatTime(activeSeconds);
-    }
-
-    // Initial display render
-    renderDisplay();
-
-    // 3. Track active status (document visibility & window focus)
-    let isActive = !document.hidden;
-
-    function updateActiveState() {
-      isActive = (document.visibilityState === 'visible');
-    }
-
-    // 4. Listen to tab switching, minimize, and window focus/blur events
-    document.addEventListener('visibilitychange', updateActiveState);
-    window.addEventListener('focus', function () { isActive = true; });
-    window.addEventListener('blur', function () { isActive = false; });
-
-    // 5. Active second ticker: only increments when user is actively on the website
-    setInterval(function () {
-      if (isActive && !document.hidden) {
-        activeSeconds++;
-        renderDisplay();
-
-        // Persist to sessionStorage every second so page switches stay accurate
-        try {
-          sessionStorage.setItem(STORAGE_KEY, String(activeSeconds));
-        } catch (e) { }
-      }
-    }, 1000);
-  }
-
-  // Start live session time tracker
-  initSessionTimeTracker();
 
   // =========================================================================
   // 10. HR DOCUMENT TEMPLATES STANDALONE PAGE CONTROLLER
