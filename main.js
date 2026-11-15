@@ -1418,16 +1418,22 @@ $(document).ready(function () {
 
   function formatPeriodDateLabel(d1, d2) {
     const l1 = d1.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
-    return `${l1} to Today`;
+    const l2 = d2 ? d2.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) : 'Today';
+    return `${l1} to ${l2}`;
   }
 
   function applyDateRangeToDashboard(fromStr, toStr) {
     if (!fromStr) return;
     const todayStr = getTodayDateStr();
-    toStr = todayStr;
+    if (!toStr) {
+      toStr = $('#input-global-date-to').val() || todayStr;
+    }
     let d1 = new Date(fromStr);
     let d2 = new Date(toStr);
-    if (d1 > d2) { d1 = new Date(toStr); fromStr = toStr; }
+    if (d1 > d2) {
+      const tmp = d1; d1 = d2; d2 = tmp;
+      const tmpStr = fromStr; fromStr = toStr; toStr = tmpStr;
+    }
 
     $('#input-global-date-from, #input-graph-date-from').val(fromStr);
     $('#input-global-date-to, #input-graph-date-to').val(toStr);
@@ -1439,10 +1445,11 @@ $(document).ready(function () {
     showToast(`Dashboard updated for ${displayLabel}.`, 'info');
   }
 
-  $('#input-global-date-from, #input-graph-date-from').on('change', function () {
-    const fromStr = $(this).val();
-    if (fromStr) {
-      applyDateRangeToDashboard(fromStr, getTodayDateStr());
+  $('#input-global-date-from, #input-graph-date-from, #input-global-date-to, #input-graph-date-to').on('change', function () {
+    const fromStr = $('#input-global-date-from').val() || $('#input-graph-date-from').val();
+    const toStr = $('#input-global-date-to').val() || $('#input-graph-date-to').val() || getTodayDateStr();
+    if (fromStr && toStr) {
+      applyDateRangeToDashboard(fromStr, toStr);
     }
   });
 
@@ -1820,7 +1827,7 @@ $(document).ready(function () {
     const gridColor = 'rgba(229, 229, 229, 0.7)';
 
     const fromDate = $('#input-graph-date-from').val() || $('#input-global-date-from').val() || '2026-01-01';
-    const toDate = getTodayDateStr();
+    const toDate = $('#input-graph-date-to').val() || $('#input-global-date-to').val() || getTodayDateStr();
     $('#input-graph-date-to, #input-global-date-to').val(toDate);
     const account = $('#select-money-flow-account').val() || 'all';
 
@@ -1941,14 +1948,7 @@ $(document).ready(function () {
     });
   }
 
-  // Filter interaction for Money Flow range & account dropdowns
-  $('#input-graph-date-from').on('change', function () {
-    const fromStr = $(this).val();
-    if (fromStr) {
-      applyDateRangeToDashboard(fromStr, getTodayDateStr());
-    }
-  });
-
+  // Filter interaction for Money Flow account dropdown
   $('#select-money-flow-account').on('change', function () {
     renderMoneyFlowChart();
   });

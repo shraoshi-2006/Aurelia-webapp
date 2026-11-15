@@ -2800,12 +2800,18 @@
               </svg>
             </button>
             <div class="flex items-center space-x-1">
-              <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Date</span>
-              <input type="date" id="input-global-date-from" value="2026-11-06"
-                class="date-picker-input text-xs font-bold text-[#14213D] bg-transparent border-0 focus:outline-none cursor-pointer"
-                title="Select date">
-            </div>
-            <input type="date" id="input-global-date-to" class="hidden">
+                <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">From</span>
+                <input type="date" id="input-global-date-from" value="2026-01-01"
+                  class="date-picker-input text-xs font-bold text-[#14213D] bg-transparent border-0 focus:outline-none cursor-pointer"
+                  title="Select start date">
+              </div>
+              <span class="text-slate-300 dark:text-slate-600 mx-1 select-none font-bold text-xs">—</span>
+              <div class="flex items-center space-x-1">
+                <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">To</span>
+                <input type="date" id="input-global-date-to" value="2026-10-27"
+                  class="date-picker-input text-xs font-bold text-[#14213D] dark:text-white bg-transparent border-0 focus:outline-none cursor-pointer"
+                  title="Select end date">
+              </div>
           </div>
         </div>
       </div>
@@ -3493,7 +3499,7 @@
   <!-- Authentication Controller -->
   <script src="../auth.js?v=20261110_05"></script>
   <!-- Main JavaScript Logic -->
-  <script src="../main.js?v=20261110_v38"></script>
+  <script src="../main.js?v=20261110_v39"></script>
 </body>
 
 </html>
