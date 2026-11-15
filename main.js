@@ -2973,7 +2973,7 @@ $(document).ready(function () {
     if (filtered.length === 0) {
       $tbody.html(`
         <tr>
-          <td colspan="5" class="py-8 text-center text-slate-400 font-medium">
+          <td colspan="4" class="py-8 text-center text-slate-400 font-medium">
             No active login sessions found for device filter (${escapeHtml(selectedFilter)}).
           </td>
         </tr>
@@ -2984,9 +2984,6 @@ $(document).ready(function () {
 
     filtered.forEach((row) => {
       const deviceIcon = getDeviceTypeIconSvg(row.deviceType);
-      const statusBadge = row.isLive
-        ? `<span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400 border border-emerald-200/60 dark:border-emerald-800/50 whitespace-nowrap">${escapeHtml(row.timeSpent)}</span>`
-        : `<span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200/50 dark:border-slate-700/50 whitespace-nowrap">${escapeHtml(row.timeSpent)}</span>`;
 
       $tbody.append(`
         <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors">
@@ -3013,9 +3010,6 @@ $(document).ready(function () {
               ${deviceIcon}
               <span class="text-slate-700 dark:text-slate-300 font-medium text-xs">${escapeHtml(row.deviceName)}</span>
             </div>
-          </td>
-          <td class="py-3 px-4 whitespace-nowrap">
-            ${statusBadge}
           </td>
         </tr>
       `);
