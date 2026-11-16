@@ -2804,21 +2804,23 @@
         <div class="flex flex-wrap items-center gap-2.5">
           <div
             class="calendar-range-capsule flex items-center bg-white rounded-full px-3 py-1.5 border border-[#E5E5E5] shadow-xs hover:border-[#FCA311] transition-all cursor-pointer">
-            <button type="button" class="calendar-icon-trigger p-1 mr-1.5 text-[#FCA311] cursor-pointer"
-              title="Choose date">
-              <svg class="w-4 h-4 stroke-current flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.8">
-                <path stroke-linecap="round" stroke-linejoin="round"
-                  d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
-              </svg>
-            </button>
+            <!-- From Date Input -->
             <div class="flex items-center space-x-1">
                 <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">From</span>
                 <input type="date" id="input-global-date-from" value="2026-01-01"
                   class="date-picker-input text-xs font-bold text-[#14213D] bg-transparent border-0 focus:outline-none cursor-pointer"
                   title="Select start date">
               </div>
-              <span class="text-slate-300 dark:text-slate-600 mx-1 select-none font-bold text-xs">—</span>
-              <div class="flex items-center space-x-1">
+            <!-- Middle Calendar Icon (Live, Clickable) -->
+            <button type="button" class="calendar-icon-trigger p-1 mx-1.5 text-[#FCA311] cursor-pointer"
+              title="Choose date">
+              <svg class="w-4 h-4 stroke-current flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.8">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
+              </svg>
+            </button>
+            <!-- To Date Input -->
+            <div class="flex items-center space-x-1">
                 <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">To</span>
                 <input type="date" id="input-global-date-to" value="2026-10-27"
                   class="date-picker-input text-xs font-bold text-[#14213D] dark:text-white bg-transparent border-0 focus:outline-none cursor-pointer"
@@ -3245,7 +3247,7 @@
   <!-- Authentication Controller -->
   <script src="../auth.js?v=20261110_05"></script>
   <!-- Main JavaScript Logic -->
-  <script src="../main.js?v=20261110_v40"></script>
+  <script src="../main.js?v=20261110_v41"></script>
 </body>
 
 </html>
