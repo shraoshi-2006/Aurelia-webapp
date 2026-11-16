@@ -1453,21 +1453,24 @@ $(document).ready(function () {
     }
   });
 
-  // Live 1st Calendar Symbol & Date Input Click -> Open date picker popup
+  // Live Calendar Symbols & Date Input Click -> Open date picker popup
   $(document).on('click', '.calendar-icon-trigger', function (e) {
     e.preventDefault();
     e.stopPropagation();
-    const $input = $(this).closest('.calendar-range-capsule').find('input[type="date"]:not(.hidden)');
-    if ($input.length && $input[0]) {
-      const inputEl = $input[0];
-      if (typeof inputEl.showPicker === 'function') {
+    const $capsule = $(this).closest('.calendar-range-capsule');
+    const $inputs = $capsule.find('input[type="date"]:not(.hidden)');
+    const allTriggers = $capsule.find('.calendar-icon-trigger');
+    const triggerIndex = allTriggers.index(this);
+    const targetInput = (triggerIndex === 1 && $inputs.length > 1) ? $inputs[1] : $inputs[0];
+    if (targetInput) {
+      if (typeof targetInput.showPicker === 'function') {
         try {
-          inputEl.showPicker();
+          targetInput.showPicker();
         } catch (err) {
-          inputEl.focus();
+          targetInput.focus();
         }
       } else {
-        inputEl.focus();
+        targetInput.focus();
       }
     }
   });
