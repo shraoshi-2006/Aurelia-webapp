@@ -1817,7 +1817,57 @@
       border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
       box-shadow: 0 4px 16px -2px rgba(0, 0, 0, 0.45) !important;
     }
-  </style>
+  
+  /* Global Center Alignment for all Tables (Heading & Data) */
+  table,
+  table thead,
+  table tbody,
+  table tfoot,
+  table tr,
+  table th,
+  table td,
+  .Aurelia-table-header th,
+  .Aurelia-table-header td {
+    text-align: center !important;
+  }
+
+  table th *,
+  table td * {
+    text-align: center !important;
+  }
+
+  table th .flex,
+  table td .flex,
+  table th .inline-flex,
+  table td .inline-flex,
+  table th [class*="space-x-"],
+  table td [class*="space-x-"],
+  table th [class*="gap-"],
+  table td [class*="gap-"] {
+    justify-content: center !important;
+  }
+
+  table th .flex-col,
+  table td .flex-col {
+    align-items: center !important;
+    text-align: center !important;
+  }
+
+  table td select,
+  table td input {
+    text-align: center !important;
+    text-align-last: center !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+
+  table td img,
+  table td svg {
+    display: inline-block !important;
+    vertical-align: middle !important;
+  }
+
+</style>
 </head>
 
 <body
@@ -2941,7 +2991,7 @@
 
   <div class="Aurelia-card p-0 overflow-hidden">
     <div class="overflow-x-auto">
-      <table class="w-full text-xs text-left">
+      <table class="w-full text-xs text-center">
         <thead class="bg-slate-50 text-slate-500 font-semibold text-[11px] border-b border-slate-200">
           <tr>
             <th class="py-3 px-4 whitespace-nowrap">Employee ID</th>
@@ -2952,7 +3002,7 @@
             <th class="py-3 px-4">Punch Out</th>
             <th class="py-3 px-4">Hours Logged</th>
             <th class="py-3 px-4 text-center">Status</th>
-            <th class="py-3 px-4 text-right">Actions</th>
+            <th class="py-3 px-4 text-center">Actions</th>
           </tr>
         </thead>
         <tbody id="page-al-tbody" class="divide-y divide-slate-100">
@@ -2974,7 +3024,7 @@
             <td class="py-3.5 px-4 font-mono text-slate-500">In Progress</td>
             <td class="py-3.5 px-4 font-bold text-slate-900">7h 15m</td>
             <td class="py-3.5 px-4 text-center"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800">Present</span></td>
-            <td class="py-3.5 px-4 text-right"><button class="text-slate-400 hover:text-[#FCA311] p-1 btn-edit-punch" title="Adjust Punch"><svg class="w-4 h-4 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" /></svg></button></td>
+            <td class="py-3.5 px-4 text-center"><button class="text-slate-400 hover:text-[#FCA311] p-1 btn-edit-punch" title="Adjust Punch"><svg class="w-4 h-4 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" /></svg></button></td>
           </tr>
           <tr class="hover:bg-slate-50" data-shift="morning">
             <td class="py-3.5 px-4 whitespace-nowrap"><span class="px-2.5 py-1 rounded text-xs font-mono font-bold bg-[#FCA311] text-black inline-block shadow-2xs">EMP-2026-04</span></td>
@@ -2994,7 +3044,7 @@
             <td class="py-3.5 px-4 font-mono text-slate-900 font-bold">02:10 PM</td>
             <td class="py-3.5 px-4 font-bold text-slate-900">8h 16m</td>
             <td class="py-3.5 px-4 text-center"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800">Present</span></td>
-            <td class="py-3.5 px-4 text-right"><button class="text-slate-400 hover:text-[#FCA311] p-1 btn-edit-punch" title="Adjust Punch"><svg class="w-4 h-4 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" /></svg></button></td>
+            <td class="py-3.5 px-4 text-center"><button class="text-slate-400 hover:text-[#FCA311] p-1 btn-edit-punch" title="Adjust Punch"><svg class="w-4 h-4 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" /></svg></button></td>
           </tr>
           <tr class="hover:bg-slate-50" data-shift="morning">
             <td class="py-3.5 px-4 whitespace-nowrap"><span class="px-2.5 py-1 rounded text-xs font-mono font-bold bg-[#FCA311] text-black inline-block shadow-2xs">EMP-2026-06</span></td>
@@ -3014,7 +3064,7 @@
             <td class="py-3.5 px-4 font-mono text-slate-900 font-bold">02:30 PM</td>
             <td class="py-3.5 px-4 font-bold text-slate-900">8h 08m</td>
             <td class="py-3.5 px-4 text-center"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800">Late (22m)</span></td>
-            <td class="py-3.5 px-4 text-right"><button class="text-slate-400 hover:text-[#FCA311] p-1 btn-edit-punch" title="Adjust Punch"><svg class="w-4 h-4 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" /></svg></button></td>
+            <td class="py-3.5 px-4 text-center"><button class="text-slate-400 hover:text-[#FCA311] p-1 btn-edit-punch" title="Adjust Punch"><svg class="w-4 h-4 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" /></svg></button></td>
           </tr>
           <tr class="hover:bg-slate-50" data-shift="evening">
             <td class="py-3.5 px-4 whitespace-nowrap"><span class="px-2.5 py-1 rounded text-xs font-mono font-bold bg-[#FCA311] text-black inline-block shadow-2xs">EMP-2026-08</span></td>
@@ -3034,7 +3084,7 @@
             <td class="py-3.5 px-4 font-mono text-slate-500">In Progress</td>
             <td class="py-3.5 px-4 font-bold text-slate-900">6h 10m</td>
             <td class="py-3.5 px-4 text-center"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800">Present</span></td>
-            <td class="py-3.5 px-4 text-right"><button class="text-slate-400 hover:text-[#FCA311] p-1 btn-edit-punch" title="Adjust Punch"><svg class="w-4 h-4 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" /></svg></button></td>
+            <td class="py-3.5 px-4 text-center"><button class="text-slate-400 hover:text-[#FCA311] p-1 btn-edit-punch" title="Adjust Punch"><svg class="w-4 h-4 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" /></svg></button></td>
           </tr>
           <tr class="hover:bg-slate-50" data-shift="night">
             <td class="py-3.5 px-4 whitespace-nowrap"><span class="px-2.5 py-1 rounded text-xs font-mono font-bold bg-[#FCA311] text-black inline-block shadow-2xs">EMP-2026-12</span></td>
@@ -3054,7 +3104,7 @@
             <td class="py-3.5 px-4 font-mono text-slate-400">--:--</td>
             <td class="py-3.5 px-4 font-bold text-slate-400">0h 00m</td>
             <td class="py-3.5 px-4 text-center"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-700">Upcoming Shift</span></td>
-            <td class="py-3.5 px-4 text-right"><button class="text-slate-400 hover:text-[#FCA311] p-1 btn-edit-punch" title="Adjust Punch"><svg class="w-4 h-4 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" /></svg></button></td>
+            <td class="py-3.5 px-4 text-center"><button class="text-slate-400 hover:text-[#FCA311] p-1 btn-edit-punch" title="Adjust Punch"><svg class="w-4 h-4 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" /></svg></button></td>
           </tr>
         </tbody>
       </table>
@@ -3287,7 +3337,7 @@
   <!-- Authentication Controller -->
   <script src="../auth.js?v=20261110_07"></script>
   <!-- Main JavaScript Logic -->
-  <script src="../main.js?v=20261110_v48"></script>
+  <script src="../main.js?v=20261110_v49"></script>
 </body>
 
 </html>

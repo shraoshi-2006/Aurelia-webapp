@@ -3511,7 +3511,57 @@
           }
         } else {
           // Fallback if CDN unavailable
-          const htmlContent = `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Pay Slip - ${empName}</title><style>body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;padding:32px;color:#0f172a;max-width:800px;margin:0 auto;}</style></head><body>${printDoc.innerHTML}</body></html>`;
+          const htmlContent = `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Pay Slip - ${empName}</title><style>body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;padding:32px;color:#0f172a;max-width:800px;margin:0 auto;}
+  /* Global Center Alignment for all Tables (Heading & Data) */
+  table,
+  table thead,
+  table tbody,
+  table tfoot,
+  table tr,
+  table th,
+  table td,
+  .Aurelia-table-header th,
+  .Aurelia-table-header td {
+    text-align: center !important;
+  }
+
+  table th *,
+  table td * {
+    text-align: center !important;
+  }
+
+  table th .flex,
+  table td .flex,
+  table th .inline-flex,
+  table td .inline-flex,
+  table th [class*="space-x-"],
+  table td [class*="space-x-"],
+  table th [class*="gap-"],
+  table td [class*="gap-"] {
+    justify-content: center !important;
+  }
+
+  table th .flex-col,
+  table td .flex-col {
+    align-items: center !important;
+    text-align: center !important;
+  }
+
+  table td select,
+  table td input {
+    text-align: center !important;
+    text-align-last: center !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+
+  table td img,
+  table td svg {
+    display: inline-block !important;
+    vertical-align: middle !important;
+  }
+
+</style></head><body>${printDoc.innerHTML}</body></html>`;
           const blob = new Blob([htmlContent], { type: 'text/html;charset=utf-8;' });
           const url = URL.createObjectURL(blob);
           const a = document.createElement('a');
@@ -3585,7 +3635,7 @@
   <!-- Authentication Controller -->
   <script src="../auth.js?v=20261110_07"></script>
   <!-- Main JavaScript Logic -->
-  <script src="../main.js?v=20261110_v48"></script>
+  <script src="../main.js?v=20261110_v49"></script>
 </body>
 
 </html>

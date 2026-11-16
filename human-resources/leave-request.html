@@ -2902,14 +2902,14 @@
 
     <!-- Gmail-Inspired Leave Stream Table -->
     <div class="overflow-x-auto">
-      <table class="w-full text-xs text-left">
+      <table class="w-full text-xs text-center">
         <thead class="bg-slate-50/70 dark:bg-slate-800/50 text-slate-400 font-semibold text-[11px] border-b border-slate-200/80 dark:border-slate-700/80">
           <tr>
             <th class="py-2.5 px-4 w-36">Employee ID</th>
             <th class="py-2.5 px-4 w-48">Employee</th>
             <th class="py-2.5 px-4">Leave Application & Reason Snippet</th>
             <th class="py-2.5 px-4 text-center">Status</th>
-            <th class="py-2.5 px-4 text-right pr-6">Dates & Actions</th>
+            <th class="py-2.5 px-4 text-center pr-6">Dates & Actions</th>
           </tr>
         </thead>
         <tbody id="page-lr-tbody" class="divide-y divide-slate-100 dark:divide-slate-800/80">
@@ -2941,7 +2941,7 @@
             <td class="py-3 px-4 text-center status-col whitespace-nowrap">
               <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800">Pending</span>
             </td>
-            <td class="py-3 px-4 text-right pr-6 whitespace-nowrap action-col">
+            <td class="py-3 px-4 text-center pr-6 whitespace-nowrap action-col">
               <div class="flex items-center justify-end space-x-2">
                 <span class="text-xs font-mono text-slate-500 dark:text-slate-400 mr-1">08 Nov - 10 Nov</span>
                 <button class="btn-Aurelia-primary text-[10px] py-1 px-2.5 font-bold btn-approve-lr cursor-pointer" data-target="LR-2026-089">Approve</button>
@@ -3017,7 +3017,7 @@
             <td class="py-3 px-4 text-center status-col whitespace-nowrap">
               <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800">Pending</span>
             </td>
-            <td class="py-3 px-4 text-right pr-6 whitespace-nowrap action-col">
+            <td class="py-3 px-4 text-center pr-6 whitespace-nowrap action-col">
               <div class="flex items-center justify-end space-x-2">
                 <span class="text-xs font-mono text-slate-500 dark:text-slate-400 mr-1">06 Nov - 07 Nov</span>
                 <button class="btn-Aurelia-primary text-[10px] py-1 px-2.5 font-bold btn-approve-lr cursor-pointer" data-target="LR-2026-088">Approve</button>
@@ -3051,7 +3051,7 @@
             <td class="py-3 px-4 text-center whitespace-nowrap status-col">
               <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#15803d] text-white shadow-2xs">Approved</span>
             </td>
-            <td class="py-3 px-4 text-right pr-6 whitespace-nowrap text-slate-400 text-xs font-mono action-col">
+            <td class="py-3 px-4 text-center pr-6 whitespace-nowrap text-slate-400 text-xs font-mono action-col">
               01 Nov - 05 Nov
             </td>
           </tr>
@@ -3081,7 +3081,7 @@
             <td class="py-3 px-4 text-center whitespace-nowrap status-col">
               <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-100 text-rose-800">Rejected</span>
             </td>
-            <td class="py-3 px-4 text-right pr-6 whitespace-nowrap text-slate-400 text-xs font-mono action-col">
+            <td class="py-3 px-4 text-center pr-6 whitespace-nowrap text-slate-400 text-xs font-mono action-col">
               31 Oct 2026
             </td>
           </tr>
@@ -3111,11 +3111,11 @@
             <td class="py-3 px-4 text-center whitespace-nowrap">
               <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#15803d] text-white shadow-2xs">Approved</span>
             </td>
-            <td class="py-3 px-4 text-right pr-6 whitespace-nowrap text-slate-400 text-xs font-mono">
+            <td class="py-3 px-4 text-center pr-6 whitespace-nowrap text-slate-400 text-xs font-mono">
               20 Nov - 24 Nov
             </td>
           </tr>
-            <td class="py-3 px-4 text-right pr-6 whitespace-nowrap text-slate-400 text-xs font-mono">
+            <td class="py-3 px-4 text-center pr-6 whitespace-nowrap text-slate-400 text-xs font-mono">
               20 Nov - 24 Nov
             </td>
           </tr>
@@ -3380,7 +3380,57 @@
         outline: none;
       }
     }
-  </style>
+  
+  /* Global Center Alignment for all Tables (Heading & Data) */
+  table,
+  table thead,
+  table tbody,
+  table tfoot,
+  table tr,
+  table th,
+  table td,
+  .Aurelia-table-header th,
+  .Aurelia-table-header td {
+    text-align: center !important;
+  }
+
+  table th *,
+  table td * {
+    text-align: center !important;
+  }
+
+  table th .flex,
+  table td .flex,
+  table th .inline-flex,
+  table td .inline-flex,
+  table th [class*="space-x-"],
+  table td [class*="space-x-"],
+  table th [class*="gap-"],
+  table td [class*="gap-"] {
+    justify-content: center !important;
+  }
+
+  table th .flex-col,
+  table td .flex-col {
+    align-items: center !important;
+    text-align: center !important;
+  }
+
+  table td select,
+  table td input {
+    text-align: center !important;
+    text-align-last: center !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+
+  table td img,
+  table td svg {
+    display: inline-block !important;
+    vertical-align: middle !important;
+  }
+
+</style>
 
   <script>
     $(document).ready(function() {
@@ -3701,7 +3751,7 @@
   <!-- Authentication Controller -->
   <script src="../auth.js?v=20261110_07"></script>
   <!-- Main JavaScript Logic -->
-  <script src="../main.js?v=20261110_v48"></script>
+  <script src="../main.js?v=20261110_v49"></script>
 </body>
 
 </html>

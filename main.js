@@ -18,6 +18,41 @@
 $(document).ready(function () {
   'use strict';
 
+  // Global Table Center Alignment Enforcer
+  if (!$('#style-global-table-center').length) {
+    $('head').append(`
+      <style id="style-global-table-center">
+        table, table thead, table tbody, table tfoot, table tr, table th, table td,
+        .Aurelia-table-header th, .Aurelia-table-header td {
+          text-align: center !important;
+        }
+        table th *, table td * {
+          text-align: center !important;
+        }
+        table th .flex, table td .flex,
+        table th .inline-flex, table td .inline-flex,
+        table th [class*="space-x-"], table td [class*="space-x-"],
+        table th [class*="gap-"], table td [class*="gap-"] {
+          justify-content: center !important;
+        }
+        table th .flex-col, table td .flex-col {
+          align-items: center !important;
+          text-align: center !important;
+        }
+        table td select, table td input {
+          text-align: center !important;
+          text-align-last: center !important;
+          margin-left: auto !important;
+          margin-right: auto !important;
+        }
+        table td img, table td svg {
+          display: inline-block !important;
+          vertical-align: middle !important;
+        }
+      </style>
+    `);
+  }
+
   // Global Chart.js Instances
   let moneyFlowChart = null;
   let budgetDoughnutChart = null;
@@ -1199,7 +1234,7 @@ $(document).ready(function () {
                   </span>`
               }
             </td>
-            <td class="py-2.5 sm:py-3 px-3 whitespace-nowrap text-right">
+            <td class="py-2.5 sm:py-3 px-3 whitespace-nowrap text-center">
               <div class="inline-flex items-center justify-end space-x-1.5">
                 <a href="${staffListUrl}" class="inline-flex items-center space-x-1 px-2 py-1 rounded-md text-[11px] font-semibold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-[#FCA311] hover:text-black transition-all shadow-2xs" title="View staff assigned to this department">
                   <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -2348,13 +2383,13 @@ $(document).ready(function () {
             <div class="text-[10px] text-slate-400 truncate max-w-xs">${escapeHtml(item.description || '')}</div>
           </td>
           <td class="py-3 px-3 text-slate-600 dark:text-slate-300">${escapeHtml(item.category || '-')}</td>
-          <td class="py-3 px-3 text-right font-semibold text-slate-700 dark:text-slate-200">${formatMoney(item.price)}</td>
+          <td class="py-3 px-3 text-center font-semibold text-slate-700 dark:text-slate-200">${formatMoney(item.price)}</td>
           <td class="py-3 px-3 text-center">
             <span class="inline-block px-2.5 py-0.5 rounded-md text-xs font-bold ${item.qty > 0 ? 'bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-100' : 'text-slate-400'}">
               ${item.qty}
             </span>
           </td>
-          <td class="py-3 px-3 text-right font-bold ${item.rawRevenue > 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-slate-400'}">
+          <td class="py-3 px-3 text-center font-bold ${item.rawRevenue > 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-slate-400'}">
             ${formatMoney(item.rawRevenue)}
           </td>
           <td class="py-3 px-3 text-center">
@@ -2579,7 +2614,7 @@ $(document).ready(function () {
                 <span class="truncate text-xs">${escapeHtml(itemsPreview)}</span>
               </div>
             </td>
-            <td class="py-3 px-3 text-right font-extrabold text-slate-900 dark:text-white whitespace-nowrap text-sm">
+            <td class="py-3 px-3 text-center font-extrabold text-slate-900 dark:text-white whitespace-nowrap text-sm">
               <span id="${rowAmtId}">${formatMoney(b.grandTotal)}</span>
             </td>
             <td class="py-3 px-3 text-center whitespace-nowrap space-x-1">
@@ -3508,8 +3543,8 @@ $(document).ready(function () {
             <td class="py-2.5 px-2 text-center">
               <input type="number" min="1" max="99" value="${it.qty}" class="bill-item-qty-input Aurelia-input w-16 py-1 px-1.5 text-center text-xs font-bold" data-index="${idx}">
             </td>
-            <td class="py-2.5 px-3 text-right text-slate-600 dark:text-slate-300">${formatMoney(it.price)}</td>
-            <td class="py-2.5 px-3 text-right font-bold text-slate-900 dark:text-white bill-item-subtotal">${formatMoney(it.subtotal)}</td>
+            <td class="py-2.5 px-3 text-center text-slate-600 dark:text-slate-300">${formatMoney(it.price)}</td>
+            <td class="py-2.5 px-3 text-center font-bold text-slate-900 dark:text-white bill-item-subtotal">${formatMoney(it.subtotal)}</td>
             <td class="py-2.5 px-2 text-center">
               <button type="button" class="btn-remove-bill-item text-rose-500 hover:text-rose-700 font-bold text-base cursor-pointer" data-index="${idx}" title="Remove item">&times;</button>
             </td>
@@ -3868,9 +3903,9 @@ $(document).ready(function () {
             </td>
             <td class="py-3 px-4 text-slate-500 font-medium">${formatDateTime(b.date)}</td>
             <td class="py-3 px-4 text-slate-600 dark:text-slate-300 font-medium">${escapeHtml(b.paymentMethod)}</td>
-            <td class="py-3 px-4 text-right font-black text-slate-900 dark:text-white">${formatMoney(b.grandTotal)}</td>
+            <td class="py-3 px-4 text-center font-black text-slate-900 dark:text-white">${formatMoney(b.grandTotal)}</td>
             <td class="py-3 px-4 text-center">${getStatusBadge(b.status)}</td>
-            <td class="py-3.5 px-4 text-right whitespace-nowrap">
+            <td class="py-3.5 px-4 text-center whitespace-nowrap">
               <div class="flex items-center justify-end space-x-1">
                 <!-- View / Eye -->
                 <button type="button" class="btn-view-bill p-2 rounded-lg text-slate-500 hover:text-sky-600 hover:bg-sky-50 dark:hover:bg-slate-800 transition-colors cursor-pointer" title="View Invoice" data-id="${b.id}">
@@ -4658,7 +4693,7 @@ $(document).ready(function () {
           <td class="py-3 px-4 text-slate-500 max-w-sm truncate ${!isAvail ? 'opacity-65' : ''}" title="${escapeHtml(item.description || '')}">
             ${escapeHtml(item.description || 'Prepared fresh upon order.')}
           </td>
-          <td class="py-3 px-4 text-right font-black text-[#14213D] dark:text-white whitespace-nowrap ${!isAvail ? 'opacity-65' : ''}">
+          <td class="py-3 px-4 text-center font-black text-[#14213D] dark:text-white whitespace-nowrap ${!isAvail ? 'opacity-65' : ''}">
             ${formatMoney(item.price)}
           </td>
           <td class="py-3 px-4 text-center whitespace-nowrap">
@@ -4672,7 +4707,7 @@ $(document).ready(function () {
               </span>
             `}
           </td>
-          <td class="py-3.5 px-4 text-right whitespace-nowrap">
+          <td class="py-3.5 px-4 text-center whitespace-nowrap">
             <div class="flex items-center justify-end space-x-1">
               <!-- Edit / Pencil -->
               <button type="button" class="btn-edit-menu-item p-2 rounded-lg text-slate-500 hover:text-amber-600 hover:bg-amber-50 dark:hover:bg-slate-800 transition-colors cursor-pointer" data-id="${item.id}" title="Edit item" aria-label="Edit item">
@@ -4877,12 +4912,12 @@ $(document).ready(function () {
             <div class="font-bold text-slate-900 dark:text-white">${escapeHtml(ord.customerName)}</div>
             <div class="text-[11px] text-slate-400 font-medium">${escapeHtml(ord.tableRoom)}</div>
           </td>
-          <td class="py-3 px-4 text-left whitespace-nowrap">
+          <td class="py-3 px-4 text-center whitespace-nowrap">
             <button type="button" class="btn-view-order-items btn-finset-primary text-xs py-1 px-3 cursor-pointer" data-id="${ord.id}" title="View ordered items list">
               Click here to see &rarr;
             </button>
           </td>
-          <td class="py-3 px-4 text-right font-black text-[#14213D] dark:text-white whitespace-nowrap">
+          <td class="py-3 px-4 text-center font-black text-[#14213D] dark:text-white whitespace-nowrap">
             ${formatMoney(estTotal)}
           </td>
           <td class="py-3 px-4 text-center whitespace-nowrap">
@@ -4894,7 +4929,7 @@ $(document).ready(function () {
               <option value="Cancelled" ${ord.status === 'Cancelled' ? 'selected' : ''}>Cancelled</option>
             </select>
           </td>
-          <td class="py-3 px-4 text-left whitespace-nowrap">
+          <td class="py-3 px-4 text-center whitespace-nowrap">
             <div class="inline-flex items-center gap-2">
               <button type="button" class="btn-view-order-details btn-finset-secondary text-xs py-1 px-3" data-id="${ord.id}">
                 Details
@@ -4991,8 +5026,8 @@ $(document).ready(function () {
         <tr>
           <td class="py-1 px-3 font-semibold text-slate-800 dark:text-white">${escapeHtml(it.name)}</td>
           <td class="py-1 px-2 text-center">${it.qty}</td>
-          <td class="py-1 px-3 text-right text-slate-500">${formatMoney(it.price)}</td>
-          <td class="py-1 px-3 text-right font-bold text-slate-900 dark:text-white">${formatMoney(line)}</td>
+          <td class="py-1 px-3 text-center text-slate-500">${formatMoney(it.price)}</td>
+          <td class="py-1 px-3 text-center font-bold text-slate-900 dark:text-white">${formatMoney(line)}</td>
           <td class="py-1 px-2 text-center">
             <button type="button" class="btn-remove-order-item text-rose-500 font-bold" data-index="${idx}">&times;</button>
           </td>
@@ -5084,7 +5119,7 @@ $(document).ready(function () {
               <button type="button" class="btn-close-modal w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-500 hover:text-slate-800 dark:text-slate-300 dark:hover:text-white flex items-center justify-center transition-colors text-sm font-semibold cursor-pointer" title="Close">&times;</button>
             </div>
             <div class="overflow-x-auto max-h-72 overflow-y-auto rounded-xl border border-slate-100 dark:border-slate-800">
-              <table class="w-full text-xs text-left">
+              <table class="w-full text-xs text-center">
                 <thead>
                   <tr class="Aurelia-table-header text-slate-500 font-semibold text-[11px]">
                     <th class="py-2 px-3">#</th>
@@ -5178,8 +5213,8 @@ $(document).ready(function () {
         <tr>
           <td class="py-2 px-3 font-semibold text-slate-800 dark:text-white">${escapeHtml(it.name)}</td>
           <td class="py-2 px-2 text-center">${it.qty}</td>
-          <td class="py-2 px-3 text-right text-slate-500">${formatMoney(it.price)}</td>
-          <td class="py-2 px-3 text-right font-bold text-slate-900 dark:text-white">${formatMoney(it.price * it.qty)}</td>
+          <td class="py-2 px-3 text-center text-slate-500">${formatMoney(it.price)}</td>
+          <td class="py-2 px-3 text-center font-bold text-slate-900 dark:text-white">${formatMoney(it.price * it.qty)}</td>
         </tr>
       `);
     });
@@ -5233,8 +5268,8 @@ $(document).ready(function () {
             <td class="py-3 px-4 text-slate-500">${escapeHtml(c.email || '-')}</td>
             <td class="py-3 px-4 text-slate-500 max-w-xs truncate">${escapeHtml(c.address || '-')}</td>
             <td class="py-3 px-4 text-center font-bold text-slate-800 dark:text-white">${c.visits || 0}</td>
-            <td class="py-3 px-4 text-right font-black text-[#14213D]">${formatMoney(c.totalSpend || 0)}</td>
-            <td class="py-3.5 px-4 text-right whitespace-nowrap">
+            <td class="py-3 px-4 text-center font-black text-[#14213D]">${formatMoney(c.totalSpend || 0)}</td>
+            <td class="py-3.5 px-4 text-center whitespace-nowrap">
               <div class="flex items-center justify-end space-x-1">
                 <!-- View / Eye -->
                 <button type="button" class="btn-view-customer-profile p-2 rounded-lg text-slate-500 hover:text-sky-600 hover:bg-sky-50 dark:hover:bg-slate-800 transition-colors cursor-pointer" data-id="${c.id}" title="View profile" aria-label="View profile">
@@ -5405,8 +5440,8 @@ $(document).ready(function () {
             <td class="py-2 px-3 font-mono font-bold text-[#14213D]">${escapeHtml(b.billNumber)}</td>
             <td class="py-2 px-3 text-slate-500">${formatDateTime(b.date)}</td>
             <td class="py-2 px-3 text-slate-600 dark:text-slate-300 font-medium">${escapeHtml(b.paymentMethod)}</td>
-            <td class="py-2 px-3 text-right font-black text-slate-900 dark:text-white">${formatMoney(b.grandTotal)}</td>
-            <td class="py-2 px-3 text-right">
+            <td class="py-2 px-3 text-center font-black text-slate-900 dark:text-white">${formatMoney(b.grandTotal)}</td>
+            <td class="py-2 px-3 text-center">
               <button type="button" class="btn-view-bill btn-finset-secondary text-xs py-0.5 px-2" data-id="${b.id}">View</button>
             </td>
           </tr>
@@ -5481,8 +5516,8 @@ $(document).ready(function () {
             <td class="py-2.5 px-4 text-center text-slate-400 font-bold">${idx + 1}</td>
             <td class="py-2.5 px-4 font-bold text-slate-900 dark:text-white">${escapeHtml(it.name)}</td>
             <td class="py-2.5 px-4 text-slate-500 font-medium">${escapeHtml(it.category)}</td>
-            <td class="py-2.5 px-4 text-right font-semibold text-slate-700 dark:text-slate-300">${it.qty}</td>
-            <td class="py-2.5 px-4 text-right font-black text-slate-900 dark:text-white">${formatMoney(it.revenue)}</td>
+            <td class="py-2.5 px-4 text-center font-semibold text-slate-700 dark:text-slate-300">${it.qty}</td>
+            <td class="py-2.5 px-4 text-center font-black text-slate-900 dark:text-white">${formatMoney(it.revenue)}</td>
           </tr>
         `);
       });
@@ -6331,7 +6366,7 @@ $(document).ready(function () {
           <td class="py-3.5 px-4 whitespace-nowrap">
             ${verifyBadge}
           </td>
-          <td class="py-3.5 px-4 text-right whitespace-nowrap">
+          <td class="py-3.5 px-4 text-center whitespace-nowrap">
             <div class="flex items-center justify-end space-x-1">
               <!-- View / Eye -->
               <button type="button" class="btn-preview-hr-doc p-2 rounded-lg text-slate-500 hover:text-sky-600 hover:bg-sky-50 dark:hover:bg-slate-800 transition-colors cursor-pointer" title="View Document" data-id="${tpl.id}">

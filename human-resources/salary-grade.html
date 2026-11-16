@@ -1805,7 +1805,57 @@
       border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
       box-shadow: 0 4px 16px -2px rgba(0, 0, 0, 0.45) !important;
     }
-  </style>
+  
+  /* Global Center Alignment for all Tables (Heading & Data) */
+  table,
+  table thead,
+  table tbody,
+  table tfoot,
+  table tr,
+  table th,
+  table td,
+  .Aurelia-table-header th,
+  .Aurelia-table-header td {
+    text-align: center !important;
+  }
+
+  table th *,
+  table td * {
+    text-align: center !important;
+  }
+
+  table th .flex,
+  table td .flex,
+  table th .inline-flex,
+  table td .inline-flex,
+  table th [class*="space-x-"],
+  table td [class*="space-x-"],
+  table th [class*="gap-"],
+  table td [class*="gap-"] {
+    justify-content: center !important;
+  }
+
+  table th .flex-col,
+  table td .flex-col {
+    align-items: center !important;
+    text-align: center !important;
+  }
+
+  table td select,
+  table td input {
+    text-align: center !important;
+    text-align-last: center !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+
+  table td img,
+  table td svg {
+    display: inline-block !important;
+    vertical-align: middle !important;
+  }
+
+</style>
 </head>
 
 <body
@@ -2902,7 +2952,7 @@
           
   <div class="Aurelia-card p-0 overflow-hidden">
     <div class="overflow-x-auto">
-      <table class="w-full text-xs text-left">
+      <table class="w-full text-xs text-center">
         <thead class="bg-slate-50 text-slate-500 font-semibold text-[11px] border-b border-slate-200">
           <tr>
             <th class="py-3 px-4">Grade Code</th>
@@ -2912,7 +2962,7 @@
             <th class="py-3 px-4">Special Allowance</th>
             <th class="py-3 px-4">Gross Range (₹/mo)</th>
             <th class="py-3 px-4 text-center">Headcount</th>
-            <th class="py-3 px-4 text-right">Actions</th>
+            <th class="py-3 px-4 text-center">Actions</th>
           </tr>
         </thead>
         <tbody id="page-sg-tbody" class="divide-y divide-slate-100">
@@ -2924,7 +2974,7 @@
             <td class="py-3.5 px-4 text-slate-600">₹25,000</td>
             <td class="py-3.5 px-4 font-bold text-emerald-600 font-mono">₹1,58,000 - ₹2,03,000</td>
             <td class="py-3.5 px-4 text-center"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-800">2 Staff</span></td>
-            <td class="py-3.5 px-4 text-right"><button class="btn-Aurelia-secondary text-[11px] py-1 px-2.5">Edit Band</button></td>
+            <td class="py-3.5 px-4 text-center"><button class="btn-Aurelia-secondary text-[11px] py-1 px-2.5">Edit Band</button></td>
           </tr>
           <tr class="hover:bg-slate-50">
             <td class="py-3.5 px-4 font-mono font-bold text-slate-900">GRD-MGT-B</td>
@@ -2934,7 +2984,7 @@
             <td class="py-3.5 px-4 text-slate-600">₹18,000</td>
             <td class="py-3.5 px-4 font-bold text-emerald-600 font-mono">₹1,09,000 - ₹1,29,000</td>
             <td class="py-3.5 px-4 text-center"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-800">5 Staff</span></td>
-            <td class="py-3.5 px-4 text-right"><button class="btn-Aurelia-secondary text-[11px] py-1 px-2.5">Edit Band</button></td>
+            <td class="py-3.5 px-4 text-center"><button class="btn-Aurelia-secondary text-[11px] py-1 px-2.5">Edit Band</button></td>
           </tr>
           <tr class="hover:bg-slate-50">
             <td class="py-3.5 px-4 font-mono font-bold text-slate-900">GRD-SUP-C</td>
@@ -2944,7 +2994,7 @@
             <td class="py-3.5 px-4 text-slate-600">₹12,000</td>
             <td class="py-3.5 px-4 font-bold text-emerald-600 font-mono">₹72,750 - ₹87,750</td>
             <td class="py-3.5 px-4 text-center"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-800">8 Staff</span></td>
-            <td class="py-3.5 px-4 text-right"><button class="btn-Aurelia-secondary text-[11px] py-1 px-2.5">Edit Band</button></td>
+            <td class="py-3.5 px-4 text-center"><button class="btn-Aurelia-secondary text-[11px] py-1 px-2.5">Edit Band</button></td>
           </tr>
           <tr class="hover:bg-slate-50">
             <td class="py-3.5 px-4 font-mono font-bold text-slate-900">GRD-OPS-D</td>
@@ -2954,7 +3004,7 @@
             <td class="py-3.5 px-4 text-slate-600">₹9,500</td>
             <td class="py-3.5 px-4 font-bold text-emerald-600 font-mono">₹52,700 - ₹62,700</td>
             <td class="py-3.5 px-4 text-center"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-800">14 Staff</span></td>
-            <td class="py-3.5 px-4 text-right"><button class="btn-Aurelia-secondary text-[11px] py-1 px-2.5">Edit Band</button></td>
+            <td class="py-3.5 px-4 text-center"><button class="btn-Aurelia-secondary text-[11px] py-1 px-2.5">Edit Band</button></td>
           </tr>
           <tr class="hover:bg-slate-50">
             <td class="py-3.5 px-4 font-mono font-bold text-slate-900">GRD-SVC-E</td>
@@ -2964,7 +3014,7 @@
             <td class="py-3.5 px-4 text-slate-600">₹6,000</td>
             <td class="py-3.5 px-4 font-bold text-emerald-600 font-mono">₹37,200 - ₹43,200</td>
             <td class="py-3.5 px-4 text-center"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-800">12 Staff</span></td>
-            <td class="py-3.5 px-4 text-right"><button class="btn-Aurelia-secondary text-[11px] py-1 px-2.5">Edit Band</button></td>
+            <td class="py-3.5 px-4 text-center"><button class="btn-Aurelia-secondary text-[11px] py-1 px-2.5">Edit Band</button></td>
           </tr>
           <tr class="hover:bg-slate-50">
             <td class="py-3.5 px-4 font-mono font-bold text-slate-900">GRD-ENT-F</td>
@@ -2974,7 +3024,7 @@
             <td class="py-3.5 px-4 text-slate-600">₹4,500</td>
             <td class="py-3.5 px-4 font-bold text-emerald-600 font-mono">₹27,900 - ₹31,900</td>
             <td class="py-3.5 px-4 text-center"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-800">7 Staff</span></td>
-            <td class="py-3.5 px-4 text-right"><button class="btn-Aurelia-secondary text-[11px] py-1 px-2.5">Edit Band</button></td>
+            <td class="py-3.5 px-4 text-center"><button class="btn-Aurelia-secondary text-[11px] py-1 px-2.5">Edit Band</button></td>
           </tr>
         </tbody>
       </table>
@@ -3041,7 +3091,7 @@
   <!-- Authentication Controller -->
   <script src="../auth.js?v=20261110_07"></script>
   <!-- Main JavaScript Logic -->
-  <script src="../main.js?v=20261110_v48"></script>
+  <script src="../main.js?v=20261110_v49"></script>
 </body>
 
 </html>

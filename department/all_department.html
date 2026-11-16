@@ -1875,7 +1875,57 @@
       border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
       box-shadow: 0 4px 16px -2px rgba(0, 0, 0, 0.45) !important;
     }
-  </style>
+  
+  /* Global Center Alignment for all Tables (Heading & Data) */
+  table,
+  table thead,
+  table tbody,
+  table tfoot,
+  table tr,
+  table th,
+  table td,
+  .Aurelia-table-header th,
+  .Aurelia-table-header td {
+    text-align: center !important;
+  }
+
+  table th *,
+  table td * {
+    text-align: center !important;
+  }
+
+  table th .flex,
+  table td .flex,
+  table th .inline-flex,
+  table td .inline-flex,
+  table th [class*="space-x-"],
+  table td [class*="space-x-"],
+  table th [class*="gap-"],
+  table td [class*="gap-"] {
+    justify-content: center !important;
+  }
+
+  table th .flex-col,
+  table td .flex-col {
+    align-items: center !important;
+    text-align: center !important;
+  }
+
+  table td select,
+  table td input {
+    text-align: center !important;
+    text-align-last: center !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+
+  table td img,
+  table td svg {
+    display: inline-block !important;
+    vertical-align: middle !important;
+  }
+
+</style>
 </head>
 
 <body
@@ -3015,7 +3065,7 @@
             <!-- Departments Table Container -->
             <div class="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200/90 dark:border-slate-800 shadow-xs overflow-hidden">
               <div class="overflow-x-auto">
-                <table class="w-full text-xs text-left border-collapse">
+                <table class="w-full text-xs text-center border-collapse">
                   <thead class="bg-slate-50 dark:bg-slate-800/90 text-slate-500 dark:text-slate-400 font-semibold text-[10px] sm:text-[11px] border-b border-slate-200 dark:border-slate-700 select-none">
                     <tr>
                       <th class="py-3 px-3 font-bold uppercase tracking-wider">Department</th>
@@ -3025,7 +3075,7 @@
                       <th class="py-3 px-2.5 font-bold uppercase tracking-wider whitespace-nowrap">Station / Location</th>
                       <th class="py-3 px-2 font-bold uppercase tracking-wider whitespace-nowrap">Shift Schedule</th>
                       <th class="py-3 px-2 font-bold uppercase tracking-wider whitespace-nowrap text-center">Status</th>
-                      <th class="py-3 px-3 font-bold uppercase tracking-wider whitespace-nowrap text-right">Actions</th>
+                      <th class="py-3 px-3 font-bold uppercase tracking-wider whitespace-nowrap text-center">Actions</th>
                     </tr>
                   </thead>
                   <tbody id="modal-dept-grid" class="divide-y divide-slate-100 dark:divide-slate-800/80 bg-white dark:bg-slate-900">
@@ -3067,7 +3117,7 @@
   <!-- Authentication Controller -->
   <script src="../auth.js?v=20261110_07"></script>
   <!-- Main JavaScript Logic -->
-<script src="../main.js?v=20261110_v48"></script>
+<script src="../main.js?v=20261110_v49"></script>
 </body>
 
 </html>

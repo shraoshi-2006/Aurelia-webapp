@@ -3076,7 +3076,7 @@
           <!-- Document Templates Table Card -->
           <div class="Aurelia-card p-0 overflow-hidden">
             <div class="overflow-x-auto">
-              <table class="w-full text-xs text-left">
+              <table class="w-full text-xs text-center">
                 <thead
                   class="bg-slate-50 dark:bg-slate-800 text-slate-500 font-semibold text-[11px] border-b border-slate-200 dark:border-slate-700">
                   <tr>
@@ -3085,7 +3085,7 @@
                     <th class="py-3.5 px-4 font-bold text-slate-700 dark:text-slate-300">Department</th>
                     <th class="py-3.5 px-4 font-bold text-slate-700 dark:text-slate-300">Format</th>
                     <th class="py-3.5 px-4 font-bold text-slate-700 dark:text-slate-300">Verification</th>
-                    <th class="py-3.5 px-4 font-bold text-slate-700 dark:text-slate-300 text-right">Action</th>
+                    <th class="py-3.5 px-4 font-bold text-slate-700 dark:text-slate-300 text-center">Action</th>
                   </tr>
                 </thead>
                 <tbody id="hr-templates-tbody" class="divide-y divide-slate-100 dark:divide-slate-800">
@@ -3335,7 +3335,7 @@
   <!-- Authentication Controller -->
   <script src="../auth.js?v=20261110_07"></script>
   <!-- Main JavaScript Logic -->
-  <script src="../main.js?v=20261110_v48"></script>
+  <script src="../main.js?v=20261110_v49"></script>
 
   <script>
     let isHrDocPrinting = false;
@@ -3461,7 +3461,57 @@
             showToast('Document downloaded successfully!', 'success');
           }
         } else {
-          const htmlContent = `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>${titleText}</title><style>body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;padding:32px;color:#0f172a;max-width:800px;margin:0 auto;}</style></head><body>${printDoc.innerHTML}</body></html>`;
+          const htmlContent = `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>${titleText}</title><style>body{font-family:-apple-system,BlinkMacSystemFont,sans-serif;padding:32px;color:#0f172a;max-width:800px;margin:0 auto;}
+  /* Global Center Alignment for all Tables (Heading & Data) */
+  table,
+  table thead,
+  table tbody,
+  table tfoot,
+  table tr,
+  table th,
+  table td,
+  .Aurelia-table-header th,
+  .Aurelia-table-header td {
+    text-align: center !important;
+  }
+
+  table th *,
+  table td * {
+    text-align: center !important;
+  }
+
+  table th .flex,
+  table td .flex,
+  table th .inline-flex,
+  table td .inline-flex,
+  table th [class*="space-x-"],
+  table td [class*="space-x-"],
+  table th [class*="gap-"],
+  table td [class*="gap-"] {
+    justify-content: center !important;
+  }
+
+  table th .flex-col,
+  table td .flex-col {
+    align-items: center !important;
+    text-align: center !important;
+  }
+
+  table td select,
+  table td input {
+    text-align: center !important;
+    text-align-last: center !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+
+  table td img,
+  table td svg {
+    display: inline-block !important;
+    vertical-align: middle !important;
+  }
+
+</style></head><body>${printDoc.innerHTML}</body></html>`;
           const blob = new Blob([htmlContent], { type: 'text/html;charset=utf-8;' });
           const url = URL.createObjectURL(blob);
           const a = document.createElement('a');

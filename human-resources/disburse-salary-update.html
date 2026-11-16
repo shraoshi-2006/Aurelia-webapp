@@ -1810,7 +1810,57 @@
       border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
       box-shadow: 0 4px 16px -2px rgba(0, 0, 0, 0.45) !important;
     }
-  </style>
+  
+  /* Global Center Alignment for all Tables (Heading & Data) */
+  table,
+  table thead,
+  table tbody,
+  table tfoot,
+  table tr,
+  table th,
+  table td,
+  .Aurelia-table-header th,
+  .Aurelia-table-header td {
+    text-align: center !important;
+  }
+
+  table th *,
+  table td * {
+    text-align: center !important;
+  }
+
+  table th .flex,
+  table td .flex,
+  table th .inline-flex,
+  table td .inline-flex,
+  table th [class*="space-x-"],
+  table td [class*="space-x-"],
+  table th [class*="gap-"],
+  table td [class*="gap-"] {
+    justify-content: center !important;
+  }
+
+  table th .flex-col,
+  table td .flex-col {
+    align-items: center !important;
+    text-align: center !important;
+  }
+
+  table td select,
+  table td input {
+    text-align: center !important;
+    text-align-last: center !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+
+  table td img,
+  table td svg {
+    display: inline-block !important;
+    vertical-align: middle !important;
+  }
+
+</style>
 </head>
 
 <body
@@ -2933,7 +2983,7 @@
 
   <div class="Aurelia-card p-0 overflow-hidden">
     <div class="overflow-x-auto">
-      <table class="w-full text-xs text-left">
+      <table class="w-full text-xs text-center">
         <thead class="bg-slate-50 text-slate-500 font-semibold text-[11px] border-b border-slate-200">
           <tr>
             <th class="py-3 px-4">Batch Ref</th>
@@ -2945,7 +2995,7 @@
             <th class="py-3 px-4 font-bold text-emerald-600">Net Disbursed (₹)</th>
             <th class="py-3 px-4">Transfer Date</th>
             <th class="py-3 px-4 text-center">Status</th>
-            <th class="py-3 px-4 text-right">Receipt</th>
+            <th class="py-3 px-4 text-center">Receipt</th>
           </tr>
         </thead>
         <tbody id="page-ds-tbody" class="divide-y divide-slate-100">
@@ -2968,7 +3018,7 @@
             <td class="py-3.5 px-4 font-mono font-bold text-emerald-600 text-sm">₹1,55,600</td>
             <td class="py-3.5 px-4 text-slate-600 font-mono">01 Nov 2026</td>
             <td class="py-3.5 px-4 text-center"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800">Disbursed</span></td>
-            <td class="py-3.5 px-4 text-right"><a href="pay-slip.html?emp=EMP-2026-02" class="text-[#FCA311] hover:underline font-bold text-[11px]">View Advice</a></td>
+            <td class="py-3.5 px-4 text-center"><a href="pay-slip.html?emp=EMP-2026-02" class="text-[#FCA311] hover:underline font-bold text-[11px]">View Advice</a></td>
           </tr>
           <tr class="hover:bg-slate-50" data-status="disbursed">
             <td class="py-3.5 px-4 font-mono font-bold text-slate-900">PAY-2610-02</td>
@@ -2989,7 +3039,7 @@
             <td class="py-3.5 px-4 font-mono font-bold text-emerald-600 text-sm">₹1,04,720</td>
             <td class="py-3.5 px-4 text-slate-600 font-mono">01 Nov 2026</td>
             <td class="py-3.5 px-4 text-center"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800">Disbursed</span></td>
-            <td class="py-3.5 px-4 text-right"><a href="pay-slip.html?emp=EMP-2026-03" class="text-[#FCA311] hover:underline font-bold text-[11px]">View Advice</a></td>
+            <td class="py-3.5 px-4 text-center"><a href="pay-slip.html?emp=EMP-2026-03" class="text-[#FCA311] hover:underline font-bold text-[11px]">View Advice</a></td>
           </tr>
           <tr class="hover:bg-slate-50" data-status="disbursed">
             <td class="py-3.5 px-4 font-mono font-bold text-slate-900">PAY-2610-03</td>
@@ -3010,7 +3060,7 @@
             <td class="py-3.5 px-4 font-mono font-bold text-emerald-600 text-sm">₹64,525</td>
             <td class="py-3.5 px-4 text-slate-600 font-mono">01 Nov 2026</td>
             <td class="py-3.5 px-4 text-center"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800">Disbursed</span></td>
-            <td class="py-3.5 px-4 text-right"><a href="pay-slip.html?emp=EMP-2026-01" class="text-[#FCA311] hover:underline font-bold text-[11px]">View Advice</a></td>
+            <td class="py-3.5 px-4 text-center"><a href="pay-slip.html?emp=EMP-2026-01" class="text-[#FCA311] hover:underline font-bold text-[11px]">View Advice</a></td>
           </tr>
           <tr class="hover:bg-slate-50" data-status="disbursed">
             <td class="py-3.5 px-4 font-mono font-bold text-slate-900">PAY-2610-04</td>
@@ -3031,7 +3081,7 @@
             <td class="py-3.5 px-4 font-mono font-bold text-emerald-600 text-sm">₹96,350</td>
             <td class="py-3.5 px-4 text-slate-600 font-mono">01 Nov 2026</td>
             <td class="py-3.5 px-4 text-center"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800">Disbursed</span></td>
-            <td class="py-3.5 px-4 text-right"><a href="pay-slip.html?emp=EMP-2026-04" class="text-[#FCA311] hover:underline font-bold text-[11px]">View Advice</a></td>
+            <td class="py-3.5 px-4 text-center"><a href="pay-slip.html?emp=EMP-2026-04" class="text-[#FCA311] hover:underline font-bold text-[11px]">View Advice</a></td>
           </tr>
           <tr class="hover:bg-slate-50" data-status="disbursed">
             <td class="py-3.5 px-4 font-mono font-bold text-slate-900">PAY-2610-05</td>
@@ -3052,7 +3102,7 @@
             <td class="py-3.5 px-4 font-mono font-bold text-emerald-600 text-sm">₹52,250</td>
             <td class="py-3.5 px-4 text-slate-600 font-mono">01 Nov 2026</td>
             <td class="py-3.5 px-4 text-center"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800">Disbursed</span></td>
-            <td class="py-3.5 px-4 text-right"><a href="pay-slip.html?emp=EMP-2026-08" class="text-[#FCA311] hover:underline font-bold text-[11px]">View Advice</a></td>
+            <td class="py-3.5 px-4 text-center"><a href="pay-slip.html?emp=EMP-2026-08" class="text-[#FCA311] hover:underline font-bold text-[11px]">View Advice</a></td>
           </tr>
           <tr class="hover:bg-slate-50" data-status="disbursed">
             <td class="py-3.5 px-4 font-mono font-bold text-slate-900">PAY-2610-06</td>
@@ -3073,7 +3123,7 @@
             <td class="py-3.5 px-4 font-mono font-bold text-emerald-600 text-sm">₹70,310</td>
             <td class="py-3.5 px-4 text-slate-600 font-mono">01 Nov 2026</td>
             <td class="py-3.5 px-4 text-center"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800">Disbursed</span></td>
-            <td class="py-3.5 px-4 text-right"><a href="pay-slip.html?emp=EMP-2026-09" class="text-[#FCA311] hover:underline font-bold text-[11px]">View Advice</a></td>
+            <td class="py-3.5 px-4 text-center"><a href="pay-slip.html?emp=EMP-2026-09" class="text-[#FCA311] hover:underline font-bold text-[11px]">View Advice</a></td>
           </tr>
           <tr class="hover:bg-slate-50" data-status="disbursed">
             <td class="py-3.5 px-4 font-mono font-bold text-slate-900">PAY-2610-07</td>
@@ -3094,7 +3144,7 @@
             <td class="py-3.5 px-4 font-mono font-bold text-emerald-600 text-sm">₹73,160</td>
             <td class="py-3.5 px-4 text-slate-600 font-mono">01 Nov 2026</td>
             <td class="py-3.5 px-4 text-center"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800">Disbursed</span></td>
-            <td class="py-3.5 px-4 text-right"><a href="pay-slip.html?emp=EMP-2026-11" class="text-[#FCA311] hover:underline font-bold text-[11px]">View Advice</a></td>
+            <td class="py-3.5 px-4 text-center"><a href="pay-slip.html?emp=EMP-2026-11" class="text-[#FCA311] hover:underline font-bold text-[11px]">View Advice</a></td>
           </tr>
           <tr class="hover:bg-slate-50" data-status="pending">
             <td class="py-3.5 px-4 font-mono font-bold text-slate-900">PAY-2610-40</td>
@@ -3115,7 +3165,7 @@
             <td class="py-3.5 px-4 font-mono font-bold text-amber-600 text-sm">₹35,360</td>
             <td class="py-3.5 px-4 text-slate-400 font-mono">Queued</td>
             <td class="py-3.5 px-4 text-center"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800">Pending Auth</span></td>
-            <td class="py-3.5 px-4 text-right"><button class="btn-Aurelia-primary text-[10px] py-1 px-2 btn-auth-single cursor-pointer">Authorize</button></td>
+            <td class="py-3.5 px-4 text-center"><button class="btn-Aurelia-primary text-[10px] py-1 px-2 btn-auth-single cursor-pointer">Authorize</button></td>
           </tr>
           <tr class="hover:bg-slate-50" data-status="pending">
             <td class="py-3.5 px-4 font-mono font-bold text-slate-900">PAY-2610-41</td>
@@ -3136,7 +3186,7 @@
             <td class="py-3.5 px-4 font-mono font-bold text-amber-600 text-sm">₹40,050</td>
             <td class="py-3.5 px-4 text-slate-400 font-mono">Queued</td>
             <td class="py-3.5 px-4 text-center"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800">Pending Auth</span></td>
-            <td class="py-3.5 px-4 text-right"><button class="btn-Aurelia-primary text-[10px] py-1 px-2 btn-auth-single cursor-pointer">Authorize</button></td>
+            <td class="py-3.5 px-4 text-center"><button class="btn-Aurelia-primary text-[10px] py-1 px-2 btn-auth-single cursor-pointer">Authorize</button></td>
           </tr>
           <tr class="hover:bg-slate-50" data-status="pending">
             <td class="py-3.5 px-4 font-mono font-bold text-slate-900">PAY-2610-42</td>
@@ -3157,7 +3207,7 @@
             <td class="py-3.5 px-4 font-mono font-bold text-amber-600 text-sm">₹57,320</td>
             <td class="py-3.5 px-4 text-slate-400 font-mono">Queued</td>
             <td class="py-3.5 px-4 text-center"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800">Pending Auth</span></td>
-            <td class="py-3.5 px-4 text-right"><button class="btn-Aurelia-primary text-[10px] py-1 px-2 btn-auth-single cursor-pointer">Authorize</button></td>
+            <td class="py-3.5 px-4 text-center"><button class="btn-Aurelia-primary text-[10px] py-1 px-2 btn-auth-single cursor-pointer">Authorize</button></td>
           </tr>
         </tbody>
       </table>
@@ -3729,7 +3779,7 @@
   <!-- Authentication Controller -->
   <script src="../auth.js?v=20261110_07"></script>
   <!-- Main JavaScript Logic -->
-  <script src="../main.js?v=20261110_v48"></script>
+  <script src="../main.js?v=20261110_v49"></script>
 </body>
 
 </html>
