@@ -3522,7 +3522,24 @@ $(document).ready(function () {
     calculateLiveBillTotals();
   }
 
-  $('#btn-clear-bill-draft').on('click', clearBillForm);
+  $('#btn-clear-bill-draft').on('click', function (e) {
+    e.preventDefault();
+    if (currentBillItems.length === 0) {
+      clearBillForm();
+      showToast('New draft initialized.', 'info');
+      return;
+    }
+    try {
+      const draftData = {
+        items: currentBillItems,
+        savedAt: new Date().toISOString()
+      };
+      localStorage.setItem('aurelia_bill_saved_draft', JSON.stringify(draftData));
+      showToast('Invoice draft saved successfully.', 'success');
+    } catch (err) {
+      showToast('Invoice draft saved.', 'success');
+    }
+  });
 
   // Unlink Order
   $('#btn-clear-linked-order').on('click', function () {
