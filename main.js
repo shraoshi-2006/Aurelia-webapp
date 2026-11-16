@@ -585,6 +585,8 @@ $(document).ready(function () {
   const titles = {
     dashboard: 'Welcome back!',
     billing: 'Transactions & POS Billing',
+    'add-bill': 'Create Tax Invoice & POS Billing',
+    'billing-details': 'Billing Details & History',
     menu: 'Product & Menu Management',
     orders: 'Order Queue & Kitchen Tickets',
     customers: 'Guest Directory & Loyalty',
@@ -614,7 +616,12 @@ $(document).ready(function () {
       return;
     }
 
-    if (!titles[target]) target = 'dashboard';
+    if (!titles[target]) {
+      if (window.location.pathname.includes('add-bill')) target = 'add-bill';
+      else if (window.location.pathname.includes('billing-details')) target = 'billing-details';
+      else if (window.location.pathname.includes('billing')) target = 'billing';
+      else target = 'dashboard';
+    }
 
     // Update nav links active styling
     $('.Aurelia-nav-item, .aurelia-nav-item, .finset-nav-item, .nav-link').each(function () {
@@ -685,14 +692,32 @@ $(document).ready(function () {
       $activeItem.find('span.rounded-full').addClass('border-sky-400 bg-sky-400').removeClass('border-slate-400');
     }
 
+    // Auto-sync Billing submenu expansion and active pill
+    if (['billing', 'add-bill', 'billing-details'].includes(target)) {
+      $('#submenu-billing').removeClass('hidden');
+      $('#chevron-nav-billing').addClass('rotate-180');
+      $('#btn-nav-billing').addClass('active');
+      const act = target === 'billing-details' ? 'billing-details' : 'add-bill';
+      $('.billing-sub-item').removeClass('text-[#FCA311] font-bold active').addClass('text-slate-300');
+      $('.billing-sub-item span.rounded-full').removeClass('border-[#FCA311] bg-[#FCA311]').addClass('border-slate-400');
+      const $activeItem = $(`.billing-sub-item[data-action="${act}"]`);
+      $activeItem.addClass('text-[#FCA311] font-bold active').removeClass('text-slate-300');
+      $activeItem.find('span.rounded-full').addClass('border-[#FCA311] bg-[#FCA311]').removeClass('border-slate-400');
+    }
+
     // If target section is not present in the current DOM (e.g. cross-navigating between index.html and standalone HR pages)
-    const $targetSec = $('#section-' + target);
+    let $targetSec = $('#section-' + target);
+    if ($targetSec.length === 0 && (target === 'add-bill' || target === 'billing-details' || target === 'billing') && $('#section-billing').length) {
+      $targetSec = $('#section-billing');
+    }
     if ($targetSec.length === 0) {
       const isDeptSubdir = window.location.pathname.includes('/department');
       const isHRSubdir = window.location.pathname.includes('/human-resources');
       const isSubdir = isDeptSubdir || isHRSubdir;
       const pageFileMap = {
-        'billing': isSubdir ? '../billing.html' : 'billing.html',
+        'billing': isSubdir ? '../add-bill.html' : 'add-bill.html',
+        'add-bill': isSubdir ? '../add-bill.html' : 'add-bill.html',
+        'billing-details': isSubdir ? '../billing-details.html' : 'billing-details.html',
         'orders': isSubdir ? '../order.html' : 'order.html',
         'menu': isSubdir ? '../menu.html' : 'menu.html',
         'customers': isSubdir ? '../customer.html' : 'customer.html',
@@ -735,6 +760,8 @@ $(document).ready(function () {
     const sectionRenderers = {
       dashboard: renderDashboard,
       billing: initBillingSection,
+      'add-bill': initBillingSection,
+      'billing-details': initBillingSection,
       menu: renderMenuSection,
       orders: renderOrdersSection,
       customers: renderCustomersSection,
@@ -1304,6 +1331,58 @@ $(document).ready(function () {
     const isHRSubdir = window.location.pathname.includes('/human-resources');
     const targetUrl = isDeptSubdir ? 'add_department.html' : (isHRSubdir ? '../department/add_department.html' : 'department/add_department.html');
     window.location.href = targetUrl;
+  });
+
+  // Toggle Billing Dropdown in Sidebar
+  $(document).on('click', '#btn-nav-billing', function (e) {
+    e.preventDefault();
+    e.stopPropagation();
+
+    // If sidebar is collapsed, auto-expand sidebar first
+    if ($('#app-sidebar').hasClass('is-collapsed')) {
+      $('#btn-sidebar-collapse').trigger('click');
+    }
+
+    const $submenu = $('#submenu-billing');
+    const $chevron = $('#chevron-nav-billing');
+    const isExpanded = !$submenu.hasClass('hidden');
+
+    if (isExpanded) {
+      $submenu.addClass('hidden');
+      $chevron.removeClass('rotate-180');
+      $(this).removeClass('active');
+    } else {
+      $submenu.removeClass('hidden');
+      $chevron.addClass('rotate-180');
+      $(this).addClass('active');
+    }
+  });
+
+  // Billing Sub-items Click Handlers
+  $(document).on('click', '.billing-sub-item', function (e) {
+    const action = $(this).data('action');
+    const isDeptSubdir = window.location.pathname.includes('/department');
+    const isHRSubdir = window.location.pathname.includes('/human-resources');
+    const isSubdir = isDeptSubdir || isHRSubdir;
+
+    if (action === 'add-bill') {
+      const targetUrl = isSubdir ? '../add-bill.html' : 'add-bill.html';
+      if (window.location.pathname.includes('add-bill')) {
+        e.preventDefault();
+      } else {
+        e.preventDefault();
+        window.location.href = targetUrl;
+      }
+    } else if (action === 'billing-details') {
+      const targetUrl = isSubdir ? '../billing-details.html' : 'billing-details.html';
+      if (window.location.pathname.includes('billing-details')) {
+        e.preventDefault();
+        renderBillingHistory();
+      } else {
+        e.preventDefault();
+        window.location.href = targetUrl;
+      }
+    }
   });
 
   // Search Departments
@@ -3147,6 +3226,13 @@ $(document).ready(function () {
     initNewBillForm();
     renderBillingHistory();
     consumePendingOrderForBilling();
+
+    const path = window.location.pathname;
+    if (path.includes('billing-details')) {
+      switchBillingSubtab('history');
+    } else if (path.includes('add-bill') || path.includes('billing')) {
+      switchBillingSubtab('create');
+    }
   }
 
   function populateBillingFromOrder(ord) {
@@ -3231,11 +3317,11 @@ $(document).ready(function () {
       return;
     }
 
-    if ($('#section-billing').length === 0) {
+    if ($('#form-create-bill').length === 0) {
       try {
         localStorage.setItem(STORAGE_KEYS.PENDING_ORDER_BILL, ord.id);
       } catch (e) { /* ignore */ }
-      switchSection('billing');
+      window.location.href = 'add-bill.html';
       return;
     }
 
@@ -3728,8 +3814,21 @@ $(document).ready(function () {
     const search = $.trim($('#filter-history-search').val()).toLowerCase();
     const payFilter = $('#filter-history-payment').val();
     const fromDate = $('#filter-history-date-from').val();
-    const toDate = fromDate ? getTodayDateStr() : '';
-    $('#filter-history-date-to').val(toDate);
+    let toDate = $('#filter-history-date-to').val();
+    if (!toDate && fromDate) {
+      toDate = getTodayDateStr();
+      $('#filter-history-date-to').val(toDate);
+    }
+
+    // Update billing details stat cards if present
+    const totalBillingVal = bills.reduce((sum, b) => sum + (Number(b.grandTotal) || 0), 0);
+    const totalPaid = bills.filter(b => (b.status || 'Paid').toLowerCase() === 'paid').reduce((sum, b) => sum + (Number(b.grandTotal) || 0), 0);
+    const totalTax = bills.reduce((sum, b) => sum + (Number(b.taxAmount) || 0), 0);
+
+    $('#billing-details-stat-total').text(formatMoney(totalBillingVal));
+    $('#billing-details-stat-paid').text(formatMoney(totalPaid));
+    $('#billing-details-stat-count').text(bills.length);
+    $('#billing-details-stat-tax').text(formatMoney(totalTax));
 
     let filtered = bills.filter(b => {
       const matchSearch = !search ||
@@ -3780,7 +3879,7 @@ $(document).ready(function () {
     }
   }
 
-  $('#filter-history-search, #filter-history-payment, #filter-history-date-from').on('input change', renderBillingHistory);
+  $('#filter-history-search, #filter-history-payment, #filter-history-date-from, #filter-history-date-to').on('input change', renderBillingHistory);
 
   $('#btn-clear-history-dates').on('click', function () {
     $('#filter-history-date-from').val('');
@@ -7164,7 +7263,9 @@ $(document).ready(function () {
     currentPath.includes('manage-salary') ||
     currentPath.includes('disburse-salary-update') ||
     currentPath.includes('pay-slip');
-  const isBillingPage = currentPath.includes('billing.html') || currentPath.endsWith('billing');
+  const isAddBillPage = currentPath.includes('add-bill');
+  const isBillingDetailsPage = currentPath.includes('billing-details');
+  const isBillingPage = currentPath.includes('billing.html') || currentPath.endsWith('billing') || isAddBillPage || isBillingDetailsPage;
   const isOrdersPage = currentPath.includes('order.html') || currentPath.endsWith('order');
   const isMenuPage = currentPath.includes('menu.html') || currentPath.endsWith('menu');
   const isCustomerPage = currentPath.includes('customer.html') || currentPath.endsWith('customer');
@@ -7188,6 +7289,8 @@ $(document).ready(function () {
   else if (currentPath.includes('manage-salary')) defaultSection = 'manage-salary';
   else if (currentPath.includes('disburse-salary-update')) defaultSection = 'disburse-salary-update';
   else if (currentPath.includes('pay-slip')) defaultSection = 'pay-slip';
+  else if (isAddBillPage) defaultSection = 'add-bill';
+  else if (isBillingDetailsPage) defaultSection = 'billing-details';
   else if (isBillingPage) defaultSection = 'billing';
   else if (isOrdersPage) defaultSection = 'orders';
   else if (isMenuPage) defaultSection = 'menu';
@@ -7199,7 +7302,11 @@ $(document).ready(function () {
   const isStandalonePage = isHRPage || isBillingPage || isOrdersPage || isMenuPage || isCustomerPage || isAnalyticsPage || isDeptPage;
   const hashSec = window.location.hash.replace('#', '');
   let initHash = isStandalonePage ? defaultSection : (hashSec || 'dashboard');
-  if (isBillingPage && (hashSec === 'history' || hashSec === 'create' || hashSec === 'billing')) {
+  if (isAddBillPage) {
+    initHash = 'add-bill';
+  } else if (isBillingDetailsPage) {
+    initHash = 'billing-details';
+  } else if (isBillingPage && (hashSec === 'history' || hashSec === 'create' || hashSec === 'billing')) {
     initHash = 'billing';
   }
   // Immediately render sidebar badges on startup
@@ -7212,7 +7319,9 @@ $(document).ready(function () {
     if (!isStandalonePage) {
       renderDashboard();
     }
-    if (isBillingPage && hashSec === 'history' && !hasPendingOrderBill) {
+    if (isBillingDetailsPage) {
+      switchBillingSubtab('history');
+    } else if (isBillingPage && hashSec === 'history' && !hasPendingOrderBill) {
       switchBillingSubtab('history');
     }
     if (isAllDeptPage) {

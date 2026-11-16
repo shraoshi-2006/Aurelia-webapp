@@ -498,6 +498,8 @@
     else if (currentPath.includes('manage-salary')) pageDefaultSec = 'manage-salary';
     else if (currentPath.includes('disburse-salary-update')) pageDefaultSec = 'disburse-salary-update';
     else if (currentPath.includes('pay-slip')) pageDefaultSec = 'pay-slip';
+    else if (currentPath.includes('add-bill')) pageDefaultSec = 'add-bill';
+    else if (currentPath.includes('billing-details')) pageDefaultSec = 'billing-details';
     else if (currentPath.includes('billing.html') || currentPath.endsWith('billing')) pageDefaultSec = 'billing';
     else if (currentPath.includes('order.html') || currentPath.endsWith('order')) pageDefaultSec = 'orders';
     else if (currentPath.includes('menu.html') || currentPath.endsWith('menu')) pageDefaultSec = 'menu';
