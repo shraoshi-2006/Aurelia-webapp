@@ -3271,6 +3271,12 @@ $(document).ready(function () {
   // =========================================================================
 
   function initBillingSection() {
+    const todayStr = getTodayDateStr();
+    const $historyToInput = $('#filter-history-date-to');
+    if ($historyToInput.length && (!$historyToInput.val() || $historyToInput.val() < todayStr)) {
+      $historyToInput.val(todayStr);
+    }
+
     initNewBillForm();
     renderBillingHistory();
     consumePendingOrderForBilling();
@@ -3281,6 +3287,14 @@ $(document).ready(function () {
     } else if (path.includes('add-bill') || path.includes('billing')) {
       switchBillingSubtab('create');
     }
+
+    try {
+      const savedMsg = sessionStorage.getItem('aurelia_billing_saved_msg');
+      if (savedMsg) {
+        sessionStorage.removeItem('aurelia_billing_saved_msg');
+        showToast(savedMsg, 'success');
+      }
+    } catch (e) { }
   }
 
   function populateBillingFromOrder(ord) {
@@ -3819,9 +3833,9 @@ $(document).ready(function () {
     }
 
     if (shouldSendEmail) {
-      showToast(`Invoice ${billNumber} generated! Digital copy dispatched to ${customerEmail}.`, 'success');
+      showToast(`Invoice ${billNumber} saved! Digital copy dispatched to ${customerEmail}.`, 'success');
     } else {
-      showToast(`Invoice ${billNumber} completed for ${customerName}.`, 'success');
+      showToast(`Invoice ${billNumber} saved successfully. View anytime in Billing Details.`, 'success');
     }
 
     // Trigger Print or PDF
@@ -3829,8 +3843,6 @@ $(document).ready(function () {
       printInvoiceReceipt(newBill);
     } else if (andPdf) {
       downloadInvoicePDF(newBill);
-    } else {
-      openInvoiceModal(newBill);
     }
 
     clearBillForm();
@@ -3841,10 +3853,10 @@ $(document).ready(function () {
     return newBill;
   }
 
-  // Download Button Handler (saves and downloads Pine Labs PDF receipt)
+  // Submit Button Handler (saves to website without downloading or redirecting)
   $('#btn-download-bill').on('click', function (e) {
     e.preventDefault();
-    processSaveBill(false, true);
+    processSaveBill(false, false);
   });
 
   // Print Button Handler (saves and triggers printer dialog)
@@ -3855,7 +3867,7 @@ $(document).ready(function () {
 
   $('#form-create-bill').on('submit', function (e) {
     e.preventDefault();
-    processSaveBill(false, true);
+    processSaveBill(false, false);
   });
 
   // Billing History Table
