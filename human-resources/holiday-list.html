@@ -1916,46 +1916,82 @@
       box-shadow: 0 4px 16px -2px rgba(0, 0, 0, 0.45) !important;
     }
   
-  /* Global Center Alignment for all Tables (Heading & Data) */
-  table,
-  table thead,
-  table tbody,
-  table tfoot,
-  table tr,
+  /* Global Table Alignment: Headings Center, All Table Details Left-aligned from same starting point */
+  table thead th,
   table th,
-  table td,
-  .Aurelia-table-header th,
-  .Aurelia-table-header td {
+  .Aurelia-table-header th {
     text-align: center !important;
   }
 
   table th *,
-  table td * {
+  .Aurelia-table-header th * {
     text-align: center !important;
   }
 
   table th .flex,
-  table td .flex,
   table th .inline-flex,
-  table td .inline-flex,
   table th [class*="space-x-"],
-  table td [class*="space-x-"],
-  table th [class*="gap-"],
-  table td [class*="gap-"] {
+  table th [class*="gap-"] {
     justify-content: center !important;
   }
 
-  table th .flex-col,
-  table td .flex-col {
+  table th .flex-col {
     align-items: center !important;
     text-align: center !important;
   }
 
-  table td select,
-  table td input {
+  table tbody td,
+  table tfoot td,
+  table td,
+  .Aurelia-table-header td {
+    text-align: left !important;
+    white-space: normal;
+    word-break: break-word;
+  }
+
+  table td,
+  table td p,
+  table td span:not([class*="rounded-full"]):not([class*="badge"]),
+  table td div:not([class*="rounded-full"]) {
+    text-align: left !important;
+  }
+
+  table td .flex,
+  table td .inline-flex,
+  table td [class*="space-x-"],
+  table td [class*="gap-"] {
+    display: flex !important;
+    justify-content: flex-start !important;
+    text-align: left !important;
+  }
+
+  table td .flex-col {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    text-align: left !important;
+  }
+
+  table td .flex-col > *,
+  table td .inline-flex > *,
+  table td .flex > * {
+    text-align: left !important;
+  }
+
+  table td span[class*="rounded-full"],
+  table td [class*="badge"],
+  table td .bill-item-qty-input {
     text-align: center !important;
-    text-align-last: center !important;
-    margin-left: auto !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+
+  table td select,
+  table td input:not([type="checkbox"]):not([type="radio"]):not(.bill-item-qty-input) {
+    text-align: left !important;
+    text-align-last: left !important;
+    margin-left: 0 !important;
     margin-right: auto !important;
   }
 
@@ -3625,7 +3661,7 @@
   <!-- Authentication Controller -->
   <script src="../auth.js?v=20261110_07"></script>
   <!-- Main JavaScript Logic -->
-<script src="../main.js?v=20261117_v54"></script>
+<script src="../main.js?v=20261117_v57"></script>
 </body>
 
 </html>

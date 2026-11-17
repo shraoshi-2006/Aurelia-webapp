@@ -18,37 +18,95 @@
 $(document).ready(function () {
   'use strict';
 
-  // Global Table Center Alignment Enforcer
-  if (!$('#style-global-table-center').length) {
+  // Global Table Alignment Enforcer (Headings: Center, Details/Data: Left)
+  if (!$('#style-global-table-alignment').length) {
+    $('#style-global-table-center').remove();
     $('head').append(`
-      <style id="style-global-table-center">
-        table, table thead, table tbody, table tfoot, table tr, table th, table td,
-        .Aurelia-table-header th, .Aurelia-table-header td {
-          text-align: center !important;
-        }
-        table th *, table td * {
-          text-align: center !important;
-        }
-        table th .flex, table td .flex,
-        table th .inline-flex, table td .inline-flex,
-        table th [class*="space-x-"], table td [class*="space-x-"],
-        table th [class*="gap-"], table td [class*="gap-"] {
-          justify-content: center !important;
-        }
-        table th .flex-col, table td .flex-col {
-          align-items: center !important;
-          text-align: center !important;
-        }
-        table td select, table td input {
-          text-align: center !important;
-          text-align-last: center !important;
-          margin-left: auto !important;
-          margin-right: auto !important;
-        }
-        table td img, table td svg {
-          display: inline-block !important;
-          vertical-align: middle !important;
-        }
+      <style id="style-global-table-alignment">
+  /* Global Table Alignment: Headings Center, All Table Details Left-aligned from same starting point */
+  table thead th,
+  table th,
+  .Aurelia-table-header th {
+    text-align: center !important;
+  }
+
+  table th *,
+  .Aurelia-table-header th * {
+    text-align: center !important;
+  }
+
+  table th .flex,
+  table th .inline-flex,
+  table th [class*="space-x-"],
+  table th [class*="gap-"] {
+    justify-content: center !important;
+  }
+
+  table th .flex-col {
+    align-items: center !important;
+    text-align: center !important;
+  }
+
+  table tbody td,
+  table tfoot td,
+  table td,
+  .Aurelia-table-header td {
+    text-align: left !important;
+    white-space: normal;
+    word-break: break-word;
+  }
+
+  table td,
+  table td p,
+  table td span:not([class*="rounded-full"]):not([class*="badge"]),
+  table td div:not([class*="rounded-full"]) {
+    text-align: left !important;
+  }
+
+  table td .flex,
+  table td .inline-flex,
+  table td [class*="space-x-"],
+  table td [class*="gap-"] {
+    display: flex !important;
+    justify-content: flex-start !important;
+    text-align: left !important;
+  }
+
+  table td .flex-col {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    text-align: left !important;
+  }
+
+  table td .flex-col > *,
+  table td .inline-flex > *,
+  table td .flex > * {
+    text-align: left !important;
+  }
+
+  table td span[class*="rounded-full"],
+  table td [class*="badge"],
+  table td .bill-item-qty-input {
+    text-align: center !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+
+  table td select,
+  table td input:not([type="checkbox"]):not([type="radio"]):not(.bill-item-qty-input) {
+    text-align: left !important;
+    text-align-last: left !important;
+    margin-left: 0 !important;
+    margin-right: auto !important;
+  }
+
+  table td img,
+  table td svg {
+    display: inline-block !important;
+    vertical-align: middle !important;
+  }
       </style>
     `);
   }
@@ -4081,9 +4139,11 @@ $(document).ready(function () {
           <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors">
             <td class="py-3 px-4 font-mono font-bold text-[#14213D]">${escapeHtml(b.billNumber)}</td>
             <td class="py-3 px-4">
-              <div class="font-bold text-slate-900 dark:text-white">${escapeHtml(b.customerName)}</div>
-              <div class="text-[11px] text-slate-400 font-mono">${escapeHtml(b.customerPhone || '-')}</div>
-              ${b.customerEmail ? `<div class="text-[10px] text-amber-600 font-medium truncate max-w-[150px]">${escapeHtml(b.customerEmail)}</div>` : ''}
+              <div class="inline-flex flex-col text-left">
+                <div class="font-bold text-slate-900 dark:text-white">${escapeHtml(b.customerName)}</div>
+                <div class="text-[11px] text-slate-400 font-mono">${escapeHtml(b.customerPhone || '-')}</div>
+                ${b.customerEmail ? `<div class="text-[10px] text-amber-600 font-medium truncate max-w-[150px]">${escapeHtml(b.customerEmail)}</div>` : ''}
+              </div>
             </td>
             <td class="py-3 px-4 text-slate-500 font-medium">${formatDateTime(b.date)}</td>
             <td class="py-3 px-4 text-slate-600 dark:text-slate-300 font-medium">${escapeHtml(b.paymentMethod)}</td>
@@ -4902,7 +4962,7 @@ $(document).ready(function () {
               ${escapeHtml(item.category)}
             </span>
           </td>
-          <td class="py-3 px-4 text-slate-500 max-w-sm truncate ${!isAvail ? 'opacity-65' : ''}" title="${escapeHtml(item.description || '')}">
+          <td class="py-3 px-4 text-slate-500 max-w-sm whitespace-normal break-words ${!isAvail ? 'opacity-65' : ''}" title="${escapeHtml(item.description || '')}">
             ${escapeHtml(item.description || 'Prepared fresh upon order.')}
           </td>
           <td class="py-3 px-4 text-center font-black text-[#14213D] dark:text-white whitespace-nowrap ${!isAvail ? 'opacity-65' : ''}">
