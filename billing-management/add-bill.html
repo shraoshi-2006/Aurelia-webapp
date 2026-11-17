@@ -4,10 +4,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Billing Details | Aurelia Hotel & Restaurant Management</title>
-  <link rel="icon" type="image/svg+xml" href="assets/aurelia-mark.svg">
-  <link rel="icon" type="image/png" href="assets/logo.png">
-  <link rel="apple-touch-icon" href="assets/aurelia-mark.svg">
+  <title>Add Bill | Aurelia Hotel & Restaurant Management</title>
+  <link rel="icon" type="image/svg+xml" href="../assets/aurelia-mark.svg">
+  <link rel="icon" type="image/png" href="../assets/logo.png">
+  <link rel="apple-touch-icon" href="../assets/aurelia-mark.svg">
   <meta name="description"
     content="Aurelia Hotel Financial & Billing System - Modern SaaS Dashboard for Front Desk POS and Revenue Operations">
 
@@ -141,10 +141,10 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
   <!-- html2canvas for Pine Labs high fidelity receipt rendering -->
-  <script src="assets/html2canvas.min.js"></script>
+  <script src="../assets/html2canvas.min.js"></script>
 
   <!-- SweetAlert2 Modal Engine -->
-  <script src="assets/sweetalert2.all.min.js"></script>
+  <script src="../assets/sweetalert2.all.min.js"></script>
   <script>
     if (typeof Swal === 'undefined') {
       document.write('<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"><\/script>');
@@ -1105,7 +1105,16 @@
       border: 0;
       outline: none;
       cursor: pointer;
-      padding: 2px 4px;
+      padding: 0 1px !important;
+      width: 5.15rem !important;
+      max-width: 5.15rem !important;
+      min-width: 0 !important;
+      display: inline-block !important;
+    }
+
+    .date-picker-input::-webkit-datetime-edit,
+    .date-picker-input::-webkit-datetime-edit-fields-wrapper {
+      padding: 0 !important;
     }
 
     /* Hide 2nd calendar symbol (browser native picker icon) */
@@ -2018,7 +2027,7 @@
           <div class="flex items-center space-x-2.5">
             <div
               class="w-9 h-9 rounded-xl bg-[#F8FAFC] border border-[#E2E8F0] shadow-xs flex items-center justify-center p-1.5">
-              <img src="assets/aurelia-mark.svg" alt="Aurelia Emblem" class="w-full h-full object-contain">
+              <img src="../assets/aurelia-mark.svg" alt="Aurelia Emblem" class="w-full h-full object-contain">
             </div>
             <div>
               <span class="text-sm sm:text-base font-bold text-[#14213D] tracking-[0.2em] uppercase leading-none block"
@@ -2504,7 +2513,7 @@
 
       <!-- Brand Mark -->
       <div class="flex items-center space-x-2.5 cursor-pointer" onclick="window.location.hash='dashboard'">
-        <img src="assets/aurelia-mark.svg" alt="Aurelia Emblem" class="w-8 h-8 rounded-full shadow-xs object-contain">
+        <img src="../assets/aurelia-mark.svg" alt="Aurelia Emblem" class="w-8 h-8 rounded-full shadow-xs object-contain">
         <div class="flex flex-col">
           <span class="text-sm font-bold text-white tracking-[0.2em] uppercase leading-none"
             style="font-family: 'Cormorant Garamond', Georgia, serif;">AURELIA</span>
@@ -2552,7 +2561,7 @@
             <!-- Aurelia Gold Medallion Mark -->
             <div id="sidebar-logo-container"
               class="w-11 h-11 rounded-full flex items-center justify-center flex-shrink-0 transition-transform duration-300 group-hover:scale-105 shadow-md shadow-amber-500/25">
-              <img id="sidebar-logo-mark" src="assets/aurelia-mark.svg" alt="Aurelia Emblem"
+              <img id="sidebar-logo-mark" src="../assets/aurelia-mark.svg" alt="Aurelia Emblem"
                 class="w-11 h-11 rounded-full object-contain">
             </div>
             <div id="sidebar-brand-title" class="flex flex-col min-w-0">
@@ -2622,21 +2631,21 @@
             <div id="submenu-billing"
               class="sidebar-submenu pl-5 pr-2 py-2 space-y-1 text-[13px] font-medium border-l border-white/15 ml-5 mt-1 transition-all">
 
-              <!-- 1. Add Bill -->
+              <!-- 1. Add Bill (Active) -->
               <a href="add-bill.html"
-                class="billing-sub-item flex items-center space-x-2.5 py-1.5 px-2 rounded-lg text-slate-300 hover:text-white hover:bg-white/10 transition-colors group cursor-pointer"
+                class="billing-sub-item active flex items-center space-x-2.5 py-1.5 px-2 rounded-lg text-[#FCA311] font-semibold bg-white/10 transition-colors group cursor-pointer"
                 data-action="add-bill" id="btn-add-bill">
                 <span
-                  class="w-1.5 h-1.5 rounded-full border border-slate-400 group-hover:border-[#FCA311] group-hover:bg-[#FCA311] transition-all flex-shrink-0"></span>
+                  class="w-1.5 h-1.5 rounded-full border border-[#FCA311] bg-[#FCA311] transition-all flex-shrink-0"></span>
                 <span>Add Bill</span>
               </a>
 
-              <!-- 2. Billing Details (Active) -->
+              <!-- 2. Billing Details -->
               <a href="billing-details.html"
-                class="billing-sub-item active flex items-center space-x-2.5 py-1.5 px-2 rounded-lg text-[#FCA311] font-semibold bg-white/10 transition-colors group cursor-pointer"
+                class="billing-sub-item flex items-center space-x-2.5 py-1.5 px-2 rounded-lg text-slate-300 hover:text-white hover:bg-white/10 transition-colors group cursor-pointer"
                 data-action="billing-details" id="btn-billing-details">
                 <span
-                  class="w-1.5 h-1.5 rounded-full border border-[#FCA311] bg-[#FCA311] transition-all flex-shrink-0"></span>
+                  class="w-1.5 h-1.5 rounded-full border border-slate-400 group-hover:border-[#FCA311] group-hover:bg-[#FCA311] transition-all flex-shrink-0"></span>
                 <span>Billing Details</span>
               </a>
 
@@ -2707,35 +2716,35 @@
               class="sidebar-submenu hidden pl-5 pr-2 py-2 space-y-1 text-[13px] font-medium border-l border-white/15 ml-5 mt-1 transition-all">
 
               <!-- 1. HR Document Templates -->
-              <a href="human-resources/hr-document-template.html" class="hr-sub-item flex items-center space-x-2.5 py-1.5 px-2 rounded-lg text-slate-300 hover:text-white hover:bg-white/10 transition-colors group cursor-pointer" data-action="hr-doc-templates">
+              <a href="../human-resources/hr-document-template.html" class="hr-sub-item flex items-center space-x-2.5 py-1.5 px-2 rounded-lg text-slate-300 hover:text-white hover:bg-white/10 transition-colors group cursor-pointer" data-action="hr-doc-templates">
                 <span
                   class="w-1.5 h-1.5 rounded-full border border-slate-400 group-hover:border-[#FCA311] group-hover:bg-[#FCA311] transition-all flex-shrink-0"></span>
                 <span>HR Document Templates</span>
               </a>
 
               <!-- 2. HR Employee Lists -->
-              <a href="human-resources/hr-employee-list.html" class="hr-sub-item flex items-center space-x-2.5 py-1.5 px-2 rounded-lg text-slate-300 hover:text-white hover:bg-white/10 transition-colors group cursor-pointer" data-action="hr-employee-list">
+              <a href="../human-resources/hr-employee-list.html" class="hr-sub-item flex items-center space-x-2.5 py-1.5 px-2 rounded-lg text-slate-300 hover:text-white hover:bg-white/10 transition-colors group cursor-pointer" data-action="hr-employee-list">
                 <span
                   class="w-1.5 h-1.5 rounded-full border border-slate-400 group-hover:border-[#FCA311] group-hover:bg-[#FCA311] transition-all flex-shrink-0"></span>
                 <span>HR List</span>
               </a>
 
               <!-- 3. Add Employee -->
-              <a href="human-resources/add-employee.html" class="hr-sub-item flex items-center space-x-2.5 py-1.5 px-2 rounded-lg text-slate-300 hover:text-white hover:bg-white/10 transition-colors group cursor-pointer" data-action="add-employee">
+              <a href="../human-resources/add-employee.html" class="hr-sub-item flex items-center space-x-2.5 py-1.5 px-2 rounded-lg text-slate-300 hover:text-white hover:bg-white/10 transition-colors group cursor-pointer" data-action="add-employee">
                 <span
                   class="w-1.5 h-1.5 rounded-full border border-slate-400 group-hover:border-[#FCA311] group-hover:bg-[#FCA311] transition-all flex-shrink-0"></span>
                 <span>Add Employee</span>
               </a>
 
               <!-- 4. Employee List -->
-              <a href="human-resources/employee-list.html" class="hr-sub-item flex items-center space-x-2.5 py-1.5 px-2 rounded-lg text-slate-300 hover:text-white hover:bg-white/10 transition-colors group cursor-pointer" data-action="employee-list">
+              <a href="../human-resources/employee-list.html" class="hr-sub-item flex items-center space-x-2.5 py-1.5 px-2 rounded-lg text-slate-300 hover:text-white hover:bg-white/10 transition-colors group cursor-pointer" data-action="employee-list">
                 <span
                   class="w-1.5 h-1.5 rounded-full border border-slate-400 group-hover:border-[#FCA311] group-hover:bg-[#FCA311] transition-all flex-shrink-0"></span>
                 <span>Employee List</span>
               </a>
 
               <!-- 4. Holiday List -->
-              <a href="human-resources/holiday-list.html" class="hr-sub-item flex items-center space-x-2.5 py-1.5 px-2 rounded-lg text-slate-300 hover:text-white hover:bg-white/10 transition-colors group cursor-pointer" data-action="holiday-list">
+              <a href="../human-resources/holiday-list.html" class="hr-sub-item flex items-center space-x-2.5 py-1.5 px-2 rounded-lg text-slate-300 hover:text-white hover:bg-white/10 transition-colors group cursor-pointer" data-action="holiday-list">
                 <span
                   class="w-1.5 h-1.5 rounded-full border border-slate-400 group-hover:border-[#FCA311] group-hover:bg-[#FCA311] transition-all flex-shrink-0"></span>
                 <span>Holiday List</span>
@@ -2759,21 +2768,21 @@
                 <!-- Leave Management Sub-items -->
                 <div id="nested-leave-mgmt-menu"
                   class="pl-4 pr-1 py-1 space-y-1 text-xs border-l border-white/10 ml-4 mt-0.5">
-                  <a href="human-resources/leave-category.html"
+                  <a href="../human-resources/leave-category.html"
                     class="hr-sub-item flex items-center space-x-2 py-1 px-2 rounded-lg text-slate-300 hover:text-white hover:bg-white/10 transition-colors group cursor-pointer"
                     data-action="leave-category">
                     <span
                       class="w-1 h-1 rounded-full border border-slate-400 group-hover:border-[#FCA311] group-hover:bg-[#FCA311] transition-all flex-shrink-0"></span>
                     <span>Leave Category</span>
                   </a>
-                  <a href="human-resources/leave-assign.html"
+                  <a href="../human-resources/leave-assign.html"
                     class="hr-sub-item flex items-center space-x-2 py-1 px-2 rounded-lg text-slate-300 hover:text-white hover:bg-white/10 transition-colors group cursor-pointer"
                     data-action="leave-assign">
                     <span
                       class="w-1 h-1 rounded-full border border-slate-400 group-hover:border-[#FCA311] group-hover:bg-[#FCA311] transition-all flex-shrink-0"></span>
                     <span>Leave Assign</span>
                   </a>
-                  <a href="human-resources/leave-request.html"
+                  <a href="../human-resources/leave-request.html"
                     class="hr-sub-item flex items-center space-x-2 py-1 px-2 rounded-lg text-slate-300 hover:text-white hover:bg-white/10 transition-colors group cursor-pointer"
                     data-action="leave-request">
                     <span
@@ -2784,7 +2793,7 @@
               </div>
 
               <!-- 6. Attendance List -->
-              <a href="human-resources/attendance-list.html"
+              <a href="../human-resources/attendance-list.html"
                 class="hr-sub-item flex items-center space-x-2.5 py-1.5 px-2 rounded-lg text-slate-300 hover:text-white hover:bg-white/10 transition-colors group cursor-pointer"
                 data-action="attendance-list">
                 <span
@@ -2793,7 +2802,7 @@
               </a>
 
               <!-- 7. Attendance Report -->
-              <a href="human-resources/attendance-report.html"
+              <a href="../human-resources/attendance-report.html"
                 class="hr-sub-item flex items-center space-x-2.5 py-1.5 px-2 rounded-lg text-slate-300 hover:text-white hover:bg-white/10 transition-colors group cursor-pointer"
                 data-action="attendance-report">
                 <span
@@ -2819,28 +2828,28 @@
                 <!-- Payroll Sub-items -->
                 <div id="nested-payroll-menu"
                   class="hidden pl-4 pr-1 py-1 space-y-1 text-xs border-l border-white/10 ml-4 mt-0.5">
-                  <a href="human-resources/salary-grade.html"
+                  <a href="../human-resources/salary-grade.html"
                     class="hr-sub-item flex items-center space-x-2 py-1 px-2 rounded-lg text-slate-300 hover:text-white hover:bg-white/10 transition-colors group cursor-pointer"
                     data-action="salary-grade">
                     <span
                       class="w-1 h-1 rounded-full border border-slate-400 group-hover:border-[#FCA311] group-hover:bg-[#FCA311] transition-all flex-shrink-0"></span>
                     <span>Salary Grade</span>
                   </a>
-                  <a href="human-resources/manage-salary.html"
+                  <a href="../human-resources/manage-salary.html"
                     class="hr-sub-item flex items-center space-x-2 py-1 px-2 rounded-lg text-slate-300 hover:text-white hover:bg-white/10 transition-colors group cursor-pointer"
                     data-action="manage-salary">
                     <span
                       class="w-1 h-1 rounded-full border border-slate-400 group-hover:border-[#FCA311] group-hover:bg-[#FCA311] transition-all flex-shrink-0"></span>
                     <span>Manage Salary</span>
                   </a>
-                  <a href="human-resources/disburse-salary-update.html"
+                  <a href="../human-resources/disburse-salary-update.html"
                     class="hr-sub-item flex items-center space-x-2 py-1 px-2 rounded-lg text-slate-300 hover:text-white hover:bg-white/10 transition-colors group cursor-pointer"
                     data-action="disburse-salary-update">
                     <span
                       class="w-1 h-1 rounded-full border border-slate-400 group-hover:border-[#FCA311] group-hover:bg-[#FCA311] transition-all flex-shrink-0"></span>
                     <span>Disburse Salary Update</span>
                   </a>
-                  <a href="human-resources/pay-slip.html"
+                  <a href="../human-resources/pay-slip.html"
                     class="hr-sub-item flex items-center space-x-2 py-1 px-2 rounded-lg text-slate-300 hover:text-white hover:bg-white/10 transition-colors group cursor-pointer"
                     data-action="pay-slip">
                     <span
@@ -2877,7 +2886,7 @@
               class="sidebar-submenu hidden pl-5 pr-2 py-2 space-y-1 text-[13px] font-medium border-l border-white/15 ml-5 mt-1 transition-all">
 
               <!-- 1. All Department -->
-              <a href="department/all_department.html"
+              <a href="../department/all_department.html"
                 class="dept-sub-item flex items-center space-x-2.5 py-1.5 px-2 rounded-lg text-slate-300 hover:text-white hover:bg-white/10 transition-colors group cursor-pointer"
                 data-action="all-department" id="btn-all-department">
                 <span
@@ -2886,7 +2895,7 @@
               </a>
 
               <!-- 2. Add Department -->
-              <a href="department/add_department.html"
+              <a href="../department/add_department.html"
                 class="dept-sub-item flex items-center space-x-2.5 py-1.5 px-2 rounded-lg text-slate-300 hover:text-white hover:bg-white/10 transition-colors group cursor-pointer"
                 data-action="add-department" id="btn-add-department">
                 <span
@@ -3043,7 +3052,7 @@
                 title="Select date">
             </div>
             <!-- Middle Calendar Icon (Live, Clickable) -->
-            <button type="button" class="calendar-icon-trigger p-1 mx-1.5 text-[#FCA311] cursor-pointer"
+            <button type="button" class="calendar-icon-trigger p-0.5 mx-1 text-[#FCA311] cursor-pointer"
               title="Choose date">
               <svg class="w-4 h-4 stroke-current flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.8">
                 <path stroke-linecap="round" stroke-linejoin="round"
@@ -3060,14 +3069,14 @@
           </div>
         </div>
 
-        <!-- Right: Action Button to Add Bill -->
+        <!-- Right: Action Link to Billing Details -->
         <div class="flex items-center sm:justify-end">
-          <a href="add-bill.html"
-            class="inline-flex items-center space-x-2 px-4 py-2 rounded-full bg-[#14213D] text-white text-xs font-bold hover:bg-[#FCA311] hover:text-black transition-all shadow-xs cursor-pointer">
-            <svg class="w-4 h-4 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2.5">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+          <a href="billing-details.html"
+            class="inline-flex items-center space-x-2 px-4 py-2 rounded-full border border-[#E5E5E5] bg-white text-xs font-bold text-[#14213D] hover:border-[#FCA311] hover:text-[#FCA311] transition-all shadow-xs cursor-pointer">
+            <svg class="w-4 h-4 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 12h16.5m-6-6l6 6-6 6" />
             </svg>
-            <span>+ Add Bill</span>
+            <span>Billing Details</span>
           </a>
         </div>
       </div>
@@ -3080,139 +3089,329 @@
         <!-- ============================================================= -->
         <section id="section-billing" class="space-y-4">
 
-          <!-- Header & Quick Action -->
-          <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between pb-1 gap-2">
+          <!-- POS Engine Subtitle -->
+          <div class="flex items-center justify-between pb-1">
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between pb-1 gap-2">
             <div>
-              <h1 class="text-base sm:text-lg font-bold text-[#14213D] dark:text-white">Billing Details &amp; History</h1>
-              <span class="text-xs text-slate-400 font-medium">Hotel Aurelia Invoices, Payment History &amp; Revenue Ledger</span>
-            </div>
-            <div class="flex items-center space-x-2">
-              <button type="button" id="btn-export-billing-csv" onclick="exportBillingsToCSV()"
-                class="inline-flex items-center space-x-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold text-[#14213D] bg-white border border-[#E5E5E5] hover:border-[#FCA311] hover:text-[#FCA311] transition-all shadow-xs cursor-pointer"
-                title="Download CSV Ledger">
-                <svg class="w-3.5 h-3.5 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2">
-                  <path stroke-linecap="round" stroke-linejoin="round"
-                    d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
-                </svg>
-                <span>Export CSV</span>
-              </button>
-              <a href="add-bill.html"
-                class="inline-flex items-center space-x-1.5 px-4 py-1.5 rounded-full text-xs font-semibold text-white bg-[#14213D] hover:bg-[#FCA311] hover:text-black transition-all shadow-sm">
-                <svg class="w-3.5 h-3.5 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2.5">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-                </svg>
-                <span>Add Bill</span>
-              </a>
+              <h1 class="text-base sm:text-lg font-bold text-[#14213D] dark:text-white">Add New Bill</h1>
+              <span class="text-xs text-slate-400 font-medium">Hotel Aurelia POS &amp; Live GST Billing Engine</span>
             </div>
           </div>
-
-          <!-- Summary Stat Cards -->
-          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            <!-- Card 1: Total Invoiced -->
-            <div class="Aurelia-card p-4 space-y-1">
-              <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Total Invoiced</div>
-              <div id="billing-details-stat-total" class="text-xl font-extrabold text-[#14213D] dark:text-white">₹0.00</div>
-              <div class="text-[11px] text-slate-400 font-medium">Cumulative gross revenue</div>
-            </div>
-            <!-- Card 2: Paid Revenue -->
-            <div class="Aurelia-card p-4 space-y-1">
-              <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Paid Revenue</div>
-              <div id="billing-details-stat-paid" class="text-xl font-extrabold text-[#12B76A]">₹0.00</div>
-              <div class="text-[11px] text-slate-400 font-medium">Settled &amp; verified payments</div>
-            </div>
-            <!-- Card 3: Total Invoices -->
-            <div class="Aurelia-card p-4 space-y-1">
-              <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Total Invoices</div>
-              <div id="billing-details-stat-count" class="text-xl font-extrabold text-[#FCA311]">0</div>
-              <div class="text-[11px] text-slate-400 font-medium">Generated tax invoices</div>
-            </div>
-            <!-- Card 4: GST Collected -->
-            <div class="Aurelia-card p-4 space-y-1">
-              <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">GST Collected (5%)</div>
-              <div id="billing-details-stat-tax" class="text-xl font-extrabold text-[#14213D] dark:text-white">₹0.00</div>
-              <div class="text-[11px] text-slate-400 font-medium">CGST + SGST tax ledger</div>
-            </div>
           </div>
 
-          <!-- Dummy/Hidden create container so scripts don't fail -->
-          <div id="subtab-create-bill" class="hidden"></div>
+          <!-- SUBTAB 1: CREATE BILL FORM -->
+          <div id="subtab-create-bill" class="space-y-6">
+            <form id="form-create-bill" class="grid grid-cols-1 lg:grid-cols-12 gap-6" novalidate>
 
-          <!-- DEDICATED BILLING DETAILS / HISTORY -->
-          <div id="subtab-billing-history" class="space-y-4">
-            <div class="Aurelia-card p-4 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3">
-              <div class="flex-1 max-w-xs">
-                <input type="text" id="filter-history-search" class="Aurelia-input w-full text-xs"
-                  placeholder="Search bill number, customer...">
-              </div>
-              <div class="flex flex-wrap items-center gap-2">
-                <!-- Calendar Date Range Filter -->
-                <div
-                  class="calendar-range-capsule flex items-center bg-white dark:bg-slate-800 rounded-full px-3 py-1.5 border border-[#E5E5E5] dark:border-slate-700 shadow-xs hover:border-[#FCA311] transition-all cursor-pointer">
-                  <!-- First Calendar Icon (Live, Clickable) -->
-                  <button type="button" class="calendar-icon-trigger p-1 mr-1.5 text-[#FCA311] cursor-pointer"
-                    title="Choose start date">
-                    <svg class="w-4 h-4 stroke-current flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.8">
-                      <path stroke-linecap="round" stroke-linejoin="round"
-                        d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
-                    </svg>
-                  </button>
-                  <div class="flex items-center space-x-1">
-                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">From</span>
-                    <input type="date" id="filter-history-date-from" value="2026-10-01"
-                      class="date-picker-input text-xs font-semibold text-[#14213D] dark:text-white bg-transparent border-0 focus:outline-none cursor-pointer"
-                      title="Filter date">
+              <!-- Left Column: Customer & Items (8 Cols) -->
+              <div class="lg:col-span-8 space-y-6">
+
+                <!-- Invoice Meta & Guest -->
+                <div class="Aurelia-card p-6 space-y-4">
+                  <div
+                    class="flex flex-col sm:flex-row sm:items-center sm:justify-between pb-3 border-b border-slate-100 dark:border-slate-800 gap-2">
+                    <div class="flex items-center space-x-2">
+                      <span class="text-xs text-slate-500 font-semibold">Invoice No:</span>
+                      <span id="bill-number-display"
+                        class="font-mono text-sm font-bold text-[#14213D] bg-[#FFF5E6] border border-[#FCA311]/40 px-2.5 py-0.5 rounded-full">INV-2026-0001</span>
+                      <input type="hidden" id="input-bill-number" value="">
+                    </div>
+                    <div class="text-xs text-slate-400 font-medium">
+                      <span>Date: </span>
+                      <span id="bill-date-display" class="font-semibold text-slate-700 dark:text-slate-200">27 Oct 2026,
+                        10:15 AM</span>
+                    </div>
                   </div>
-                  <!-- Middle Calendar Icon (Live, Clickable) -->
-                  <button type="button" class="calendar-icon-trigger p-1 mx-1.5 text-[#FCA311] cursor-pointer"
-                    title="Choose date">
-                    <svg class="w-4 h-4 stroke-current flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.8">
-                      <path stroke-linecap="round" stroke-linejoin="round"
-                        d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
-                    </svg>
-                  </button>
-                  <!-- To Date Input -->
-                  <div class="flex items-center space-x-1">
-                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">To</span>
-                    <input type="date" id="filter-history-date-to" value="2026-10-27"
-                      class="date-picker-input text-xs font-semibold text-[#14213D] dark:text-white bg-transparent border-0 focus:outline-none cursor-pointer"
-                      title="Filter end date">
+
+                  <!-- Linked Order Alert -->
+                  <div id="linked-order-banner"
+                    class="hidden bg-[#FFF5E6] border border-[#FCA311]/40 text-[#14213D] p-3 rounded-xl text-xs flex items-center justify-between">
+                    <span>Pre-filled from Order <strong id="linked-order-id-label"
+                        class="font-mono font-bold">ORD-0001</strong>.</span>
+                    <input type="hidden" id="input-linked-order-id" value="">
+                    <button type="button" id="btn-clear-linked-order"
+                      class="text-[#14213D] hover:text-[#FCA311] hover:underline font-bold ml-2">Unlink</button>
                   </div>
-                  <button type="button" id="btn-clear-history-dates" title="Clear date filter"
-                    class="ml-2 text-xs text-slate-400 hover:text-[#14213D] font-bold px-1.5 py-0.5 rounded-full hover:bg-slate-100 dark:hover:bg-slate-700">✕</button>
+
+                  <!-- Customer Mode Selection -->
+                  <div>
+                    <label class="block text-xs font-bold text-slate-800 dark:text-slate-200 mb-2">Guest / Customer
+                      Details</label>
+                    <div class="flex items-center space-x-6 text-xs text-slate-700 dark:text-slate-300 mb-3">
+                      <label class="inline-flex items-center cursor-pointer">
+                        <input type="radio" name="customer-type" value="existing" class="accent-[#FCA311]" checked>
+                        <span class="ml-2 font-medium">Saved Customer</span>
+                      </label>
+                      <label class="inline-flex items-center cursor-pointer">
+                        <input type="radio" name="customer-type" value="walkin" class="accent-[#FCA311]">
+                        <span class="ml-2 font-medium">Walk-in Guest</span>
+                      </label>
+                    </div>
+
+                    <!-- Existing Customer Dropdown, Phone & Email in ONE line -->
+                    <div id="wrapper-existing-customer" class="space-y-3">
+                      <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
+                        <div>
+                          <label class="block text-[11px] text-slate-500 mb-1 font-semibold">Select Customer <span
+                              class="text-rose-600">*</span></label>
+                          <select id="select-customer-dropdown" class="Aurelia-input w-full text-xs font-medium">
+                            <option value="">-- Choose from Directory --</option>
+                          </select>
+                          <p id="err-customer-select" class="text-[11px] text-rose-600 mt-1 hidden font-medium">Please
+                            select customer</p>
+                        </div>
+                        <div>
+                          <label class="block text-[11px] text-slate-500 mb-1 font-semibold">Phone / Address</label>
+                          <input type="text" id="input-customer-phone-preview"
+                            class="Aurelia-input w-full text-xs text-slate-500" placeholder="Phone / Address" readonly>
+                        </div>
+                        <div>
+                          <label class="block text-[11px] text-slate-500 mb-1 font-semibold">
+                            <span>Guest Email Address <span class="text-rose-600">*</span></span>
+                          </label>
+                          <div class="relative">
+                            <div
+                              class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+                              <svg class="w-3.5 h-3.5 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                  d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
+                              </svg>
+                            </div>
+                            <input type="email" id="input-customer-email"
+                              class="Aurelia-input w-full text-xs pl-9 font-medium"
+                              placeholder="e.g. guest@example.com">
+                          </div>
+                          <p id="err-customer-email" class="text-[11px] text-rose-600 mt-1 hidden font-medium">Valid
+                            email address is required (e.g. guest@domain.com)</p>
+                        </div>
+                      </div>
+                      <input type="checkbox" id="check-send-email-invoice" class="hidden" checked>
+                    </div>
+
+                    <!-- Walk-in Guest Fields -->
+                    <div id="wrapper-walkin-customer" class="space-y-3 hidden">
+                      <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
+                        <div>
+                          <label class="block text-[11px] text-slate-500 mb-1 font-semibold">Guest Name <span
+                              class="text-rose-600">*</span></label>
+                          <input type="text" id="input-walkin-name" class="Aurelia-input w-full text-xs"
+                            placeholder="e.g. Rahul Verma">
+                          <p id="err-walkin-name" class="text-[11px] text-rose-600 mt-1 hidden font-medium">Guest name
+                            is required</p>
+                        </div>
+                        <div>
+                          <label class="block text-[11px] text-slate-500 mb-1 font-semibold">Guest Phone <span
+                              class="text-rose-600">*</span></label>
+                          <input type="tel" id="input-walkin-phone" class="Aurelia-input w-full text-xs"
+                            placeholder="e.g. 9845012345">
+                          <p id="err-walkin-phone" class="text-[11px] text-rose-600 mt-1 hidden font-medium">Enter valid
+                            10-digit mobile number</p>
+                        </div>
+                        <div>
+                          <label
+                            class="block text-[11px] text-slate-500 mb-1 font-semibold flex items-center justify-between">
+                            <span>Guest Email <span class="text-rose-600">*</span></span>
+                            <span class="text-[10px] text-amber-600 font-bold uppercase tracking-wider">Required</span>
+                          </label>
+                          <div class="relative">
+                            <div
+                              class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+                              <svg class="w-3.5 h-3.5 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                  d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" />
+                              </svg>
+                            </div>
+                            <input type="email" id="input-walkin-email"
+                              class="Aurelia-input w-full text-xs pl-9 font-medium"
+                              placeholder="e.g. rahul.verma@example.com">
+                          </div>
+                          <p id="err-walkin-email" class="text-[11px] text-rose-600 mt-1 hidden font-medium">Valid email
+                            address is required (e.g. guest@domain.com)</p>
+                        </div>
+                      </div>
+                      <div
+                        class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 pt-1 border-t border-slate-100 dark:border-slate-800">
+                        <div class="flex items-center space-x-2">
+                          <input type="checkbox" id="check-save-walkin" class="rounded accent-[#FCA311]">
+                          <label for="check-save-walkin"
+                            class="text-xs text-slate-600 dark:text-slate-300 cursor-pointer font-medium">Save to guest
+                            directory</label>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                          <input type="checkbox" id="check-walkin-send-email" class="rounded accent-[#FCA311]" checked>
+                          <label for="check-walkin-send-email"
+                            class="text-xs text-slate-600 dark:text-slate-300 cursor-pointer font-medium">Send digital
+                            invoice to guest email</label>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Table / Room & Payment Method -->
+                    <div
+                      class="grid grid-cols-1 sm:grid-cols-2 gap-3.5 pt-3 mt-3 border-t border-slate-100 dark:border-slate-800">
+                      <div>
+                        <label class="block text-[11px] text-slate-500 mb-1 font-semibold">Table or Room Ref</label>
+                        <input type="text" id="input-bill-tableref" class="Aurelia-input w-full text-xs"
+                          placeholder="e.g. Room 204 or Table 4">
+                      </div>
+                      <div>
+                        <label class="block text-[11px] text-slate-500 mb-1 font-semibold">Payment Method *</label>
+                        <select id="select-payment-method" class="Aurelia-input w-full text-xs font-semibold">
+                          <option value="UPI" selected>UPI (GooglePay / PhonePe / Paytm)</option>
+                          <option value="Card">Credit / Debit Card</option>
+                          <option value="Cash">Cash Counter</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
                 </div>
 
-                <select id="filter-history-payment" class="Aurelia-input text-xs py-1.5 px-3 rounded-full">
-                  <option value="">All Payment Methods</option>
-                  <option value="Cash">Cash</option>
-                  <option value="Card">Card</option>
-                  <option value="UPI">UPI</option>
-                </select>
-              </div>
-            </div>
+                <!-- Card: Add Items to Bill -->
+                <div class="Aurelia-card p-6 space-y-4">
+                  <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
+                    <h3 class="text-sm font-bold text-slate-900 dark:text-white">Add Menu Items</h3>
+                    <span class="text-xs text-slate-400">Available catalog items</span>
+                  </div>
 
-            <!-- History Table -->
-            <div class="Aurelia-card overflow-hidden">
-              <div class="overflow-x-auto p-4">
-                <table class="w-full text-xs text-center">
-                  <thead>
-                    <tr class="Aurelia-table-header text-slate-500 dark:text-slate-400 font-semibold text-[11px]">
-                      <th class="py-2.5 px-4 rounded-l-xl">Bill No</th>
-                      <th class="py-2.5 px-4">Customer</th>
-                      <th class="py-2.5 px-4">Date & Time</th>
-                      <th class="py-2.5 px-4">Payment</th>
-                      <th class="py-2.5 px-4 text-center">Grand Total</th>
-                      <th class="py-2.5 px-4 text-center">Status</th>
-                      <th class="py-2.5 px-4 text-center rounded-r-xl">Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody id="billing-history-tbody" class="divide-y divide-slate-100 dark:divide-slate-800">
-                    <!-- Populated dynamically -->
-                  </tbody>
-                </table>
+                  <!-- Picker Row -->
+                  <div class="grid grid-cols-1 sm:grid-cols-12 gap-3 items-end">
+                    <div class="sm:col-span-8">
+                      <label class="block text-[11px] text-slate-500 mb-1 font-semibold">Select Item</label>
+                      <select id="select-menu-item-picker" class="Aurelia-input w-full text-xs font-medium">
+                        <option value="">-- Choose Item from Menu --</option>
+                      </select>
+                    </div>
+                    <div class="sm:col-span-2">
+                      <label class="block text-[11px] text-slate-500 mb-1 font-semibold">Qty</label>
+                      <input type="number" id="input-item-qty" min="1" max="99" value="1"
+                        class="Aurelia-input w-full text-xs text-center font-bold">
+                    </div>
+                    <div class="sm:col-span-2">
+                      <button type="button" id="btn-add-item-to-bill" class="btn-Aurelia-primary w-full text-xs py-2.5">
+                        Add
+                      </button>
+                    </div>
+                  </div>
+
+                  <!-- Items Table -->
+                  <div class="overflow-x-auto mt-3">
+                    <table class="w-full text-xs text-center">
+                      <thead>
+                        <tr class="Aurelia-table-header text-slate-500 dark:text-slate-400 font-semibold text-[11px]">
+                          <th class="py-2 px-3 rounded-l-xl">Item</th>
+                          <th class="py-2 px-3">Category</th>
+                          <th class="py-2 px-2 text-center w-20">Qty</th>
+                          <th class="py-2 px-3 text-center">Price</th>
+                          <th class="py-2 px-3 text-center">Subtotal</th>
+                          <th class="py-2 px-2 text-center rounded-r-xl w-10"></th>
+                        </tr>
+                      </thead>
+                      <tbody id="bill-items-tbody" class="divide-y divide-slate-100 dark:divide-slate-800">
+                        <!-- Dynamically added -->
+                      </tbody>
+                    </table>
+                  </div>
+                  <div id="bill-items-empty" class="p-6 text-center text-xs text-slate-400">
+                    No items added yet. Select menu items above to begin drafting the invoice.
+                  </div>
+                </div>
+
               </div>
-            </div>
+
+              <!-- Right Column: Summary & GST (4 Cols) -->
+              <div class="lg:col-span-4 space-y-6">
+
+                <div class="Aurelia-card p-6 space-y-4">
+                  <h3
+                    class="text-base font-bold text-slate-900 dark:text-white pb-2 border-b border-slate-100 dark:border-slate-800">
+                    Invoice Summary
+                  </h3>
+
+                  <!-- Subtotal -->
+                  <div class="flex justify-between items-center text-xs text-slate-600 dark:text-slate-300">
+                    <span>Subtotal:</span>
+                    <span id="summary-subtotal" class="font-bold text-slate-900 dark:text-white">₹0.00</span>
+                  </div>
+
+                  <!-- Discount Configuration -->
+                  <div class="p-3 bg-slate-50 dark:bg-slate-800/60 rounded-xl space-y-2">
+                    <div class="flex items-center justify-between text-xs">
+                      <span class="font-semibold text-slate-700 dark:text-slate-300">Discount:</span>
+                      <div
+                        class="inline-flex rounded-lg border border-slate-200 dark:border-slate-700 text-[10px] font-bold p-0.5 bg-white dark:bg-slate-800">
+                        <button type="button" id="btn-discount-pct"
+                          class="px-2 py-0.5 rounded bg-[#14213D] text-white font-medium">Percent %</button>
+                        <button type="button" id="btn-discount-flat"
+                          class="px-2 py-0.5 rounded text-slate-500 font-medium">Flat
+                          ₹</button>
+                      </div>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                      <input type="number" id="input-discount-val" min="0" value="0" step="any"
+                        class="Aurelia-input flex-1 py-1 px-2.5 text-xs text-right font-bold" placeholder="0">
+                      <span id="summary-discount-amount" class="text-xs font-semibold text-rose-500">- ₹0.00</span>
+                    </div>
+                  </div>
+
+                  <!-- Tax (GST 5% = CGST 2.5% + SGST 2.5%) -->
+                  <div class="space-y-1.5 pt-2 border-t border-slate-100 dark:border-slate-800 text-xs">
+                    <div class="flex justify-between text-slate-500">
+                      <span>CGST (2.5%):</span>
+                      <span id="summary-cgst">₹0.00</span>
+                    </div>
+                    <div class="flex justify-between text-slate-500">
+                      <span>SGST (2.5%):</span>
+                      <span id="summary-sgst">₹0.00</span>
+                    </div>
+                    <div class="flex justify-between font-semibold text-slate-700 dark:text-slate-300">
+                      <span>Total GST (5%):</span>
+                      <span id="summary-tax-amount">₹0.00</span>
+                    </div>
+                  </div>
+
+                  <!-- Grand Total -->
+                  <div class="pt-3 border-t border-slate-200 dark:border-slate-700 flex justify-between items-center">
+                    <span class="text-sm font-bold text-slate-900 dark:text-white">Grand Total:</span>
+                    <span id="summary-grand-total" class="text-2xl font-black text-[#14213D]">₹0.00</span>
+                  </div>
+
+                  <!-- Action Buttons -->
+                  <div class="pt-3 space-y-2">
+                    <div class="grid grid-cols-2 gap-2">
+                      <button type="button" id="btn-download-bill"
+                        class="btn-Aurelia-primary w-full text-xs sm:text-sm py-3 font-bold flex items-center justify-center gap-1.5 shadow-md shadow-amber-500/20"
+                        title="Submit & Generate Invoice">
+                        <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2"
+                            d="M5 13l4 4L19 7"></path>
+                        </svg>
+                        <span>Submit</span>
+                      </button>
+                      <button type="button" id="btn-print-bill"
+                        class="btn-Aurelia-primary w-full text-xs sm:text-sm py-3 font-bold !bg-[#14213D] !text-white !border-[#14213D] hover:!bg-[#0F1A30] hover:!text-white flex items-center justify-center gap-1.5 !shadow-none hover:!shadow-lg"
+                        title="Print Tax Invoice">
+                        <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2"
+                            d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4H7v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z">
+                          </path>
+                        </svg>
+                        <span>Print</span>
+                      </button>
+                    </div>
+                    <button type="button" id="btn-clear-bill-draft" class="btn-Aurelia-secondary w-full text-xs py-2"
+                      title="Save as Draft">
+                      Draft
+                    </button>
+                  </div>
+                </div>
+
+              </div>
+
+            </form>
           </div>
 
+          <!-- SUBTAB 2: HIDDEN (Dedicated on billing-details.html) -->
+          <div id="subtab-billing-history" class="hidden"></div>
         </section>
 
       </div>
@@ -4646,9 +4845,9 @@
   <div id="print-invoice-area" class="hidden"></div>
 
   <!-- Authentication Controller -->
-  <script src="auth.js?v=20261110_07"></script>
+  <script src="../auth.js?v=20261110_07"></script>
   <!-- Main JavaScript Logic -->
-<script src="main.js?v=20261110_v49"></script>
+<script src="../main.js?v=20261110_v51"></script>
 </body>
 
 </html>

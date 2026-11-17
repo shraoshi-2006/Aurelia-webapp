@@ -748,32 +748,33 @@ $(document).ready(function () {
     if ($targetSec.length === 0) {
       const isDeptSubdir = window.location.pathname.includes('/department');
       const isHRSubdir = window.location.pathname.includes('/human-resources');
-      const isSubdir = isDeptSubdir || isHRSubdir;
+      const isBillingSubdir = window.location.pathname.includes('/billing-management');
+      const isSubdir = isDeptSubdir || isHRSubdir || isBillingSubdir;
       const pageFileMap = {
-        'billing': isSubdir ? '../add-bill.html' : 'add-bill.html',
-        'add-bill': isSubdir ? '../add-bill.html' : 'add-bill.html',
-        'billing-details': isSubdir ? '../billing-details.html' : 'billing-details.html',
+        'billing': isBillingSubdir ? 'add-bill.html' : (isSubdir ? '../billing-management/add-bill.html' : 'billing-management/add-bill.html'),
+        'add-bill': isBillingSubdir ? 'add-bill.html' : (isSubdir ? '../billing-management/add-bill.html' : 'billing-management/add-bill.html'),
+        'billing-details': isBillingSubdir ? 'billing-details.html' : (isSubdir ? '../billing-management/billing-details.html' : 'billing-management/billing-details.html'),
         'orders': isSubdir ? '../order.html' : 'order.html',
         'menu': isSubdir ? '../menu.html' : 'menu.html',
         'customers': isSubdir ? '../customer.html' : 'customer.html',
         'analytics': isSubdir ? '../analytics.html' : 'analytics.html',
-        'hr-documents': isDeptSubdir ? '../human-resources/hr-document-template.html' : (isHRSubdir ? 'hr-document-template.html' : 'human-resources/hr-document-template.html'),
-        'hr-employee-list': isDeptSubdir ? '../human-resources/hr-employee-list.html' : (isHRSubdir ? 'hr-employee-list.html' : 'human-resources/hr-employee-list.html'),
-        'add-employee': isDeptSubdir ? '../human-resources/add-employee.html' : (isHRSubdir ? 'add-employee.html' : 'human-resources/add-employee.html'),
-        'employees': isDeptSubdir ? '../human-resources/employee-list.html' : (isHRSubdir ? 'employee-list.html' : 'human-resources/employee-list.html'),
-        'holidays': isDeptSubdir ? '../human-resources/holiday-list.html' : (isHRSubdir ? 'holiday-list.html' : 'human-resources/holiday-list.html'),
-        'leave-category': isDeptSubdir ? '../human-resources/leave-category.html' : (isHRSubdir ? 'leave-category.html' : 'human-resources/leave-category.html'),
-        'leave-assign': isDeptSubdir ? '../human-resources/leave-assign.html' : (isHRSubdir ? 'leave-assign.html' : 'human-resources/leave-assign.html'),
-        'leave-request': isDeptSubdir ? '../human-resources/leave-request.html' : (isHRSubdir ? 'leave-request.html' : 'human-resources/leave-request.html'),
-        'attendance-list': isDeptSubdir ? '../human-resources/attendance-list.html' : (isHRSubdir ? 'attendance-list.html' : 'human-resources/attendance-list.html'),
-        'attendance-report': isDeptSubdir ? '../human-resources/attendance-report.html' : (isHRSubdir ? 'attendance-report.html' : 'human-resources/attendance-report.html'),
-        'salary-grade': isDeptSubdir ? '../human-resources/salary-grade.html' : (isHRSubdir ? 'salary-grade.html' : 'human-resources/salary-grade.html'),
-        'manage-salary': isDeptSubdir ? '../human-resources/manage-salary.html' : (isHRSubdir ? 'manage-salary.html' : 'human-resources/manage-salary.html'),
-        'disburse-salary-update': isDeptSubdir ? '../human-resources/disburse-salary-update.html' : (isHRSubdir ? 'disburse-salary-update.html' : 'human-resources/disburse-salary-update.html'),
-        'pay-slip': isDeptSubdir ? '../human-resources/pay-slip.html' : (isHRSubdir ? 'pay-slip.html' : 'human-resources/pay-slip.html'),
-        'all-departments': isDeptSubdir ? 'all_department.html' : (isHRSubdir ? '../department/all_department.html' : 'department/all_department.html'),
-        'all-department': isDeptSubdir ? 'all_department.html' : (isHRSubdir ? '../department/all_department.html' : 'department/all_department.html'),
-        'add-department': isDeptSubdir ? 'add_department.html' : (isHRSubdir ? '../department/add_department.html' : 'department/add_department.html')
+        'hr-documents': isHRSubdir ? 'hr-document-template.html' : (isSubdir ? '../human-resources/hr-document-template.html' : 'human-resources/hr-document-template.html'),
+        'hr-employee-list': isHRSubdir ? 'hr-employee-list.html' : (isSubdir ? '../human-resources/hr-employee-list.html' : 'human-resources/hr-employee-list.html'),
+        'add-employee': isHRSubdir ? 'add-employee.html' : (isSubdir ? '../human-resources/add-employee.html' : 'human-resources/add-employee.html'),
+        'employees': isHRSubdir ? 'employee-list.html' : (isSubdir ? '../human-resources/employee-list.html' : 'human-resources/employee-list.html'),
+        'holidays': isHRSubdir ? 'holiday-list.html' : (isSubdir ? '../human-resources/holiday-list.html' : 'human-resources/holiday-list.html'),
+        'leave-category': isHRSubdir ? 'leave-category.html' : (isSubdir ? '../human-resources/leave-category.html' : 'human-resources/leave-category.html'),
+        'leave-assign': isHRSubdir ? 'leave-assign.html' : (isSubdir ? '../human-resources/leave-assign.html' : 'human-resources/leave-assign.html'),
+        'leave-request': isHRSubdir ? 'leave-request.html' : (isSubdir ? '../human-resources/leave-request.html' : 'human-resources/leave-request.html'),
+        'attendance-list': isHRSubdir ? 'attendance-list.html' : (isSubdir ? '../human-resources/attendance-list.html' : 'human-resources/attendance-list.html'),
+        'attendance-report': isHRSubdir ? 'attendance-report.html' : (isSubdir ? '../human-resources/attendance-report.html' : 'human-resources/attendance-report.html'),
+        'salary-grade': isHRSubdir ? 'salary-grade.html' : (isSubdir ? '../human-resources/salary-grade.html' : 'human-resources/salary-grade.html'),
+        'manage-salary': isHRSubdir ? 'manage-salary.html' : (isSubdir ? '../human-resources/manage-salary.html' : 'human-resources/manage-salary.html'),
+        'disburse-salary-update': isHRSubdir ? 'disburse-salary-update.html' : (isSubdir ? '../human-resources/disburse-salary-update.html' : 'human-resources/disburse-salary-update.html'),
+        'pay-slip': isHRSubdir ? 'pay-slip.html' : (isSubdir ? '../human-resources/pay-slip.html' : 'human-resources/pay-slip.html'),
+        'all-departments': isDeptSubdir ? 'all_department.html' : (isSubdir ? '../department/all_department.html' : 'department/all_department.html'),
+        'all-department': isDeptSubdir ? 'all_department.html' : (isSubdir ? '../department/all_department.html' : 'department/all_department.html'),
+        'add-department': isDeptSubdir ? 'add_department.html' : (isSubdir ? '../department/add_department.html' : 'department/add_department.html')
       };
       if (pageFileMap[target]) {
         window.location.href = pageFileMap[target];
@@ -1013,22 +1014,24 @@ $(document).ready(function () {
     const action = $(this).data('action');
     const isDeptSubdir = window.location.pathname.includes('/department');
     const isHRSubdir = window.location.pathname.includes('/human-resources');
+    const isBillingSubdir = window.location.pathname.includes('/billing-management');
+    const isOtherSubdir = isDeptSubdir || isBillingSubdir;
 
     const hrPageMap = {
-      'hr-doc-templates': isDeptSubdir ? '../human-resources/hr-document-template.html' : (isHRSubdir ? 'hr-document-template.html' : 'human-resources/hr-document-template.html'),
-      'hr-employee-list': isDeptSubdir ? '../human-resources/hr-employee-list.html' : (isHRSubdir ? 'hr-employee-list.html' : 'human-resources/hr-employee-list.html'),
-      'add-employee': isDeptSubdir ? '../human-resources/add-employee.html' : (isHRSubdir ? 'add-employee.html' : 'human-resources/add-employee.html'),
-      'employee-list': isDeptSubdir ? '../human-resources/employee-list.html' : (isHRSubdir ? 'employee-list.html' : 'human-resources/employee-list.html'),
-      'holiday-list': isDeptSubdir ? '../human-resources/holiday-list.html' : (isHRSubdir ? 'holiday-list.html' : 'human-resources/holiday-list.html'),
-      'leave-category': isDeptSubdir ? '../human-resources/leave-category.html' : (isHRSubdir ? 'leave-category.html' : 'human-resources/leave-category.html'),
-      'leave-assign': isDeptSubdir ? '../human-resources/leave-assign.html' : (isHRSubdir ? 'leave-assign.html' : 'human-resources/leave-assign.html'),
-      'leave-request': isDeptSubdir ? '../human-resources/leave-request.html' : (isHRSubdir ? 'leave-request.html' : 'human-resources/leave-request.html'),
-      'attendance-list': isDeptSubdir ? '../human-resources/attendance-list.html' : (isHRSubdir ? 'attendance-list.html' : 'human-resources/attendance-list.html'),
-      'attendance-report': isDeptSubdir ? '../human-resources/attendance-report.html' : (isHRSubdir ? 'attendance-report.html' : 'human-resources/attendance-report.html'),
-      'salary-grade': isDeptSubdir ? '../human-resources/salary-grade.html' : (isHRSubdir ? 'salary-grade.html' : 'human-resources/salary-grade.html'),
-      'manage-salary': isDeptSubdir ? '../human-resources/manage-salary.html' : (isHRSubdir ? 'manage-salary.html' : 'human-resources/manage-salary.html'),
-      'disburse-salary-update': isDeptSubdir ? '../human-resources/disburse-salary-update.html' : (isHRSubdir ? 'disburse-salary-update.html' : 'human-resources/disburse-salary-update.html'),
-      'pay-slip': isDeptSubdir ? '../human-resources/pay-slip.html' : (isHRSubdir ? 'pay-slip.html' : 'human-resources/pay-slip.html')
+      'hr-doc-templates': isOtherSubdir ? '../human-resources/hr-document-template.html' : (isHRSubdir ? 'hr-document-template.html' : 'human-resources/hr-document-template.html'),
+      'hr-employee-list': isHRSubdir ? 'hr-employee-list.html' : (isSubdir ? '../human-resources/hr-employee-list.html' : 'human-resources/hr-employee-list.html'),
+      'add-employee': isHRSubdir ? 'add-employee.html' : (isSubdir ? '../human-resources/add-employee.html' : 'human-resources/add-employee.html'),
+      'employee-list': isOtherSubdir ? '../human-resources/employee-list.html' : (isHRSubdir ? 'employee-list.html' : 'human-resources/employee-list.html'),
+      'holiday-list': isOtherSubdir ? '../human-resources/holiday-list.html' : (isHRSubdir ? 'holiday-list.html' : 'human-resources/holiday-list.html'),
+      'leave-category': isHRSubdir ? 'leave-category.html' : (isSubdir ? '../human-resources/leave-category.html' : 'human-resources/leave-category.html'),
+      'leave-assign': isHRSubdir ? 'leave-assign.html' : (isSubdir ? '../human-resources/leave-assign.html' : 'human-resources/leave-assign.html'),
+      'leave-request': isHRSubdir ? 'leave-request.html' : (isSubdir ? '../human-resources/leave-request.html' : 'human-resources/leave-request.html'),
+      'attendance-list': isHRSubdir ? 'attendance-list.html' : (isSubdir ? '../human-resources/attendance-list.html' : 'human-resources/attendance-list.html'),
+      'attendance-report': isHRSubdir ? 'attendance-report.html' : (isSubdir ? '../human-resources/attendance-report.html' : 'human-resources/attendance-report.html'),
+      'salary-grade': isHRSubdir ? 'salary-grade.html' : (isSubdir ? '../human-resources/salary-grade.html' : 'human-resources/salary-grade.html'),
+      'manage-salary': isHRSubdir ? 'manage-salary.html' : (isSubdir ? '../human-resources/manage-salary.html' : 'human-resources/manage-salary.html'),
+      'disburse-salary-update': isHRSubdir ? 'disburse-salary-update.html' : (isSubdir ? '../human-resources/disburse-salary-update.html' : 'human-resources/disburse-salary-update.html'),
+      'pay-slip': isOtherSubdir ? '../human-resources/pay-slip.html' : (isHRSubdir ? 'pay-slip.html' : 'human-resources/pay-slip.html')
     };
 
     if (hrPageMap[action]) {
@@ -1174,7 +1177,9 @@ $(document).ready(function () {
     const isTable = $grid.is('tbody') || $grid.closest('table').length > 0;
     const isDeptSubdir = window.location.pathname.includes('/department');
     const isHRSubdir = window.location.pathname.includes('/human-resources');
-    const staffListUrl = isDeptSubdir ? '../human-resources/employee-list.html' : (isHRSubdir ? 'employee-list.html' : 'human-resources/employee-list.html');
+    const isBillingSubdir = window.location.pathname.includes('/billing-management');
+    const isOtherSubdir = isDeptSubdir || isBillingSubdir;
+    const staffListUrl = isOtherSubdir ? '../human-resources/employee-list.html' : (isHRSubdir ? 'employee-list.html' : 'human-resources/employee-list.html');
 
     filtered.forEach(dept => {
       if (isTable) {
@@ -1340,6 +1345,8 @@ $(document).ready(function () {
     const action = $(this).data('action');
     const isDeptSubdir = window.location.pathname.includes('/department');
     const isHRSubdir = window.location.pathname.includes('/human-resources');
+    const isBillingSubdir = window.location.pathname.includes('/billing-management');
+    const isOtherSubdir = isDeptSubdir || isBillingSubdir;
 
     if (action === 'all-department') {
       const targetUrl = isDeptSubdir ? 'all_department.html' : (isHRSubdir ? '../department/all_department.html' : 'department/all_department.html');
@@ -1350,7 +1357,7 @@ $(document).ready(function () {
         window.location.href = targetUrl;
       }
     } else if (action === 'add-department') {
-      const targetUrl = isDeptSubdir ? 'add_department.html' : (isHRSubdir ? '../department/add_department.html' : 'department/add_department.html');
+      const targetUrl = isDeptSubdir ? 'add_department.html' : (isOtherSubdir ? '../department/add_department.html' : 'department/add_department.html');
       if (window.location.pathname.includes('add_department')) {
         e.preventDefault();
         $('#input-dept-name').focus();
@@ -1364,7 +1371,9 @@ $(document).ready(function () {
   $('#btn-open-add-dept-from-list').on('click', function () {
     const isDeptSubdir = window.location.pathname.includes('/department');
     const isHRSubdir = window.location.pathname.includes('/human-resources');
-    const targetUrl = isDeptSubdir ? 'add_department.html' : (isHRSubdir ? '../department/add_department.html' : 'department/add_department.html');
+    const isBillingSubdir = window.location.pathname.includes('/billing-management');
+    const isOtherSubdir = isDeptSubdir || isBillingSubdir;
+    const targetUrl = isDeptSubdir ? 'add_department.html' : (isOtherSubdir ? '../department/add_department.html' : 'department/add_department.html');
     window.location.href = targetUrl;
   });
 
@@ -1398,10 +1407,10 @@ $(document).ready(function () {
     const action = $(this).data('action');
     const isDeptSubdir = window.location.pathname.includes('/department');
     const isHRSubdir = window.location.pathname.includes('/human-resources');
-    const isSubdir = isDeptSubdir || isHRSubdir;
-
+    const isBillingSubdir = window.location.pathname.includes('/billing-management');
+    const isSubdir = isDeptSubdir || isHRSubdir || isBillingSubdir;
     if (action === 'add-bill') {
-      const targetUrl = isSubdir ? '../add-bill.html' : 'add-bill.html';
+      const targetUrl = isBillingSubdir ? 'add-bill.html' : (isSubdir ? '../billing-management/add-bill.html' : 'billing-management/add-bill.html');
       if (window.location.pathname.includes('add-bill')) {
         e.preventDefault();
       } else {
@@ -1409,7 +1418,7 @@ $(document).ready(function () {
         window.location.href = targetUrl;
       }
     } else if (action === 'billing-details') {
-      const targetUrl = isSubdir ? '../billing-details.html' : 'billing-details.html';
+      const targetUrl = isBillingSubdir ? 'billing-details.html' : (isSubdir ? '../billing-management/billing-details.html' : 'billing-management/billing-details.html');
       if (window.location.pathname.includes('billing-details')) {
         e.preventDefault();
         renderBillingHistory();
@@ -1462,6 +1471,8 @@ $(document).ready(function () {
 
     const isDeptSubdir = window.location.pathname.includes('/department');
     const isHRSubdir = window.location.pathname.includes('/human-resources');
+    const isBillingSubdir = window.location.pathname.includes('/billing-management');
+    const isOtherSubdir = isDeptSubdir || isBillingSubdir;
     const targetUrl = isDeptSubdir ? 'all_department.html' : (isHRSubdir ? '../department/all_department.html' : 'department/all_department.html');
     setTimeout(() => {
       window.location.href = targetUrl;
@@ -3358,7 +3369,9 @@ $(document).ready(function () {
       try {
         localStorage.setItem(STORAGE_KEYS.PENDING_ORDER_BILL, ord.id);
       } catch (e) { /* ignore */ }
-      window.location.href = 'add-bill.html';
+      const isSubdir = window.location.pathname.includes('/department') || window.location.pathname.includes('/human-resources');
+      const isBillingSubdir = window.location.pathname.includes('/billing-management');
+      window.location.href = isBillingSubdir ? 'add-bill.html' : (isSubdir ? '../billing-management/add-bill.html' : 'billing-management/add-bill.html');
       return;
     }
 
@@ -6259,7 +6272,7 @@ $(document).ready(function () {
 
     const isHrDocTemplatePage = window.location.pathname.includes('hr-document-template');
     const isHrEmployeeListPage = window.location.pathname.includes('hr-employee-list');
-    const isSubdir = window.location.pathname.includes('/human-resources') || window.location.pathname.includes('/department');
+    const isSubdir = window.location.pathname.includes('/human-resources') || window.location.pathname.includes('/department') || window.location.pathname.includes('/billing-management');
     const assetPrefix = isSubdir ? '../assets/' : 'assets/';
 
     const filtered = HR_TEMPLATES.filter(tpl => {
