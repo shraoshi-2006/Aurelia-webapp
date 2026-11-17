@@ -319,6 +319,39 @@ $(document).ready(function () {
       if (!localStorage.getItem(STORAGE_KEYS.STAFF)) {
         Storage.set(STORAGE_KEYS.STAFF, DEFAULT_STAFF);
       }
+      if (!localStorage.getItem('aurelia_bills_draft_seed_v1')) {
+        const storedBills = Storage.get(STORAGE_KEYS.BILLS, []);
+        const hasDraft = storedBills.some(b => (b.status || '').toLowerCase() === 'draft');
+        if (!hasDraft && storedBills.length > 0) {
+          storedBills.push({
+            id: 'bill-draft-sample',
+            billNumber: 'INV-2026-0135',
+            date: '2026-10-24T14:15:00',
+            customerName: 'Siddharth Rao',
+            customerPhone: '+91 98800 11223',
+            customerEmail: 'siddharth.r@techcorp.in',
+            customerAddress: 'Indiranagar, Bengaluru',
+            tableRoom: 'Table 12',
+            paymentMethod: 'Unpaid',
+            status: 'Draft',
+            emailSent: false,
+            linkedOrderId: null,
+            taxRate: 5,
+            discountType: 'flat',
+            discountVal: 0,
+            discountAmount: 0.00,
+            subtotal: 4200.00,
+            taxAmount: 210.00,
+            grandTotal: 4410.00,
+            items: [
+              { name: 'Tandoori Murgh Platter', category: 'Starters', price: 1800.00, qty: 1, subtotal: 1800.00 },
+              { name: 'Dal Bukhara & Garlic Naan (2 Pax)', category: 'Main Course', price: 2400.00, qty: 1, subtotal: 2400.00 }
+            ]
+          });
+          Storage.set(STORAGE_KEYS.BILLS, storedBills);
+        }
+        localStorage.setItem('aurelia_bills_draft_seed_v1', 'true');
+      }
       if (!Storage.get(STORAGE_KEYS.MENU, []).length) {
         Storage.set(STORAGE_KEYS.MENU, DEFAULT_MENU_ITEMS);
       }
@@ -596,6 +629,8 @@ $(document).ready(function () {
       case 'paid':
       case 'completed':
         return `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-white text-[#15803d] border border-[#15803d] shadow-2xs">${escapeHtml(status)}</span>`;
+      case 'draft':
+        return `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-white text-[#d97706] border border-[#d97706] shadow-2xs">Draft</span>`;
       case 'available':
         return `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-white text-[#15803d] border border-[#15803d] shadow-2xs">${escapeHtml(status)}</span>`;
       case 'pending':
@@ -3280,6 +3315,7 @@ $(document).ready(function () {
     initNewBillForm();
     renderBillingHistory();
     consumePendingOrderForBilling();
+    consumeResumeDraftBill();
 
     const path = window.location.pathname;
     if (path.includes('billing-details')) {
@@ -3650,9 +3686,59 @@ $(document).ready(function () {
     };
   }
 
+  function consumeResumeDraftBill() {
+    try {
+      const raw = sessionStorage.getItem('aurelia_bill_resume_draft');
+      if (!raw) return;
+      sessionStorage.removeItem('aurelia_bill_resume_draft');
+      const bill = JSON.parse(raw);
+      if (!bill) return;
+
+      $('#form-create-bill').data('draft-id', bill.id);
+
+      currentBillItems = (bill.items || []).map(it => ({
+        id: it.id || ('item-' + Date.now() + Math.random()),
+        name: it.name,
+        category: it.category || 'Special',
+        price: Number(it.price) || 0,
+        qty: Number(it.qty) || 1,
+        subtotal: Number(it.subtotal) || (Number(it.price) * Number(it.qty))
+      }));
+
+      $('#input-bill-number').val(bill.billNumber || generateNextBillNumber());
+      $('#bill-number-display').text($('#input-bill-number').val());
+      $('#input-bill-tableref').val(bill.tableRoom || '');
+
+      if (bill.customerName && bill.customerName !== 'Draft Guest' && bill.customerName !== 'Walk-in Guest') {
+        $('input[name="customer-type"][value="walkin"]').prop('checked', true);
+        $('#wrapper-existing-customer').addClass('hidden');
+        $('#wrapper-walkin-customer').removeClass('hidden');
+        $('#input-walkin-name').val(bill.customerName);
+        $('#input-walkin-phone').val(bill.customerPhone && bill.customerPhone !== '-' ? bill.customerPhone : '');
+        $('#input-walkin-email').val(bill.customerEmail || '');
+      }
+
+      if (bill.discountVal) {
+        $('#input-discount-val').val(bill.discountVal);
+        if (bill.discountType === 'flat') {
+          $('#btn-discount-flat').click();
+        } else {
+          $('#btn-discount-pct').click();
+        }
+      }
+
+      renderBillDraftItems();
+      calculateLiveBillTotals();
+      showToast(`Draft ${bill.billNumber} loaded into editor.`, 'info');
+    } catch (e) {
+      console.warn('Error loading resume draft:', e);
+    }
+  }
+
   function clearBillForm() {
     currentBillItems = [];
     $('#form-create-bill')[0].reset();
+    $('#form-create-bill').removeData('draft-id');
     $('#input-discount-val').val('0');
     currentDiscountType = 'percent';
     $('#btn-discount-pct').addClass('bg-[#14213D] text-white').removeClass('text-slate-500');
@@ -3675,20 +3761,87 @@ $(document).ready(function () {
   $('#btn-clear-bill-draft').on('click', function (e) {
     e.preventDefault();
     if (currentBillItems.length === 0) {
-      clearBillForm();
-      showToast('New draft initialized.', 'info');
+      showToast('Please add at least one item before saving as draft.', 'warning');
       return;
     }
-    try {
-      const draftData = {
-        items: currentBillItems,
-        savedAt: new Date().toISOString()
-      };
-      localStorage.setItem('aurelia_bill_saved_draft', JSON.stringify(draftData));
-      showToast('Invoice draft saved successfully.', 'success');
-    } catch (err) {
-      showToast('Invoice draft saved.', 'success');
+
+    const customerType = $('input[name="customer-type"]:checked').val();
+    let customerName = '';
+    let customerPhone = '';
+    let customerEmail = '';
+    let customerAddress = '';
+    let customerId = null;
+
+    if (customerType === 'existing') {
+      const $opt = $('#select-customer-dropdown').find('option:selected');
+      customerId = $opt.val() || null;
+      if (customerId) {
+        customerName = $opt.data('name') || '';
+        customerPhone = $opt.data('phone') || '';
+        customerAddress = $opt.data('addr') || '';
+      }
+      customerEmail = $.trim($('#input-customer-email').val());
+    } else {
+      customerName = $.trim($('#input-walkin-name').val());
+      customerPhone = $.trim($('#input-walkin-phone').val());
+      customerEmail = $.trim($('#input-walkin-email').val());
     }
+
+    if (!customerName) {
+      customerName = 'Draft Guest';
+    }
+
+    const billNumber = $('#input-bill-number').val() || generateNextBillNumber();
+    const tableRoom = $.trim($('#input-bill-tableref').val()) || 'Counter 01';
+    const paymentMethod = $('#select-payment-method').val() || 'Unpaid';
+    const linkedOrderId = $('#input-linked-order-id').val() || null;
+    const totals = calculateLiveBillTotals();
+
+    const existingDraftId = $('#form-create-bill').data('draft-id');
+    const draftId = existingDraftId || ('bill-draft-' + Date.now());
+
+    const draftBill = {
+      id: draftId,
+      billNumber: billNumber,
+      date: new Date().toISOString(),
+      customerName: customerName,
+      customerPhone: customerPhone || '-',
+      customerEmail: customerEmail || '',
+      customerAddress: customerAddress || '',
+      tableRoom: tableRoom,
+      paymentMethod: paymentMethod,
+      status: 'Draft',
+      emailSent: false,
+      linkedOrderId: linkedOrderId,
+      taxRate: totals.taxRate,
+      subtotal: totals.subtotal,
+      discountType: currentDiscountType,
+      discountVal: parseFloat($('#input-discount-val').val()) || 0,
+      discountAmount: totals.discountAmount,
+      taxAmount: totals.taxAmount,
+      grandTotal: totals.grandTotal,
+      items: JSON.parse(JSON.stringify(currentBillItems))
+    };
+
+    const bills = Storage.get(STORAGE_KEYS.BILLS, []);
+    if (existingDraftId) {
+      const idx = bills.findIndex(b => b.id === existingDraftId);
+      if (idx !== -1) {
+        bills[idx] = draftBill;
+      } else {
+        bills.unshift(draftBill);
+      }
+    } else {
+      bills.unshift(draftBill);
+    }
+    Storage.set(STORAGE_KEYS.BILLS, bills);
+
+    clearBillForm();
+    renderBillingHistory();
+    renderDashboard();
+    renderSidebarBadges();
+
+    showToast(`Invoice ${billNumber} saved as Draft. View anytime in Billing Details.`, 'success');
   });
 
   // Unlink Order
@@ -3806,7 +3959,12 @@ $(document).ready(function () {
       items: JSON.parse(JSON.stringify(currentBillItems))
     };
 
+    const existingDraftId = $('#form-create-bill').data('draft-id');
     const bills = Storage.get(STORAGE_KEYS.BILLS);
+    if (existingDraftId) {
+      const draftIdx = bills.findIndex(b => b.id === existingDraftId);
+      if (draftIdx !== -1) bills.splice(draftIdx, 1);
+    }
     bills.unshift(newBill);
     Storage.set(STORAGE_KEYS.BILLS, bills);
 
@@ -3896,9 +4054,10 @@ $(document).ready(function () {
       const matchSearch = !search ||
         (b.billNumber && b.billNumber.toLowerCase().includes(search)) ||
         (b.customerName && b.customerName.toLowerCase().includes(search)) ||
-        (b.customerPhone && b.customerPhone.includes(search));
+        (b.customerPhone && b.customerPhone.includes(search)) ||
+        (b.status && b.status.toLowerCase().includes(search));
 
-      const matchPay = !payFilter || (b.paymentMethod === payFilter);
+      const matchPay = !payFilter || (b.paymentMethod === payFilter) || (payFilter === 'Draft' && (b.status || '').toLowerCase() === 'draft') || (payFilter === 'Unpaid' && (b.paymentMethod === 'Unpaid' || (b.status || '').toLowerCase() === 'draft'));
 
       const bDate = (b.date || '').substring(0, 10);
       const matchFrom = !fromDate || (bDate >= fromDate);
@@ -3939,12 +4098,21 @@ $(document).ready(function () {
                     <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                   </svg>
                 </button>
+                ${(b.status || '').toLowerCase() === 'draft' ? `
+                <!-- Edit / Complete Draft -->
+                <button type="button" class="btn-edit-bill p-2 rounded-lg text-slate-500 hover:text-amber-600 hover:bg-amber-50 dark:hover:bg-slate-800 transition-colors cursor-pointer" title="Edit / Complete Draft" data-id="${b.id}">
+                  <svg class="w-4 h-4 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125" />
+                  </svg>
+                </button>
+                ` : `
                 <!-- Print / Printer -->
                 <button type="button" class="btn-print-bill-row p-2 rounded-lg text-slate-500 hover:text-amber-600 hover:bg-amber-50 dark:hover:bg-slate-800 transition-colors cursor-pointer" title="Print Receipt" data-id="${b.id}">
                   <svg class="w-4 h-4 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M6.72 13.829c-.24.03-.48.062-.72.096m.72-.096a42.415 42.415 0 0110.56 0m-10.56 0L6.34 18m10.94-4.171c.24.03.48.062.72.096m-.72-.096L17.66 18m0 0l.229 2.523a1.125 1.125 0 01-1.12 1.227H7.231c-.662 0-1.18-.568-1.12-1.227L6.34 18m11.318 0h1.091A2.25 2.25 0 0021 15.75V9.456c0-1.081-.768-2.015-1.837-2.175a48.055 48.055 0 00-1.913-.247M6.34 18H5.25A2.25 2.25 0 013 15.75V9.456c0-1.081.768-2.015 1.837-2.175a48.041 48.041 0 011.913-.247m10.5 0a48.536 48.536 0 00-10.5 0m10.5 0V3.375c0-.621-.504-1.125-1.125-1.125h-8.25c-.621 0-1.125.504-1.125 1.125v3.659M18 10.5h.008v.008H18V10.5zm-3 0h.008v.008H15V10.5z" />
                   </svg>
                 </button>
+                `}
                 <!-- Delete / Trash (Red) -->
                 <button type="button" class="btn-delete-bill p-2 rounded-lg text-red-500 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-950/30 transition-colors cursor-pointer" title="Delete Invoice" data-id="${b.id}">
                   <svg class="w-4 h-4 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2">
@@ -4052,6 +4220,25 @@ $(document).ready(function () {
 
     $('#modal-view-bill').removeClass('hidden');
   }
+
+  $(document).on('click', '.btn-edit-bill', function () {
+    const id = $(this).data('id');
+    const bills = Storage.get(STORAGE_KEYS.BILLS, []);
+    const bill = bills.find(b => b.id === id);
+    if (!bill) return;
+
+    try {
+      sessionStorage.setItem('aurelia_bill_resume_draft', JSON.stringify(bill));
+    } catch (e) { }
+
+    const isBillingSubdir = window.location.pathname.includes('/billing-management');
+    const isDeptSubdir = window.location.pathname.includes('/department');
+    const isHRSubdir = window.location.pathname.includes('/human-resources');
+    const isSubdir = isDeptSubdir || isHRSubdir;
+    const targetUrl = isBillingSubdir ? 'add-bill.html' : (isSubdir ? '../billing-management/add-bill.html' : 'billing-management/add-bill.html');
+
+    window.location.href = targetUrl;
+  });
 
   $(document).on('click', '.btn-view-bill', function () {
     const id = $(this).data('id');
