@@ -169,6 +169,56 @@ $(document).ready(function () {
   table td svg {
     vertical-align: middle !important;
   }
+
+  /* Global Bulk Table Selection & Delete Toolbar / Checkbox Styles */
+  .table-bulk-action-bar {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    width: 100%;
+  }
+  .table-bulk-action-bar .hidden {
+    display: none !important;
+  }
+  th.bulk-cb-cell,
+  td.bulk-cb-cell {
+    width: 44px !important;
+    min-width: 44px !important;
+    max-width: 48px !important;
+    text-align: center !important;
+    vertical-align: middle !important;
+    padding-left: 10px !important;
+    padding-right: 8px !important;
+  }
+  th.bulk-cb-cell input[type="checkbox"],
+  td.bulk-cb-cell input[type="checkbox"] {
+    display: inline-block !important;
+    margin: 0 auto !important;
+    cursor: pointer !important;
+    width: 16px !important;
+    height: 16px !important;
+    accent-color: #14213D;
+    vertical-align: middle !important;
+  }
+  .dark th.bulk-cb-cell input[type="checkbox"],
+  .dark td.bulk-cb-cell input[type="checkbox"] {
+    accent-color: #FCA311;
+  }
+  table tbody tr.is-row-selected {
+    background-color: rgba(252, 163, 17, 0.10) !important;
+  }
+  .dark table tbody tr.is-row-selected {
+    background-color: rgba(252, 163, 17, 0.15) !important;
+  }
+  @media print {
+    .table-bulk-action-bar,
+    th.bulk-cb-cell,
+    td.bulk-cb-cell {
+      display: none !important;
+    }
+  }
       </style>
     `);
   }
@@ -1339,7 +1389,7 @@ $(document).ready(function () {
     filtered.forEach(dept => {
       if (isTable) {
         html += `
-          <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors border-b border-slate-100 dark:border-slate-800/80 last:border-b-0 group">
+          <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors border-b border-slate-100 dark:border-slate-800/80 last:border-b-0 group" data-code="${escapeHtml(dept.code)}" data-id="${escapeHtml(dept.code)}">
             <td class="py-2.5 sm:py-3 px-3">
               <div class="flex items-center space-x-2.5 min-w-0">
                 <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-[#14213D] to-[#FCA311] flex items-center justify-center text-white text-[11px] font-black shadow-2xs flex-shrink-0">
@@ -3197,7 +3247,12 @@ $(document).ready(function () {
         status: 'Idle (8m)',
         isLive: false
       }
-    ];
+    ].filter(s => {
+      try {
+        const removed = JSON.parse(localStorage.getItem('aurelia_deleted_device_sessions') || '[]');
+        return !removed.includes(s.terminalId) && !removed.includes(s.id);
+      } catch (e) { return true; }
+    });
   }
 
   function getDeviceTypeIconSvg(deviceType) {
@@ -3271,7 +3326,7 @@ $(document).ready(function () {
       const deviceIcon = getDeviceTypeIconSvg(row.deviceType);
 
       $tbody.append(`
-        <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors">
+        <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors" data-id="${escapeHtml(row.terminalId || row.id)}">
           <td class="py-3 px-4 whitespace-nowrap">
             <span class="px-2.5 py-1 rounded text-xs font-mono font-bold bg-[#FCA311] text-black inline-block shadow-2xs whitespace-nowrap">${escapeHtml(row.id)}</span>
           </td>
@@ -4198,7 +4253,7 @@ $(document).ready(function () {
     } else {
       filtered.forEach(b => {
         $tbody.append(`
-          <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors">
+          <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors" data-id="${escapeHtml(b.id)}">
             <td class="py-3 px-4 font-mono font-bold text-[#14213D]">${escapeHtml(b.billNumber)}</td>
             <td class="py-3 px-4">
               <div class="inline-flex flex-col text-left">
@@ -4999,7 +5054,7 @@ $(document).ready(function () {
         : `<span class="inline-flex items-center justify-center w-3.5 h-3.5 rounded-[3px] border border-emerald-600 bg-white dark:bg-slate-900 flex-shrink-0" title="Vegetarian" aria-label="Vegetarian"><span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span></span>`;
 
       $tbody.append(`
-        <tr class="group hover:bg-slate-50/90 dark:hover:bg-slate-800/40 transition-colors">
+        <tr class="group hover:bg-slate-50/90 dark:hover:bg-slate-800/40 transition-colors" data-id="${escapeHtml(item.id)}">
           <td class="py-3 px-4 ${!isAvail ? 'opacity-65' : ''}">
             <div class="flex items-center gap-3 min-w-[220px]">
               <div class="relative w-10 h-10 rounded-xl bg-gradient-to-br ${meta.tileTheme} border flex items-center justify-center flex-shrink-0 shadow-sm group-hover:scale-105 group-hover:shadow transition-all duration-200">
@@ -5235,7 +5290,7 @@ $(document).ready(function () {
       const isBilled = !!ord.billNumber;
 
       $tbody.append(`
-        <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors">
+        <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors" data-id="${escapeHtml(ord.id)}">
           <td class="py-3 px-4 font-mono font-bold text-slate-900 dark:text-white whitespace-nowrap">
             ${escapeHtml(ord.orderNumber)}
           </td>
@@ -5596,7 +5651,7 @@ $(document).ready(function () {
     } else {
       filtered.forEach(c => {
         $tbody.append(`
-          <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors">
+          <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors" data-id="${escapeHtml(c.id)}">
             <td class="py-3 px-4 font-bold text-slate-900 dark:text-white">${escapeHtml(c.name)}</td>
             <td class="py-3 px-4 font-mono text-slate-500">${escapeHtml(c.phone)}</td>
             <td class="py-3 px-4 text-slate-500">${escapeHtml(c.email || '-')}</td>
@@ -6672,7 +6727,7 @@ $(document).ready(function () {
       }
 
       html += `
-        <tr class="hover:bg-slate-50/70 dark:hover:bg-slate-800/50 transition-colors group">
+        <tr class="hover:bg-slate-50/70 dark:hover:bg-slate-800/50 transition-colors group" data-id="${escapeHtml(tpl.id)}">
           <td class="py-3.5 px-4 whitespace-nowrap">
             <span class="px-2.5 py-1 rounded text-xs font-mono font-bold bg-[#14213D] text-[#FCA311] inline-block shadow-xs tracking-wider">
               ${tpl.empId}
@@ -6971,7 +7026,7 @@ $(document).ready(function () {
         const isOnDuty = s.status === 'On Duty';
 
         $tbody.append(`
-          <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors">
+          <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors" data-id="${escapeHtml(s.id)}">
             <td class="py-3.5 px-4 whitespace-nowrap">
               <span class="px-2.5 py-1 rounded text-xs font-mono font-bold bg-[#FCA311] text-black inline-block shadow-2xs">${escapeHtml(s.id)}</span>
             </td>
@@ -7167,6 +7222,21 @@ $(document).ready(function () {
     { date: '25 Dec 2026', day: 'Friday', name: 'Christmas Day', type: 'gazetted', typeLabel: 'Gazetted Holiday', policy: 'Gala Dinner peak operational schedule; festive holiday bonus', status: 'Upcoming' }
   ];
 
+  // Load persisted deleted holidays if any
+  (function syncPersistedHolidays() {
+    try {
+      const removed = JSON.parse(localStorage.getItem('aurelia_deleted_holidays_2026') || '[]');
+      if (Array.isArray(removed) && removed.length) {
+        for (let i = HOTEL_HOLIDAYS_2026.length - 1; i >= 0; i--) {
+          const key = HOTEL_HOLIDAYS_2026[i].name + '|' + HOTEL_HOLIDAYS_2026[i].date;
+          if (removed.includes(HOTEL_HOLIDAYS_2026[i].name) || removed.includes(key)) {
+            HOTEL_HOLIDAYS_2026.splice(i, 1);
+          }
+        }
+      }
+    } catch (e) {}
+  })();
+
   let currentHolidayFilter = 'all';
 
   function getFilteredHolidays() {
@@ -7197,7 +7267,7 @@ $(document).ready(function () {
         const isUpcoming = h.status === 'Upcoming';
 
         $tbody.append(`
-          <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors">
+          <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors" data-name="${escapeHtml(h.name)}" data-date="${escapeHtml(h.date)}">
             <td class="py-3 px-4 font-mono font-bold text-slate-800 dark:text-slate-200">
               ${escapeHtml(h.date)}
             </td>
@@ -7725,6 +7795,483 @@ $(document).ready(function () {
     renderSidebarBadges();
     updateTopbarAvatarUI();
   }
+
+  // =========================================================================
+  // UNIVERSAL BULK TABLE SELECTION & DELETE ENGINE (ALL TABLE PAGES)
+  // =========================================================================
+  (function initUniversalBulkTableSelection() {
+    let tableAutoIdCounter = 1;
+
+    function isEligibleTable($table) {
+      if (!$table || !$table.length) return false;
+      if ($table.attr('data-no-bulk-select') === 'true') return false;
+      // Exclude hidden print/PDF export templates & invoice receipt print blocks
+      if ($table.closest('.receipt-wrap, #invoice-receipt, #modal-receipt, .print-section, [id*="print-"], [id*="-print"], [id*="pdf-"], [class*="print-only"]').length) {
+        return false;
+      }
+      const inlineStyle = ($table.attr('style') || '').toLowerCase();
+      if (inlineStyle.includes('border-collapse') && !$table.hasClass('w-full')) {
+        return false;
+      }
+      if (!$table.find('tbody').length) return false;
+      return true;
+    }
+
+    function getTableForToolbar($toolbar) {
+      const tableId = $toolbar.attr('data-for-table');
+      if (tableId) {
+        const $byId = $(document.getElementById(tableId));
+        if ($byId.length) return $byId;
+      }
+      return $toolbar.nextAll('.overflow-x-auto, #device-activity-scroll-wrap, table').first().find('table').addBack('table').first();
+    }
+
+    function getToolbarForTable($table) {
+      const tableId = $table.attr('data-bulk-table-id');
+      if (tableId) {
+        const $tb = $(`.table-bulk-action-bar[data-for-table="${tableId}"]`);
+        if ($tb.length) return $tb;
+      }
+      const $wrap = $table.closest('.overflow-x-auto, #device-activity-scroll-wrap');
+      return ($wrap.length ? $wrap : $table).prev('.table-bulk-action-bar');
+    }
+
+    function getSelectableRows($table) {
+      return $table.find('tbody > tr').filter(function () {
+        const $tr = $(this);
+        if ($tr.hasClass('hidden') || $tr.css('display') === 'none') return false;
+        const $nonCbCells = $tr.children('td:not(.bulk-cb-cell)');
+        if ($nonCbCells.length === 1 && $nonCbCells.first().attr('colspan')) return false;
+        return $nonCbCells.length > 0;
+      });
+    }
+
+    function attachBulkSelectToTable($table) {
+      if (!isEligibleTable($table)) return;
+      if ($table.attr('data-bulk-initialized') === 'true') return;
+
+      let $targetWrap = $table.closest('.overflow-x-auto, #device-activity-scroll-wrap');
+      if (!$targetWrap.length) $targetWrap = $table;
+      if ($targetWrap.prev('.table-bulk-action-bar').length) {
+        $table.attr('data-bulk-initialized', 'true');
+        return;
+      }
+
+      const bulkId = $table.attr('id') || ('aurelia-bulk-tbl-' + (tableAutoIdCounter++));
+      if (!$table.attr('id')) $table.attr('id', bulkId);
+      $table.attr('data-bulk-table-id', bulkId);
+      $table.attr('data-bulk-initialized', 'true');
+
+      // Choose padding seamlessly based on parent card styling
+      const $parent = $targetWrap.parent();
+      const isFlushCard = $parent.hasClass('p-0') || ($parent.hasClass('Aurelia-card') && !$parent.hasClass('p-6') && !$parent.hasClass('p-4')) || $parent.hasClass('overflow-hidden');
+      const barPadClass = isFlushCard
+        ? 'px-4 py-2.5 border-b border-slate-100 dark:border-slate-800/80 bg-slate-50/60 dark:bg-slate-900/40'
+        : 'pb-2 pt-0.5 mb-1 border-b border-slate-100/80 dark:border-slate-800/60';
+
+      const toolbarHtml = `
+        <div class="table-bulk-action-bar ${barPadClass} text-xs transition-all" data-for-table="${bulkId}">
+          <div class="flex items-center gap-2 min-w-0">
+            <div class="bulk-count-wrap hidden inline-flex items-center gap-2 px-2.5 py-1 rounded-lg bg-amber-50 dark:bg-amber-950/40 border border-amber-200/80 dark:border-amber-800/60">
+              <span class="inline-block w-2 h-2 rounded-full bg-[#FCA311]"></span>
+              <span class="bulk-count-text font-bold text-[#14213D] dark:text-amber-300 text-xs whitespace-nowrap">Selected row count: 0</span>
+            </div>
+          </div>
+          <div class="flex items-center gap-2 ml-auto flex-wrap justify-end">
+            <button type="button" class="btn-bulk-toggle inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-xl bg-white dark:bg-slate-800 text-[#14213D] dark:text-slate-100 border border-slate-200 dark:border-slate-700 hover:bg-[#14213D] hover:text-[#FCA311] hover:border-[#14213D] dark:hover:bg-[#FCA311] dark:hover:text-[#14213D] shadow-2xs transition-all cursor-pointer" title="Enable row selection">
+              <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <span>Select</span>
+            </button>
+
+            <button type="button" class="btn-bulk-select-all hidden inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-xl bg-[#14213D] text-white hover:bg-[#1f325d] dark:bg-[#FCA311] dark:text-[#14213D] dark:hover:bg-[#e5940f] shadow-2xs transition-all cursor-pointer" title="Select or deselect all rows">
+              <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.4">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+              </svg>
+              <span class="btn-bulk-select-all-label">Select All</span>
+            </button>
+
+            <button type="button" class="btn-table-bulk-delete hidden inline-flex items-center justify-center gap-1.5 px-2.5 py-1.5 text-xs font-bold rounded-xl bg-rose-50 text-rose-600 hover:bg-rose-600 hover:text-white dark:bg-rose-950/40 dark:text-rose-400 dark:hover:bg-rose-600 dark:hover:text-white border border-rose-200 dark:border-rose-900 shadow-2xs transition-all cursor-pointer opacity-50 cursor-not-allowed" title="Delete selected rows" aria-label="Delete selected rows" disabled>
+              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+              </svg>
+            </button>
+
+            <button type="button" class="btn-bulk-cancel hidden inline-flex items-center px-2.5 py-1.5 text-xs font-semibold rounded-xl text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-100 hover:bg-slate-200/70 dark:hover:bg-slate-700/60 transition-all cursor-pointer" title="Exit selection mode">
+              <span>Cancel</span>
+            </button>
+          </div>
+        </div>
+      `;
+
+      $targetWrap.before(toolbarHtml);
+    }
+
+    function syncActiveTableCheckboxes($table) {
+      if (!$table.hasClass('is-bulk-selecting')) return;
+
+      // Ensure header checkbox cell exists
+      $table.find('thead > tr').each(function () {
+        const $tr = $(this);
+        if (!$tr.children('th.bulk-cb-cell').length) {
+          $tr.prepend(`
+            <th class="bulk-cb-cell w-11 text-center py-3 px-2">
+              <input type="checkbox" class="bulk-master-cb" title="Select / Deselect all rows" aria-label="Select all rows">
+            </th>
+          `);
+        }
+      });
+
+      // Ensure body checkbox cells exist on data rows & adjust empty-state colspan
+      $table.find('tbody > tr').each(function () {
+        const $tr = $(this);
+        const $nonCbCells = $tr.children('td:not(.bulk-cb-cell)');
+        if ($nonCbCells.length === 1 && $nonCbCells.first().attr('colspan')) {
+          const $emptyTd = $nonCbCells.first();
+          if (!$emptyTd.attr('data-orig-colspan')) {
+            const orig = parseInt($emptyTd.attr('colspan'), 10) || 1;
+            $emptyTd.attr('data-orig-colspan', orig);
+            $emptyTd.attr('colspan', orig + 1);
+          }
+          return;
+        }
+        if ($nonCbCells.length > 0 && !$tr.children('td.bulk-cb-cell').length) {
+          $tr.prepend(`
+            <td class="bulk-cb-cell w-11 text-center py-3 px-2">
+              <input type="checkbox" class="bulk-row-cb" aria-label="Select row">
+            </td>
+          `);
+        }
+      });
+
+      // Ensure tfoot alignment if present
+      $table.find('tfoot > tr').each(function () {
+        const $tr = $(this);
+        if (!$tr.children('td.bulk-cb-cell, th.bulk-cb-cell').length) {
+          $tr.prepend('<td class="bulk-cb-cell w-11"></td>');
+        }
+      });
+
+      const $toolbar = getToolbarForTable($table);
+      if ($toolbar.length) updateToolbarCount($toolbar, $table);
+    }
+
+    function updateToolbarCount($toolbar, $table) {
+      const $rows = getSelectableRows($table);
+      const total = $rows.length;
+      const checked = $rows.find('td.bulk-cb-cell .bulk-row-cb:checked').length;
+
+      $toolbar.find('.bulk-count-text').text(`Selected row count: ${checked}`);
+
+      const $deleteBtn = $toolbar.find('.btn-table-bulk-delete');
+      if (checked > 0) {
+        $deleteBtn.removeClass('opacity-50 cursor-not-allowed').prop('disabled', false);
+      } else {
+        $deleteBtn.addClass('opacity-50 cursor-not-allowed').prop('disabled', true);
+      }
+
+      const $selectAllLabel = $toolbar.find('.btn-bulk-select-all-label');
+      if (total > 0 && checked === total) {
+        $selectAllLabel.text('Deselect All');
+      } else {
+        $selectAllLabel.text('Select All');
+      }
+
+      const $masterCb = $table.find('thead .bulk-master-cb');
+      if ($masterCb.length) {
+        if (checked === 0) {
+          $masterCb.prop('checked', false).prop('indeterminate', false);
+        } else if (checked === total && total > 0) {
+          $masterCb.prop('checked', true).prop('indeterminate', false);
+        } else {
+          $masterCb.prop('checked', false).prop('indeterminate', true);
+        }
+      }
+    }
+
+    function toggleTableBulkSelection($table, enable) {
+      const $toolbar = getToolbarForTable($table);
+      if (!$toolbar.length) return;
+
+      if (enable) {
+        $table.addClass('is-bulk-selecting');
+        $toolbar.find('.btn-bulk-toggle').addClass('hidden');
+        $toolbar.find('.btn-bulk-select-all, .btn-table-bulk-delete, .btn-bulk-cancel, .bulk-count-wrap').removeClass('hidden');
+        syncActiveTableCheckboxes($table);
+        updateToolbarCount($toolbar, $table);
+      } else {
+        $table.removeClass('is-bulk-selecting');
+        $toolbar.find('.btn-bulk-toggle').removeClass('hidden');
+        $toolbar.find('.btn-bulk-select-all, .btn-table-bulk-delete, .btn-bulk-cancel, .bulk-count-wrap').addClass('hidden');
+        $table.find('.bulk-cb-cell').remove();
+        $table.find('tbody tr').removeClass('is-row-selected');
+        // Restore any bumped empty-state colspans
+        $table.find('td[data-orig-colspan]').each(function () {
+          $(this).attr('colspan', $(this).attr('data-orig-colspan')).removeAttr('data-orig-colspan');
+        });
+      }
+    }
+
+    function extractRowId(tr) {
+      const $tr = $(tr);
+      return $tr.attr('data-id') || $tr.find('[data-id]').first().attr('data-id') || '';
+    }
+
+    function executeTableBulkDelete($table, selectedTrs) {
+      const tbodyId = $table.find('tbody').attr('id') || '';
+      const count = selectedTrs.length;
+      if (!count) return;
+
+      // 1. Menu Items
+      if (tbodyId === 'menu-items-tbody') {
+        const ids = selectedTrs.map(extractRowId).filter(Boolean);
+        const menu = Storage.get(STORAGE_KEYS.MENU, []);
+        Storage.set(STORAGE_KEYS.MENU, menu.filter(m => !ids.includes(String(m.id))));
+        renderMenuItemsGrid();
+        populateMenuItemPicker();
+        renderSidebarBadges();
+        showToast(`Deleted ${count} menu item${count > 1 ? 's' : ''} successfully.`, 'info');
+        return;
+      }
+
+      // 2. Orders
+      if (tbodyId === 'orders-tbody') {
+        const ids = selectedTrs.map(extractRowId).filter(Boolean);
+        const orders = Storage.get(STORAGE_KEYS.ORDERS, []);
+        Storage.set(STORAGE_KEYS.ORDERS, orders.filter(o => !ids.includes(String(o.id))));
+        renderOrdersSection();
+        renderSidebarBadges();
+        showToast(`Deleted ${count} order${count > 1 ? 's' : ''} successfully.`, 'info');
+        return;
+      }
+
+      // 3. Customers / Guests
+      if (tbodyId === 'customers-tbody') {
+        const ids = selectedTrs.map(extractRowId).filter(Boolean);
+        const customers = Storage.get(STORAGE_KEYS.CUSTOMERS, []);
+        Storage.set(STORAGE_KEYS.CUSTOMERS, customers.filter(c => !ids.includes(String(c.id))));
+        renderCustomersSection();
+        populateCustomerDropdown();
+        renderSidebarBadges();
+        showToast(`Deleted ${count} guest record${count > 1 ? 's' : ''} successfully.`, 'info');
+        return;
+      }
+
+      // 4. Billing Details & Billings Modal
+      if (tbodyId === 'billing-history-tbody' || tbodyId === 'modal-billings-tbody') {
+        const ids = selectedTrs.map(extractRowId).filter(Boolean);
+        const bills = Storage.get(STORAGE_KEYS.BILLS, []);
+        Storage.set(STORAGE_KEYS.BILLS, bills.filter(b => !ids.includes(String(b.id))));
+        if (typeof renderBillingHistory === 'function') renderBillingHistory();
+        if (typeof renderDashboard === 'function') renderDashboard();
+        if (tbodyId === 'modal-billings-tbody' && typeof renderBillingsModal === 'function') renderBillingsModal();
+        showToast(`Deleted ${count} billing record${count > 1 ? 's' : ''} successfully.`, 'info');
+        return;
+      }
+
+      // 5. Add Bill Draft Items
+      if (tbodyId === 'bill-items-tbody') {
+        const indices = new Set(selectedTrs.map(tr => {
+          const idx = $(tr).find('[data-index]').first().attr('data-index');
+          return typeof idx !== 'undefined' ? parseInt(idx, 10) : $(tr).index();
+        }));
+        currentBillItems = currentBillItems.filter((_, idx) => !indices.has(idx));
+        renderBillDraftItems();
+        calculateLiveBillTotals();
+        showToast(`Removed ${count} item${count > 1 ? 's' : ''} from bill.`, 'info');
+        return;
+      }
+
+      // 6. Staff / Employee Directory
+      if (tbodyId === 'page-staff-tbody' || tbodyId === 'modal-staff-tbody') {
+        const ids = selectedTrs.map(tr => extractRowId(tr) || $(tr).children('td:not(.bulk-cb-cell)').first().text().trim()).filter(Boolean);
+        const staffList = Storage.get(STORAGE_KEYS.STAFF, DEFAULT_STAFF) || DEFAULT_STAFF;
+        Storage.set(STORAGE_KEYS.STAFF, staffList.filter(s => !ids.includes(String(s.id))));
+        if (typeof renderEmployeesSection === 'function') renderEmployeesSection();
+        if (tbodyId === 'modal-staff-tbody' && typeof renderStaffDirectoryModal === 'function') renderStaffDirectoryModal();
+        showToast(`Deleted ${count} employee record${count > 1 ? 's' : ''} successfully.`, 'info');
+        return;
+      }
+
+      // 7. HR Document Templates & HR Employee List
+      if (tbodyId === 'hr-templates-tbody') {
+        const ids = selectedTrs.map(extractRowId).filter(Boolean);
+        HR_TEMPLATES = HR_TEMPLATES.filter(t => !ids.includes(String(t.id)));
+        try {
+          localStorage.setItem('aurelia_hr_templates_v7', JSON.stringify(HR_TEMPLATES));
+        } catch (e) {}
+        renderHrDocumentsSection();
+        showToast(`Deleted ${count} HR record${count > 1 ? 's' : ''} successfully.`, 'info');
+        return;
+      }
+
+      // 8. Departments Table
+      if (tbodyId === 'modal-dept-grid') {
+        const codes = selectedTrs.map(tr => $(tr).attr('data-code') || $(tr).find('[data-code]').first().attr('data-code') || extractRowId(tr)).filter(Boolean);
+        hotelDepartments = hotelDepartments.filter(d => !codes.includes(String(d.code)));
+        saveDepartments();
+        renderDepartmentsGrid($('#modal-dept-search').val());
+        showToast(`Deleted ${count} department${count > 1 ? 's' : ''} successfully.`, 'info');
+        return;
+      }
+
+      // 9. Holiday Schedule Table
+      if (tbodyId === 'page-holiday-tbody') {
+        const names = selectedTrs.map(tr => $(tr).attr('data-name') || $(tr).children('td:not(.bulk-cb-cell)').eq(1).text().trim()).filter(Boolean);
+        for (let i = HOTEL_HOLIDAYS_2026.length - 1; i >= 0; i--) {
+          if (names.includes(HOTEL_HOLIDAYS_2026[i].name)) {
+            HOTEL_HOLIDAYS_2026.splice(i, 1);
+          }
+        }
+        try {
+          const prev = JSON.parse(localStorage.getItem('aurelia_deleted_holidays_2026') || '[]');
+          const merged = Array.from(new Set(prev.concat(names)));
+          localStorage.setItem('aurelia_deleted_holidays_2026', JSON.stringify(merged));
+        } catch (e) {}
+        renderHolidaysSection();
+        showToast(`Deleted ${count} holiday${count > 1 ? 's' : ''} successfully.`, 'info');
+        return;
+      }
+
+      // 10. Dashboard Device Activity & Modal Devices
+      if (tbodyId === 'dashboard-recent-trans-tbody' || tbodyId === 'modal-devices-tbody') {
+        const ids = selectedTrs.map(tr => extractRowId(tr) || $(tr).children('td:not(.bulk-cb-cell)').first().text().trim()).filter(Boolean);
+        try {
+          const prev = JSON.parse(localStorage.getItem('aurelia_deleted_device_sessions') || '[]');
+          const merged = Array.from(new Set(prev.concat(ids)));
+          localStorage.setItem('aurelia_deleted_device_sessions', JSON.stringify(merged));
+        } catch (e) {}
+        if (typeof renderDashboardRecentTransactions === 'function') renderDashboardRecentTransactions();
+        if (tbodyId === 'modal-devices-tbody' && typeof renderAllDevicesModal === 'function') renderAllDevicesModal();
+        showToast(`Deleted ${count} device session record${count > 1 ? 's' : ''} successfully.`, 'info');
+        return;
+      }
+
+      // 11. Universal Fallback (HR static/inline tables, analytics top items, modal tables, etc.)
+      const $tbody = $table.find('tbody');
+      selectedTrs.forEach(tr => $(tr).remove());
+      if (getSelectableRows($table).length === 0) {
+        const colCount = Math.max(1, $table.find('thead > tr:first > th:not(.bulk-cb-cell)').length || 5);
+        $tbody.html(`<tr><td colspan="${colCount}" class="py-8 text-center text-slate-400 font-medium">No records remaining.</td></tr>`);
+      }
+      showToast(`Deleted ${count} record${count > 1 ? 's' : ''} successfully.`, 'info');
+    }
+
+    function scanAndInitializeTables() {
+      $('table').each(function () {
+        const $tbl = $(this);
+        attachBulkSelectToTable($tbl);
+        if ($tbl.hasClass('is-bulk-selecting')) {
+          syncActiveTableCheckboxes($tbl);
+        }
+      });
+    }
+
+    // Delegated Event Handlers
+    $(document).on('click', '.btn-bulk-toggle', function (e) {
+      e.preventDefault();
+      const $toolbar = $(this).closest('.table-bulk-action-bar');
+      const $table = getTableForToolbar($toolbar);
+      if ($table.length) toggleTableBulkSelection($table, true);
+    });
+
+    $(document).on('click', '.btn-bulk-cancel', function (e) {
+      e.preventDefault();
+      const $toolbar = $(this).closest('.table-bulk-action-bar');
+      const $table = getTableForToolbar($toolbar);
+      if ($table.length) toggleTableBulkSelection($table, false);
+    });
+
+    $(document).on('click', '.btn-bulk-select-all', function (e) {
+      e.preventDefault();
+      const $toolbar = $(this).closest('.table-bulk-action-bar');
+      const $table = getTableForToolbar($toolbar);
+      if (!$table.length) return;
+      const $rows = getSelectableRows($table);
+      const $cbs = $rows.find('td.bulk-cb-cell .bulk-row-cb');
+      const allChecked = $cbs.length > 0 && $cbs.filter(':checked').length === $cbs.length;
+      const nextState = !allChecked;
+      $cbs.prop('checked', nextState);
+      $rows.toggleClass('is-row-selected', nextState);
+      updateToolbarCount($toolbar, $table);
+    });
+
+    $(document).on('change', '.bulk-master-cb', function (e) {
+      e.stopPropagation();
+      const $table = $(this).closest('table');
+      const $toolbar = getToolbarForTable($table);
+      const isChecked = $(this).is(':checked');
+      const $rows = getSelectableRows($table);
+      $rows.find('td.bulk-cb-cell .bulk-row-cb').prop('checked', isChecked);
+      $rows.toggleClass('is-row-selected', isChecked);
+      if ($toolbar.length) updateToolbarCount($toolbar, $table);
+    });
+
+    $(document).on('click', '.bulk-cb-cell', function (e) {
+      e.stopPropagation();
+      if (!$(e.target).is('input[type="checkbox"]')) {
+        const $cb = $(this).find('input[type="checkbox"]');
+        if ($cb.length) {
+          $cb.prop('checked', !$cb.is(':checked')).trigger('change');
+        }
+      }
+    });
+
+    $(document).on('change', '.bulk-row-cb', function (e) {
+      e.stopPropagation();
+      const $tr = $(this).closest('tr');
+      const $table = $tr.closest('table');
+      const $toolbar = getToolbarForTable($table);
+      $tr.toggleClass('is-row-selected', $(this).is(':checked'));
+      if ($toolbar.length) updateToolbarCount($toolbar, $table);
+    });
+
+    $(document).on('click', '.btn-table-bulk-delete', function (e) {
+      e.preventDefault();
+      const $toolbar = $(this).closest('.table-bulk-action-bar');
+      const $table = getTableForToolbar($toolbar);
+      if (!$table.length) return;
+
+      const selectedTrs = getSelectableRows($table).filter(function () {
+        return $(this).find('td.bulk-cb-cell .bulk-row-cb').is(':checked');
+      }).get();
+
+      const count = selectedTrs.length;
+      if (!count) {
+        showToast('Please select at least one row to delete.', 'warning');
+        return;
+      }
+
+      const label = count === 1 ? 'record' : 'records';
+      const msg = `Are you sure you want to permanently delete ${count} selected ${label}? This action cannot be undone.`;
+
+      const performBulkDelete = function () {
+        executeTableBulkDelete($table, selectedTrs);
+        toggleTableBulkSelection($table, false);
+      };
+
+      if (typeof openConfirmDeleteModal === 'function' && $('#modal-confirm-delete').length) {
+        openConfirmDeleteModal(msg, performBulkDelete);
+      } else if (window.confirm(msg)) {
+        performBulkDelete();
+      }
+    });
+
+    // Initial scan + MutationObserver so dynamically rendered/filtered tables stay synced
+    scanAndInitializeTables();
+    setTimeout(scanAndInitializeTables, 250);
+
+    let observerTimer = null;
+    if (typeof MutationObserver !== 'undefined' && document.body) {
+      const bulkObserver = new MutationObserver(function () {
+        if (observerTimer) clearTimeout(observerTimer);
+        observerTimer = setTimeout(scanAndInitializeTables, 80);
+      });
+      bulkObserver.observe(document.body, { childList: true, subtree: true });
+    }
+  })();
+
 });
 
 // =========================================================================
