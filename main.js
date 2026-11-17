@@ -5310,7 +5310,7 @@ $(document).ready(function () {
             ${formatMoney(estTotal)}
           </td>
           <td class="py-3 px-4 text-center whitespace-nowrap">
-            <select class="order-status-inline-change finset-input py-1 px-2.5 text-xs font-semibold rounded-lg border border-slate-200 dark:border-slate-700 cursor-pointer" data-id="${ord.id}" data-status="${escapeHtml((ord.status || 'Pending').toLowerCase())}">
+            <select class="order-status-inline-change py-1 px-2.5 text-xs font-semibold rounded-full cursor-pointer" data-id="${ord.id}" data-status="${escapeHtml((ord.status || 'Pending').toLowerCase())}">
               <option value="Pending" ${ord.status === 'Pending' ? 'selected' : ''}>Pending</option>
               <option value="Preparing" ${ord.status === 'Preparing' ? 'selected' : ''}>Preparing</option>
               <option value="Served" ${ord.status === 'Served' ? 'selected' : ''}>Served</option>
@@ -8375,7 +8375,15 @@ $(document).ready(function () {
       table thead th {
         text-align: left !important;
       }
-      select.order-status-inline-change {
+      select.order-status-inline-change,
+      select.order-status-inline-change:focus,
+      select.order-status-inline-change:active,
+      select.order-status-inline-change[data-status],
+      select.order-status-inline-change[data-status]:focus,
+      .dark select.order-status-inline-change,
+      .dark select.order-status-inline-change:focus,
+      .dark select.order-status-inline-change[data-status],
+      .dark select.order-status-inline-change[data-status]:focus {
         border-radius: 9999px !important;
         padding-left: 0.85rem !important;
         padding-right: 1.85rem !important;
@@ -8395,6 +8403,7 @@ $(document).ready(function () {
         -moz-appearance: none !important;
         appearance: none !important;
         cursor: pointer !important;
+        outline: none !important;
       }
       select.order-status-inline-change:hover {
         box-shadow: 0 2px 6px rgba(15, 23, 42, 0.08) !important;

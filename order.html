@@ -1202,7 +1202,15 @@
     }
 
 /* Outlined Capsule Status Dropdowns (White Body, Colored Border & Font) */
-    select.order-status-inline-change {
+    select.order-status-inline-change,
+    select.order-status-inline-change:focus,
+    select.order-status-inline-change:active,
+    select.order-status-inline-change[data-status],
+    select.order-status-inline-change[data-status]:focus,
+    .dark select.order-status-inline-change,
+    .dark select.order-status-inline-change:focus,
+    .dark select.order-status-inline-change[data-status],
+    .dark select.order-status-inline-change[data-status]:focus {
       border-radius: 9999px !important;
       padding-left: 0.85rem !important;
       padding-right: 1.85rem !important;
@@ -4763,7 +4771,7 @@
   <!-- Authentication Controller -->
   <script src="auth.js?v=20261110_07"></script>
   <!-- Main JavaScript Logic -->
-<script src="main.js?v=20261117_v60"></script>
+<script src="main.js?v=20261117_v61"></script>
 </body>
 
 </html>
