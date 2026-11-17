@@ -1885,55 +1885,57 @@
       box-shadow: 0 4px 16px -2px rgba(0, 0, 0, 0.45) !important;
     }
   
-  /* Global Table Alignment: Headings Center, All Table Details Left-aligned from same starting point */
-  table thead th,
+  /* Global Table Left Alignment: All Table Headings, Details and Content Left-aligned */
+  table,
+  table thead,
+  table tbody,
+  table tfoot,
+  table tr,
   table th,
-  .Aurelia-table-header th {
-    text-align: center !important;
-  }
-
-  table th *,
-  .Aurelia-table-header th * {
-    text-align: center !important;
-  }
-
-  table th .flex,
-  table th .inline-flex,
-  table th [class*="space-x-"],
-  table th [class*="gap-"] {
-    justify-content: center !important;
-  }
-
-  table th .flex-col {
-    align-items: center !important;
-    text-align: center !important;
+  table td,
+  table thead th,
+  table tbody td,
+  table tfoot td,
+  .Aurelia-table-header th,
+  .Aurelia-table-header td {
+    text-align: left !important;
   }
 
   table tbody td,
   table tfoot td,
   table td,
   .Aurelia-table-header td {
-    text-align: left !important;
     white-space: normal;
     word-break: break-word;
   }
 
+  /* Default table headers and cell text left-aligned */
+  table th,
   table td,
+  table th p,
   table td p,
-  table td span:not([class*="rounded-full"]):not([class*="badge"]),
-  table td div:not([class*="rounded-full"]) {
+  table th span:not([class*="justify-center"]):not([class*="rounded"]):not([class*="badge"]):not([class*="w-"]),
+  table td span:not([class*="justify-center"]):not([class*="rounded"]):not([class*="badge"]):not([class*="w-"]),
+  table th div:not([class*="justify-center"]):not([class*="rounded"]):not([class*="w-"]),
+  table td div:not([class*="justify-center"]):not([class*="rounded"]):not([class*="w-"]) {
     text-align: left !important;
   }
 
-  table td .flex,
-  table td .inline-flex,
-  table td [class*="space-x-"],
-  table td [class*="gap-"] {
+  /* Primary layout flex containers in cells align to the start/left */
+  table th > .flex,
+  table th > .inline-flex,
+  table td > .flex,
+  table td > .inline-flex,
+  table th .flex:not([class*="justify-center"]):not([class*="justify-end"]):not([class*="rounded"]):not([class*="w-"]),
+  table th .inline-flex:not([class*="justify-center"]):not([class*="justify-end"]):not([class*="rounded"]):not([class*="w-"]),
+  table td .flex:not([class*="justify-center"]):not([class*="justify-end"]):not([class*="rounded"]):not([class*="w-"]),
+  table td .inline-flex:not([class*="justify-center"]):not([class*="justify-end"]):not([class*="rounded"]):not([class*="w-"]) {
     display: flex !important;
     justify-content: flex-start !important;
     text-align: left !important;
   }
 
+  table th .flex-col,
   table td .flex-col {
     display: flex !important;
     flex-direction: column !important;
@@ -1941,22 +1943,77 @@
     text-align: left !important;
   }
 
-  table td .flex-col > *,
-  table td .inline-flex > *,
-  table td .flex > * {
+  table th .flex-col > *,
+  table td .flex-col > * {
     text-align: left !important;
   }
 
-  table td span[class*="rounded-full"],
-  table td [class*="badge"],
-  table td .bill-item-qty-input {
+  /* CRITICAL FIX: Retain internal centering for Avatars, Food Tiles, Dietary marks, Badges and Buttons */
+  table th .justify-center,
+  table td .justify-center,
+  table th [class*="justify-center"],
+  table td [class*="justify-center"],
+  table th .items-center.justify-center,
+  table td .items-center.justify-center,
+  table td [class*="rounded-full"][class*="w-"],
+  table td [class*="rounded-xl"][class*="w-"],
+  table td [class*="rounded-2xl"][class*="w-"],
+  table td [class*="rounded-lg"][class*="w-"],
+  table td [class*="rounded-md"][class*="w-"],
+  table td [class*="rounded-"][class*="h-"],
+  table td [title="Vegetarian"],
+  table td [title="Non-Vegetarian"],
+  table td [aria-label="Vegetarian"],
+  table td [aria-label="Non-Vegetarian"],
+  table td button[class*="rounded"],
+  table td a[class*="rounded"] {
+    display: inline-flex !important;
+    justify-content: center !important;
+    align-items: center !important;
     text-align: center !important;
+  }
+
+  table td [class*="badge"],
+  table td span[class*="rounded-full"] {
     display: inline-flex !important;
     align-items: center !important;
     justify-content: center !important;
+    text-align: center !important;
   }
 
+  /* Internal text, spans and SVG inside avatars, tiles, dietary badges and action buttons */
+  table th .justify-center *,
+  table td .justify-center *,
+  table th [class*="justify-center"] *,
+  table td [class*="justify-center"] *,
+  table td [class*="rounded-full"][class*="w-"] *,
+  table td [class*="rounded-xl"][class*="w-"] *,
+  table td [class*="rounded-2xl"][class*="w-"] *,
+  table td [class*="rounded-lg"][class*="w-"] *,
+  table td [class*="rounded-md"][class*="w-"] *,
+  table td [class*="rounded-"][class*="h-"] *,
+  table td [title="Vegetarian"] *,
+  table td [title="Non-Vegetarian"] *,
+  table td [aria-label="Vegetarian"] *,
+  table td [aria-label="Non-Vegetarian"] *,
+  table td [class*="badge"] *,
+  table td span[class*="rounded-full"] *,
+  table td button[class*="rounded"] * {
+    text-align: center !important;
+  }
+
+  /* Food Tile emoji specifically */
+  table td [class*="rounded-xl"][class*="w-"] > span,
+  table td [class*="rounded-2xl"][class*="w-"] > span {
+    display: inline-block !important;
+    text-align: center !important;
+    line-height: 1 !important;
+  }
+
+  /* Form inputs and select boxes */
+  table th select,
   table td select,
+  table th input:not([type="checkbox"]):not([type="radio"]):not(.bill-item-qty-input),
   table td input:not([type="checkbox"]):not([type="radio"]):not(.bill-item-qty-input) {
     text-align: left !important;
     text-align-last: left !important;
@@ -1964,9 +2021,14 @@
     margin-right: auto !important;
   }
 
+  table td .bill-item-qty-input {
+    text-align: center !important;
+  }
+
+  table th img,
+  table th svg,
   table td img,
   table td svg {
-    display: inline-block !important;
     vertical-align: middle !important;
   }
 
@@ -3179,7 +3241,7 @@
   <!-- Authentication Controller -->
   <script src="../auth.js?v=20261110_07"></script>
   <!-- Main JavaScript Logic -->
-<script src="../main.js?v=20261117_v57"></script>
+<script src="../main.js?v=20261117_v59"></script>
 </body>
 
 </html>
