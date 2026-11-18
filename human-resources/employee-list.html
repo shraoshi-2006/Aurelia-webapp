@@ -1323,6 +1323,70 @@
       z-index: 70 !important;
     }
 
+    /* Employee Roster Table: White background by default, grey background + grey shadow on hover */
+    #staff-table-card {
+      background: #FFFFFF !important;
+      border: 1px solid rgba(226, 232, 240, 0.95) !important;
+      box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.06), 0 1px 3px rgba(15, 23, 42, 0.04) !important;
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
+    }
+
+    #staff-table-card::before {
+      display: none !important;
+      content: none !important;
+    }
+
+    #page-staff-table {
+      background-color: #FFFFFF !important;
+      border-collapse: separate !important;
+      border-spacing: 0 !important;
+    }
+
+    #page-staff-tbody {
+      background-color: #FFFFFF !important;
+    }
+
+    #page-staff-tbody tr {
+      background-color: #FFFFFF !important;
+      position: relative;
+      transition: background-color 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1), transform 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    }
+
+    #page-staff-tbody tr td {
+      background-color: #FFFFFF !important;
+      transition: background-color 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    }
+
+    #page-staff-tbody tr:hover {
+      background-color: #F1F5F9 !important;
+      box-shadow: 0 8px 24px -4px rgba(15, 23, 42, 0.16), 0 3px 8px -2px rgba(15, 23, 42, 0.08) !important;
+      transform: translateY(-1px);
+      z-index: 20;
+    }
+
+    #page-staff-tbody tr:hover td {
+      background-color: #F1F5F9 !important;
+      border-color: #CBD5E1 !important;
+    }
+
+    .dark #staff-table-card {
+      background: #0F172A !important;
+      border-color: #334155 !important;
+    }
+
+    .dark #page-staff-table,
+    .dark #page-staff-tbody,
+    .dark #page-staff-tbody tr td {
+      background-color: #0F172A !important;
+    }
+
+    .dark #page-staff-tbody tr:hover,
+    .dark #page-staff-tbody tr:hover td {
+      background-color: #1E293B !important;
+      box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.5) !important;
+    }
+
     /* Subtle custom scrollbar */
     ::-webkit-scrollbar {
       width: 6px;
@@ -3190,9 +3254,9 @@
           </div>
 
           <!-- Staff Table -->
-          <div class="Aurelia-card p-0 overflow-hidden">
+          <div id="staff-table-card" class="Aurelia-card p-0 overflow-hidden bg-white dark:bg-slate-900 shadow-sm">
             <div class="overflow-x-auto">
-              <table class="w-full text-xs text-center">
+              <table id="page-staff-table" class="w-full text-xs text-center bg-white dark:bg-slate-900">
                 <thead class="bg-slate-50 dark:bg-slate-800 text-slate-500 font-semibold text-[11px] border-b border-slate-200 dark:border-slate-700">
                   <tr>
                     <th class="py-3.5 px-4 whitespace-nowrap">Employee ID</th>
@@ -3204,7 +3268,7 @@
                     <th class="py-3.5 px-4">Contact</th>
                   </tr>
                 </thead>
-                <tbody id="page-staff-tbody" class="divide-y divide-slate-100 dark:divide-slate-800">
+                <tbody id="page-staff-tbody" class="divide-y divide-slate-100 dark:divide-slate-800 bg-white dark:bg-slate-900">
                   <!-- Rendered dynamically by main.js -->
                 </tbody>
               </table>

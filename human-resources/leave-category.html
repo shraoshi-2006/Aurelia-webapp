@@ -1979,6 +1979,70 @@
     vertical-align: middle !important;
   }
 
+  /* Employee Leave Table: White background by default, grey background + grey shadow on hover */
+  #emp-leave-card {
+    background: #FFFFFF !important;
+    border: 1px solid rgba(226, 232, 240, 0.95) !important;
+    box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.06), 0 1px 3px rgba(15, 23, 42, 0.04) !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+
+  #emp-leave-card::before {
+    display: none !important;
+    content: none !important;
+  }
+
+  #page-emp-leave-table {
+    background-color: #FFFFFF !important;
+    border-collapse: separate !important;
+    border-spacing: 0 !important;
+  }
+
+  #page-emp-leave-tbody {
+    background-color: #FFFFFF !important;
+  }
+
+  #page-emp-leave-tbody tr {
+    background-color: #FFFFFF !important;
+    position: relative;
+    transition: background-color 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1), transform 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  }
+
+  #page-emp-leave-tbody tr td {
+    background-color: #FFFFFF !important;
+    transition: background-color 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  }
+
+  #page-emp-leave-tbody tr:hover {
+    background-color: #F1F5F9 !important;
+    box-shadow: 0 8px 24px -4px rgba(15, 23, 42, 0.16), 0 3px 8px -2px rgba(15, 23, 42, 0.08) !important;
+    transform: translateY(-1px);
+    z-index: 20;
+  }
+
+  #page-emp-leave-tbody tr:hover td {
+    background-color: #F1F5F9 !important;
+    border-color: #CBD5E1 !important;
+  }
+
+  .dark #emp-leave-card {
+    background: #0F172A !important;
+    border-color: #334155 !important;
+  }
+
+  .dark #page-emp-leave-table,
+  .dark #page-emp-leave-tbody,
+  .dark #page-emp-leave-tbody tr td {
+    background-color: #0F172A !important;
+  }
+
+  .dark #page-emp-leave-tbody tr:hover,
+  .dark #page-emp-leave-tbody tr:hover td {
+    background-color: #1E293B !important;
+    box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.5) !important;
+  }
+
 </style>
 </head>
 
@@ -3175,9 +3239,9 @@
           </div>
 
           <!-- SINGLE UNIFIED EMPLOYEE LEAVE TABLE (ONLY FOR EMPLOYEES) -->
-          <div class="Aurelia-card p-0 overflow-hidden shadow-sm">
+          <div id="emp-leave-card" class="Aurelia-card p-0 overflow-hidden shadow-sm bg-white dark:bg-slate-900">
             <div class="overflow-x-auto">
-              <table class="w-full text-xs text-center">
+              <table id="page-emp-leave-table" class="w-full text-xs text-center bg-white dark:bg-slate-900">
                 <thead
                   class="bg-slate-50 dark:bg-slate-800/60 text-slate-500 dark:text-slate-400 font-semibold text-[11px] border-b border-slate-200 dark:border-slate-700/60">
                   <tr>
@@ -3190,10 +3254,10 @@
                     <th class="py-3 px-3 text-center">Status</th>
                   </tr>
                 </thead>
-                <tbody id="page-emp-leave-tbody" class="divide-y divide-slate-100 dark:divide-slate-800">
+                <tbody id="page-emp-leave-tbody" class="divide-y divide-slate-100 dark:divide-slate-800 bg-white dark:bg-slate-900">
 
                   <!-- 1. Tanvi Agarwal  -->
-                  <tr class="hover:bg-slate-50/80 dark:hover:bg-slate-800/50 transition-colors"
+                  <tr class="bg-white hover:bg-slate-100/90 dark:bg-slate-900 dark:hover:bg-slate-800 transition-all cursor-pointer relative"
                     data-category="Sick / Medical Leave (SL)" data-status="onleave">
                     <td class="py-3 px-3 whitespace-nowrap">
                       <span
@@ -3237,7 +3301,7 @@
                   </tr>
 
                   <!-- 2. Adaline Lively -->
-                  <tr class="hover:bg-slate-50/80 dark:hover:bg-slate-800/50 transition-colors"
+                  <tr class="bg-white hover:bg-slate-100/90 dark:bg-slate-900 dark:hover:bg-slate-800 transition-all cursor-pointer relative"
                     data-category="Earned / Privilege Leave (EL)">
                     <td class="py-3 px-3 whitespace-nowrap">
                       <span
@@ -3280,7 +3344,7 @@
                   </tr>
 
                   <!-- 3. Vikram Malhotra -->
-                  <tr class="hover:bg-slate-50/80 dark:hover:bg-slate-800/50 transition-colors"
+                  <tr class="bg-white hover:bg-slate-100/90 dark:bg-slate-900 dark:hover:bg-slate-800 transition-all cursor-pointer relative"
                     data-category="Casual Leave (CL)">
                     <td class="py-3 px-3 whitespace-nowrap">
                       <span
@@ -3323,7 +3387,7 @@
                   </tr>
 
                   <!-- 4. Priyanka Sharma -->
-                  <tr class="hover:bg-slate-50/80 dark:hover:bg-slate-800/50 transition-colors"
+                  <tr class="bg-white hover:bg-slate-100/90 dark:bg-slate-900 dark:hover:bg-slate-800 transition-all cursor-pointer relative"
                     data-category="Compensatory Off (CO)">
                     <td class="py-3 px-3 whitespace-nowrap">
                       <span
@@ -3366,7 +3430,7 @@
                   </tr>
 
                   <!-- 5. Rohan Desai -->
-                  <tr class="hover:bg-slate-50/80 dark:hover:bg-slate-800/50 transition-colors"
+                  <tr class="bg-white hover:bg-slate-100/90 dark:bg-slate-900 dark:hover:bg-slate-800 transition-all cursor-pointer relative"
                     data-category="Casual Leave (CL)">
                     <td class="py-3 px-3 whitespace-nowrap">
                       <span
@@ -3409,7 +3473,7 @@
                   </tr>
 
                   <!-- 6. Ananya Sen -->
-                  <tr class="hover:bg-slate-50/80 dark:hover:bg-slate-800/50 transition-colors"
+                  <tr class="bg-white hover:bg-slate-100/90 dark:bg-slate-900 dark:hover:bg-slate-800 transition-all cursor-pointer relative"
                     data-category="Casual Leave (CL)">
                     <td class="py-3 px-3 whitespace-nowrap">
                       <span
@@ -3452,7 +3516,7 @@
                   </tr>
 
                   <!-- 7. Sameer Joshi -->
-                  <tr class="hover:bg-slate-50/80 dark:hover:bg-slate-800/50 transition-colors"
+                  <tr class="bg-white hover:bg-slate-100/90 dark:bg-slate-900 dark:hover:bg-slate-800 transition-all cursor-pointer relative"
                     data-category="Sick / Medical Leave (SL)">
                     <td class="py-3 px-3 whitespace-nowrap">
                       <span
@@ -3495,7 +3559,7 @@
                   </tr>
 
                   <!-- 8. Neha Pillai -->
-                  <tr class="hover:bg-slate-50/80 dark:hover:bg-slate-800/50 transition-colors"
+                  <tr class="bg-white hover:bg-slate-100/90 dark:bg-slate-900 dark:hover:bg-slate-800 transition-all cursor-pointer relative"
                     data-category="Earned / Privilege Leave (EL)">
                     <td class="py-3 px-3 whitespace-nowrap">
                       <span
@@ -3538,7 +3602,7 @@
                   </tr>
 
                   <!-- 9. Chef Rajesh Kulkarni -->
-                  <tr class="hover:bg-slate-50/80 dark:hover:bg-slate-800/50 transition-colors"
+                  <tr class="bg-white hover:bg-slate-100/90 dark:bg-slate-900 dark:hover:bg-slate-800 transition-all cursor-pointer relative"
                     data-category="Compensatory Off (CO)">
                     <td class="py-3 px-3 whitespace-nowrap">
                       <span
@@ -3581,7 +3645,7 @@
                   </tr>
 
                   <!-- 10. Tariq Mansoor -->
-                  <tr class="hover:bg-slate-50/80 dark:hover:bg-slate-800/50 transition-colors"
+                  <tr class="bg-white hover:bg-slate-100/90 dark:bg-slate-900 dark:hover:bg-slate-800 transition-all cursor-pointer relative"
                     data-category="Casual Leave (CL)">
                     <td class="py-3 px-3 whitespace-nowrap">
                       <span
@@ -3624,7 +3688,7 @@
                   </tr>
 
                   <!-- 11. Meenakshi Sundaram -->
-                  <tr class="hover:bg-slate-50/80 dark:hover:bg-slate-800/50 transition-colors"
+                  <tr class="bg-white hover:bg-slate-100/90 dark:bg-slate-900 dark:hover:bg-slate-800 transition-all cursor-pointer relative"
                     data-category="Earned / Privilege Leave (EL)">
                     <td class="py-3 px-3 whitespace-nowrap">
                       <span
@@ -3667,7 +3731,7 @@
                   </tr>
 
                   <!-- 12. Amitava Roy -->
-                  <tr class="hover:bg-slate-50/80 dark:hover:bg-slate-800/50 transition-colors"
+                  <tr class="bg-white hover:bg-slate-100/90 dark:bg-slate-900 dark:hover:bg-slate-800 transition-all cursor-pointer relative"
                     data-category="Casual Leave (CL)">
                     <td class="py-3 px-3 whitespace-nowrap">
                       <span

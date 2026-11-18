@@ -2986,7 +2986,7 @@ $(document).ready(function () {
           : '<span class="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-[#b91c1c] border-2 border-white dark:border-slate-800 rounded-full"></span>';
 
         $tbody.append(`
-          <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors">
+          <tr class="bg-white hover:bg-slate-100/90 dark:bg-slate-900 dark:hover:bg-slate-800 transition-all cursor-pointer relative">
             <td class="py-2.5 px-3">
               <div class="flex items-center space-x-2.5">
                 <div class="relative w-8 h-8 rounded-full bg-[#14213D] text-[#FCA311] font-bold text-xs flex items-center justify-center flex-shrink-0 shadow-xs">
@@ -5901,7 +5901,7 @@ $(document).ready(function () {
     } else {
       sortedItems.forEach((it, idx) => {
         $tbody.append(`
-          <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors">
+          <tr class="bg-white hover:bg-slate-100/90 dark:bg-slate-900 dark:hover:bg-slate-800 transition-all cursor-pointer relative">
             <td class="py-2.5 px-4 text-center text-slate-400 font-bold">${idx + 1}</td>
             <td class="py-2.5 px-4 font-bold text-slate-900 dark:text-white">${escapeHtml(it.name)}</td>
             <td class="py-2.5 px-4 text-slate-500 font-medium">${escapeHtml(it.category)}</td>
@@ -7026,7 +7026,7 @@ $(document).ready(function () {
         const isOnDuty = s.status === 'On Duty';
 
         $tbody.append(`
-          <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors" data-id="${escapeHtml(s.id)}">
+          <tr class="bg-white hover:bg-slate-100/90 dark:bg-slate-900 dark:hover:bg-slate-800 transition-all cursor-pointer relative" data-id="${escapeHtml(s.id)}">
             <td class="py-3.5 px-4 whitespace-nowrap">
               <span class="px-2.5 py-1 rounded text-xs font-mono font-bold bg-[#FCA311] text-black inline-block shadow-2xs">${escapeHtml(s.id)}</span>
             </td>
