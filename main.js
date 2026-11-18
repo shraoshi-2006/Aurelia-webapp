@@ -212,6 +212,121 @@ $(document).ready(function () {
   .dark table tbody tr.is-row-selected {
     background-color: rgba(252, 163, 17, 0.15) !important;
   }
+
+  /* ========================================================================= */
+  /* GLOBAL LIST TABLE ENGINE: Pure White default, Grey background + Grey shadow on hover */
+  /* ========================================================================= */
+  .Aurelia-card:has(table),
+  .aurelia-card:has(table),
+  div:has(> .overflow-x-auto > table),
+  div:has(> table) {
+    background: #FFFFFF !important;
+    border: 1px solid rgba(226, 232, 240, 0.95) !important;
+    box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.06), 0 1px 3px rgba(15, 23, 42, 0.04) !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+
+  .Aurelia-card:has(table)::before,
+  .aurelia-card:has(table)::before,
+  div:has(> .overflow-x-auto > table)::before,
+  div:has(> table)::before {
+    display: none !important;
+    content: none !important;
+  }
+
+  table:not(#print-invoice-area table) {
+    background-color: #FFFFFF !important;
+    border-collapse: separate !important;
+    border-spacing: 0 !important;
+  }
+
+  table:not(#print-invoice-area table) thead tr {
+    background-color: #F8FAFC !important;
+  }
+
+  table:not(#print-invoice-area table) tbody {
+    background-color: #FFFFFF !important;
+  }
+
+  table:not(#print-invoice-area table) tbody tr {
+    background-color: #FFFFFF !important;
+    position: relative;
+    transition: background-color 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1), transform 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  }
+
+  table:not(#print-invoice-area table) tbody tr td {
+    background-color: #FFFFFF !important;
+    transition: background-color 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  }
+
+  table:not(#print-invoice-area table) tbody tr:hover {
+    background-color: #F1F5F9 !important;
+    box-shadow: 0 8px 24px -4px rgba(15, 23, 42, 0.16), 0 3px 8px -2px rgba(15, 23, 42, 0.08) !important;
+    transform: translateY(-1px);
+    z-index: 20;
+  }
+
+  table:not(#print-invoice-area table) tbody tr:hover td {
+    background-color: #F1F5F9 !important;
+    border-color: #CBD5E1 !important;
+  }
+
+  /* Retain selection highlight for selected rows */
+  table:not(#print-invoice-area table) tbody tr.is-row-selected,
+  table:not(#print-invoice-area table) tbody tr.is-row-selected td {
+    background-color: rgba(252, 163, 17, 0.12) !important;
+  }
+  table:not(#print-invoice-area table) tbody tr.is-row-selected:hover,
+  table:not(#print-invoice-area table) tbody tr.is-row-selected:hover td {
+    background-color: rgba(252, 163, 17, 0.18) !important;
+  }
+
+  /* Dark mode overrides for all tables */
+  .dark .Aurelia-card:has(table),
+  .dark .aurelia-card:has(table),
+  .dark div:has(> .overflow-x-auto > table),
+  .dark div:has(> table) {
+    background: #0F172A !important;
+    border-color: #334155 !important;
+  }
+
+  .dark table:not(#print-invoice-area table),
+  .dark table:not(#print-invoice-area table) thead tr {
+    background-color: #1E293B !important;
+  }
+
+  .dark table:not(#print-invoice-area table) tbody,
+  .dark table:not(#print-invoice-area table) tbody tr,
+  .dark table:not(#print-invoice-area table) tbody tr td {
+    background-color: #0F172A !important;
+  }
+
+  .dark table:not(#print-invoice-area table) tbody tr:hover,
+  .dark table:not(#print-invoice-area table) tbody tr:hover td {
+    background-color: #1E293B !important;
+    box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.5) !important;
+  }
+
+  .dark table:not(#print-invoice-area table) tbody tr.is-row-selected,
+  .dark table:not(#print-invoice-area table) tbody tr.is-row-selected td {
+    background-color: rgba(252, 163, 17, 0.18) !important;
+  }
+  .dark table:not(#print-invoice-area table) tbody tr.is-row-selected:hover,
+  .dark table:not(#print-invoice-area table) tbody tr.is-row-selected:hover td {
+    background-color: rgba(252, 163, 17, 0.25) !important;
+  }
+
+  @media print {
+    table:not(#print-invoice-area table),
+    table:not(#print-invoice-area table) tbody,
+    table:not(#print-invoice-area table) tbody tr,
+    table:not(#print-invoice-area table) tbody tr td {
+      background-color: transparent !important;
+      box-shadow: none !important;
+      transform: none !important;
+    }
+  }
   @media print {
     .table-bulk-action-bar,
     th.bulk-cb-cell,
