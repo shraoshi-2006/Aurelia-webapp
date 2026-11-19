@@ -7154,39 +7154,40 @@ $(document).ready(function () {
           avatarStyle = 'linear-gradient(135deg, #14213D 0%, #7e22ce 60%, #FCA311 100%)';
         }
 
-        const avatarHtml = `<div class="w-9 h-9 rounded-xl flex items-center justify-center font-black text-xs text-white shadow-xs border border-white/20 flex-shrink-0" style="background: ${avatarStyle};">${avatarBadgeText}</div>`;
+        const avatarHtml = `<div class="w-8 h-8 md:w-9 md:h-9 rounded-xl flex items-center justify-center font-black text-xs md:text-sm text-white shadow-xs border border-white/20 flex-shrink-0" style="background: ${avatarStyle};">${avatarBadgeText}</div>`;
         const isOnDuty = s.status === 'On Duty';
+        const rowBg = idx % 2 === 0 ? 'bg-white' : 'bg-slate-100/80 dark:bg-slate-800/60';
 
         $tbody.append(`
-          <tr class="bg-white hover:bg-slate-100/90 dark:bg-slate-900 dark:hover:bg-slate-800 transition-all cursor-pointer relative" data-id="${escapeHtml(s.id)}">
-            <td class="py-3.5 px-4 whitespace-nowrap">
-              <span class="px-2.5 py-1 rounded text-xs font-mono font-bold bg-[#FCA311] text-black inline-block shadow-2xs">${escapeHtml(s.id)}</span>
+          <tr class="${rowBg} hover:bg-slate-100 hover:shadow-md dark:hover:bg-slate-800 transition-all cursor-pointer relative" data-id="${escapeHtml(s.id)}">
+            <td class="py-2.5 px-2.5 sm:py-3.5 sm:px-4 whitespace-nowrap">
+              <span class="px-2 py-0.5 md:px-2.5 md:py-1 rounded text-xs md:text-sm font-mono font-bold bg-[#FCA311] text-black inline-block shadow-2xs">${escapeHtml(s.id)}</span>
             </td>
-            <td class="py-3.5 px-4 whitespace-nowrap">
-              <div class="flex items-center space-x-3">
+            <td class="py-2.5 px-2.5 sm:py-3.5 sm:px-4 whitespace-nowrap">
+              <div class="flex items-center space-x-2.5 md:space-x-3">
                 ${avatarHtml}
                 <div>
-                  <div class="font-bold text-slate-900 dark:text-white text-xs">${escapeHtml(s.name)}</div>
-                  <div class="text-[10px] text-slate-400">${escapeHtml(s.station || s.role)}</div>
+                  <div class="font-bold text-slate-900 dark:text-white text-xs md:text-sm">${escapeHtml(s.name)}</div>
+                  <div class="text-[10px] md:text-xs text-slate-400">${escapeHtml(s.station || s.role)}</div>
                 </div>
               </div>
             </td>
-            <td class="py-3.5 px-4 whitespace-nowrap">
-              <div class="font-semibold text-slate-800 dark:text-slate-200 text-xs">${escapeHtml(s.role)}</div>
-              <div class="text-[10px] text-slate-400">${escapeHtml(s.department)}</div>
+            <td class="py-2.5 px-2.5 sm:py-3.5 sm:px-4 whitespace-nowrap">
+              <div class="font-semibold text-slate-800 dark:text-slate-200 text-xs md:text-sm">${escapeHtml(s.role)}</div>
+              <div class="text-[10px] md:text-xs text-slate-400">${escapeHtml(s.department)}</div>
             </td>
-            <td class="py-3.5 px-4 font-medium text-slate-600 dark:text-slate-300 text-xs whitespace-nowrap">
+            <td class="py-2.5 px-2.5 sm:py-3.5 sm:px-4 font-medium text-slate-600 dark:text-slate-300 text-xs md:text-sm whitespace-nowrap">
               ${escapeHtml(s.station)}
             </td>
-            <td class="py-3.5 px-4 font-mono text-xs text-slate-500 dark:text-slate-400 whitespace-nowrap">
+            <td class="py-2.5 px-2.5 sm:py-3.5 sm:px-4 font-mono text-xs md:text-sm text-slate-500 dark:text-slate-400 whitespace-nowrap">
               ${escapeHtml(s.shift)}
             </td>
-            <td class="py-3.5 px-4 text-center whitespace-nowrap">
-              <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold ${isOnDuty ? 'bg-[#15803d] text-white' : 'bg-[#b91c1c] text-white'} shadow-2xs">
+            <td class="py-2.5 px-2.5 sm:py-3.5 sm:px-4 text-center whitespace-nowrap">
+              <span class="inline-flex items-center px-2 py-0.5 md:px-2.5 md:py-0.5 rounded-full text-[10px] md:text-xs font-semibold ${isOnDuty ? 'bg-[#15803d] text-white' : 'bg-[#b91c1c] text-white'} shadow-2xs">
                 ${escapeHtml(s.status)}
               </span>
             </td>
-            <td class="py-3.5 px-4 text-slate-500 font-mono text-xs whitespace-nowrap">
+            <td class="py-2.5 px-2.5 sm:py-3.5 sm:px-4 text-slate-500 font-mono text-xs md:text-sm whitespace-nowrap">
               ${escapeHtml(s.phone)}
             </td>
           </tr>
