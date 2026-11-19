@@ -368,6 +368,15 @@
     #mobile-drawer-backdrop {
       z-index: 45 !important;
     }
+        /* Mobile responsive viewport boundary & overflow protection */
+    html, body {
+      overflow-x: hidden !important;
+      max-width: 100vw !important;
+    }
+    #app-dashboard-wrapper, #main-app-content {
+      overflow-x: hidden !important;
+      max-width: 100% !important;
+    }
     #mobile-user-menu-backdrop {
       z-index: 9998 !important;
     }

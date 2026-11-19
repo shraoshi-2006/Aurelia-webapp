@@ -3676,25 +3676,25 @@ $(document).ready(function () {
           <td class="py-3 px-4 whitespace-nowrap">
             <span class="px-2.5 py-1 rounded text-xs font-mono font-bold bg-[#FCA311] text-black inline-block shadow-2xs whitespace-nowrap">${escapeHtml(row.id)}</span>
           </td>
-          <td class="py-3 px-4">
+          <td class="py-3 px-4 whitespace-nowrap">
             <div class="flex items-center space-x-2.5">
               <div class="w-7 h-7 rounded-full ${row.avatarBg} flex items-center justify-center text-[10px] font-bold flex-shrink-0 shadow-xs">${escapeHtml(row.initials)}</div>
-              <div class="flex flex-col">
-                <span class="font-semibold text-slate-900 dark:text-white leading-tight">${escapeHtml(row.name)}</span>
-                <span class="text-[10px] text-slate-500 dark:text-slate-400">${escapeHtml(row.role)}</span>
+              <div class="flex flex-col text-left">
+                <span class="font-semibold text-slate-900 dark:text-white leading-tight whitespace-nowrap">${escapeHtml(row.name)}</span>
+                <span class="text-[10px] text-slate-500 dark:text-slate-400 whitespace-nowrap">${escapeHtml(row.role)}</span>
               </div>
             </div>
           </td>
-          <td class="py-3 px-4">
-            <div class="flex flex-col text-xs">
-              <span class="text-slate-800 dark:text-slate-200 font-medium">${escapeHtml(row.email)}</span>
-              <span class="text-slate-500 dark:text-slate-400 text-[11px] font-mono">${escapeHtml(row.phone)}</span>
+          <td class="py-3 px-4 whitespace-nowrap">
+            <div class="flex flex-col text-xs text-left">
+              <span class="text-slate-800 dark:text-slate-200 font-medium whitespace-nowrap">${escapeHtml(row.email)}</span>
+              <span class="text-slate-500 dark:text-slate-400 text-[11px] font-mono whitespace-nowrap">${escapeHtml(row.phone)}</span>
             </div>
           </td>
-          <td class="py-3 px-4">
+          <td class="py-3 px-4 whitespace-nowrap">
             <div class="flex items-center space-x-2">
               ${deviceIcon}
-              <span class="text-slate-700 dark:text-slate-300 font-medium text-xs">${escapeHtml(row.deviceName)}</span>
+              <span class="text-slate-700 dark:text-slate-300 font-medium text-xs whitespace-nowrap">${escapeHtml(row.deviceName)}</span>
             </div>
           </td>
         </tr>
@@ -3779,25 +3779,25 @@ $(document).ready(function () {
           <td class="py-3 px-3 whitespace-nowrap">
             <span class="px-2.5 py-1 rounded text-xs font-mono font-bold bg-[#FCA311] text-black inline-block shadow-2xs whitespace-nowrap">${escapeHtml(row.id)}</span>
           </td>
-          <td class="py-3 px-3">
+          <td class="py-3 px-3 whitespace-nowrap">
             <div class="flex items-center space-x-2.5">
               <div class="w-7 h-7 rounded-full ${row.avatarBg} flex items-center justify-center text-[10px] font-bold flex-shrink-0 shadow-xs">${escapeHtml(row.initials)}</div>
-              <div class="flex flex-col">
+              <div class="flex flex-col text-left">
                 <span class="font-semibold text-slate-900 dark:text-white leading-tight whitespace-nowrap">${escapeHtml(row.name)}</span>
                 <span class="text-[10px] text-slate-500 dark:text-slate-400 whitespace-nowrap">${escapeHtml(row.role)}</span>
               </div>
             </div>
           </td>
-          <td class="py-3 px-3">
-            <div class="flex flex-col text-xs">
-              <span class="text-slate-800 dark:text-slate-200 font-medium">${escapeHtml(row.email)}</span>
-              <span class="text-slate-500 dark:text-slate-400 text-[11px] font-mono">${escapeHtml(row.phone)}</span>
+          <td class="py-3 px-3 whitespace-nowrap">
+            <div class="flex flex-col text-xs text-left">
+              <span class="text-slate-800 dark:text-slate-200 font-medium whitespace-nowrap">${escapeHtml(row.email)}</span>
+              <span class="text-slate-500 dark:text-slate-400 text-[11px] font-mono whitespace-nowrap">${escapeHtml(row.phone)}</span>
             </div>
           </td>
-          <td class="py-3 px-3">
+          <td class="py-3 px-3 whitespace-nowrap">
             <div class="flex items-center space-x-2">
               ${deviceIcon}
-              <span class="text-slate-700 dark:text-slate-300 font-medium text-xs">${escapeHtml(row.deviceName)}</span>
+              <span class="text-slate-700 dark:text-slate-300 font-medium text-xs whitespace-nowrap">${escapeHtml(row.deviceName)}</span>
             </div>
           </td>
           <td class="py-3 px-3 whitespace-nowrap">
