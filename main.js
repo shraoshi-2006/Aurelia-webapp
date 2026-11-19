@@ -8679,10 +8679,16 @@ $(document).ready(function () {
 
   function applyThemeColors(sidebarBg, cardBorder) {
     const root = document.documentElement;
-    const isDefaultBorder = !cardBorder || cardBorder.includes('rgba') || cardBorder === '#FFFFFF' || cardBorder.toLowerCase() === '#ffffff';
-    const rimBgValue = isDefaultBorder
-      ? 'linear-gradient(135deg, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0.5) 30%, rgba(255, 255, 255, 0.1) 65%, rgba(255, 255, 255, 0.75) 100%)'
+    const isDefaultBorder = !cardBorder || cardBorder.includes('rgba');
+    const rimBgValue = isDefaultBorder 
+      ? 'linear-gradient(135deg, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0.5) 30%, rgba(255, 255, 255, 0.1) 65%, rgba(255, 255, 255, 0.75) 100%)' 
       : cardBorder;
+
+    // Match primary button color (e.g. "Click here to see ->", "+ New Bill", "Save") to Card Border Color
+    const btnBg = isDefaultBorder ? '#FCA311' : cardBorder;
+    const btnIsLight = isColorLight(btnBg);
+    const btnText = btnIsLight ? '#000000' : '#FFFFFF';
+    const btnBorder = btnIsLight ? 'rgba(0, 0, 0, 0.15)' : 'rgba(255, 255, 255, 0.25)';
 
     if (sidebarBg) {
       root.style.setProperty('--aurelia-sidebar-bg', sidebarBg);
@@ -8691,6 +8697,8 @@ $(document).ready(function () {
       root.style.setProperty('--aurelia-card-border', cardBorder);
       root.style.setProperty('--aurelia-card-border-hover', cardBorder);
       root.style.setProperty('--aurelia-card-rim-bg', rimBgValue);
+      root.style.setProperty('--aurelia-btn-primary-bg', btnBg);
+      root.style.setProperty('--aurelia-btn-primary-text', btnText);
     }
 
     // Dynamic style tag override to guarantee instant application across all elements
@@ -8707,6 +8715,8 @@ $(document).ready(function () {
         --aurelia-card-border: ${cardBorder} !important;
         --aurelia-card-border-hover: ${cardBorder} !important;
         --aurelia-card-rim-bg: ${rimBgValue} !important;
+        --aurelia-btn-primary-bg: ${btnBg} !important;
+        --aurelia-btn-primary-text: ${btnText} !important;
       }
       #app-sidebar,
       #mobile-user-menu-drawer,
@@ -8746,11 +8756,45 @@ $(document).ready(function () {
       .glass-money-flow::before {
         background: ${rimBgValue} !important;
       }
+      .btn-Aurelia-primary,
+      .btn-aurelia-primary,
+      .btn-finset-primary,
+      .btn-view-order-items,
+      .btn-order-to-bill,
+      .quick-nav-bill,
+      #btn-theme-save,
+      #btn-save-profile,
+      #btn-confirm-reset-action,
+      button.btn-finset-primary,
+      button.btn-Aurelia-primary {
+        background: ${btnBg} !important;
+        background-color: ${btnBg} !important;
+        color: ${btnText} !important;
+        border-color: ${btnBorder} !important;
+      }
+      .btn-Aurelia-primary *,
+      .btn-aurelia-primary *,
+      .btn-finset-primary *,
+      .btn-view-order-items *,
+      .btn-order-to-bill *,
+      .quick-nav-bill * {
+        color: ${btnText} !important;
+      }
+      .btn-Aurelia-primary:hover,
+      .btn-aurelia-primary:hover,
+      .btn-finset-primary:hover,
+      .btn-view-order-items:hover,
+      .btn-order-to-bill:hover,
+      .quick-nav-bill:hover,
+      #btn-theme-save:hover {
+        filter: brightness(0.92) !important;
+        color: ${btnText} !important;
+      }
     `;
 
     // Apply inline style directly to ensure no specificity clashes
     const $sidebarTargets = $('#app-sidebar, #mobile-user-menu-drawer, #mobile-drawer, #app-mobile-header, #btn-sidebar-collapse');
-    $sidebarTargets.each(function () {
+    $sidebarTargets.each(function() {
       this.style.setProperty('background', sidebarBg, 'important');
       this.style.setProperty('background-color', sidebarBg, 'important');
     });
@@ -8761,9 +8805,15 @@ $(document).ready(function () {
       $('#app-sidebar, #mobile-user-menu-drawer').removeClass('sidebar-light-mode');
     }
 
-    $('.Aurelia-card, .aurelia-card, .finset-card, .spatial-card, #section-dashboard .Aurelia-card, #main-app-content .Aurelia-card, .glass-money-flow').each(function () {
+    $('.Aurelia-card, .aurelia-card, .finset-card, .spatial-card, #section-dashboard .Aurelia-card, #main-app-content .Aurelia-card, .glass-money-flow').each(function() {
       this.style.setProperty('border-color', cardBorder, 'important');
       this.style.setProperty('border-width', '2px', 'important');
+    });
+
+    $('.btn-Aurelia-primary, .btn-aurelia-primary, .btn-finset-primary, .btn-view-order-items, .btn-order-to-bill, .quick-nav-bill, #btn-theme-save').each(function() {
+      this.style.setProperty('background', btnBg, 'important');
+      this.style.setProperty('background-color', btnBg, 'important');
+      this.style.setProperty('color', btnText, 'important');
     });
   }
 
