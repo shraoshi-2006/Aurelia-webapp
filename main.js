@@ -1873,46 +1873,49 @@ $(document).ready(function () {
   $(document).on('click', '.btn-sidebar-trigger', openSidebar);
   $(document).on('click', '#mobile-drawer-backdrop, #btn-sidebar-close-mobile', closeSidebar);
 
-  // Mobile 3-Lines Header Toggle: Opens/Closes the floating Quick Capsule (#mobile-quick-popup)
+  // Mobile 3-Lines User Menu Drawer (Pure Path / Image 1 style: Notifications, Settings, Profile ONLY)
+  function openMobileUserMenu() {
+    $('#mobile-user-menu-backdrop').removeClass('hidden');
+    $('#mobile-user-menu-drawer').removeClass('-translate-x-full');
+    $('body').addClass('overflow-hidden');
+  }
+
+  function closeMobileUserMenu() {
+    $('#mobile-user-menu-drawer').addClass('-translate-x-full');
+    $('#mobile-user-menu-backdrop').addClass('hidden');
+    $('body').removeClass('overflow-hidden');
+  }
+
   $(document).on('click', '#btn-mobile-more', function (e) {
     e.preventDefault();
     e.stopPropagation();
-    $('#mobile-quick-popup').toggleClass('hidden');
+    openMobileUserMenu();
   });
 
-  // Close floating Quick Capsule when clicking anywhere outside
-  $(document).on('click', function (e) {
-    if (!$(e.target).closest('#btn-mobile-more, #mobile-quick-popup').length) {
-      $('#mobile-quick-popup').addClass('hidden');
-    }
-  });
-
-  // Mobile Quick Capsule items (Notifications, Settings, Profile)
-  $(document).on('click', '#btn-mobile-popup-notifications, #btn-sidebar-notifications-mobile', function (e) {
+  $(document).on('click', '#btn-close-mobile-user-menu, #mobile-user-menu-backdrop', function (e) {
     e.preventDefault();
-    e.stopPropagation();
-    $('#mobile-quick-popup').addClass('hidden');
-    closeSidebar();
+    closeMobileUserMenu();
+  });
+
+  $(document).on('click', '#menu-item-notifications', function (e) {
+    e.preventDefault();
+    closeMobileUserMenu();
     setTimeout(() => {
       $('#btn-top-notifications').trigger('click');
     }, 150);
   });
 
-  $(document).on('click', '#btn-mobile-popup-settings, #btn-sidebar-settings-mobile', function (e) {
+  $(document).on('click', '#menu-item-settings', function (e) {
     e.preventDefault();
-    e.stopPropagation();
-    $('#mobile-quick-popup').addClass('hidden');
-    closeSidebar();
+    closeMobileUserMenu();
     setTimeout(() => {
       $('#btn-top-settings').trigger('click');
     }, 150);
   });
 
-  $(document).on('click', '#btn-mobile-popup-profile, #sidebar-mobile-profile', function (e) {
+  $(document).on('click', '#menu-item-profile', function (e) {
     e.preventDefault();
-    e.stopPropagation();
-    $('#mobile-quick-popup').addClass('hidden');
-    closeSidebar();
+    closeMobileUserMenu();
     setTimeout(() => {
       $('#topbar-profile-container button, #user-profile-capsule').first().trigger('click');
     }, 150);
