@@ -369,6 +369,14 @@ $(document).ready(function () {
     z-index: 60 !important;
   }
 
+  @media (max-width: 1023px) {
+    #btn-sidebar-collapse {
+      background: #FCA311 !important;
+      color: #000000 !important;
+      box-shadow: 2px 0 10px rgba(252, 163, 17, 0.45) !important;
+    }
+  }
+
   /* Spacing for mobile topbar right button (+ New Bill) */
   #app-mobile-header {
     padding-left: 1rem !important;
@@ -6179,9 +6187,17 @@ $(document).ready(function () {
     }
   });
 
-  // Notification button action
-  $('#btn-top-notifications').on('click', function () {
+  // Notification button action (Desktop & Mobile)
+  $(document).on('click', '#btn-top-notifications, #btn-mobile-notifications, .btn-notifications-trigger', function () {
     showToast('Kitchen Ticket ORD-0082 (Room 304) is preparing. Front desk audit session active.', 'info');
+  });
+
+  // Mobile Topbar Settings & Profile buttons
+  $(document).on('click', '#btn-mobile-settings, #btn-mobile-profile', function (e) {
+    e.preventDefault();
+    const target = $(this).attr('data-target') || 'settings';
+    window.location.hash = target;
+    if (typeof switchSection === 'function') switchSection(target);
   });
 
   // Device ID Badge (Default DEV08, click to copy)
