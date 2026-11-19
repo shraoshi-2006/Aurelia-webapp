@@ -30,9 +30,9 @@
               '#app-sidebar,#mobile-user-menu-drawer,#mobile-drawer,.mobile-sidebar-drawer,#app-mobile-header,#btn-sidebar-collapse,#app-sidebar.is-collapsed #btn-sidebar-collapse{background:' + sb + ' !important;background-color:' + sb + ' !important;}' +
               '.Aurelia-card,.aurelia-card,.finset-card,.spatial-card,#section-dashboard .Aurelia-card,#main-app-content .Aurelia-card,.glass-money-flow{border:2px solid ' + cb + ' !important;border-color:' + cb + ' !important;}' +
               '.Aurelia-card::before,.aurelia-card::before,.finset-card::before,.spatial-card::before,#section-dashboard .Aurelia-card::before,#main-app-content .Aurelia-card::before,.glass-money-flow::before{background:' + rim + ' !important;}' +
-              '.btn-Aurelia-primary,.btn-aurelia-primary,.btn-finset-primary,.btn-view-order-items,.btn-order-to-bill,.quick-nav-bill,#btn-theme-save,#btn-save-profile,#btn-confirm-reset-action,button.btn-finset-primary,button.btn-Aurelia-primary{background:' + btnBg + ' !important;background-color:' + btnBg + ' !important;color:' + btnText + ' !important;border-color:' + btnBorder + ' !important;}' +
+              '.btn-Aurelia-primary,.btn-aurelia-primary,.btn-finset-primary,.btn-view-order-items,.btn-order-to-bill,.quick-nav-bill,#btn-theme-save,#btn-save-profile,#btn-confirm-reset-action,button.btn-finset-primary,button.btn-Aurelia-primary{background:' + btnBg + ' !important;background-color:' + btnBg + ' !important;color:' + btnText + ' !important;border-color:' + btnBorder + ' !important;box-shadow:none !important;}' +
               '.btn-Aurelia-primary *,.btn-aurelia-primary *,.btn-finset-primary *,.btn-view-order-items *,.btn-order-to-bill *,.quick-nav-bill *{color:' + btnText + ' !important;}' +
-              '.btn-Aurelia-primary:hover,.btn-aurelia-primary:hover,.btn-finset-primary:hover,.btn-view-order-items:hover,.btn-order-to-bill:hover,.quick-nav-bill:hover,#btn-theme-save:hover{filter:brightness(0.92) !important;color:' + btnText + ' !important;}';
+              '.btn-Aurelia-primary:hover,.btn-aurelia-primary:hover,.btn-finset-primary:hover,.btn-view-order-items:hover,.btn-order-to-bill:hover,.quick-nav-bill:hover,#btn-theme-save:hover{filter:brightness(0.92) !important;color:' + btnText + ' !important;box-shadow:none !important;}.btn-Aurelia-primary:active,.btn-aurelia-primary:active,.btn-finset-primary:active{box-shadow:none !important;}';
             document.head.appendChild(st);
           }
         } catch(e){}
@@ -156,8 +156,8 @@
           boxShadow: {
             'card': '0 2px 14px 0 rgba(20, 33, 61, 0.04)',
             'card-hover': '0 8px 30px 0 rgba(20, 33, 61, 0.08)',
-            'purple': '0 4px 16px -2px rgba(252, 163, 17, 0.35)',
-            'amber': '0 4px 16px -2px rgba(252, 163, 17, 0.35)',
+            'purple': 'none',
+            'amber': 'none',
             'navy': '0 4px 16px -2px rgba(20, 33, 61, 0.35)'
           }
         }
@@ -369,7 +369,7 @@
       background: #FCA311 !important;
       color: #000000 !important;
       border-color: #FCA311 !important;
-      box-shadow: 0 4px 14px rgba(252, 163, 17, 0.45) !important;
+      box-shadow: none !important;
       transform: translate(2px, -2px) rotate(12deg) scale(1.08) !important;
     }
 
@@ -507,7 +507,7 @@
       padding: 9px 18px;
       font-size: 13px;
       font-weight: 700;
-      box-shadow: 0 4px 14px rgba(252, 163, 17, 0.35) !important;
+      box-shadow: none !important;
       transition: all 0.18s cubic-bezier(0.4, 0, 0.2, 1);
       display: inline-flex;
       align-items: center;
@@ -522,7 +522,7 @@
     .btn-finset-primary:hover {
       background: #E5920A !important;
       color: #000000 !important;
-      box-shadow: 0 6px 20px rgba(252, 163, 17, 0.45) !important;
+      box-shadow: none !important;
       transform: translateY(-1px);
     }
 
@@ -558,7 +558,7 @@
       border-color: #FCA311 !important;
       color: #14213D !important;
       background: #FDF9F2 !important;
-      box-shadow: 0 2px 8px rgba(252, 163, 17, 0.2) !important;
+      box-shadow: none !important;
     }
 
     /* Danger Pill Button */
@@ -2531,7 +2531,7 @@
             title="Aurelia Hotel &amp; Restaurant">
             <!-- Aurelia Gold Medallion Mark -->
             <div id="sidebar-logo-container"
-              class="w-11 h-11 rounded-full flex items-center justify-center flex-shrink-0 transition-transform duration-300 group-hover:scale-105 shadow-md shadow-amber-500/25">
+              class="w-11 h-11 rounded-full flex items-center justify-center flex-shrink-0 transition-transform duration-300 group-hover:scale-105 shadow-md">
               <img id="sidebar-logo-mark" src="../assets/aurelia-mark.svg" alt="Aurelia Emblem"
                 class="w-11 h-11 rounded-full object-contain">
             </div>
@@ -3029,7 +3029,7 @@
       <p class="text-xs text-slate-400">Formal hotel salary statement with itemized earnings, statutory withholdings & verified seal</p>
     </div>
     <div class="flex items-center space-x-2.5">
-      <button type="button" id="btn-print-pay-slip" onclick="printPaySlipDirectly(event)" class="btn-Aurelia-primary text-xs py-2 px-3.5 flex items-center space-x-1.5 cursor-pointer shadow-sm shadow-[#FCA311]/20">
+      <button type="button" id="btn-print-pay-slip" onclick="printPaySlipDirectly(event)" class="btn-Aurelia-primary text-xs py-2 px-3.5 flex items-center space-x-1.5 cursor-pointer shadow-sm">
         <svg class="w-4 h-4 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6.72 13.829c-.24.03-.48.062-.72.096m.72-.096a42.415 42.415 0 0110.56 0m-10.56 0L6.34 18m10.94-4.171c.24.03.48.062.72.096m-.72-.096L17.66 18m0 0l.229 2.523a1.125 1.125 0 01-1.12 1.227H7.231c-.662 0-1.18-.568-1.12-1.227L6.34 18m11.32 0c.268-.07.534-.144.798-.222A2.25 2.25 0 0020.25 15.6V10.5a2.25 2.25 0 00-2.25-2.25h-12A2.25 2.25 0 003.75 10.5v5.1a2.25 2.25 0 001.792 2.178c.264.078.53.152.798.222" /></svg>
         <span>Print Pay Slip</span>
       </button>
@@ -3113,7 +3113,7 @@
     <div class="flex flex-row items-center justify-between pb-6 border-b-2 border-[#14213D] gap-4">
       <div class="flex items-center space-x-3.5 min-w-0">
         <!-- Aurelia Vector Gold Emblem Logo (Direct Inline SVG for 100% PDF & Canvas Fidelity) -->
-        <svg viewBox="0 0 200 200" class="w-12 h-12 rounded-full shrink-0 shadow-md shadow-amber-500/20" style="width: 48px; height: 48px; min-width: 48px; min-height: 48px; display: inline-block;" role="img" aria-label="Aurelia Emblem">
+        <svg viewBox="0 0 200 200" class="w-12 h-12 rounded-full shrink-0 shadow-md" style="width: 48px; height: 48px; min-width: 48px; min-height: 48px; display: inline-block;" role="img" aria-label="Aurelia Emblem">
           <circle cx="100" cy="100" r="95" fill="#FCA311"/>
           <circle cx="100" cy="100" r="86" fill="none" stroke="#14213D" stroke-width="2.2"/>
           <path d="M58 162 L100 46 L142 162" fill="none" stroke="#14213D" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
@@ -3935,7 +3935,7 @@
   <!-- Authentication Controller -->
   <script src="../auth.js?v=20261110_07"></script>
   <!-- Main JavaScript Logic -->
-  <script src="../main.js?v=20261119_v64"></script>
+  <script src="../main.js?v=20261119_v65"></script>
 </body>
 
 </html>

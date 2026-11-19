@@ -30,9 +30,9 @@
               '#app-sidebar,#mobile-user-menu-drawer,#mobile-drawer,.mobile-sidebar-drawer,#app-mobile-header,#btn-sidebar-collapse,#app-sidebar.is-collapsed #btn-sidebar-collapse{background:' + sb + ' !important;background-color:' + sb + ' !important;}' +
               '.Aurelia-card,.aurelia-card,.finset-card,.spatial-card,#section-dashboard .Aurelia-card,#main-app-content .Aurelia-card,.glass-money-flow{border:2px solid ' + cb + ' !important;border-color:' + cb + ' !important;}' +
               '.Aurelia-card::before,.aurelia-card::before,.finset-card::before,.spatial-card::before,#section-dashboard .Aurelia-card::before,#main-app-content .Aurelia-card::before,.glass-money-flow::before{background:' + rim + ' !important;}' +
-              '.btn-Aurelia-primary,.btn-aurelia-primary,.btn-finset-primary,.btn-view-order-items,.btn-order-to-bill,.quick-nav-bill,#btn-theme-save,#btn-save-profile,#btn-confirm-reset-action,button.btn-finset-primary,button.btn-Aurelia-primary{background:' + btnBg + ' !important;background-color:' + btnBg + ' !important;color:' + btnText + ' !important;border-color:' + btnBorder + ' !important;}' +
+              '.btn-Aurelia-primary,.btn-aurelia-primary,.btn-finset-primary,.btn-view-order-items,.btn-order-to-bill,.quick-nav-bill,#btn-theme-save,#btn-save-profile,#btn-confirm-reset-action,button.btn-finset-primary,button.btn-Aurelia-primary{background:' + btnBg + ' !important;background-color:' + btnBg + ' !important;color:' + btnText + ' !important;border-color:' + btnBorder + ' !important;box-shadow:none !important;}' +
               '.btn-Aurelia-primary *,.btn-aurelia-primary *,.btn-finset-primary *,.btn-view-order-items *,.btn-order-to-bill *,.quick-nav-bill *{color:' + btnText + ' !important;}' +
-              '.btn-Aurelia-primary:hover,.btn-aurelia-primary:hover,.btn-finset-primary:hover,.btn-view-order-items:hover,.btn-order-to-bill:hover,.quick-nav-bill:hover,#btn-theme-save:hover{filter:brightness(0.92) !important;color:' + btnText + ' !important;}';
+              '.btn-Aurelia-primary:hover,.btn-aurelia-primary:hover,.btn-finset-primary:hover,.btn-view-order-items:hover,.btn-order-to-bill:hover,.quick-nav-bill:hover,#btn-theme-save:hover{filter:brightness(0.92) !important;color:' + btnText + ' !important;box-shadow:none !important;}.btn-Aurelia-primary:active,.btn-aurelia-primary:active,.btn-finset-primary:active{box-shadow:none !important;}';
             document.head.appendChild(st);
           }
         } catch(e){}
@@ -156,8 +156,8 @@
           boxShadow: {
             'card': '0 2px 14px 0 rgba(20, 33, 61, 0.04)',
             'card-hover': '0 8px 30px 0 rgba(20, 33, 61, 0.08)',
-            'purple': '0 4px 16px -2px rgba(252, 163, 17, 0.35)',
-            'amber': '0 4px 16px -2px rgba(252, 163, 17, 0.35)',
+            'purple': 'none',
+            'amber': 'none',
             'navy': '0 4px 16px -2px rgba(20, 33, 61, 0.35)'
           }
         }
@@ -369,7 +369,7 @@
       background: #FCA311 !important;
       color: #000000 !important;
       border-color: #FCA311 !important;
-      box-shadow: 0 4px 14px rgba(252, 163, 17, 0.45) !important;
+      box-shadow: none !important;
       transform: translate(2px, -2px) rotate(12deg) scale(1.08) !important;
     }
 
@@ -498,7 +498,7 @@
       padding: 9px 18px;
       font-size: 13px;
       font-weight: 700;
-      box-shadow: 0 4px 14px rgba(252, 163, 17, 0.35) !important;
+      box-shadow: none !important;
       transition: all 0.18s cubic-bezier(0.4, 0, 0.2, 1);
       display: inline-flex;
       align-items: center;
@@ -513,7 +513,7 @@
     .btn-finset-primary:hover {
       background: #E5920A !important;
       color: #000000 !important;
-      box-shadow: 0 6px 20px rgba(252, 163, 17, 0.45) !important;
+      box-shadow: none !important;
       transform: translateY(-1px);
     }
 
@@ -549,7 +549,7 @@
       border-color: #FCA311 !important;
       color: #14213D !important;
       background: #FDF9F2 !important;
-      box-shadow: 0 2px 8px rgba(252, 163, 17, 0.2) !important;
+      box-shadow: none !important;
     }
 
     /* Danger Pill Button */
@@ -658,7 +658,7 @@
       margin: 0 !important;
       border-radius: 9999px !important;
       background: #FCA311 !important;
-      box-shadow: 0 0 0 1.5px #3F4354, 0 0 6px rgba(252, 163, 17, 0.8) !important;
+      box-shadow: 0 0 0 1.5px #3F4354 !important;
       border: none !important;
       color: transparent !important;
       font-size: 0 !important;
@@ -672,7 +672,7 @@
     #app-sidebar.is-collapsed .Aurelia-nav-item.active .sidebar-badge,
     #app-sidebar.is-collapsed .aurelia-nav-item.active .sidebar-badge,
     #app-sidebar.is-collapsed .finset-nav-item.active .sidebar-badge {
-      box-shadow: 0 0 0 1.5px #1E212D, 0 0 6px rgba(252, 163, 17, 0.9) !important;
+      box-shadow: 0 0 0 1.5px #1E212D !important;
     }
 
     #app-sidebar.is-collapsed .sidebar-pad {
@@ -2603,7 +2603,7 @@
             title="Aurelia Hotel &amp; Restaurant">
             <!-- Aurelia Gold Medallion Mark -->
             <div id="sidebar-logo-container"
-              class="w-11 h-11 rounded-full flex items-center justify-center flex-shrink-0 transition-transform duration-300 group-hover:scale-105 shadow-md shadow-amber-500/25">
+              class="w-11 h-11 rounded-full flex items-center justify-center flex-shrink-0 transition-transform duration-300 group-hover:scale-105 shadow-md">
               <img id="sidebar-logo-mark" src="../assets/aurelia-mark.svg" alt="Aurelia Emblem"
                 class="w-11 h-11 rounded-full object-contain">
             </div>
@@ -3131,7 +3131,7 @@
               <p class="text-xs text-slate-400">Standardized official hotel agreements, employment contracts, code of conduct & policies</p>
             </div>
             <div class="flex items-center space-x-2.5">
-              <button type="button" id="btn-create-custom-template" class="btn-Aurelia-primary text-xs py-2 px-4 flex items-center space-x-1.5 shadow-sm shadow-[#FCA311]/20">
+              <button type="button" id="btn-create-custom-template" class="btn-Aurelia-primary text-xs py-2 px-4 flex items-center space-x-1.5 shadow-sm">
                 <svg class="w-4 h-4 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
                 </svg>
@@ -3266,7 +3266,7 @@
                 <!-- Submit Button -->
                 <div class="pt-2 flex justify-center">
                   <button type="submit" id="btn-submit-hr-doc"
-                    class="btn-Aurelia-primary text-xs py-2.5 px-10 font-bold flex items-center justify-center space-x-2 shadow-md shadow-[#FCA311]/25 hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer">
+                    class="btn-Aurelia-primary text-xs py-2.5 px-10 font-bold flex items-center justify-center space-x-2 shadow-md hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer">
                     <svg class="w-4 h-4 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2">
                       <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
                     </svg>
@@ -3324,7 +3324,7 @@
             <!-- See More Option at the bottom of the 4 rows (Redirects to HR employee list page) -->
             <div id="hr-templates-see-more-wrap" class="p-4 border-t border-slate-100 dark:border-slate-800 bg-slate-50/60 dark:bg-slate-800/40 flex items-center justify-center">
               <a href="hr-employee-list.html" id="btn-see-more-hr-docs"
-                class="btn-Aurelia-primary inline-flex items-center space-x-2 py-2 px-6 text-xs font-bold shadow-md shadow-[#FCA311]/20 hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer">
+                class="btn-Aurelia-primary inline-flex items-center space-x-2 py-2 px-6 text-xs font-bold shadow-md hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer">
                 <span>See More</span>
                 <svg class="w-4 h-4 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2.5">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
@@ -3381,7 +3381,7 @@
             </svg>
             <span>Print</span>
           </button>
-          <button type="button" id="btn-download-hr-doc" onclick="openHrDocDownloadModal(event)" class="btn-Aurelia-primary text-xs py-1.5 px-3 flex items-center space-x-1.5 shadow-sm shadow-[#FCA311]/20 cursor-pointer">
+          <button type="button" id="btn-download-hr-doc" onclick="openHrDocDownloadModal(event)" class="btn-Aurelia-primary text-xs py-1.5 px-3 flex items-center space-x-1.5 shadow-sm cursor-pointer">
             <svg class="w-4 h-4 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2">
               <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
             </svg>
@@ -3557,7 +3557,7 @@
   <!-- Authentication Controller -->
   <script src="../auth.js?v=20261110_07"></script>
   <!-- Main JavaScript Logic -->
-  <script src="../main.js?v=20261119_v64"></script>
+  <script src="../main.js?v=20261119_v65"></script>
 
   <script>
     let isHrDocPrinting = false;

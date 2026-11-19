@@ -12,6 +12,16 @@
       const rimBgValue = isDefaultBorder
         ? 'linear-gradient(135deg, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0.5) 30%, rgba(255, 255, 255, 0.1) 65%, rgba(255, 255, 255, 0.75) 100%)'
         : cardBorder;
+      const btnBg = isDefaultBorder ? '#FCA311' : cardBorder;
+      let r = 252, g = 163, b = 17;
+      if (btnBg.startsWith('#') && btnBg.length === 7) {
+        r = parseInt(btnBg.slice(1, 3), 16) || 0;
+        g = parseInt(btnBg.slice(3, 5), 16) || 0;
+        b = parseInt(btnBg.slice(5, 7), 16) || 0;
+      }
+      const isLight = ((r * 299 + g * 587 + b * 114) / 1000) > 170;
+      const btnText = isLight ? '#000000' : '#FFFFFF';
+      const btnBorder = isLight ? 'rgba(0, 0, 0, 0.15)' : 'rgba(255, 255, 255, 0.25)';
 
       let style = document.getElementById('aurelia-dynamic-theme-override');
       if (!style) {
@@ -25,6 +35,8 @@
           --aurelia-card-border: ${cardBorder} !important;
           --aurelia-card-border-hover: ${cardBorder} !important;
           --aurelia-card-rim-bg: ${rimBgValue} !important;
+          --aurelia-btn-primary-bg: ${btnBg} !important;
+          --aurelia-btn-primary-text: ${btnText} !important;
         }
         #app-sidebar,
         #mobile-user-menu-drawer,
@@ -63,6 +75,47 @@
         #main-app-content .Aurelia-card::before,
         .glass-money-flow::before {
           background: ${rimBgValue} !important;
+        }
+        .btn-Aurelia-primary,
+        .btn-aurelia-primary,
+        .btn-finset-primary,
+        .btn-view-order-items,
+        .btn-order-to-bill,
+        .quick-nav-bill,
+        #btn-theme-save,
+        #btn-save-profile,
+        #btn-confirm-reset-action,
+        button.btn-finset-primary,
+        button.btn-Aurelia-primary {
+          background: ${btnBg} !important;
+          background-color: ${btnBg} !important;
+          color: ${btnText} !important;
+          border-color: ${btnBorder} !important;
+          box-shadow: none !important;
+        }
+        .btn-Aurelia-primary *,
+        .btn-aurelia-primary *,
+        .btn-finset-primary *,
+        .btn-view-order-items *,
+        .btn-order-to-bill *,
+        .quick-nav-bill * {
+          color: ${btnText} !important;
+        }
+        .btn-Aurelia-primary:hover,
+        .btn-aurelia-primary:hover,
+        .btn-finset-primary:hover,
+        .btn-view-order-items:hover,
+        .btn-order-to-bill:hover,
+        .quick-nav-bill:hover,
+        #btn-theme-save:hover {
+          filter: brightness(0.92) !important;
+          color: ${btnText} !important;
+          box-shadow: none !important;
+        }
+        .btn-Aurelia-primary:active,
+        .btn-aurelia-primary:active,
+        .btn-finset-primary:active {
+          box-shadow: none !important;
         }
       `;
     }
@@ -8771,6 +8824,7 @@ $(document).ready(function () {
         background-color: ${btnBg} !important;
         color: ${btnText} !important;
         border-color: ${btnBorder} !important;
+        box-shadow: none !important;
       }
       .btn-Aurelia-primary *,
       .btn-aurelia-primary *,
@@ -8789,6 +8843,12 @@ $(document).ready(function () {
       #btn-theme-save:hover {
         filter: brightness(0.92) !important;
         color: ${btnText} !important;
+        box-shadow: none !important;
+      }
+      .btn-Aurelia-primary:active,
+      .btn-aurelia-primary:active,
+      .btn-finset-primary:active {
+        box-shadow: none !important;
       }
     `;
 
@@ -8814,6 +8874,7 @@ $(document).ready(function () {
       this.style.setProperty('background', btnBg, 'important');
       this.style.setProperty('background-color', btnBg, 'important');
       this.style.setProperty('color', btnText, 'important');
+      this.style.setProperty('box-shadow', 'none', 'important');
     });
   }
 
