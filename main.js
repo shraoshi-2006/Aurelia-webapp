@@ -643,6 +643,48 @@ $(document).ready(function () {
     }
   }
 
+  /* Mobile-only font scaling & single-line containment for 2-column Stat/Metric Cards (Active ONLY on <= 639px) */
+  @media (max-width: 639px) {
+    .grid.grid-cols-2 .Aurelia-card,
+    .grid.grid-cols-2 > div.Aurelia-card,
+    .grid.grid-cols-2 > .Aurelia-card,
+    .grid.grid-cols-2 .finset-card {
+      padding: 0.625rem 0.625rem !important;
+    }
+    .grid.grid-cols-2 .Aurelia-card > div.text-2xl,
+    .grid.grid-cols-2 .Aurelia-card > div.text-xl,
+    .grid.grid-cols-2 .Aurelia-card div[class*="text-2xl"],
+    .grid.grid-cols-2 .Aurelia-card div[class*="text-xl"],
+    .grid.grid-cols-2 .finset-card > div.text-2xl,
+    .grid.grid-cols-2 .finset-card > div.text-xl {
+      font-size: 0.875rem !important;
+      line-height: 1.15rem !important;
+      font-weight: 800 !important;
+      white-space: nowrap !important;
+      overflow: hidden !important;
+      text-overflow: ellipsis !important;
+    }
+    .grid.grid-cols-2 .Aurelia-card > span:first-child,
+    .grid.grid-cols-2 .Aurelia-card span[class*="text-[10px]"],
+    .grid.grid-cols-2 .Aurelia-card span[class*="text-\\[10px\\]"] {
+      font-size: 0.5625rem !important;
+      line-height: 0.75rem !important;
+      letter-spacing: 0.05em !important;
+      white-space: nowrap !important;
+      overflow: hidden !important;
+      text-overflow: ellipsis !important;
+    }
+    .grid.grid-cols-2 .Aurelia-card > span:last-child,
+    .grid.grid-cols-2 .Aurelia-card span[class*="text-[11px]"],
+    .grid.grid-cols-2 .Aurelia-card span[class*="text-\\[11px\\]"] {
+      font-size: 0.625rem !important;
+      line-height: 0.85rem !important;
+      white-space: nowrap !important;
+      overflow: hidden !important;
+      text-overflow: ellipsis !important;
+    }
+  }
+
   /* Spacing for mobile topbar right button (+ New Bill) */
   #app-mobile-header {
     padding-left: 1rem !important;
