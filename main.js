@@ -1850,6 +1850,7 @@ $(document).ready(function () {
 
   // Mobile Drawer Toggle
   function openSidebar() {
+    $('#mobile-quick-popup').addClass('hidden');
     $('#app-sidebar').removeClass('-translate-x-full is-collapsed');
     $('#mobile-drawer-backdrop').removeClass('hidden');
     $('body').addClass('overflow-hidden lg:overflow-auto');
@@ -1869,28 +1870,48 @@ $(document).ready(function () {
     }
   }
 
-  $(document).on('click', '#btn-mobile-more, .btn-sidebar-trigger', openSidebar);
+  $(document).on('click', '.btn-sidebar-trigger', openSidebar);
   $(document).on('click', '#mobile-drawer-backdrop, #btn-sidebar-close-mobile', closeSidebar);
 
-  // Mobile drawer quick controls (Notifications, Settings, Profile)
-  $(document).on('click', '#btn-sidebar-notifications-mobile', function (e) {
+  // Mobile 3-Lines Header Toggle: Opens/Closes the floating Quick Capsule (#mobile-quick-popup)
+  $(document).on('click', '#btn-mobile-more', function (e) {
     e.preventDefault();
+    e.stopPropagation();
+    $('#mobile-quick-popup').toggleClass('hidden');
+  });
+
+  // Close floating Quick Capsule when clicking anywhere outside
+  $(document).on('click', function (e) {
+    if (!$(e.target).closest('#btn-mobile-more, #mobile-quick-popup').length) {
+      $('#mobile-quick-popup').addClass('hidden');
+    }
+  });
+
+  // Mobile Quick Capsule items (Notifications, Settings, Profile)
+  $(document).on('click', '#btn-mobile-popup-notifications, #btn-sidebar-notifications-mobile', function (e) {
+    e.preventDefault();
+    e.stopPropagation();
+    $('#mobile-quick-popup').addClass('hidden');
     closeSidebar();
     setTimeout(() => {
       $('#btn-top-notifications').trigger('click');
     }, 150);
   });
 
-  $(document).on('click', '#btn-sidebar-settings-mobile', function (e) {
+  $(document).on('click', '#btn-mobile-popup-settings, #btn-sidebar-settings-mobile', function (e) {
     e.preventDefault();
+    e.stopPropagation();
+    $('#mobile-quick-popup').addClass('hidden');
     closeSidebar();
     setTimeout(() => {
       $('#btn-top-settings').trigger('click');
     }, 150);
   });
 
-  $(document).on('click', '#sidebar-mobile-profile', function (e) {
+  $(document).on('click', '#btn-mobile-popup-profile, #sidebar-mobile-profile', function (e) {
     e.preventDefault();
+    e.stopPropagation();
+    $('#mobile-quick-popup').addClass('hidden');
     closeSidebar();
     setTimeout(() => {
       $('#topbar-profile-container button, #user-profile-capsule').first().trigger('click');
