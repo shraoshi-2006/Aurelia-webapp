@@ -2685,11 +2685,11 @@
   <!-- Mobile Top Bar (< lg) -->
   <header id="app-mobile-header"
     class="lg:hidden bg-[#494D5F] border-b border-white/10 px-4 py-3 flex items-center justify-between sticky top-0 z-40 shadow-sm hidden">
-    <div class="flex items-center space-x-3">
-      <!-- Mobile Sidebar Toggle -->
+    <div class="flex items-center space-x-3 relative">
+      <!-- Mobile 3-Lines Toggle -->
       <button id="btn-mobile-more" type="button"
-        class="btn-sidebar-trigger w-9 h-9 rounded-full border border-white/20 bg-white/10 flex items-center justify-center text-white cursor-pointer"
-        aria-label="Open sidebar menu">
+        class="w-9 h-9 rounded-full border border-white/20 bg-white/10 flex items-center justify-center text-white hover:bg-white/20 transition-all cursor-pointer"
+        aria-label="User Quick Menu" title="User Quick Menu">
         <svg class="w-5 h-5 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2">
           <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
         </svg>
@@ -2705,11 +2705,49 @@
             Restaurant</span>
         </div>
       </div>
+
+      <!-- Quick Capsule Menu (AL Avatar, Name/Role, Bell with 1, Settings) -->
+      <div id="mobile-quick-popup"
+        class="hidden absolute top-12 left-0 z-50 flex items-center space-x-3 px-3.5 py-2 rounded-2xl bg-[#3B4152] border border-white/20 shadow-2xl backdrop-blur-md whitespace-nowrap transition-all duration-200">
+        <!-- Profile Info -->
+        <div class="flex items-center space-x-2.5 cursor-pointer" id="btn-mobile-popup-profile" title="View Profile">
+          <div class="w-9 h-9 rounded-full bg-[#14213D] border-2 border-[#FCA311] text-[#FCA311] font-extrabold text-xs flex items-center justify-center shadow-xs flex-shrink-0">
+            AL
+          </div>
+          <div class="flex flex-col pr-1">
+            <span class="text-xs font-bold text-white leading-tight">Adaline Li...</span>
+            <span class="text-[10px] text-slate-300 font-medium">Head of HR</span>
+          </div>
+        </div>
+        <!-- Notification Bell with red badge 1 -->
+        <button type="button" id="btn-mobile-popup-notifications"
+          class="relative w-8 h-8 rounded-full bg-white/15 hover:bg-[#FCA311] hover:text-black flex items-center justify-center text-white transition-all cursor-pointer flex-shrink-0"
+          title="Notifications">
+          <svg class="w-4 h-4 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0" />
+          </svg>
+          <span
+            class="absolute -top-0.5 -right-0.5 w-4 h-4 rounded-full bg-rose-500 text-white text-[9px] font-extrabold flex items-center justify-center shadow-xs">
+            1
+          </span>
+        </button>
+        <!-- Settings Gear -->
+        <button type="button" id="btn-mobile-popup-settings"
+          class="w-8 h-8 rounded-full bg-white/15 hover:bg-[#FCA311] hover:text-black flex items-center justify-center text-white transition-all cursor-pointer flex-shrink-0"
+          title="Settings">
+          <svg class="w-4 h-4 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.324.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 011.37.49l1.296 2.247a1.125 1.125 0 01-.26 1.431l-1.003.827c-.293.24-.438.613-.431.992a6.759 6.759 0 010 .255c-.007.378.138.75.43.99l1.005.828c.424.35.534.954.26 1.43l-1.298 2.247a1.125 1.125 0 01-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.57 6.57 0 01-.22.128c-.331.183-.581.495-.644.869l-.213 1.28c-.09.543-.56.941-1.11.941h-2.594c-.55 0-1.02-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 01-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 01-1.369-.49l-1.297-2.247a1.125 1.125 0 01.26-1.431l1.004-.827c.292-.24.437-.613.43-.992a6.932 6.932 0 010-.255c.007-.378-.138-.75-.43-.99l-1.004-.828a1.125 1.125 0 01-.26-1.43l1.297-2.247a1.125 1.125 0 011.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.087.22-.128.332-.183.582-.495.644-.869l.214-1.281z" />
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+          </svg>
+        </button>
+      </div>
     </div>
 
     <!-- Right Controls Mobile -->
-    <div class="flex items-center space-x-2">
-      <button type="button" class="quick-nav-bill btn-Aurelia-primary py-1 px-3 text-xs">
+    <div class="flex items-center space-x-2 mr-2">
+      <button type="button" class="quick-nav-bill btn-Aurelia-primary py-1.5 px-3.5 text-xs font-bold shadow-xs">
         + New Bill
       </button>
     </div>
@@ -2720,7 +2758,7 @@
     class="fixed inset-0 bg-[#14213D]/40 backdrop-blur-sm z-40 hidden transition-opacity duration-300"></div>
 
   <!-- App Wrapper (Sidebar + Main) -->
-  <div id="app-dashboard-wrapper" class="flex flex-1 min-h-screen bg-[#F4F5F7] relative z-10 hidden">
+  <div id="app-dashboard-wrapper" class="flex flex-1 min-h-screen bg-[#F4F5F7] relative hidden">
 
     <!-- =================================================================== -->
     <!-- SIDEBAR NAVIGATION (Matches Aurelia layout) -->
@@ -2739,7 +2777,7 @@
 
       <!-- Top Brand Section (Fixed at top) -->
       <div class="p-6 pb-2 sidebar-pad flex-shrink-0">
-        <div id="sidebar-brand-wrapper" class="flex items-center space-x-3 mb-6 relative">
+        <div id="sidebar-brand-wrapper" class="flex items-center justify-between mb-6 relative">
           <div class="flex items-center space-x-3 cursor-pointer group" onclick="window.location.hash='dashboard'"
             title="Aurelia Hotel &amp; Restaurant">
             <!-- Aurelia Gold Medallion Mark -->
@@ -2757,6 +2795,14 @@
                 &amp; Restaurant</span>
             </div>
           </div>
+          <!-- Mobile Close Button (lg:hidden) -->
+          <button type="button" id="btn-sidebar-close-mobile"
+            class="lg:hidden w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 flex items-center justify-center text-slate-500 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white transition-all cursor-pointer ml-auto"
+            aria-label="Close sidebar">
+            <svg class="w-4 h-4 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
         </div>
 
         <!-- 1. Dashboard (Active Pill - Fixed at top) -->
@@ -3162,7 +3208,7 @@
         </div>
 
         <!-- Top Right Controls (Notifications, Profile Capsule) -->
-        <div class="flex flex-wrap items-center gap-2.5 sm:gap-3.5 self-start md:self-auto">
+        <div class="hidden md:flex flex-wrap items-center gap-2.5 sm:gap-3.5 self-start md:self-auto">
 
           <!-- Device ID Capsule Pill (Matches FinSet DEV08 Badge) -->
           <div id="topbar-device-id-badge"

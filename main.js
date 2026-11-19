@@ -212,12 +212,171 @@ $(document).ready(function () {
   .dark table tbody tr.is-row-selected {
     background-color: rgba(252, 163, 17, 0.15) !important;
   }
+
+  /* ========================================================================= */
+  /* GLOBAL LIST TABLE ENGINE: Pure White default, Grey background + Grey shadow on hover */
+  /* ========================================================================= */
+  .Aurelia-card:has(table),
+  .aurelia-card:has(table),
+  div:has(> .overflow-x-auto > table),
+  div:has(> table) {
+    background: #FFFFFF !important;
+    border: 1px solid rgba(226, 232, 240, 0.95) !important;
+    box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.06), 0 1px 3px rgba(15, 23, 42, 0.04) !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+
+  .Aurelia-card:has(table)::before,
+  .aurelia-card:has(table)::before,
+  div:has(> .overflow-x-auto > table)::before,
+  div:has(> table)::before {
+    display: none !important;
+    content: none !important;
+  }
+
+  table:not(#print-invoice-area table) {
+    background-color: #FFFFFF !important;
+    border-collapse: separate !important;
+    border-spacing: 0 !important;
+  }
+
+  table:not(#print-invoice-area table) thead tr {
+    background-color: #F8FAFC !important;
+  }
+
+  table:not(#print-invoice-area table) tbody {
+    background-color: transparent !important;
+  }
+
+  table:not(#print-invoice-area table) tbody tr {
+    position: relative;
+    transition: background-color 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1), transform 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  }
+
+  table:not(#print-invoice-area table) tbody tr td {
+    transition: background-color 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  }
+
+  /* Alternating Zebra Striping: 1 row light grey, 1 row white */
+  table:not(#print-invoice-area table) tbody tr:nth-child(odd),
+  table:not(#print-invoice-area table) tbody tr:nth-child(odd) td {
+    background-color: #F1F5F9 !important;
+  }
+
+  table:not(#print-invoice-area table) tbody tr:nth-child(even),
+  table:not(#print-invoice-area table) tbody tr:nth-child(even) td {
+    background-color: #FFFFFF !important;
+  }
+
+  table:not(#print-invoice-area table) tbody tr:hover {
+    box-shadow: 0 8px 24px -4px rgba(15, 23, 42, 0.16), 0 3px 8px -2px rgba(15, 23, 42, 0.08) !important;
+    transform: translateY(-1px);
+    z-index: 20;
+  }
+
+  table:not(#print-invoice-area table) tbody tr:hover td {
+    background-color: #E2E8F0 !important;
+    border-color: #CBD5E1 !important;
+  }
+
+  /* Retain selection highlight for selected rows */
+  table:not(#print-invoice-area table) tbody tr.is-row-selected,
+  table:not(#print-invoice-area table) tbody tr.is-row-selected td {
+    background-color: rgba(252, 163, 17, 0.12) !important;
+  }
+  table:not(#print-invoice-area table) tbody tr.is-row-selected:hover,
+  table:not(#print-invoice-area table) tbody tr.is-row-selected:hover td {
+    background-color: rgba(252, 163, 17, 0.18) !important;
+  }
+
+  /* Dark mode overrides for all tables */
+  .dark .Aurelia-card:has(table),
+  .dark .aurelia-card:has(table),
+  .dark div:has(> .overflow-x-auto > table),
+  .dark div:has(> table) {
+    background: #0F172A !important;
+    border-color: #334155 !important;
+  }
+
+  .dark table:not(#print-invoice-area table),
+  .dark table:not(#print-invoice-area table) thead tr {
+    background-color: #1E293B !important;
+  }
+
+  .dark table:not(#print-invoice-area table) tbody {
+    background-color: #0F172A !important;
+  }
+
+  .dark table:not(#print-invoice-area table) tbody tr:nth-child(odd),
+  .dark table:not(#print-invoice-area table) tbody tr:nth-child(odd) td {
+    background-color: #131E32 !important;
+  }
+
+  .dark table:not(#print-invoice-area table) tbody tr:nth-child(even),
+  .dark table:not(#print-invoice-area table) tbody tr:nth-child(even) td {
+    background-color: #0F172A !important;
+  }
+
+  .dark table:not(#print-invoice-area table) tbody tr:hover td {
+    background-color: #1E293B !important;
+  }
+  .dark table:not(#print-invoice-area table) tbody tr:hover {
+    box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.6) !important;
+  }
+
+  .dark table:not(#print-invoice-area table) tbody tr.is-row-selected,
+  .dark table:not(#print-invoice-area table) tbody tr.is-row-selected td {
+    background-color: rgba(252, 163, 17, 0.18) !important;
+  }
+  .dark table:not(#print-invoice-area table) tbody tr.is-row-selected:hover,
+  .dark table:not(#print-invoice-area table) tbody tr.is-row-selected:hover td {
+    background-color: rgba(252, 163, 17, 0.25) !important;
+  }
+
+  @media print {
+    table:not(#print-invoice-area table),
+    table:not(#print-invoice-area table) tbody,
+    table:not(#print-invoice-area table) tbody tr,
+    table:not(#print-invoice-area table) tbody tr td {
+      background-color: transparent !important;
+      box-shadow: none !important;
+      transform: none !important;
+    }
+  }
   @media print {
     .table-bulk-action-bar,
     th.bulk-cb-cell,
     td.bulk-cb-cell {
       display: none !important;
     }
+  }
+
+  /* CRITICAL: Mobile drawer stacking context fix.
+     Ensures the backdrop sits strictly BEHIND the sidebar, blurring only the main content behind it,
+     never the sidebar itself! */
+  #app-dashboard-wrapper {
+    z-index: auto !important;
+  }
+  #mobile-drawer-backdrop {
+    z-index: 45 !important;
+  }
+  #app-sidebar {
+    z-index: 55 !important;
+    background-color: #494D5F !important;
+  }
+  #btn-sidebar-collapse {
+    z-index: 60 !important;
+  }
+
+  /* Spacing for mobile topbar right button (+ New Bill) */
+  #app-mobile-header {
+    padding-left: 1rem !important;
+    padding-right: 1.25rem !important;
+  }
+  #app-mobile-header .quick-nav-bill,
+  #app-mobile-header button:last-child {
+    margin-right: 6px !important;
   }
       </style>
     `);
@@ -1691,24 +1850,98 @@ $(document).ready(function () {
 
   // Mobile Drawer Toggle
   function openSidebar() {
-    $('#app-sidebar').removeClass('-translate-x-full');
+    $('#mobile-quick-popup').addClass('hidden');
+    $('#app-sidebar').removeClass('-translate-x-full is-collapsed');
     $('#mobile-drawer-backdrop').removeClass('hidden');
     $('body').addClass('overflow-hidden lg:overflow-auto');
+    if ($(window).width() < 1024) {
+      $('#btn-sidebar-collapse').find('svg').css('transform', 'rotate(0deg)');
+      $('#btn-sidebar-collapse').attr('title', 'Close sidebar');
+    }
   }
 
   function closeSidebar() {
     $('#app-sidebar').addClass('-translate-x-full');
     $('#mobile-drawer-backdrop').addClass('hidden');
     $('body').removeClass('overflow-hidden lg:overflow-auto');
+    if ($(window).width() < 1024) {
+      $('#btn-sidebar-collapse').find('svg').css('transform', 'rotate(180deg)');
+      $('#btn-sidebar-collapse').attr('title', 'Open sidebar');
+    }
   }
 
-  $('#btn-mobile-more').on('click', openSidebar);
-  $('#mobile-drawer-backdrop').on('click', closeSidebar);
+  $(document).on('click', '.btn-sidebar-trigger', openSidebar);
+  $(document).on('click', '#mobile-drawer-backdrop, #btn-sidebar-close-mobile', closeSidebar);
 
-  // Desktop Sidebar Collapse Toggle (<)
-  let sidebarCollapsed = false;
-  $('#btn-sidebar-collapse').on('click', function (e) {
+  // Mobile 3-Lines Header Toggle: Opens/Closes the floating Quick Capsule (#mobile-quick-popup)
+  $(document).on('click', '#btn-mobile-more', function (e) {
     e.preventDefault();
+    e.stopPropagation();
+    $('#mobile-quick-popup').toggleClass('hidden');
+  });
+
+  // Close floating Quick Capsule when clicking anywhere outside
+  $(document).on('click', function (e) {
+    if (!$(e.target).closest('#btn-mobile-more, #mobile-quick-popup').length) {
+      $('#mobile-quick-popup').addClass('hidden');
+    }
+  });
+
+  // Mobile Quick Capsule items (Notifications, Settings, Profile)
+  $(document).on('click', '#btn-mobile-popup-notifications, #btn-sidebar-notifications-mobile', function (e) {
+    e.preventDefault();
+    e.stopPropagation();
+    $('#mobile-quick-popup').addClass('hidden');
+    closeSidebar();
+    setTimeout(() => {
+      $('#btn-top-notifications').trigger('click');
+    }, 150);
+  });
+
+  $(document).on('click', '#btn-mobile-popup-settings, #btn-sidebar-settings-mobile', function (e) {
+    e.preventDefault();
+    e.stopPropagation();
+    $('#mobile-quick-popup').addClass('hidden');
+    closeSidebar();
+    setTimeout(() => {
+      $('#btn-top-settings').trigger('click');
+    }, 150);
+  });
+
+  $(document).on('click', '#btn-mobile-popup-profile, #sidebar-mobile-profile', function (e) {
+    e.preventDefault();
+    e.stopPropagation();
+    $('#mobile-quick-popup').addClass('hidden');
+    closeSidebar();
+    setTimeout(() => {
+      $('#topbar-profile-container button, #user-profile-capsule').first().trigger('click');
+    }, 150);
+  });
+
+  // Auto-close mobile drawer when tapping any navigation link
+  $(document).on('click', '#app-sidebar a, #app-sidebar .nav-link, #app-sidebar .hr-sub-item, #app-sidebar .dept-sub-item', function () {
+    if ($(window).width() < 1024 && !$(this).is('#btn-nav-hr, #btn-nav-dept, #btn-nav-billing, #btn-sub-leave-mgmt, #btn-sub-payroll')) {
+      closeSidebar();
+    }
+  });
+
+  // Sidebar Collapse / Mobile Drawer Toggle
+  let sidebarCollapsed = false;
+  $(document).on('click', '#btn-sidebar-collapse', function (e) {
+    e.preventDefault();
+    e.stopPropagation();
+
+    // On mobile (< 1024px), toggle slide drawer open / closed
+    if ($(window).width() < 1024) {
+      if ($('#app-sidebar').hasClass('-translate-x-full')) {
+        openSidebar();
+      } else {
+        closeSidebar();
+      }
+      return;
+    }
+
+    // On Desktop, toggle between full width (lg:w-68) and compact icon width (is-collapsed)
     sidebarCollapsed = !sidebarCollapsed;
     if (sidebarCollapsed) {
       $('#app-sidebar').addClass('is-collapsed').removeClass('lg:w-68');
@@ -1718,6 +1951,31 @@ $(document).ready(function () {
       $('#app-sidebar').removeClass('is-collapsed').addClass('lg:w-68');
       $(this).find('svg').css('transform', 'rotate(0deg)');
       $(this).attr('title', 'Collapse sidebar');
+    }
+  });
+
+  // Set initial chevron position on mobile
+  if ($(window).width() < 1024) {
+    $('#btn-sidebar-collapse').find('svg').css('transform', 'rotate(180deg)');
+    $('#btn-sidebar-collapse').attr('title', 'Open sidebar');
+  }
+
+  $(window).on('resize', function () {
+    if ($(window).width() >= 1024) {
+      $('#app-sidebar').removeClass('-translate-x-full');
+      $('#mobile-drawer-backdrop').addClass('hidden');
+      $('body').removeClass('overflow-hidden');
+      if (sidebarCollapsed) {
+        $('#btn-sidebar-collapse').find('svg').css('transform', 'rotate(180deg)');
+      } else {
+        $('#btn-sidebar-collapse').find('svg').css('transform', 'rotate(0deg)');
+      }
+    } else {
+      if ($('#app-sidebar').hasClass('-translate-x-full')) {
+        $('#btn-sidebar-collapse').find('svg').css('transform', 'rotate(180deg)');
+      } else {
+        $('#btn-sidebar-collapse').find('svg').css('transform', 'rotate(0deg)');
+      }
     }
   });
 
@@ -2986,7 +3244,7 @@ $(document).ready(function () {
           : '<span class="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-[#b91c1c] border-2 border-white dark:border-slate-800 rounded-full"></span>';
 
         $tbody.append(`
-          <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors">
+          <tr class="bg-white hover:bg-slate-100/90 dark:bg-slate-900 dark:hover:bg-slate-800 transition-all cursor-pointer relative">
             <td class="py-2.5 px-3">
               <div class="flex items-center space-x-2.5">
                 <div class="relative w-8 h-8 rounded-full bg-[#14213D] text-[#FCA311] font-bold text-xs flex items-center justify-center flex-shrink-0 shadow-xs">
@@ -5901,7 +6159,7 @@ $(document).ready(function () {
     } else {
       sortedItems.forEach((it, idx) => {
         $tbody.append(`
-          <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors">
+          <tr class="bg-white hover:bg-slate-100/90 dark:bg-slate-900 dark:hover:bg-slate-800 transition-all cursor-pointer relative">
             <td class="py-2.5 px-4 text-center text-slate-400 font-bold">${idx + 1}</td>
             <td class="py-2.5 px-4 font-bold text-slate-900 dark:text-white">${escapeHtml(it.name)}</td>
             <td class="py-2.5 px-4 text-slate-500 font-medium">${escapeHtml(it.category)}</td>
@@ -7022,39 +7280,40 @@ $(document).ready(function () {
           avatarStyle = 'linear-gradient(135deg, #14213D 0%, #7e22ce 60%, #FCA311 100%)';
         }
 
-        const avatarHtml = `<div class="w-9 h-9 rounded-xl flex items-center justify-center font-black text-xs text-white shadow-xs border border-white/20 flex-shrink-0" style="background: ${avatarStyle};">${avatarBadgeText}</div>`;
+        const avatarHtml = `<div class="w-8 h-8 md:w-9 md:h-9 rounded-xl flex items-center justify-center font-black text-xs md:text-sm text-white shadow-xs border border-white/20 flex-shrink-0" style="background: ${avatarStyle};">${avatarBadgeText}</div>`;
         const isOnDuty = s.status === 'On Duty';
+        const rowBg = idx % 2 === 0 ? 'bg-white' : 'bg-slate-100/80 dark:bg-slate-800/60';
 
         $tbody.append(`
-          <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors" data-id="${escapeHtml(s.id)}">
-            <td class="py-3.5 px-4 whitespace-nowrap">
-              <span class="px-2.5 py-1 rounded text-xs font-mono font-bold bg-[#FCA311] text-black inline-block shadow-2xs">${escapeHtml(s.id)}</span>
+          <tr class="${rowBg} hover:bg-slate-100 hover:shadow-md dark:hover:bg-slate-800 transition-all cursor-pointer relative" data-id="${escapeHtml(s.id)}">
+            <td class="py-2.5 px-2.5 sm:py-3.5 sm:px-4 whitespace-nowrap">
+              <span class="px-2 py-0.5 md:px-2.5 md:py-1 rounded text-xs md:text-sm font-mono font-bold bg-[#FCA311] text-black inline-block shadow-2xs">${escapeHtml(s.id)}</span>
             </td>
-            <td class="py-3.5 px-4 whitespace-nowrap">
-              <div class="flex items-center space-x-3">
+            <td class="py-2.5 px-2.5 sm:py-3.5 sm:px-4 whitespace-nowrap">
+              <div class="flex items-center space-x-2.5 md:space-x-3">
                 ${avatarHtml}
                 <div>
-                  <div class="font-bold text-slate-900 dark:text-white text-xs">${escapeHtml(s.name)}</div>
-                  <div class="text-[10px] text-slate-400">${escapeHtml(s.station || s.role)}</div>
+                  <div class="font-bold text-slate-900 dark:text-white text-xs md:text-sm">${escapeHtml(s.name)}</div>
+                  <div class="text-[10px] md:text-xs text-slate-400">${escapeHtml(s.station || s.role)}</div>
                 </div>
               </div>
             </td>
-            <td class="py-3.5 px-4 whitespace-nowrap">
-              <div class="font-semibold text-slate-800 dark:text-slate-200 text-xs">${escapeHtml(s.role)}</div>
-              <div class="text-[10px] text-slate-400">${escapeHtml(s.department)}</div>
+            <td class="py-2.5 px-2.5 sm:py-3.5 sm:px-4 whitespace-nowrap">
+              <div class="font-semibold text-slate-800 dark:text-slate-200 text-xs md:text-sm">${escapeHtml(s.role)}</div>
+              <div class="text-[10px] md:text-xs text-slate-400">${escapeHtml(s.department)}</div>
             </td>
-            <td class="py-3.5 px-4 font-medium text-slate-600 dark:text-slate-300 text-xs whitespace-nowrap">
+            <td class="py-2.5 px-2.5 sm:py-3.5 sm:px-4 font-medium text-slate-600 dark:text-slate-300 text-xs md:text-sm whitespace-nowrap">
               ${escapeHtml(s.station)}
             </td>
-            <td class="py-3.5 px-4 font-mono text-xs text-slate-500 dark:text-slate-400 whitespace-nowrap">
+            <td class="py-2.5 px-2.5 sm:py-3.5 sm:px-4 font-mono text-xs md:text-sm text-slate-500 dark:text-slate-400 whitespace-nowrap">
               ${escapeHtml(s.shift)}
             </td>
-            <td class="py-3.5 px-4 text-center whitespace-nowrap">
-              <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold ${isOnDuty ? 'bg-[#15803d] text-white' : 'bg-[#b91c1c] text-white'} shadow-2xs">
+            <td class="py-2.5 px-2.5 sm:py-3.5 sm:px-4 text-center whitespace-nowrap">
+              <span class="inline-flex items-center px-2 py-0.5 md:px-2.5 md:py-0.5 rounded-full text-[10px] md:text-xs font-semibold ${isOnDuty ? 'bg-[#15803d] text-white' : 'bg-[#b91c1c] text-white'} shadow-2xs">
                 ${escapeHtml(s.status)}
               </span>
             </td>
-            <td class="py-3.5 px-4 text-slate-500 font-mono text-xs whitespace-nowrap">
+            <td class="py-2.5 px-2.5 sm:py-3.5 sm:px-4 text-slate-500 font-mono text-xs md:text-sm whitespace-nowrap">
               ${escapeHtml(s.phone)}
             </td>
           </tr>

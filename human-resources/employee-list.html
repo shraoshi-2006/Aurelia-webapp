@@ -25,6 +25,9 @@
       darkMode: 'class',
       theme: {
         extend: {
+          fontSize: {
+            'md': '1rem',
+          },
           fontFamily: {
             sans: ['"Plus Jakarta Sans"', 'Inter', 'system-ui', '-apple-system', 'sans-serif'],
           },
@@ -339,7 +342,14 @@
     /* ========================================================================= */
     /* SIDEBAR NAVIGATION IN SOPHISTICATED DEEP SLATE (#494D5F)                  */
     /* ========================================================================= */
+    #app-dashboard-wrapper {
+      z-index: auto !important;
+    }
+    #mobile-drawer-backdrop {
+      z-index: 45 !important;
+    }
     #app-sidebar {
+      z-index: 55 !important;
       background: #494D5F !important;
       border-right: 1px solid rgba(255, 255, 255, 0.08) !important;
       box-shadow: 4px 0 24px rgba(15, 23, 42, 0.12) !important;
@@ -1321,6 +1331,88 @@
 
     #modal-view-bill {
       z-index: 70 !important;
+    }
+
+    /* Employee Roster Table: White background by default, grey background + grey shadow on hover */
+    #staff-table-card {
+      background: #FFFFFF !important;
+      border: 1px solid rgba(226, 232, 240, 0.95) !important;
+      box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.06), 0 1px 3px rgba(15, 23, 42, 0.04) !important;
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
+    }
+
+    #staff-table-card::before {
+      display: none !important;
+      content: none !important;
+    }
+
+    #page-staff-table {
+      background-color: #FFFFFF !important;
+      border-collapse: separate !important;
+      border-spacing: 0 !important;
+    }
+
+    #page-staff-tbody {
+      background-color: transparent !important;
+    }
+
+    #page-staff-tbody tr {
+      position: relative;
+      transition: background-color 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1), transform 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    }
+
+    #page-staff-tbody tr td {
+      transition: background-color 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    }
+
+    /* Alternating Zebra Striping: 1 row light grey, 1 row white */
+    #page-staff-tbody tr:nth-child(odd),
+    #page-staff-tbody tr:nth-child(odd) td {
+      background-color: #F1F5F9 !important;
+    }
+
+    #page-staff-tbody tr:nth-child(even),
+    #page-staff-tbody tr:nth-child(even) td {
+      background-color: #FFFFFF !important;
+    }
+
+    #page-staff-tbody tr:hover {
+      box-shadow: 0 8px 24px -4px rgba(15, 23, 42, 0.16), 0 3px 8px -2px rgba(15, 23, 42, 0.08) !important;
+      transform: translateY(-1px);
+      z-index: 20;
+    }
+
+    #page-staff-tbody tr:hover td {
+      background-color: #E2E8F0 !important;
+      border-color: #CBD5E1 !important;
+    }
+
+    .dark #staff-table-card {
+      background: #0F172A !important;
+      border-color: #334155 !important;
+    }
+
+    .dark #page-staff-table,
+    .dark #page-staff-tbody {
+      background-color: #0F172A !important;
+    }
+
+    .dark #page-staff-tbody tr:nth-child(odd),
+    .dark #page-staff-tbody tr:nth-child(odd) td {
+      background-color: #131E32 !important;
+    }
+
+    .dark #page-staff-tbody tr:nth-child(even),
+    .dark #page-staff-tbody tr:nth-child(even) td {
+      background-color: #0F172A !important;
+    }
+
+    .dark #page-staff-tbody tr:hover td {
+      background-color: #1E293B !important;
+    }
+    .dark #page-staff-tbody tr:hover {
+      box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.6) !important;
     }
 
     /* Subtle custom scrollbar */
@@ -2537,11 +2629,11 @@
   <!-- Mobile Top Bar (< lg) -->
   <header id="app-mobile-header"
     class="lg:hidden bg-[#494D5F] border-b border-white/10 px-4 py-3 flex items-center justify-between sticky top-0 z-40 shadow-sm hidden">
-    <div class="flex items-center space-x-3">
-      <!-- Mobile Sidebar Toggle -->
+    <div class="flex items-center space-x-3 relative">
+      <!-- Mobile 3-Lines Toggle -->
       <button id="btn-mobile-more" type="button"
-        class="btn-sidebar-trigger w-9 h-9 rounded-full border border-white/20 bg-white/10 flex items-center justify-center text-white cursor-pointer"
-        aria-label="Open sidebar menu">
+        class="w-9 h-9 rounded-full border border-white/20 bg-white/10 flex items-center justify-center text-white hover:bg-white/20 transition-all cursor-pointer"
+        aria-label="User Quick Menu" title="User Quick Menu">
         <svg class="w-5 h-5 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2">
           <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
         </svg>
@@ -2557,11 +2649,49 @@
             Restaurant</span>
         </div>
       </div>
+
+      <!-- Quick Capsule Menu (AL Avatar, Name/Role, Bell with 1, Settings) -->
+      <div id="mobile-quick-popup"
+        class="hidden absolute top-12 left-0 z-50 flex items-center space-x-3 px-3.5 py-2 rounded-2xl bg-[#3B4152] border border-white/20 shadow-2xl backdrop-blur-md whitespace-nowrap transition-all duration-200">
+        <!-- Profile Info -->
+        <div class="flex items-center space-x-2.5 cursor-pointer" id="btn-mobile-popup-profile" title="View Profile">
+          <div class="w-9 h-9 rounded-full bg-[#14213D] border-2 border-[#FCA311] text-[#FCA311] font-extrabold text-xs flex items-center justify-center shadow-xs flex-shrink-0">
+            AL
+          </div>
+          <div class="flex flex-col pr-1">
+            <span class="text-xs font-bold text-white leading-tight">Adaline Li...</span>
+            <span class="text-[10px] text-slate-300 font-medium">Head of HR</span>
+          </div>
+        </div>
+        <!-- Notification Bell with red badge 1 -->
+        <button type="button" id="btn-mobile-popup-notifications"
+          class="relative w-8 h-8 rounded-full bg-white/15 hover:bg-[#FCA311] hover:text-black flex items-center justify-center text-white transition-all cursor-pointer flex-shrink-0"
+          title="Notifications">
+          <svg class="w-4 h-4 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0" />
+          </svg>
+          <span
+            class="absolute -top-0.5 -right-0.5 w-4 h-4 rounded-full bg-rose-500 text-white text-[9px] font-extrabold flex items-center justify-center shadow-xs">
+            1
+          </span>
+        </button>
+        <!-- Settings Gear -->
+        <button type="button" id="btn-mobile-popup-settings"
+          class="w-8 h-8 rounded-full bg-white/15 hover:bg-[#FCA311] hover:text-black flex items-center justify-center text-white transition-all cursor-pointer flex-shrink-0"
+          title="Settings">
+          <svg class="w-4 h-4 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.324.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 011.37.49l1.296 2.247a1.125 1.125 0 01-.26 1.431l-1.003.827c-.293.24-.438.613-.431.992a6.759 6.759 0 010 .255c-.007.378.138.75.43.99l1.005.828c.424.35.534.954.26 1.43l-1.298 2.247a1.125 1.125 0 01-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.57 6.57 0 01-.22.128c-.331.183-.581.495-.644.869l-.213 1.28c-.09.543-.56.941-1.11.941h-2.594c-.55 0-1.02-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 01-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 01-1.369-.49l-1.297-2.247a1.125 1.125 0 01.26-1.431l1.004-.827c.292-.24.437-.613.43-.992a6.932 6.932 0 010-.255c.007-.378-.138-.75-.43-.99l-1.004-.828a1.125 1.125 0 01-.26-1.43l1.297-2.247a1.125 1.125 0 011.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.087.22-.128.332-.183.582-.495.644-.869l.214-1.281z" />
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+          </svg>
+        </button>
+      </div>
     </div>
 
     <!-- Right Controls Mobile -->
-    <div class="flex items-center space-x-2">
-      <button type="button" class="quick-nav-bill btn-Aurelia-primary py-1 px-3 text-xs">
+    <div class="flex items-center space-x-2 mr-2">
+      <button type="button" class="quick-nav-bill btn-Aurelia-primary py-1.5 px-3.5 text-xs font-bold shadow-xs">
         + New Bill
       </button>
     </div>
@@ -2572,7 +2702,7 @@
     class="fixed inset-0 bg-[#14213D]/40 backdrop-blur-sm z-40 hidden transition-opacity duration-300"></div>
 
   <!-- App Wrapper (Sidebar + Main) -->
-  <div id="app-dashboard-wrapper" class="flex flex-1 min-h-screen bg-[#F4F5F7] relative z-10 hidden">
+  <div id="app-dashboard-wrapper" class="flex flex-1 min-h-screen bg-[#F4F5F7] relative hidden">
 
     <!-- =================================================================== -->
     <!-- SIDEBAR NAVIGATION (Matches Aurelia layout) -->
@@ -2591,7 +2721,7 @@
 
       <!-- Top Brand Section (Fixed at top) -->
       <div class="p-6 pb-2 sidebar-pad flex-shrink-0">
-        <div id="sidebar-brand-wrapper" class="flex items-center space-x-3 mb-6 relative">
+        <div id="sidebar-brand-wrapper" class="flex items-center justify-between mb-6 relative">
           <div class="flex items-center space-x-3 cursor-pointer group" onclick="window.location.hash='dashboard'"
             title="Aurelia Hotel &amp; Restaurant">
             <!-- Aurelia Gold Medallion Mark -->
@@ -2609,6 +2739,14 @@
                 &amp; Restaurant</span>
             </div>
           </div>
+          <!-- Mobile Close Button (lg:hidden) -->
+          <button type="button" id="btn-sidebar-close-mobile"
+            class="lg:hidden w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 flex items-center justify-center text-slate-500 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white transition-all cursor-pointer ml-auto"
+            aria-label="Close sidebar">
+            <svg class="w-4 h-4 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
         </div>
 
         <!-- 1. Dashboard (Active Pill - Fixed at top) -->
@@ -2993,18 +3131,18 @@
 
       <!-- TOP HEADER (Welcome back, Shraoshi / Adaline Lively, Search, Bell, Profile) -->
       <header id="top-desktop-header"
-        class="app-sticky-header px-6 sm:px-8 pt-6 pb-4 sm:pt-7 sm:pb-5 flex flex-col md:flex-row md:items-center md:justify-between gap-4 sticky top-0 z-50 border-b border-transparent transition-all duration-200">
+        class="app-sticky-header px-4 sm:px-8 pt-4 pb-3 sm:pt-7 sm:pb-5 flex flex-col md:flex-row md:items-center md:justify-between gap-4 sticky top-0 z-50 border-b border-transparent transition-all duration-200">
         <div>
-          <h1 class="text-2xl sm:text-3xl font-extrabold text-[#14213D] tracking-tight" id="topbar-welcome-title">
+          <h1 class="text-xl md:text-2xl font-extrabold text-[#14213D] tracking-tight" id="topbar-welcome-title">
             Welcome back!
           </h1>
-          <p class="text-xs sm:text-sm text-slate-500 mt-1 font-medium">
+          <p class="text-xs md:text-sm text-slate-500 mt-1 font-medium">
             It is the best time to manage your finances
           </p>
         </div>
 
         <!-- Top Right Controls (Notifications, Profile Capsule) -->
-        <div class="flex flex-wrap items-center gap-2.5 sm:gap-3.5 self-start md:self-auto">
+        <div class="hidden md:flex flex-wrap items-center gap-2.5 sm:gap-3.5 self-start md:self-auto">
 
           <!-- Device ID Capsule Pill (Matches FinSet DEV08 Badge) -->
           <div id="topbar-device-id-badge"
@@ -3108,7 +3246,7 @@
       </div>
 
       <!-- MAIN SCROLLABLE DASHBOARD VIEW CONTAINER -->
-      <div class="px-6 sm:px-8 pb-5 flex-1">
+      <div class="px-4 sm:px-8 pb-5 flex-1">
 
         <!-- ============================================================= -->
         <!-- 9. EMPLOYEES & STAFF DIRECTORY (STANDALONE PAGE)             -->
@@ -3117,11 +3255,11 @@
           <!-- Page Header -->
           <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between pb-3 gap-3 border-b border-slate-200 dark:border-slate-800">
             <div>
-              <h2 class="text-lg font-bold text-slate-900 dark:text-white">Staff & Employee Directory</h2>
-              <p class="text-xs text-slate-400">Hotel staffing roster, shift assignments, and live departmental attendance</p>
+              <h2 class="text-xl md:text-2xl font-bold text-slate-900 dark:text-white">Staff & Employee Directory</h2>
+              <p class="text-xs md:text-sm text-slate-400 mt-1">Hotel staffing roster, shift assignments, and live departmental attendance</p>
             </div>
             <div class="flex items-center space-x-2.5">
-              <button type="button" id="btn-page-add-employee" class="btn-Aurelia-primary text-xs py-2 px-4 flex items-center space-x-1.5 shadow-sm shadow-[#FCA311]/20">
+              <button type="button" id="btn-page-add-employee" class="btn-Aurelia-primary text-xs md:text-sm py-2 px-4 flex items-center space-x-1.5 shadow-sm shadow-[#FCA311]/20">
                 <svg class="w-4 h-4 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
                 </svg>
@@ -3131,45 +3269,45 @@
           </div>
 
           <!-- Staff Status Metrics Strip -->
-          <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
-            <div class="Aurelia-card p-4 flex flex-col justify-between">
-              <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Total Headcount</span>
-              <div class="text-2xl font-black text-slate-900 dark:text-white mt-1">48 Staff</div>
-              <span class="text-[11px] text-slate-400 font-medium mt-1">6 Departments Active</span>
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
+            <div class="Aurelia-card p-3 sm:p-4 flex flex-col justify-between">
+              <span class="text-[10px] md:text-xs font-bold uppercase tracking-wider text-slate-400">Total Headcount</span>
+              <div class="text-xl md:text-2xl font-black text-slate-900 dark:text-white mt-1">48 Staff</div>
+              <span class="text-[10px] md:text-xs text-slate-400 font-medium mt-1">6 Departments Active</span>
             </div>
-            <div class="Aurelia-card p-4 flex flex-col justify-between">
-              <span class="text-[10px] font-bold uppercase tracking-wider text-emerald-700 dark:text-emerald-400">Active On Duty</span>
-              <div class="text-2xl font-black text-emerald-600 dark:text-emerald-400 mt-1">42 Staff</div>
-              <span class="text-[11px] text-slate-400 font-medium mt-1 flex items-center gap-1.5">
+            <div class="Aurelia-card p-3 sm:p-4 flex flex-col justify-between">
+              <span class="text-[10px] md:text-xs font-bold uppercase tracking-wider text-emerald-700 dark:text-emerald-400">Active On Duty</span>
+              <div class="text-xl md:text-2xl font-black text-emerald-600 dark:text-emerald-400 mt-1">42 Staff</div>
+              <span class="text-[10px] md:text-xs text-slate-400 font-medium mt-1 flex items-center gap-1.5">
                 <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 flex-shrink-0"></span>
                 <span>87.5% Duty Rate</span>
               </span>
             </div>
-            <div class="Aurelia-card p-4 flex flex-col justify-between">
-              <span class="text-[10px] font-bold uppercase tracking-wider text-amber-700 dark:text-amber-400">On Leave Today</span>
-              <div class="text-2xl font-black text-amber-600 dark:text-amber-400 mt-1">6 Staff</div>
-              <span class="text-[11px] text-slate-400 font-medium mt-1 flex items-center gap-1.5">
+            <div class="Aurelia-card p-3 sm:p-4 flex flex-col justify-between">
+              <span class="text-[10px] md:text-xs font-bold uppercase tracking-wider text-amber-700 dark:text-amber-400">On Leave Today</span>
+              <div class="text-xl md:text-2xl font-black text-amber-600 dark:text-amber-400 mt-1">6 Staff</div>
+              <span class="text-[10px] md:text-xs text-slate-400 font-medium mt-1 flex items-center gap-1.5">
                 <span class="w-1.5 h-1.5 rounded-full bg-amber-500 flex-shrink-0"></span>
                 <span>12.5% Approved Leave</span>
               </span>
             </div>
-            <div class="Aurelia-card p-4 flex flex-col justify-between">
-              <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Active Shifts</span>
-              <div class="text-2xl font-black text-[#14213D] dark:text-white mt-1">3 Rotations</div>
-              <span class="text-[11px] text-slate-400 font-medium mt-1">Morning • Day • Night</span>
+            <div class="Aurelia-card p-3 sm:p-4 flex flex-col justify-between">
+              <span class="text-[10px] md:text-xs font-bold uppercase tracking-wider text-slate-400">Active Shifts</span>
+              <div class="text-xl md:text-2xl font-black text-[#14213D] dark:text-white mt-1">3 Rotations</div>
+              <span class="text-[10px] md:text-xs text-slate-400 font-medium mt-1">Morning • Day • Night</span>
             </div>
           </div>
 
           <!-- Filter Controls -->
           <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
             <div class="flex items-center space-x-2">
-              <button type="button" class="btn-staff-filter active py-1.5 px-3.5 rounded-full text-xs font-semibold bg-[#14213D] text-white shadow-xs cursor-pointer" data-filter="all">
+              <button type="button" class="btn-staff-filter active py-1.5 px-3.5 rounded-full text-xs md:text-sm font-semibold bg-[#14213D] text-white shadow-xs cursor-pointer" data-filter="all">
                 All (48)
               </button>
             </div>
 
             <div class="flex items-center space-x-3 w-full md:w-auto">
-              <select id="select-page-staff-dept" class="Aurelia-input text-xs py-2 pl-4 pr-10 font-semibold cursor-pointer">
+              <select id="select-page-staff-dept" class="Aurelia-input text-xs md:text-sm py-2 pl-4 pr-10 font-semibold cursor-pointer">
                 <option value="all">All Departments (6)</option>
                 <option value="Front Office">Front Office (8)</option>
                 <option value="Culinary & Kitchen">Culinary & Kitchen (12)</option>
@@ -3180,7 +3318,7 @@
               </select>
 
               <div class="relative flex-1 md:w-64">
-                <input type="text" id="input-page-staff-search" class="Aurelia-input w-full text-xs pl-9 font-medium"
+                <input type="text" id="input-page-staff-search" class="Aurelia-input w-full text-xs md:text-sm pl-9 font-medium"
                   placeholder="Search staff by name, role...">
                 <svg class="w-4 h-4 stroke-current text-slate-400 absolute left-3 top-2.5" fill="none" viewBox="0 0 24 24" stroke-width="2">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
@@ -3190,29 +3328,29 @@
           </div>
 
           <!-- Staff Table -->
-          <div class="Aurelia-card p-0 overflow-hidden">
+          <div id="staff-table-card" class="Aurelia-card p-0 overflow-hidden bg-white dark:bg-slate-900 shadow-sm">
             <div class="overflow-x-auto">
-              <table class="w-full text-xs text-center">
-                <thead class="bg-slate-50 dark:bg-slate-800 text-slate-500 font-semibold text-[11px] border-b border-slate-200 dark:border-slate-700">
+              <table id="page-staff-table" class="w-full text-xs md:text-sm text-center bg-white dark:bg-slate-900">
+                <thead class="bg-slate-50 dark:bg-slate-800 text-slate-500 font-semibold text-[10px] md:text-xs border-b border-slate-200 dark:border-slate-700">
                   <tr>
-                    <th class="py-3.5 px-4 whitespace-nowrap">Employee ID</th>
-                    <th class="py-3.5 px-4">Employee Name</th>
-                    <th class="py-3.5 px-4">Role & Department</th>
-                    <th class="py-3.5 px-4">Assigned Station</th>
-                    <th class="py-3.5 px-4">Shift Timing</th>
-                    <th class="py-3.5 px-4 text-center">Status</th>
-                    <th class="py-3.5 px-4">Contact</th>
+                    <th class="py-2.5 px-2.5 sm:py-3.5 sm:px-4 whitespace-nowrap">Employee ID</th>
+                    <th class="py-2.5 px-2.5 sm:py-3.5 sm:px-4">Employee Name</th>
+                    <th class="py-2.5 px-2.5 sm:py-3.5 sm:px-4">Role & Department</th>
+                    <th class="py-2.5 px-2.5 sm:py-3.5 sm:px-4">Assigned Station</th>
+                    <th class="py-2.5 px-2.5 sm:py-3.5 sm:px-4">Shift Timing</th>
+                    <th class="py-2.5 px-2.5 sm:py-3.5 sm:px-4 text-center">Status</th>
+                    <th class="py-2.5 px-2.5 sm:py-3.5 sm:px-4">Contact</th>
                   </tr>
                 </thead>
-                <tbody id="page-staff-tbody" class="divide-y divide-slate-100 dark:divide-slate-800">
+                <tbody id="page-staff-tbody" class="divide-y divide-slate-100 dark:divide-slate-800 bg-white dark:bg-slate-900">
                   <!-- Rendered dynamically by main.js -->
                 </tbody>
               </table>
             </div>
-            <div id="page-staff-empty" class="p-8 text-center text-xs text-slate-400 hidden">
+            <div id="page-staff-empty" class="p-8 text-center text-xs md:text-sm text-slate-400 hidden">
               No staff members found matching your search.
             </div>
-            <div class="p-3.5 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs text-slate-400">
+            <div class="p-3.5 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs md:text-sm text-slate-400">
               <span id="page-staff-count-label">Showing 48 of 48 staff members</span>
               <span>Active Hotel Operations</span>
             </div>
