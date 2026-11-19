@@ -385,14 +385,64 @@
     #mobile-drawer-backdrop {
       z-index: 45 !important;
     }
-        /* Mobile responsive viewport boundary & overflow protection */
-    html, body {
-      overflow-x: hidden !important;
-      max-width: 100vw !important;
-    }
-    #app-dashboard-wrapper, #main-app-content {
-      overflow-x: hidden !important;
-      max-width: 100% !important;
+        /* Mobile-only responsive containment and single-line table protection (Active ONLY on <= 767px) */
+    @media (max-width: 767px) {
+      html, body {
+        overflow-x: hidden !important;
+        max-width: 100vw !important;
+        width: 100% !important;
+      }
+      #app-dashboard-wrapper, #main-app-content, #section-dashboard, main, section {
+        overflow-x: hidden !important;
+        max-width: 100% !important;
+        min-width: 0 !important;
+        width: 100% !important;
+      }
+      #section-dashboard > div.absolute.rounded-full,
+      section > div.absolute.rounded-full.blur-3xl {
+        display: none !important;
+      }
+      .Aurelia-card, .aurelia-card {
+        max-width: 100% !important;
+      }
+      .overflow-x-auto, .overflow-x-scroll, .table-responsive, div:has(> table) {
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        max-width: 100% !important;
+        display: block !important;
+        width: 100% !important;
+      }
+      .overflow-x-auto > table, .overflow-x-scroll > table, .Aurelia-card table:not(#print-invoice-area table), table.w-full {
+        min-width: 560px !important;
+      }
+      table tbody td, table tfoot td, table td, table th, .Aurelia-table-header td, .Aurelia-table-header th {
+        white-space: nowrap !important;
+        word-break: normal !important;
+        font-size: 11px !important;
+        padding-top: 0.5rem !important;
+        padding-bottom: 0.5rem !important;
+        padding-left: 0.5rem !important;
+        padding-right: 0.5rem !important;
+      }
+      [class*="badge"], .stat-badge-pill, [id*="-badge-"], table td span, .inline-flex.rounded-full {
+        white-space: nowrap !important;
+        flex-shrink: 0 !important;
+        display: inline-flex !important;
+      }
+      table td .inline-flex.flex-col, table td .flex-col {
+        white-space: nowrap !important;
+        min-width: 120px !important;
+      }
+      #device-activity-scroll-wrap table {
+        min-width: 520px !important;
+      }
+      .calendar-range-capsule {
+        max-width: 100% !important;
+        overflow-x: auto !important;
+      }
+      .calendar-range-capsule input[type="date"] {
+        max-width: 95px !important;
+      }
     }
     #mobile-user-menu-backdrop {
       z-index: 9998 !important;
@@ -2043,12 +2093,18 @@
     text-align: left !important;
   }
 
-  table tbody td,
-  table tfoot td,
-  table td,
-  .Aurelia-table-header td {
+  table tbody td:not(.whitespace-nowrap),
+  table tfoot td:not(.whitespace-nowrap),
+  table td:not(.whitespace-nowrap),
+  .Aurelia-table-header td:not(.whitespace-nowrap) {
     white-space: normal;
     word-break: break-word;
+  }
+
+  table td.whitespace-nowrap,
+  table th.whitespace-nowrap,
+  .whitespace-nowrap {
+    white-space: nowrap !important;
   }
 
   /* Default table headers and cell text left-aligned */
