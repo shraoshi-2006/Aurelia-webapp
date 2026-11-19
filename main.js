@@ -351,6 +351,23 @@ $(document).ready(function () {
       display: none !important;
     }
   }
+
+  /* CRITICAL: Mobile drawer stacking context fix.
+     Ensures the backdrop sits strictly BEHIND the sidebar, blurring only the main content behind it,
+     never the sidebar itself! */
+  #app-dashboard-wrapper {
+    z-index: auto !important;
+  }
+  #mobile-drawer-backdrop {
+    z-index: 45 !important;
+  }
+  #app-sidebar {
+    z-index: 55 !important;
+    background-color: #494D5F !important;
+  }
+  #btn-sidebar-collapse {
+    z-index: 60 !important;
+  }
       </style>
     `);
   }

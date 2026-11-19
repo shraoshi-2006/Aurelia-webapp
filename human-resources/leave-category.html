@@ -342,7 +342,14 @@
     /* ========================================================================= */
     /* SIDEBAR NAVIGATION IN SOPHISTICATED DEEP SLATE (#494D5F)                  */
     /* ========================================================================= */
+    #app-dashboard-wrapper {
+      z-index: auto !important;
+    }
+    #mobile-drawer-backdrop {
+      z-index: 45 !important;
+    }
     #app-sidebar {
+      z-index: 55 !important;
       background: #494D5F !important;
       border-right: 1px solid rgba(255, 255, 255, 0.08) !important;
       box-shadow: 4px 0 24px rgba(15, 23, 42, 0.12) !important;
@@ -2629,7 +2636,7 @@
     class="fixed inset-0 bg-[#14213D]/40 backdrop-blur-sm z-40 hidden transition-opacity duration-300"></div>
 
   <!-- App Wrapper (Sidebar + Main) -->
-  <div id="app-dashboard-wrapper" class="flex flex-1 min-h-screen bg-[#F4F5F7] relative z-10 hidden">
+  <div id="app-dashboard-wrapper" class="flex flex-1 min-h-screen bg-[#F4F5F7] relative hidden">
 
     <!-- =================================================================== -->
     <!-- SIDEBAR NAVIGATION (Matches Aurelia layout) -->
