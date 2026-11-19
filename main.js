@@ -4905,21 +4905,12 @@ $(document).ready(function () {
                 ${b.customerEmail ? `<div class="text-[10px] text-amber-600 font-medium whitespace-nowrap">${escapeHtml(b.customerEmail)}</div>` : ''}
               </div>
             </td>
-<<<<<<< HEAD
-            <td class="py-3 px-4 text-slate-500 font-medium">${formatDateTime(b.date)}</td>
-            <td class="py-3 px-4 text-slate-600 dark:text-slate-300 font-medium">${getPaymentMethodBadge(b.paymentMethod)}</td>
-            <td class="py-3 px-4 text-center font-black text-slate-900 dark:text-white">${formatMoney(b.grandTotal)}</td>
-            <td class="py-3 px-4 text-center">${getStatusBadge(b.status)}</td>
-            <td class="py-3.5 px-4 text-center whitespace-nowrap">
-              <div class="flex items-center justify-end space-x-1">
-=======
             <td class="py-2.5 px-3 text-slate-500 font-medium whitespace-nowrap">${formatDateTime(b.date)}</td>
-            <td class="py-2.5 px-3 text-slate-600 dark:text-slate-300 font-medium whitespace-nowrap">${escapeHtml(b.paymentMethod)}</td>
+            <td class="py-2.5 px-3 text-slate-600 dark:text-slate-300 font-medium whitespace-nowrap">${getPaymentMethodBadge(b.paymentMethod)}</td>
             <td class="py-2.5 px-3 text-center font-black text-slate-900 dark:text-white whitespace-nowrap">${formatMoney(b.grandTotal)}</td>
             <td class="py-2.5 px-3 text-center whitespace-nowrap">${getStatusBadge(b.status)}</td>
             <td class="py-2.5 px-3 text-center whitespace-nowrap">
               <div class="flex items-center justify-end space-x-1 whitespace-nowrap">
->>>>>>> bde29785e87425e2535ad968b22abb5f1a525ce2
                 <!-- View / Eye -->
                 <button type="button" class="btn-view-bill p-2 rounded-lg text-slate-500 hover:text-sky-600 hover:bg-sky-50 dark:hover:bg-slate-800 transition-colors cursor-pointer" title="View Invoice" data-id="${b.id}">
                   <svg class="w-4 h-4 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2">
