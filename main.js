@@ -609,20 +609,38 @@ $(document).ready(function () {
   }
 
   /* CRITICAL: Mobile drawer stacking context fix.
-     Ensures the backdrop sits strictly BEHIND the sidebar, blurring only the main content behind it,
-     never the sidebar itself! */
+     Ensures the backdrop sits strictly above the sticky header (z-50) and below the mobile sidebar drawer (z-100),
+     blurring everything behind it. When mobile drawer is open, DEV08 badge is hidden completely. */
   #app-dashboard-wrapper {
     z-index: auto !important;
   }
   #mobile-drawer-backdrop {
-    z-index: 45 !important;
+    z-index: 90 !important;
   }
-  #app-sidebar {
-    z-index: 55 !important;
-    background-color: var(--aurelia-sidebar-bg, #494D5F) !important;
+  @media (max-width: 1023px) {
+    #app-sidebar {
+      z-index: 100 !important;
+      background-color: var(--aurelia-sidebar-bg, #494D5F) !important;
+    }
+    #btn-sidebar-collapse {
+      z-index: 105 !important;
+    }
+    body.sidebar-open #topbar-device-id-badge,
+    body.sidebar-open [id*="device-id-badge"] {
+      display: none !important;
+      opacity: 0 !important;
+      visibility: hidden !important;
+      pointer-events: none !important;
+    }
   }
-  #btn-sidebar-collapse {
-    z-index: 60 !important;
+  @media (min-width: 1024px) {
+    #app-sidebar {
+      z-index: 55 !important;
+      background-color: var(--aurelia-sidebar-bg, #494D5F) !important;
+    }
+    #btn-sidebar-collapse {
+      z-index: 60 !important;
+    }
   }
 
   /* Spacing for mobile topbar right button (+ New Bill) */
@@ -2222,7 +2240,7 @@ $(document).ready(function () {
     $('#mobile-quick-popup').addClass('hidden');
     $('#app-sidebar').removeClass('-translate-x-full is-collapsed');
     $('#mobile-drawer-backdrop').removeClass('hidden');
-    $('body').addClass('overflow-hidden lg:overflow-auto');
+    $('body').addClass('overflow-hidden lg:overflow-auto sidebar-open');
     if ($(window).width() < 1024) {
       $('#btn-sidebar-collapse').find('svg').css('transform', 'rotate(0deg)');
       $('#btn-sidebar-collapse').attr('title', 'Close sidebar');
@@ -2232,7 +2250,7 @@ $(document).ready(function () {
   function closeSidebar() {
     $('#app-sidebar').addClass('-translate-x-full');
     $('#mobile-drawer-backdrop').addClass('hidden');
-    $('body').removeClass('overflow-hidden lg:overflow-auto');
+    $('body').removeClass('overflow-hidden lg:overflow-auto sidebar-open');
     if ($(window).width() < 1024) {
       $('#btn-sidebar-collapse').find('svg').css('transform', 'rotate(180deg)');
       $('#btn-sidebar-collapse').attr('title', 'Open sidebar');
@@ -2349,7 +2367,7 @@ $(document).ready(function () {
     if ($(window).width() >= 1024) {
       $('#app-sidebar').removeClass('-translate-x-full');
       $('#mobile-drawer-backdrop').addClass('hidden');
-      $('body').removeClass('overflow-hidden');
+      $('body').removeClass('overflow-hidden sidebar-open');
       if (sidebarCollapsed) {
         $('#btn-sidebar-collapse').find('svg').css('transform', 'rotate(180deg)');
       } else {
@@ -2357,8 +2375,10 @@ $(document).ready(function () {
       }
     } else {
       if ($('#app-sidebar').hasClass('-translate-x-full')) {
+        $('body').removeClass('sidebar-open');
         $('#btn-sidebar-collapse').find('svg').css('transform', 'rotate(180deg)');
       } else {
+        $('body').addClass('sidebar-open');
         $('#btn-sidebar-collapse').find('svg').css('transform', 'rotate(0deg)');
       }
     }

@@ -380,7 +380,16 @@
     /* SIDEBAR NAVIGATION IN SOPHISTICATED DEEP SLATE (#494D5F)                  */
     /* ========================================================================= */
     #mobile-drawer-backdrop {
-      z-index: 45 !important;
+      z-index: 90 !important;
+    }
+    @media (max-width: 1023px) {
+      body.sidebar-open #topbar-device-id-badge,
+      body.sidebar-open [id*="device-id-badge"] {
+        display: none !important;
+        opacity: 0 !important;
+        visibility: hidden !important;
+        pointer-events: none !important;
+      }
     }
         /* Mobile-only responsive containment and single-line table protection (Active ONLY on <= 767px) */
     @media (max-width: 767px) {
