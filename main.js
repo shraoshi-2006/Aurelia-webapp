@@ -685,6 +685,17 @@ $(document).ready(function () {
     }
   }
 
+  /* Ensure all header and modal icon badges are perfect circles and never squished */
+  .bg-gradient-to-tr.from-\[\#14213D\].to-\[\#FCA311\],
+  div[class*="bg-gradient-to-tr"][class*="from-[#14213D]"] {
+    border-radius: 9999px !important;
+    aspect-ratio: 1 / 1 !important;
+    flex-shrink: 0 !important;
+  }
+  #btn-sidebar-close-mobile {
+    display: none !important;
+  }
+
   /* Spacing for mobile topbar right button (+ New Bill) */
   #app-mobile-header {
     padding-left: 1rem !important;
@@ -6785,7 +6796,7 @@ $(document).ready(function () {
           class="Aurelia-card max-w-lg w-full p-6 sm:p-7 space-y-4 shadow-2xl max-h-[92vh] flex flex-col rounded-3xl border border-slate-100 dark:border-slate-800">
           <div class="flex items-center justify-between pb-3.5 border-b border-slate-100 dark:border-slate-800 flex-shrink-0">
             <div class="flex items-center space-x-3">
-              <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-[#14213D] to-[#FCA311] flex items-center justify-center text-white shadow-md">
+              <div class="w-10 h-10 min-w-10 min-h-10 rounded-full flex-shrink-0 aspect-square bg-gradient-to-tr from-[#14213D] to-[#FCA311] flex items-center justify-center text-white shadow-md">
                 <svg class="w-5 h-5 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
                 </svg>
