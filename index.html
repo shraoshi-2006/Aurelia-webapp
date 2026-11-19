@@ -345,6 +345,21 @@
       justify-content: center;
       transition: all 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
       cursor: pointer;
+      flex-shrink: 0 !important;
+    }
+
+    @media (max-width: 640px) {
+      .btn-circle-arrow,
+      #section-dashboard .btn-circle-arrow {
+        width: 26px !important;
+        height: 26px !important;
+        min-width: 26px !important;
+      }
+      .btn-circle-arrow svg,
+      #section-dashboard .btn-circle-arrow svg {
+        width: 12px !important;
+        height: 12px !important;
+      }
     }
 
     .Aurelia-card:hover .btn-circle-arrow {
@@ -3453,7 +3468,7 @@
       </div>
 
       <!-- MAIN SCROLLABLE DASHBOARD VIEW CONTAINER -->
-      <div class="px-6 sm:px-8 pb-5 flex-1">
+      <div class="px-3.5 sm:px-8 pb-5 flex-1">
 
         <!-- ============================================================= -->
         <!-- 1. DASHBOARD VIEW (Pixel-matched to the screenshot) -->
@@ -3471,57 +3486,57 @@
             class="absolute top-1/2 left-1/3 w-[28rem] h-[28rem] rounded-full bg-gradient-to-tr from-[#FCA311]/6 via-orange-100/20 to-transparent blur-3xl pointer-events-none z-0">
           </div>
 
-          <!-- ROW 1: 4 KEY METRIC CARDS (Glassmorphic) -->
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+          <!-- ROW 1: 3 KEY METRIC CARDS (Glassmorphic, Compact 2-Col on Mobile) -->
+          <div class="grid grid-cols-2 md:grid-cols-3 gap-2.5 sm:gap-5">
 
             <!-- Card 1: Total Billing -->
             <div id="card-dashboard-total-billing"
-              class="Aurelia-card glass-card-animate p-6 flex flex-col justify-between relative z-10 min-h-[175px] cursor-pointer group"
+              class="Aurelia-card glass-card-animate p-3 sm:p-5 flex flex-col justify-between relative z-10 min-h-0 cursor-pointer group"
               title="Click to view all billing transactions & invoices">
-              <div class="flex items-center justify-between">
-                <div class="flex items-center space-x-2">
-                  <span class="text-sm font-semibold text-slate-500 dark:text-slate-400">Total Billing</span>
+              <div class="flex items-start sm:items-center justify-between gap-1">
+                <div class="flex flex-col sm:flex-row sm:items-center gap-1 sm:space-x-2">
+                  <span class="text-xs sm:text-sm font-semibold text-slate-500 dark:text-slate-400">Total Billing</span>
                   <span id="stat-billing-growth"
-                    class="stat-badge-pill inline-flex items-center text-[10px] font-bold text-[#12B76A] bg-[#ECFDF3]/85 dark:bg-emerald-950/40 px-2 py-0.5 rounded-full border border-emerald-300/40">
+                    class="stat-badge-pill inline-flex items-center text-[9px] sm:text-[10px] font-bold text-[#12B76A] bg-[#ECFDF3]/85 dark:bg-emerald-950/40 px-1.5 py-0.5 rounded-full border border-emerald-300/40 w-fit">
                     ↑ 12.1%
                   </span>
                 </div>
                 <button type="button" id="btn-dashboard-total-billings"
-                  class="btn-circle-arrow group-hover:bg-[#FCA311] group-hover:text-black group-hover:rotate-12 transition-all"
+                  class="btn-circle-arrow flex-shrink-0 group-hover:bg-[#FCA311] group-hover:text-black group-hover:rotate-12 transition-all"
                   title="View all bills & invoices">
                   <svg class="w-3.5 h-3.5 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2.5">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25" />
                   </svg>
                 </button>
               </div>
-              <div class="my-2">
+              <div class="my-1.5 sm:my-2">
                 <div>
-                  <span class="text-[10px] font-bold tracking-wider uppercase text-slate-400 block mb-0.5">Gross Billed Revenue</span>
+                  <span class="text-[9px] sm:text-[10px] font-bold tracking-wider uppercase text-slate-400 block mb-0.5">Gross Billed</span>
                   <div id="stat-total-billing"
-                    class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
-                    <span class="rupee-symbol">₹</span>1,57,121<span class="text-slate-400 font-normal">.82</span>
+                    class="text-base sm:text-2xl lg:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">
+                    <span class="rupee-symbol">₹</span>1,57,121<span class="text-slate-400 font-normal text-xs sm:text-lg">.82</span>
                   </div>
                 </div>
               </div>
-              <div class="grid grid-cols-2 gap-3 pt-2 border-t border-slate-100 dark:border-slate-800/80 text-xs">
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-1.5 sm:gap-3 pt-1.5 sm:pt-2 border-t border-slate-100 dark:border-slate-800/80 text-[10px] sm:text-xs">
                 <div>
-                  <div class="text-[11px] text-slate-400 flex items-center space-x-1">
+                  <div class="text-[9px] sm:text-[11px] text-slate-400 flex items-center space-x-1">
                     <span class="w-1.5 h-1.5 rounded-full bg-[#14213D] dark:bg-slate-300"></span>
                     <span class="font-medium">Invoices</span>
                     <span id="stat-billing-avg"
-                      class="text-[10px] text-slate-500 dark:text-slate-400 font-semibold ml-auto">vs last mo</span>
+                      class="text-[9px] sm:text-[10px] text-slate-500 dark:text-slate-400 font-semibold ml-auto hidden sm:inline">vs last mo</span>
                   </div>
-                  <div id="stat-billing-count" class="font-bold text-slate-900 dark:text-slate-100 text-sm mt-0.5">
+                  <div id="stat-billing-count" class="font-bold text-slate-900 dark:text-slate-100 text-xs sm:text-sm mt-0.5">
                     8 Settled
                   </div>
                 </div>
-                <div class="border-l border-slate-100 dark:border-slate-800/80 pl-3">
-                  <div class="text-[11px] text-slate-400 flex items-center space-x-1">
+                <div class="sm:border-l sm:border-slate-100 dark:sm:border-slate-800/80 sm:pl-3">
+                  <div class="text-[9px] sm:text-[11px] text-slate-400 flex items-center space-x-1">
                     <span class="w-1.5 h-1.5 rounded-full bg-[#FCA311]"></span>
                     <span class="font-medium">GST (5%)</span>
-                    <span class="text-[10px] text-amber-600 dark:text-amber-400 font-bold ml-auto">Tax</span>
+                    <span class="text-[9px] sm:text-[10px] text-amber-600 dark:text-amber-400 font-bold ml-auto hidden sm:inline">Tax</span>
                   </div>
-                  <div id="stat-billing-tax" class="font-bold text-slate-900 dark:text-slate-100 text-sm mt-0.5">
+                  <div id="stat-billing-tax" class="font-bold text-slate-900 dark:text-slate-100 text-xs sm:text-sm mt-0.5">
                     <span class="rupee-symbol">₹</span>7,481<span class="text-slate-400 font-normal">.99</span>
                   </div>
                 </div>
@@ -3529,16 +3544,16 @@
             </div>
 
             <!-- Card 2: Merged Income, Expense & Calculated Profit -->
-            <div class="Aurelia-card glass-card-animate p-6 flex flex-col justify-between relative z-10 min-h-[175px]">
-              <div class="flex items-center justify-between">
-                <div class="flex items-center space-x-2">
-                  <span class="text-sm font-semibold text-slate-500 dark:text-slate-400">Income & Expense</span>
+            <div class="Aurelia-card glass-card-animate p-3 sm:p-5 flex flex-col justify-between relative z-10 min-h-0">
+              <div class="flex items-start sm:items-center justify-between gap-1">
+                <div class="flex flex-col sm:flex-row sm:items-center gap-1 sm:space-x-2">
+                  <span class="text-xs sm:text-sm font-semibold text-slate-500 dark:text-slate-400">Income &amp; Expense</span>
                   <span id="stat-profit-margin"
-                    class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100/80 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-300/40">
-                    +26.8% Profit
+                    class="text-[9px] sm:text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-emerald-100/80 text-emerald-800 dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-300/40 w-fit">
+                    +26.8%
                   </span>
                 </div>
-                <button type="button" class="btn-circle-arrow nav-link" data-target="analytics"
+                <button type="button" class="btn-circle-arrow nav-link flex-shrink-0" data-target="analytics"
                   title="View financial analytics">
                   <svg class="w-3.5 h-3.5 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2.5">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25" />
@@ -3547,90 +3562,89 @@
               </div>
 
               <!-- Main Calculated Profit -->
-              <div class="my-2">
+              <div class="my-1.5 sm:my-2">
                 <div>
-                  <span class="text-[10px] font-bold tracking-wider uppercase text-slate-400 block mb-0.5">Calculated
-                    Profit</span>
+                  <span class="text-[9px] sm:text-[10px] font-bold tracking-wider uppercase text-slate-400 block mb-0.5">Calculated Profit</span>
                   <div id="stat-calculated-profit"
-                    class="text-2xl sm:text-3xl font-extrabold text-[#12B76A] dark:text-emerald-400 tracking-tight">
+                    class="text-base sm:text-2xl lg:text-3xl font-extrabold text-[#12B76A] dark:text-emerald-400 tracking-tight">
                     <span class="rupee-symbol">₹</span>22,780<span
-                      class="text-emerald-600/70 dark:text-emerald-400/70 font-normal">.00</span>
+                      class="text-emerald-600/70 dark:text-emerald-400/70 font-normal text-xs sm:text-lg">.00</span>
                   </div>
                 </div>
               </div>
 
               <!-- Side-by-side Income & Expense breakdown -->
-              <div class="grid grid-cols-2 gap-3 pt-2 border-t border-slate-100 dark:border-slate-800/80 text-xs">
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-1.5 sm:gap-3 pt-1.5 sm:pt-2 border-t border-slate-100 dark:border-slate-800/80 text-[10px] sm:text-xs">
                 <div>
-                  <div class="text-[11px] text-slate-400 flex items-center space-x-1">
+                  <div class="text-[9px] sm:text-[11px] text-slate-400 flex items-center space-x-1">
                     <span class="w-1.5 h-1.5 rounded-full bg-[#12B76A]"></span>
                     <span class="font-medium">Income</span>
                     <span id="stat-income-growth"
-                      class="text-[10px] text-emerald-600 dark:text-emerald-400 font-bold ml-auto">↑ 6.3%</span>
+                      class="text-[9px] sm:text-[10px] text-emerald-600 dark:text-emerald-400 font-bold ml-auto hidden sm:inline">↑ 6.3%</span>
                   </div>
-                  <div id="stat-income-display" class="font-bold text-slate-900 dark:text-slate-100 text-sm mt-0.5">
+                  <div id="stat-income-display" class="font-bold text-slate-900 dark:text-slate-100 text-xs sm:text-sm mt-0.5">
                     <span class="rupee-symbol">₹</span>85,000<span class="text-slate-400 font-normal">.00</span>
                   </div>
                 </div>
-                <div class="border-l border-slate-100 dark:border-slate-800/80 pl-3">
-                  <div class="text-[11px] text-slate-400 flex items-center space-x-1">
+                <div class="sm:border-l sm:border-slate-100 dark:sm:border-slate-800/80 sm:pl-3">
+                  <div class="text-[9px] sm:text-[11px] text-slate-400 flex items-center space-x-1">
                     <span class="w-1.5 h-1.5 rounded-full bg-[#F04438]"></span>
                     <span class="font-medium">Expense</span>
                     <span id="stat-expense-growth"
-                      class="text-[10px] text-rose-600 dark:text-rose-400 font-bold ml-auto">↑ 2.4%</span>
+                      class="text-[9px] sm:text-[10px] text-rose-600 dark:text-rose-400 font-bold ml-auto hidden sm:inline">↑ 2.4%</span>
                   </div>
-                  <div id="stat-expense-display" class="font-bold text-slate-900 dark:text-slate-100 text-sm mt-0.5">
+                  <div id="stat-expense-display" class="font-bold text-slate-900 dark:text-slate-100 text-xs sm:text-sm mt-0.5">
                     <span class="rupee-symbol">₹</span>62,220<span class="text-slate-400 font-normal">.00</span>
                   </div>
                 </div>
               </div>
             </div>
 
-            <!-- Card 3: Total Employee -->
-            <div class="Aurelia-card glass-card-animate p-6 flex flex-col justify-between relative z-10 min-h-[175px]">
-              <div class="flex items-center justify-between">
+            <!-- Card 3: Total Employee (spans 2 cols on mobile, 1 col on md+) -->
+            <div class="col-span-2 md:col-span-1 Aurelia-card glass-card-animate p-3 sm:p-5 flex flex-col justify-between relative z-10 min-h-0">
+              <div class="flex items-center justify-between gap-1">
                 <div class="flex items-center space-x-2">
-                  <span class="text-sm font-semibold text-slate-500 dark:text-slate-400">Total Employee</span>
+                  <span class="text-xs sm:text-sm font-semibold text-slate-500 dark:text-slate-400">Total Employee</span>
                   <span id="stat-employee-onduty"
-                    class="stat-badge-pill inline-flex items-center text-[10px] font-bold text-[#12B76A] bg-[#ECFDF3]/85 dark:bg-emerald-950/40 px-2 py-0.5 rounded-full border border-emerald-300/40">
+                    class="stat-badge-pill inline-flex items-center text-[9px] sm:text-[10px] font-bold text-[#12B76A] bg-[#ECFDF3]/85 dark:bg-emerald-950/40 px-2 py-0.5 rounded-full border border-emerald-300/40">
                     ● 42 On Duty
                   </span>
                 </div>
-                <button type="button" id="btn-dashboard-total-staff" class="btn-circle-arrow"
+                <button type="button" id="btn-dashboard-total-staff" class="btn-circle-arrow flex-shrink-0"
                   title="View staff roster & attendance">
                   <svg class="w-3.5 h-3.5 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2.5">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25" />
                   </svg>
                 </button>
               </div>
-              <div class="my-2">
+              <div class="my-1.5 sm:my-2">
                 <div>
-                  <span class="text-[10px] font-bold tracking-wider uppercase text-slate-400 block mb-0.5">Active Hotel Roster</span>
+                  <span class="text-[9px] sm:text-[10px] font-bold tracking-wider uppercase text-slate-400 block mb-0.5">Active Hotel Roster</span>
                   <div id="stat-total-employee"
-                    class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight flex items-baseline">
-                    48<span class="text-slate-400 font-semibold text-lg ml-1.5">Staff</span>
+                    class="text-base sm:text-2xl lg:text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight flex items-baseline">
+                    48<span class="text-slate-400 font-semibold text-xs sm:text-lg ml-1.5">Staff</span>
                   </div>
                 </div>
               </div>
-              <div class="grid grid-cols-2 gap-3 pt-2 border-t border-slate-100 dark:border-slate-800/80 text-xs">
+              <div class="grid grid-cols-2 gap-3 pt-1.5 sm:pt-2 border-t border-slate-100 dark:border-slate-800/80 text-[10px] sm:text-xs">
                 <div>
-                  <div class="text-[11px] text-slate-400 flex items-center space-x-1">
+                  <div class="text-[9px] sm:text-[11px] text-slate-400 flex items-center space-x-1">
                     <span class="w-1.5 h-1.5 rounded-full bg-[#12B76A]"></span>
                     <span class="font-medium">Attendance</span>
-                    <span class="text-[10px] text-emerald-600 dark:text-emerald-400 font-bold ml-auto">Today</span>
+                    <span class="text-[9px] sm:text-[10px] text-emerald-600 dark:text-emerald-400 font-bold ml-auto">Today</span>
                   </div>
-                  <div id="stat-employee-attendance" class="font-bold text-slate-900 dark:text-slate-100 text-sm mt-0.5">
+                  <div id="stat-employee-attendance" class="font-bold text-slate-900 dark:text-slate-100 text-xs sm:text-sm mt-0.5">
                     87.5%
                   </div>
                 </div>
                 <div class="border-l border-slate-100 dark:border-slate-800/80 pl-3">
-                  <div class="text-[11px] text-slate-400 flex items-center space-x-1">
+                  <div class="text-[9px] sm:text-[11px] text-slate-400 flex items-center space-x-1">
                     <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
                     <span class="font-medium">On Leave</span>
                     <span id="stat-employee-depts"
-                      class="text-[10px] text-slate-500 dark:text-slate-400 font-semibold ml-auto">6 Depts</span>
+                      class="text-[9px] sm:text-[10px] text-slate-500 dark:text-slate-400 font-semibold ml-auto">6 Depts</span>
                   </div>
-                  <div id="stat-employee-leave" class="font-bold text-slate-900 dark:text-slate-100 text-sm mt-0.5">
+                  <div id="stat-employee-leave" class="font-bold text-slate-900 dark:text-slate-100 text-xs sm:text-sm mt-0.5">
                     6 Staff
                   </div>
                 </div>
