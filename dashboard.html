@@ -365,6 +365,13 @@
     /* ========================================================================= */
     /* SIDEBAR NAVIGATION IN SOPHISTICATED DEEP SLATE (#494D5F)                  */
     /* ========================================================================= */
+        #mobile-user-menu-backdrop {
+      z-index: 9998 !important;
+    }
+    #mobile-user-menu-drawer {
+      z-index: 9999 !important;
+      background: #494D5F !important;
+    }
     #app-sidebar {
       background: var(--aurelia-sidebar-bg, #494D5F) !important;
       border-right: 1px solid rgba(255, 255, 255, 0.08) !important;
@@ -2746,38 +2753,134 @@
     </div>
   </div>
 
-  <!-- Mobile Top Bar (< lg) -->
+    <!-- Mobile Top Bar (< lg) -->
   <header id="app-mobile-header"
     class="lg:hidden bg-[#494D5F] border-b border-white/10 px-4 py-3 flex items-center justify-between sticky top-0 z-40 shadow-sm hidden">
-    <div class="flex items-center space-x-3">
-      <!-- Mobile Sidebar Toggle -->
+    <!-- Brand Mark (Left) -->
+    <div class="flex items-center space-x-2.5 cursor-pointer" onclick="window.location.hash='dashboard'">
+      <img src="assets/aurelia-mark.svg" alt="Aurelia Emblem"
+        class="w-8 h-8 rounded-full shadow-xs object-contain">
+      <div class="flex flex-col">
+        <span class="text-sm font-bold text-white tracking-[0.2em] uppercase leading-none"
+          style="font-family: 'Cormorant Garamond', Georgia, serif;">AURELIA</span>
+        <span class="text-[8px] font-semibold text-slate-300 tracking-[0.2em] uppercase leading-tight">Hotel &amp;
+          Restaurant</span>
+      </div>
+    </div>
+
+    <!-- Right Controls Mobile (3-Lines Menu) -->
+    <div class="flex items-center space-x-2 mr-1">
       <button id="btn-mobile-more" type="button"
-        class="btn-sidebar-trigger w-9 h-9 rounded-full border border-white/20 bg-white/10 flex items-center justify-center text-white cursor-pointer"
-        aria-label="Open sidebar menu">
+        class="w-9 h-9 rounded-full border border-white/20 bg-white/10 flex items-center justify-center text-white hover:bg-white/20 transition-all cursor-pointer shadow-xs"
+        aria-label="Open menu" title="Open menu">
         <svg class="w-5 h-5 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2">
           <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
         </svg>
       </button>
-
-      <!-- Brand Mark -->
-      <div class="flex items-center space-x-2.5 cursor-pointer" onclick="window.location.hash='dashboard'">
-        <img src="assets/aurelia-mark.svg" alt="Aurelia Emblem" class="w-8 h-8 rounded-full shadow-xs object-contain">
-        <div class="flex flex-col">
-          <span class="text-sm font-bold text-white tracking-[0.2em] uppercase leading-none"
-            style="font-family: 'Cormorant Garamond', Georgia, serif;">AURELIA</span>
-          <span class="text-[8px] font-semibold text-slate-300 tracking-[0.2em] uppercase leading-tight">Hotel &amp;
-            Restaurant</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- Right Controls Mobile -->
-    <div class="flex items-center space-x-2">
-      <button type="button" class="quick-nav-bill btn-Aurelia-primary py-1 px-3 text-xs">
-        + New Bill
-      </button>
     </div>
   </header>
+
+  <!-- Mobile User Menu Backdrop -->
+  <div id="mobile-user-menu-backdrop"
+    class="fixed inset-0 bg-[#14213D]/70 backdrop-blur-sm hidden transition-opacity duration-300"
+    style="z-index: 9998 !important;"></div>
+
+  <!-- Mobile User Menu Drawer (Pure Path / Aurelia Style) -->
+  <aside id="mobile-user-menu-drawer"
+    class="fixed inset-y-0 left-0 w-80 max-w-[85vw] text-white transform -translate-x-full transition-transform duration-300 ease-in-out shadow-2xl flex flex-col border-r border-white/10 lg:hidden"
+    style="z-index: 9999 !important; background-color: #494D5F !important;"
+    aria-label="User Mobile Menu">
+    
+    <!-- Top Header (Logo + [X] Close Button) -->
+    <div class="px-5 py-4 border-b border-white/10 flex items-center justify-between">
+      <div class="flex items-center space-x-3">
+        <img src="assets/aurelia-mark.svg" alt="Aurelia Emblem" class="w-9 h-9 rounded-full shadow-xs object-contain">
+        <div class="flex flex-col">
+          <span class="text-base font-bold text-white tracking-[0.2em] uppercase leading-none"
+            style="font-family: 'Cormorant Garamond', Georgia, serif;">AURELIA</span>
+          <span class="text-[9px] font-semibold text-slate-300 tracking-[0.2em] uppercase leading-tight">Hotel &amp; Restaurant</span>
+        </div>
+      </div>
+      <!-- [X] Close Button (Styled like Image 1) -->
+      <button type="button" id="btn-close-mobile-user-menu"
+        class="w-10 h-10 rounded-xl border border-white/20 bg-white/10 hover:bg-white/20 flex items-center justify-center text-white transition-all cursor-pointer shadow-xs"
+        aria-label="Close menu">
+        <svg class="w-5 h-5 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2.2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
+
+    <!-- Menu Items: ONLY Notification, Settings, User Profile and Account -->
+    <div class="flex-1 overflow-y-auto p-4 space-y-3">
+      
+      <!-- 1. Notification Row -->
+      <button type="button" id="menu-item-notifications"
+        class="w-full flex items-center justify-between p-3.5 rounded-2xl bg-white/5 hover:bg-white/15 border border-white/10 transition-all text-left cursor-pointer group">
+        <div class="flex items-center space-x-3.5">
+          <div class="relative w-11 h-11 rounded-full bg-white/10 group-hover:bg-[#FCA311] group-hover:text-black flex items-center justify-center text-white transition-all flex-shrink-0">
+            <svg class="w-5 h-5 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0" />
+            </svg>
+            <span
+              class="absolute -top-0.5 -right-0.5 w-4 h-4 rounded-full bg-rose-500 text-white text-[9px] font-extrabold flex items-center justify-center shadow-xs">
+              1
+            </span>
+          </div>
+          <div class="flex flex-col">
+            <span class="text-sm font-bold text-white group-hover:text-[#FCA311] transition-colors">Notifications</span>
+            <span class="text-xs text-slate-300">1 unread alert</span>
+          </div>
+        </div>
+        <div class="flex items-center space-x-2">
+          <span class="px-2 py-0.5 rounded-full bg-rose-500/20 text-rose-300 border border-rose-500/30 text-[10px] font-bold">1 New</span>
+          <svg class="w-4 h-4 text-slate-400 group-hover:text-white group-hover:translate-x-0.5 transition-all" fill="none" viewBox="0 0 24 24" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+          </svg>
+        </div>
+      </button>
+
+      <!-- 2. Settings Row -->
+      <button type="button" id="menu-item-settings"
+        class="w-full flex items-center justify-between p-3.5 rounded-2xl bg-white/5 hover:bg-white/15 border border-white/10 transition-all text-left cursor-pointer group">
+        <div class="flex items-center space-x-3.5">
+          <div class="w-11 h-11 rounded-full bg-white/10 group-hover:bg-[#FCA311] group-hover:text-black flex items-center justify-center text-white transition-all flex-shrink-0">
+            <svg class="w-5 h-5 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.324.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 011.37.49l1.296 2.247a1.125 1.125 0 01-.26 1.431l-1.003.827c-.293.24-.438.613-.431.992a6.759 6.759 0 010 .255c-.007.378.138.75.43.99l1.005.828c.424.35.534.954.26 1.43l-1.298 2.247a1.125 1.125 0 01-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.57 6.57 0 01-.22.128c-.331.183-.581.495-.644.869l-.213 1.28c-.09.543-.56.941-1.11.941h-2.594c-.55 0-1.02-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 01-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 01-1.369-.49l-1.297-2.247a1.125 1.125 0 01.26-1.431l1.004-.827c.292-.24.437-.613.43-.992a6.932 6.932 0 010-.255c.007-.378-.138-.75-.43-.99l-1.004-.828a1.125 1.125 0 01-.26-1.43l1.297-2.247a1.125 1.125 0 011.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.087.22-.128.332-.183.582-.495.644-.869l.214-1.281z" />
+              <path stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+            </svg>
+          </div>
+          <div class="flex flex-col">
+            <span class="text-sm font-bold text-white group-hover:text-[#FCA311] transition-colors">Settings</span>
+            <span class="text-xs text-slate-300">Preferences &amp; System</span>
+          </div>
+        </div>
+        <svg class="w-4 h-4 text-slate-400 group-hover:text-white group-hover:translate-x-0.5 transition-all" fill="none" viewBox="0 0 24 24" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+        </svg>
+      </button>
+
+      <!-- 3. User Profile and Account Row -->
+      <button type="button" id="menu-item-profile"
+        class="w-full flex items-center justify-between p-3.5 rounded-2xl bg-white/5 hover:bg-white/15 border border-white/10 transition-all text-left cursor-pointer group">
+        <div class="flex items-center space-x-3.5 min-w-0">
+          <div class="w-11 h-11 rounded-full bg-[#14213D] border-2 border-[#FCA311] text-[#FCA311] font-extrabold text-sm flex items-center justify-center shadow-xs flex-shrink-0">
+            AL
+          </div>
+          <div class="flex flex-col min-w-0 truncate">
+            <span class="text-sm font-bold text-white group-hover:text-[#FCA311] transition-colors truncate">Adaline Lively</span>
+            <span class="text-xs text-slate-300 truncate">Head of HR &bull; Profile &amp; Account</span>
+          </div>
+        </div>
+        <svg class="w-4 h-4 text-slate-400 group-hover:text-white group-hover:translate-x-0.5 transition-all flex-shrink-0 ml-2" fill="none" viewBox="0 0 24 24" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+        </svg>
+      </button>
+
+    </div>
+  </aside>
 
   <!-- Mobile Drawer Backdrop -->
   <div id="mobile-drawer-backdrop"
