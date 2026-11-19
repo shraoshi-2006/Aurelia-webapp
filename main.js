@@ -9,8 +9,8 @@
       const sidebarBg = theme.sidebarBg || '#494D5F';
       const cardBorder = theme.cardBorder || 'rgba(255, 255, 255, 0.82)';
       const isDefaultBorder = !theme.cardBorder || theme.cardBorder.includes('rgba');
-      const rimBgValue = isDefaultBorder 
-        ? 'linear-gradient(135deg, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0.5) 30%, rgba(255, 255, 255, 0.1) 65%, rgba(255, 255, 255, 0.75) 100%)' 
+      const rimBgValue = isDefaultBorder
+        ? 'linear-gradient(135deg, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0.5) 30%, rgba(255, 255, 255, 0.1) 65%, rgba(255, 255, 255, 0.75) 100%)'
         : cardBorder;
 
       let style = document.getElementById('aurelia-dynamic-theme-override');
@@ -66,7 +66,7 @@
         }
       `;
     }
-  } catch (e) {}
+  } catch (e) { }
 })();
 
 /**
@@ -1667,13 +1667,13 @@ $(document).ready(function () {
             </td>
             <td class="py-2.5 sm:py-3 px-2 whitespace-nowrap text-center">
               ${(dept.status === 'Inactive' || dept.status === 'Not active' || dept.status === 'not-active')
-                ? `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-[#b91c1c] text-white shadow-2xs">
+            ? `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-[#b91c1c] text-white shadow-2xs">
                     Not active
                   </span>`
-                : `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-[#15803d] text-white shadow-2xs">
+            : `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-[#15803d] text-white shadow-2xs">
                     Active
                   </span>`
-              }
+          }
             </td>
             <td class="py-2.5 sm:py-3 px-3 whitespace-nowrap text-center">
               <div class="inline-flex items-center justify-end space-x-1.5">
@@ -1699,13 +1699,13 @@ $(document).ready(function () {
               <div class="flex items-center justify-between mb-1.5">
                 <span class="px-2 py-0.5 rounded-md text-[10px] font-mono font-bold bg-[#14213D] text-[#FCA311]">${dept.code}</span>
                 ${(dept.status === 'Inactive' || dept.status === 'Not active' || dept.status === 'not-active')
-                  ? `<span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold bg-[#b91c1c] text-white shadow-2xs">
+            ? `<span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold bg-[#b91c1c] text-white shadow-2xs">
                       Not active
                     </span>`
-                  : `<span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold bg-[#15803d] text-white shadow-2xs">
+            : `<span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold bg-[#15803d] text-white shadow-2xs">
                       Active
                     </span>`
-                }
+          }
               </div>
               <h4 class="text-xs font-bold text-slate-900 dark:text-white group-hover:text-[#FCA311] transition-colors leading-snug">
                 ${dept.name}
@@ -6946,7 +6946,7 @@ $(document).ready(function () {
           });
           storedHrTpls = JSON.stringify(parsed);
           localStorage.setItem('aurelia_hr_templates_v7', storedHrTpls);
-        } catch (e) {}
+        } catch (e) { }
       }
     }
     if (storedHrTpls) {
@@ -7165,7 +7165,7 @@ $(document).ready(function () {
     tpl.empName = trimmed;
     try {
       localStorage.setItem('aurelia_hr_templates_v7', JSON.stringify(HR_TEMPLATES));
-    } catch (e) {}
+    } catch (e) { }
     renderHrDocumentsSection();
     showToast(`Updated record for ${tpl.empId}`, 'success');
   });
@@ -7181,7 +7181,7 @@ $(document).ready(function () {
       HR_TEMPLATES.splice(idx, 1);
       try {
         localStorage.setItem('aurelia_hr_templates_v7', JSON.stringify(HR_TEMPLATES));
-      } catch (e) {}
+      } catch (e) { }
       renderHrDocumentsSection();
       showToast(`Record ${item.empId} deleted successfully.`, 'info');
     }
@@ -7568,7 +7568,7 @@ $(document).ready(function () {
           }
         }
       }
-    } catch (e) {}
+    } catch (e) { }
   })();
 
   let currentHolidayFilter = 'all';
@@ -8434,7 +8434,7 @@ $(document).ready(function () {
         HR_TEMPLATES = HR_TEMPLATES.filter(t => !ids.includes(String(t.id)));
         try {
           localStorage.setItem('aurelia_hr_templates_v7', JSON.stringify(HR_TEMPLATES));
-        } catch (e) {}
+        } catch (e) { }
         renderHrDocumentsSection();
         showToast(`Deleted ${count} HR record${count > 1 ? 's' : ''} successfully.`, 'info');
         return;
@@ -8462,7 +8462,7 @@ $(document).ready(function () {
           const prev = JSON.parse(localStorage.getItem('aurelia_deleted_holidays_2026') || '[]');
           const merged = Array.from(new Set(prev.concat(names)));
           localStorage.setItem('aurelia_deleted_holidays_2026', JSON.stringify(merged));
-        } catch (e) {}
+        } catch (e) { }
         renderHolidaysSection();
         showToast(`Deleted ${count} holiday${count > 1 ? 's' : ''} successfully.`, 'info');
         return;
@@ -8475,7 +8475,7 @@ $(document).ready(function () {
           const prev = JSON.parse(localStorage.getItem('aurelia_deleted_device_sessions') || '[]');
           const merged = Array.from(new Set(prev.concat(ids)));
           localStorage.setItem('aurelia_deleted_device_sessions', JSON.stringify(merged));
-        } catch (e) {}
+        } catch (e) { }
         if (typeof renderDashboardRecentTransactions === 'function') renderDashboardRecentTransactions();
         if (tbodyId === 'modal-devices-tbody' && typeof renderAllDevicesModal === 'function') renderAllDevicesModal();
         showToast(`Deleted ${count} device session record${count > 1 ? 's' : ''} successfully.`, 'info');
@@ -8667,8 +8667,8 @@ $(document).ready(function () {
   function applyThemeColors(sidebarBg, cardBorder) {
     const root = document.documentElement;
     const isDefaultBorder = !cardBorder || cardBorder.includes('rgba') || cardBorder === '#FFFFFF' || cardBorder.toLowerCase() === '#ffffff';
-    const rimBgValue = isDefaultBorder 
-      ? 'linear-gradient(135deg, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0.5) 30%, rgba(255, 255, 255, 0.1) 65%, rgba(255, 255, 255, 0.75) 100%)' 
+    const rimBgValue = isDefaultBorder
+      ? 'linear-gradient(135deg, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0.5) 30%, rgba(255, 255, 255, 0.1) 65%, rgba(255, 255, 255, 0.75) 100%)'
       : cardBorder;
 
     if (sidebarBg) {
@@ -8737,7 +8737,7 @@ $(document).ready(function () {
 
     // Apply inline style directly to ensure no specificity clashes
     const $sidebarTargets = $('#app-sidebar, #mobile-user-menu-drawer, #mobile-drawer, #app-mobile-header, #btn-sidebar-collapse');
-    $sidebarTargets.each(function() {
+    $sidebarTargets.each(function () {
       this.style.setProperty('background', sidebarBg, 'important');
       this.style.setProperty('background-color', sidebarBg, 'important');
     });
@@ -8748,7 +8748,7 @@ $(document).ready(function () {
       $('#app-sidebar, #mobile-user-menu-drawer').removeClass('sidebar-light-mode');
     }
 
-    $('.Aurelia-card, .aurelia-card, .finset-card, .spatial-card, #section-dashboard .Aurelia-card, #main-app-content .Aurelia-card, .glass-money-flow').each(function() {
+    $('.Aurelia-card, .aurelia-card, .finset-card, .spatial-card, #section-dashboard .Aurelia-card, #main-app-content .Aurelia-card, .glass-money-flow').each(function () {
       this.style.setProperty('border-color', cardBorder, 'important');
       this.style.setProperty('border-width', '2px', 'important');
     });
@@ -9374,5 +9374,3 @@ $(document).ready(function () {
     setup();
   }
 })();
-
-
