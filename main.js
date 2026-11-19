@@ -426,16 +426,10 @@ $(document).ready(function () {
     vertical-align: middle !important;
   }
 
-  /* Global Bulk Table Selection & Delete Toolbar / Checkbox Styles */
-  .table-bulk-action-bar {
-    display: flex !important;
-    align-items: center !important;
-    justify-content: space-between !important;
-    gap: 0.75rem;
-    flex-wrap: wrap;
-    width: 100%;
-  }
-  .table-bulk-action-bar .hidden {
+  /* ========================================================================= */
+  /* UNIVERSAL TABLE ROW CHECKBOXES (AURELIA REFINED STYLE)                    */
+  /* ========================================================================= */
+  .btn-bulk-toggle {
     display: none !important;
   }
   th.bulk-cb-cell,
@@ -445,22 +439,88 @@ $(document).ready(function () {
     max-width: 48px !important;
     text-align: center !important;
     vertical-align: middle !important;
-    padding-left: 10px !important;
+    padding-left: 8px !important;
     padding-right: 8px !important;
   }
+  .bulk-row-cb,
+  .bulk-master-cb,
   th.bulk-cb-cell input[type="checkbox"],
   td.bulk-cb-cell input[type="checkbox"] {
-    display: inline-block !important;
-    margin: 0 auto !important;
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+    appearance: none !important;
+    width: 17px !important;
+    height: 17px !important;
+    min-width: 17px !important;
+    min-height: 17px !important;
+    border: 1.8px solid #1E293B !important;
+    border-radius: 4px !important;
+    background-color: #FFFFFF !important;
     cursor: pointer !important;
-    width: 16px !important;
-    height: 16px !important;
-    accent-color: #14213D;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
     vertical-align: middle !important;
+    position: relative !important;
+    transition: all 0.15s ease-in-out !important;
+    outline: none !important;
+    box-sizing: border-box !important;
+    margin: 0 auto !important;
   }
+  .dark .bulk-row-cb,
+  .dark .bulk-master-cb,
   .dark th.bulk-cb-cell input[type="checkbox"],
   .dark td.bulk-cb-cell input[type="checkbox"] {
-    accent-color: #FCA311;
+    border-color: #94A3B8 !important;
+    background-color: #1E293B !important;
+  }
+  .bulk-row-cb:hover,
+  .bulk-master-cb:hover,
+  th.bulk-cb-cell input[type="checkbox"]:hover,
+  td.bulk-cb-cell input[type="checkbox"]:hover {
+    border-color: #0F172A !important;
+    box-shadow: 0 0 0 3px rgba(15, 23, 42, 0.08) !important;
+  }
+  .dark .bulk-row-cb:hover,
+  .dark .bulk-master-cb:hover,
+  .dark th.bulk-cb-cell input[type="checkbox"]:hover,
+  .dark td.bulk-cb-cell input[type="checkbox"]:hover {
+    border-color: #FCA311 !important;
+    box-shadow: 0 0 0 3px rgba(252, 163, 17, 0.15) !important;
+  }
+  .bulk-row-cb:checked,
+  .bulk-master-cb:checked,
+  th.bulk-cb-cell input[type="checkbox"]:checked,
+  td.bulk-cb-cell input[type="checkbox"]:checked {
+    background-color: #14213D !important;
+    border-color: #14213D !important;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 16 16' fill='none' stroke='white' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M3.5 8.5L6.5 11.5L12.5 4.5'/%3E%3C/svg%3E") !important;
+    background-size: 11px 11px !important;
+    background-position: center !important;
+    background-repeat: no-repeat !important;
+  }
+  .dark .bulk-row-cb:checked,
+  .dark .bulk-master-cb:checked,
+  .dark th.bulk-cb-cell input[type="checkbox"]:checked,
+  .dark td.bulk-cb-cell input[type="checkbox"]:checked {
+    background-color: #FCA311 !important;
+    border-color: #FCA311 !important;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 16 16' fill='none' stroke='%2314213D' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M3.5 8.5L6.5 11.5L12.5 4.5'/%3E%3C/svg%3E") !important;
+  }
+  .bulk-master-cb:indeterminate,
+  th.bulk-cb-cell input[type="checkbox"]:indeterminate {
+    background-color: #14213D !important;
+    border-color: #14213D !important;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 16 16' fill='none' stroke='white' stroke-width='2.6' stroke-linecap='round' xmlns='http://www.w3.org/2000/svg'%3E%3Cline x1='4' y1='8' x2='12' y2='8'/%3E%3C/svg%3E") !important;
+    background-size: 11px 11px !important;
+    background-position: center !important;
+    background-repeat: no-repeat !important;
+  }
+  .dark .bulk-master-cb:indeterminate,
+  .dark th.bulk-cb-cell input[type="checkbox"]:indeterminate {
+    background-color: #FCA311 !important;
+    border-color: #FCA311 !important;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 16 16' fill='none' stroke='%2314213D' stroke-width='2.6' stroke-linecap='round' xmlns='http://www.w3.org/2000/svg'%3E%3Cline x1='4' y1='8' x2='12' y2='8'/%3E%3C/svg%3E") !important;
   }
   table tbody tr.is-row-selected {
     background-color: rgba(252, 163, 17, 0.10) !important;
@@ -8606,36 +8666,30 @@ $(document).ready(function () {
         : 'pb-2 pt-0.5 mb-1 border-b border-slate-100/80 dark:border-slate-800/60';
 
       const toolbarHtml = `
-        <div class="table-bulk-action-bar ${barPadClass} text-xs transition-all" data-for-table="${bulkId}">
+        <div class="table-bulk-action-bar ${barPadClass} text-xs transition-all hidden" data-for-table="${bulkId}">
           <div class="flex items-center gap-2 min-w-0">
-            <div class="bulk-count-wrap hidden inline-flex items-center gap-2 px-2.5 py-1 rounded-lg bg-amber-50 dark:bg-amber-950/40 border border-amber-200/80 dark:border-amber-800/60">
+            <div class="bulk-count-wrap inline-flex items-center gap-2 px-2.5 py-1 rounded-lg bg-amber-50 dark:bg-amber-950/40 border border-amber-200/80 dark:border-amber-800/60">
               <span class="inline-block w-2 h-2 rounded-full bg-[#FCA311]"></span>
               <span class="bulk-count-text font-bold text-[#14213D] dark:text-amber-300 text-xs whitespace-nowrap">Selected row count: 0</span>
             </div>
           </div>
           <div class="flex items-center gap-2 ml-auto flex-wrap justify-end">
-            <button type="button" class="btn-bulk-toggle inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-xl bg-white dark:bg-slate-800 text-[#14213D] dark:text-slate-100 border border-slate-200 dark:border-slate-700 hover:bg-[#14213D] hover:text-[#FCA311] hover:border-[#14213D] dark:hover:bg-[#FCA311] dark:hover:text-[#14213D] shadow-2xs transition-all cursor-pointer" title="Enable row selection">
-              <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-              <span>Select</span>
-            </button>
-
-            <button type="button" class="btn-bulk-select-all hidden inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-xl bg-[#14213D] text-white hover:bg-[#1f325d] dark:bg-[#FCA311] dark:text-[#14213D] dark:hover:bg-[#e5940f] shadow-2xs transition-all cursor-pointer" title="Select or deselect all rows">
+            <button type="button" class="btn-bulk-select-all inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-xl bg-[#14213D] text-white hover:bg-[#1f325d] dark:bg-[#FCA311] dark:text-[#14213D] dark:hover:bg-[#e5940f] shadow-2xs transition-all cursor-pointer" title="Select or deselect all rows">
               <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.4">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
               </svg>
               <span class="btn-bulk-select-all-label">Select All</span>
             </button>
 
-            <button type="button" class="btn-table-bulk-delete hidden inline-flex items-center justify-center gap-1.5 px-2.5 py-1.5 text-xs font-bold rounded-xl bg-rose-50 text-rose-600 hover:bg-rose-600 hover:text-white dark:bg-rose-950/40 dark:text-rose-400 dark:hover:bg-rose-600 dark:hover:text-white border border-rose-200 dark:border-rose-900 shadow-2xs transition-all cursor-pointer opacity-50 cursor-not-allowed" title="Delete selected rows" aria-label="Delete selected rows" disabled>
+            <button type="button" class="btn-table-bulk-delete inline-flex items-center justify-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-xl bg-rose-50 text-rose-600 hover:bg-rose-600 hover:text-white dark:bg-rose-950/40 dark:text-rose-400 dark:hover:bg-rose-600 dark:hover:text-white border border-rose-200 dark:border-rose-900 shadow-2xs transition-all cursor-pointer opacity-50 cursor-not-allowed" title="Delete selected rows" aria-label="Delete selected rows" disabled>
               <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
               </svg>
+              <span class="btn-bulk-delete-label">Delete</span>
             </button>
 
-            <button type="button" class="btn-bulk-cancel hidden inline-flex items-center px-2.5 py-1.5 text-xs font-semibold rounded-xl text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-100 hover:bg-slate-200/70 dark:hover:bg-slate-700/60 transition-all cursor-pointer" title="Exit selection mode">
-              <span>Cancel</span>
+            <button type="button" class="btn-bulk-cancel inline-flex items-center px-2.5 py-1.5 text-xs font-semibold rounded-xl text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-100 hover:bg-slate-200/70 dark:hover:bg-slate-700/60 transition-all cursor-pointer" title="Deselect all rows">
+              <span>Deselect</span>
             </button>
           </div>
         </div>
@@ -8644,15 +8698,19 @@ $(document).ready(function () {
       $targetWrap.before(toolbarHtml);
     }
 
-    function syncActiveTableCheckboxes($table) {
-      if (!$table.hasClass('is-bulk-selecting')) return;
+    function syncTableCheckboxes($table) {
+      if (!isEligibleTable($table)) return;
 
       // Ensure header checkbox cell exists
       $table.find('thead > tr').each(function () {
         const $tr = $(this);
         if (!$tr.children('th.bulk-cb-cell').length) {
+          const $firstTh = $tr.children('th').first();
+          if ($firstTh.hasClass('rounded-l-xl')) {
+            $firstTh.removeClass('rounded-l-xl');
+          }
           $tr.prepend(`
-            <th class="bulk-cb-cell w-11 text-center py-3 px-2">
+            <th class="bulk-cb-cell w-11 text-center py-3 px-2 rounded-l-xl">
               <input type="checkbox" class="bulk-master-cb" title="Select / Deselect all rows" aria-label="Select all rows">
             </th>
           `);
@@ -8698,13 +8756,16 @@ $(document).ready(function () {
       const total = $rows.length;
       const checked = $rows.find('td.bulk-cb-cell .bulk-row-cb:checked').length;
 
-      $toolbar.find('.bulk-count-text').text(`Selected row count: ${checked}`);
-
-      const $deleteBtn = $toolbar.find('.btn-table-bulk-delete');
       if (checked > 0) {
-        $deleteBtn.removeClass('opacity-50 cursor-not-allowed').prop('disabled', false);
+        $toolbar.removeClass('hidden');
+        $toolbar.find('.bulk-count-text').text(`Selected row count: ${checked}`);
+        $toolbar.find('.btn-table-bulk-delete').removeClass('opacity-50 cursor-not-allowed').prop('disabled', false);
+        $toolbar.find('.btn-bulk-delete-label').text(`Delete (${checked})`);
       } else {
-        $deleteBtn.addClass('opacity-50 cursor-not-allowed').prop('disabled', true);
+        $toolbar.addClass('hidden');
+        $toolbar.find('.bulk-count-text').text('Selected row count: 0');
+        $toolbar.find('.btn-table-bulk-delete').addClass('opacity-50 cursor-not-allowed').prop('disabled', true);
+        $toolbar.find('.btn-bulk-delete-label').text('Delete');
       }
 
       const $selectAllLabel = $toolbar.find('.btn-bulk-select-all-label');
@@ -8727,25 +8788,13 @@ $(document).ready(function () {
     }
 
     function toggleTableBulkSelection($table, enable) {
-      const $toolbar = getToolbarForTable($table);
-      if (!$toolbar.length) return;
-
-      if (enable) {
-        $table.addClass('is-bulk-selecting');
-        $toolbar.find('.btn-bulk-toggle').addClass('hidden');
-        $toolbar.find('.btn-bulk-select-all, .btn-table-bulk-delete, .btn-bulk-cancel, .bulk-count-wrap').removeClass('hidden');
-        syncActiveTableCheckboxes($table);
-        updateToolbarCount($toolbar, $table);
-      } else {
-        $table.removeClass('is-bulk-selecting');
-        $toolbar.find('.btn-bulk-toggle').removeClass('hidden');
-        $toolbar.find('.btn-bulk-select-all, .btn-table-bulk-delete, .btn-bulk-cancel, .bulk-count-wrap').addClass('hidden');
-        $table.find('.bulk-cb-cell').remove();
-        $table.find('tbody tr').removeClass('is-row-selected');
-        // Restore any bumped empty-state colspans
-        $table.find('td[data-orig-colspan]').each(function () {
-          $(this).attr('colspan', $(this).attr('data-orig-colspan')).removeAttr('data-orig-colspan');
-        });
+      // Retained for backward-compat if invoked externally; simply clears if enable=false
+      if (!enable) {
+        const $rows = getSelectableRows($table);
+        $rows.find('td.bulk-cb-cell .bulk-row-cb').prop('checked', false);
+        $rows.removeClass('is-row-selected');
+        const $toolbar = getToolbarForTable($table);
+        if ($toolbar.length) updateToolbarCount($toolbar, $table);
       }
     }
 
@@ -8897,26 +8946,23 @@ $(document).ready(function () {
     function scanAndInitializeTables() {
       $('table').each(function () {
         const $tbl = $(this);
+        if (!isEligibleTable($tbl)) return;
         attachBulkSelectToTable($tbl);
-        if ($tbl.hasClass('is-bulk-selecting')) {
-          syncActiveTableCheckboxes($tbl);
-        }
+        syncTableCheckboxes($tbl);
       });
     }
 
     // Delegated Event Handlers
-    $(document).on('click', '.btn-bulk-toggle', function (e) {
-      e.preventDefault();
-      const $toolbar = $(this).closest('.table-bulk-action-bar');
-      const $table = getTableForToolbar($toolbar);
-      if ($table.length) toggleTableBulkSelection($table, true);
-    });
-
     $(document).on('click', '.btn-bulk-cancel', function (e) {
       e.preventDefault();
       const $toolbar = $(this).closest('.table-bulk-action-bar');
       const $table = getTableForToolbar($toolbar);
-      if ($table.length) toggleTableBulkSelection($table, false);
+      if ($table.length) {
+        const $rows = getSelectableRows($table);
+        $rows.find('td.bulk-cb-cell .bulk-row-cb').prop('checked', false);
+        $rows.removeClass('is-row-selected');
+        updateToolbarCount($toolbar, $table);
+      }
     });
 
     $(document).on('click', '.btn-bulk-select-all', function (e) {
@@ -8984,7 +9030,9 @@ $(document).ready(function () {
 
       const performBulkDelete = function () {
         executeTableBulkDelete($table, selectedTrs);
-        toggleTableBulkSelection($table, false);
+        scanAndInitializeTables();
+        const $tb = getToolbarForTable($table);
+        if ($tb.length) updateToolbarCount($tb, $table);
       };
 
       if (typeof openConfirmDeleteModal === 'function' && $('#modal-confirm-delete').length) {
@@ -8994,15 +9042,16 @@ $(document).ready(function () {
       }
     });
 
-    // Initial scan + MutationObserver so dynamically rendered/filtered tables stay synced
+    // Initial scan + fast MutationObserver so dynamically rendered/filtered tables stay synced
     scanAndInitializeTables();
-    setTimeout(scanAndInitializeTables, 250);
+    setTimeout(scanAndInitializeTables, 100);
+    setTimeout(scanAndInitializeTables, 400);
 
     let observerTimer = null;
     if (typeof MutationObserver !== 'undefined' && document.body) {
       const bulkObserver = new MutationObserver(function () {
         if (observerTimer) clearTimeout(observerTimer);
-        observerTimer = setTimeout(scanAndInitializeTables, 80);
+        observerTimer = setTimeout(scanAndInitializeTables, 30);
       });
       bulkObserver.observe(document.body, { childList: true, subtree: true });
     }
