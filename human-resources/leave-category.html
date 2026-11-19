@@ -412,8 +412,17 @@
         display: block !important;
         width: 100% !important;
       }
-      .overflow-x-auto > table, .overflow-x-scroll > table, .Aurelia-card table:not(#print-invoice-area table), table.w-full {
+      .overflow-x-auto > table:not(#page-emp-leave-table), .overflow-x-scroll > table:not(#page-emp-leave-table), .Aurelia-card table:not(#print-invoice-area table):not(#page-emp-leave-table), table.w-full:not(#page-emp-leave-table) {
         min-width: 560px !important;
+      }
+      #emp-leave-card,
+      #emp-leave-card .overflow-x-auto {
+        overflow-x: hidden !important;
+      }
+      #page-emp-leave-table {
+        min-width: 0 !important;
+        width: 100% !important;
+        max-width: 100% !important;
       }
       table tbody td, table tfoot td, table td, table th, .Aurelia-table-header td, .Aurelia-table-header th {
         white-space: nowrap !important;
@@ -2113,6 +2122,14 @@
     background-color: #FFFFFF !important;
     border-collapse: separate !important;
     border-spacing: 0 !important;
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  #emp-leave-card,
+  #emp-leave-card .overflow-x-auto {
+    overflow-x: hidden !important;
+    max-width: 100% !important;
   }
 
   #page-emp-leave-tbody {
@@ -3531,7 +3548,6 @@
                     <th class="py-2.5 px-2.5 sm:py-3.5 sm:px-4">Role &amp; Department</th>
                     <th class="py-2.5 px-2.5 sm:py-3.5 sm:px-4">Leave Category</th>
                     <th class="py-2.5 px-2.5 sm:py-3.5 sm:px-4">Duration</th>
-                    <th class="py-2.5 px-2.5 sm:py-3.5 sm:px-4">Reason</th>
                     <th class="py-2.5 px-2.5 sm:py-3.5 sm:px-4 text-center">Status</th>
                   </tr>
                 </thead>
@@ -3562,17 +3578,17 @@
                         Office</span>
                     </td>
                     <td class="py-2.5 px-2.5 sm:py-3.5 sm:px-4 whitespace-nowrap">
-                      <span
+                      <div class="flex flex-col items-start gap-1">
+                        <span
                         class="px-2 py-0.5 md:px-2.5 md:py-1 rounded-md text-xs md:text-sm font-bold bg-rose-100 text-rose-800 dark:bg-rose-950/50 dark:text-rose-300 border border-rose-200/60 inline-flex items-center">
                         <span>Sick / Medical Leave (SL)</span>
                       </span>
+                        <span class="leave-reason-text text-[10px] md:text-xs text-slate-500 dark:text-slate-400 font-medium leading-tight">Seasonal viral fever</span>
+                      </div>
                     </td>
                     <td class="py-2.5 px-2.5 sm:py-3.5 sm:px-4 whitespace-nowrap">
                       <span
                         class="inline-block px-2 py-0.5 md:px-2.5 md:py-1 rounded-full text-xs md:text-sm font-semibold bg-rose-100 text-rose-800 dark:bg-rose-950/40 dark:text-rose-300 border border-rose-200/60">3 Days</span>
-                    </td>
-                    <td class="py-2.5 px-2.5 sm:py-3.5 sm:px-4 text-slate-700 dark:text-slate-300 text-xs md:text-sm font-medium whitespace-nowrap">
-                      Seasonal viral fever
                     </td>
                     <td class="py-2.5 px-2.5 sm:py-3.5 sm:px-4 text-center whitespace-nowrap">
                       <span
@@ -3606,17 +3622,17 @@
                         Office</span>
                     </td>
                     <td class="py-2.5 px-2.5 sm:py-3.5 sm:px-4 whitespace-nowrap">
-                      <span
+                      <div class="flex flex-col items-start gap-1">
+                        <span
                         class="px-2 py-0.5 md:px-2.5 md:py-1 rounded-md text-xs md:text-sm font-bold bg-sky-100 text-sky-800 dark:bg-sky-950/50 dark:text-sky-300 border border-sky-200/60 inline-flex items-center">
                         <span>Earned / Privilege Leave (EL)</span>
                       </span>
+                        <span class="leave-reason-text text-[10px] md:text-xs text-slate-500 dark:text-slate-400 font-medium leading-tight">Annual vacation leave</span>
+                      </div>
                     </td>
                     <td class="py-2.5 px-2.5 sm:py-3.5 sm:px-4 whitespace-nowrap">
                       <span
                         class="inline-block px-2 py-0.5 md:px-2.5 md:py-1 rounded-full text-xs md:text-sm font-semibold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">5 Days</span>
-                    </td>
-                    <td class="py-2.5 px-2.5 sm:py-3.5 sm:px-4 text-slate-700 dark:text-slate-300 text-xs md:text-sm font-medium whitespace-nowrap">
-                      Annual vacation leave
                     </td>
                     <td class="py-2.5 px-2.5 sm:py-3.5 sm:px-4 text-center whitespace-nowrap">
                       <span
@@ -3649,17 +3665,17 @@
                         Office</span>
                     </td>
                     <td class="py-2.5 px-2.5 sm:py-3.5 sm:px-4 whitespace-nowrap">
-                      <span
+                      <div class="flex flex-col items-start gap-1">
+                        <span
                         class="px-2 py-0.5 md:px-2.5 md:py-1 rounded-md text-xs md:text-sm font-bold bg-emerald-100 text-emerald-800 dark:bg-emerald-950/50 dark:text-emerald-300 border border-emerald-200/60 inline-flex items-center">
                         <span>Casual Leave (CL)</span>
                       </span>
+                        <span class="leave-reason-text text-[10px] md:text-xs text-slate-500 dark:text-slate-400 font-medium leading-tight">Family wedding function</span>
+                      </div>
                     </td>
                     <td class="py-2.5 px-2.5 sm:py-3.5 sm:px-4 whitespace-nowrap">
                       <span
                         class="inline-block px-2 py-0.5 md:px-2.5 md:py-1 rounded-full text-xs md:text-sm font-semibold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">3 Days</span>
-                    </td>
-                    <td class="py-2.5 px-2.5 sm:py-3.5 sm:px-4 text-slate-700 dark:text-slate-300 text-xs md:text-sm font-medium whitespace-nowrap">
-                      Family wedding function
                     </td>
                     <td class="py-2.5 px-2.5 sm:py-3.5 sm:px-4 text-center whitespace-nowrap">
                       <span
@@ -3692,17 +3708,17 @@
                         Office</span>
                     </td>
                     <td class="py-2.5 px-2.5 sm:py-3.5 sm:px-4 whitespace-nowrap">
-                      <span
+                      <div class="flex flex-col items-start gap-1">
+                        <span
                         class="px-2 py-0.5 md:px-2.5 md:py-1 rounded-md text-xs md:text-sm font-bold bg-amber-100 text-amber-800 dark:bg-amber-950/50 dark:text-amber-300 border border-amber-200/60 inline-flex items-center">
                         <span>Compensatory Off (CO)</span>
                       </span>
+                        <span class="leave-reason-text text-[10px] md:text-xs text-slate-500 dark:text-slate-400 font-medium leading-tight">Comp off (Diwali weekend)</span>
+                      </div>
                     </td>
                     <td class="py-2.5 px-2.5 sm:py-3.5 sm:px-4 whitespace-nowrap">
                       <span
                         class="inline-block px-2 py-0.5 md:px-2.5 md:py-1 rounded-full text-xs md:text-sm font-semibold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">1 Day</span>
-                    </td>
-                    <td class="py-2.5 px-2.5 sm:py-3.5 sm:px-4 text-slate-700 dark:text-slate-300 text-xs md:text-sm font-medium whitespace-nowrap">
-                      Comp off (Diwali weekend)
                     </td>
                     <td class="py-2.5 px-2.5 sm:py-3.5 sm:px-4 text-center whitespace-nowrap">
                       <span
@@ -3735,17 +3751,17 @@
                         Office</span>
                     </td>
                     <td class="py-2.5 px-2.5 sm:py-3.5 sm:px-4 whitespace-nowrap">
-                      <span
+                      <div class="flex flex-col items-start gap-1">
+                        <span
                         class="px-2 py-0.5 md:px-2.5 md:py-1 rounded-md text-xs md:text-sm font-bold bg-emerald-100 text-emerald-800 dark:bg-emerald-950/50 dark:text-emerald-300 border border-emerald-200/60 inline-flex items-center">
                         <span>Casual Leave (CL)</span>
                       </span>
+                        <span class="leave-reason-text text-[10px] md:text-xs text-slate-500 dark:text-slate-400 font-medium leading-tight">Personal banking &amp; paperwork</span>
+                      </div>
                     </td>
                     <td class="py-2.5 px-2.5 sm:py-3.5 sm:px-4 whitespace-nowrap">
                       <span
                         class="inline-block px-2 py-0.5 md:px-2.5 md:py-1 rounded-full text-xs md:text-sm font-semibold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">1 Day</span>
-                    </td>
-                    <td class="py-2.5 px-2.5 sm:py-3.5 sm:px-4 text-slate-700 dark:text-slate-300 text-xs md:text-sm font-medium whitespace-nowrap">
-                      Personal banking &amp; paperwork
                     </td>
                     <td class="py-2.5 px-2.5 sm:py-3.5 sm:px-4 text-center whitespace-nowrap">
                       <span
@@ -3778,17 +3794,17 @@
                         Office</span>
                     </td>
                     <td class="py-2.5 px-2.5 sm:py-3.5 sm:px-4 whitespace-nowrap">
-                      <span
+                      <div class="flex flex-col items-start gap-1">
+                        <span
                         class="px-2 py-0.5 md:px-2.5 md:py-1 rounded-md text-xs md:text-sm font-bold bg-emerald-100 text-emerald-800 dark:bg-emerald-950/50 dark:text-emerald-300 border border-emerald-200/60 inline-flex items-center">
                         <span>Casual Leave (CL)</span>
                       </span>
+                        <span class="leave-reason-text text-[10px] md:text-xs text-slate-500 dark:text-slate-400 font-medium leading-tight">Personal travel</span>
+                      </div>
                     </td>
                     <td class="py-2.5 px-2.5 sm:py-3.5 sm:px-4 whitespace-nowrap">
                       <span
                         class="inline-block px-2 py-0.5 md:px-2.5 md:py-1 rounded-full text-xs md:text-sm font-semibold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">2 Days</span>
-                    </td>
-                    <td class="py-2.5 px-2.5 sm:py-3.5 sm:px-4 text-slate-700 dark:text-slate-300 text-xs md:text-sm font-medium whitespace-nowrap">
-                      Personal travel
                     </td>
                     <td class="py-2.5 px-2.5 sm:py-3.5 sm:px-4 text-center whitespace-nowrap">
                       <span
@@ -3821,17 +3837,17 @@
                         Office</span>
                     </td>
                     <td class="py-2.5 px-2.5 sm:py-3.5 sm:px-4 whitespace-nowrap">
-                      <span
+                      <div class="flex flex-col items-start gap-1">
+                        <span
                         class="px-2 py-0.5 md:px-2.5 md:py-1 rounded-md text-xs md:text-sm font-bold bg-rose-100 text-rose-800 dark:bg-rose-950/50 dark:text-rose-300 border border-rose-200/60 inline-flex items-center">
                         <span>Sick / Medical Leave (SL)</span>
                       </span>
+                        <span class="leave-reason-text text-[10px] md:text-xs text-slate-500 dark:text-slate-400 font-medium leading-tight">Lumbar sprain rest</span>
+                      </div>
                     </td>
                     <td class="py-2.5 px-2.5 sm:py-3.5 sm:px-4 whitespace-nowrap">
                       <span
                         class="inline-block px-2 py-0.5 md:px-2.5 md:py-1 rounded-full text-xs md:text-sm font-semibold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">2 Days</span>
-                    </td>
-                    <td class="py-2.5 px-2.5 sm:py-3.5 sm:px-4 text-slate-700 dark:text-slate-300 text-xs md:text-sm font-medium whitespace-nowrap">
-                      Lumbar sprain rest
                     </td>
                     <td class="py-2.5 px-2.5 sm:py-3.5 sm:px-4 text-center whitespace-nowrap">
                       <span
@@ -3864,17 +3880,17 @@
                         Office</span>
                     </td>
                     <td class="py-2.5 px-2.5 sm:py-3.5 sm:px-4 whitespace-nowrap">
-                      <span
+                      <div class="flex flex-col items-start gap-1">
+                        <span
                         class="px-2 py-0.5 md:px-2.5 md:py-1 rounded-md text-xs md:text-sm font-bold bg-sky-100 text-sky-800 dark:bg-sky-950/50 dark:text-sky-300 border border-sky-200/60 inline-flex items-center">
                         <span>Earned / Privilege Leave (EL)</span>
                       </span>
+                        <span class="leave-reason-text text-[10px] md:text-xs text-slate-500 dark:text-slate-400 font-medium leading-tight">Family vacation travel</span>
+                      </div>
                     </td>
                     <td class="py-2.5 px-2.5 sm:py-3.5 sm:px-4 whitespace-nowrap">
                       <span
                         class="inline-block px-2 py-0.5 md:px-2.5 md:py-1 rounded-full text-xs md:text-sm font-semibold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">5 Days</span>
-                    </td>
-                    <td class="py-2.5 px-2.5 sm:py-3.5 sm:px-4 text-slate-700 dark:text-slate-300 text-xs md:text-sm font-medium whitespace-nowrap">
-                      Family vacation travel
                     </td>
                     <td class="py-2.5 px-2.5 sm:py-3.5 sm:px-4 text-center whitespace-nowrap">
                       <span
@@ -3907,17 +3923,17 @@
                         & Kitchen</span>
                     </td>
                     <td class="py-2.5 px-2.5 sm:py-3.5 sm:px-4 whitespace-nowrap">
-                      <span
+                      <div class="flex flex-col items-start gap-1">
+                        <span
                         class="px-2 py-0.5 md:px-2.5 md:py-1 rounded-md text-xs md:text-sm font-bold bg-amber-100 text-amber-800 dark:bg-amber-950/50 dark:text-amber-300 border border-amber-200/60 inline-flex items-center">
                         <span>Compensatory Off (CO)</span>
                       </span>
+                        <span class="leave-reason-text text-[10px] md:text-xs text-slate-500 dark:text-slate-400 font-medium leading-tight">Banquet Sunday duty comp off</span>
+                      </div>
                     </td>
                     <td class="py-2.5 px-2.5 sm:py-3.5 sm:px-4 whitespace-nowrap">
                       <span
                         class="inline-block px-2 py-0.5 md:px-2.5 md:py-1 rounded-full text-xs md:text-sm font-semibold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">1 Day</span>
-                    </td>
-                    <td class="py-2.5 px-2.5 sm:py-3.5 sm:px-4 text-slate-700 dark:text-slate-300 text-xs md:text-sm font-medium whitespace-nowrap">
-                      Banquet Sunday duty comp off
                     </td>
                     <td class="py-2.5 px-2.5 sm:py-3.5 sm:px-4 text-center whitespace-nowrap">
                       <span
@@ -3950,17 +3966,17 @@
                         & Kitchen</span>
                     </td>
                     <td class="py-2.5 px-2.5 sm:py-3.5 sm:px-4 whitespace-nowrap">
-                      <span
+                      <div class="flex flex-col items-start gap-1">
+                        <span
                         class="px-2 py-0.5 md:px-2.5 md:py-1 rounded-md text-xs md:text-sm font-bold bg-emerald-100 text-emerald-800 dark:bg-emerald-950/50 dark:text-emerald-300 border border-emerald-200/60 inline-flex items-center">
                         <span>Casual Leave (CL)</span>
                       </span>
+                        <span class="leave-reason-text text-[10px] md:text-xs text-slate-500 dark:text-slate-400 font-medium leading-tight">Urgent personal matters</span>
+                      </div>
                     </td>
                     <td class="py-2.5 px-2.5 sm:py-3.5 sm:px-4 whitespace-nowrap">
                       <span
                         class="inline-block px-2 py-0.5 md:px-2.5 md:py-1 rounded-full text-xs md:text-sm font-semibold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">1 Day</span>
-                    </td>
-                    <td class="py-2.5 px-2.5 sm:py-3.5 sm:px-4 text-slate-700 dark:text-slate-300 text-xs md:text-sm font-medium whitespace-nowrap">
-                      Urgent personal matters
                     </td>
                     <td class="py-2.5 px-2.5 sm:py-3.5 sm:px-4 text-center whitespace-nowrap">
                       <span
@@ -3993,17 +4009,17 @@
                         & Kitchen</span>
                     </td>
                     <td class="py-2.5 px-2.5 sm:py-3.5 sm:px-4 whitespace-nowrap">
-                      <span
+                      <div class="flex flex-col items-start gap-1">
+                        <span
                         class="px-2 py-0.5 md:px-2.5 md:py-1 rounded-md text-xs md:text-sm font-bold bg-sky-100 text-sky-800 dark:bg-sky-950/50 dark:text-sky-300 border border-sky-200/60 inline-flex items-center">
                         <span>Earned / Privilege Leave (EL)</span>
                       </span>
+                        <span class="leave-reason-text text-[10px] md:text-xs text-slate-500 dark:text-slate-400 font-medium leading-tight">Family anniversary celebration</span>
+                      </div>
                     </td>
                     <td class="py-2.5 px-2.5 sm:py-3.5 sm:px-4 whitespace-nowrap">
                       <span
                         class="inline-block px-2 py-0.5 md:px-2.5 md:py-1 rounded-full text-xs md:text-sm font-semibold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">5 Days</span>
-                    </td>
-                    <td class="py-2.5 px-2.5 sm:py-3.5 sm:px-4 text-slate-700 dark:text-slate-300 text-xs md:text-sm font-medium whitespace-nowrap">
-                      Family anniversary celebration
                     </td>
                     <td class="py-2.5 px-2.5 sm:py-3.5 sm:px-4 text-center whitespace-nowrap">
                       <span
@@ -4036,17 +4052,17 @@
                         & Kitchen</span>
                     </td>
                     <td class="py-2.5 px-2.5 sm:py-3.5 sm:px-4 whitespace-nowrap">
-                      <span
+                      <div class="flex flex-col items-start gap-1">
+                        <span
                         class="px-2 py-0.5 md:px-2.5 md:py-1 rounded-md text-xs md:text-sm font-bold bg-emerald-100 text-emerald-800 dark:bg-emerald-950/50 dark:text-emerald-300 border border-emerald-200/60 inline-flex items-center">
                         <span>Casual Leave (CL)</span>
                       </span>
+                        <span class="leave-reason-text text-[10px] md:text-xs text-slate-500 dark:text-slate-400 font-medium leading-tight">Personal family visit</span>
+                      </div>
                     </td>
                     <td class="py-2.5 px-2.5 sm:py-3.5 sm:px-4 whitespace-nowrap">
                       <span
                         class="inline-block px-2 py-0.5 md:px-2.5 md:py-1 rounded-full text-xs md:text-sm font-semibold bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700">2 Days</span>
-                    </td>
-                    <td class="py-2.5 px-2.5 sm:py-3.5 sm:px-4 text-slate-700 dark:text-slate-300 text-xs md:text-sm font-medium whitespace-nowrap">
-                      Personal family visit
                     </td>
                     <td class="py-2.5 px-2.5 sm:py-3.5 sm:px-4 text-center whitespace-nowrap">
                       <span
@@ -4135,10 +4151,10 @@
           const name = $tr.find('td:nth-child(2) .font-bold').text().trim();
           const role = $tr.find('td:nth-child(3) .font-semibold').text().trim();
           const dept = $tr.find('td:nth-child(3) span').text().trim();
-          const cat = $tr.find('td:nth-child(4)').text().trim();
+          const cat = $tr.find('td:nth-child(4) span:first-child').text().trim() || $tr.find('td:nth-child(4)').text().trim();
+          const reason = $tr.find('td:nth-child(4) .leave-reason-text').text().trim();
           const duration = $tr.find('td:nth-child(5)').text().trim();
-          const reason = $tr.find('td:nth-child(6)').text().trim();
-          const status = $tr.find('td:nth-child(7)').text().trim();
+          const status = $tr.find('td:nth-child(6)').text().trim();
 
           rowsHtml += `
             <tr style="border-bottom: 1px solid #e2e8f0; font-size: 11px;">
@@ -4333,7 +4349,7 @@
         $('#page-emp-leave-tbody tr').each(function () {
           if (this.style.display === 'none') return;
           const $cells = $(this).children('td');
-          if ($cells.length < 7) return;
+          if ($cells.length < 6) return;
 
           const empId = $cells.eq(0).text().trim();
           const $nameCol = $cells.eq(1);
@@ -4342,10 +4358,10 @@
           const $roleCol = $cells.eq(2);
           const role = $roleCol.children('div').first().text().trim();
           const department = $roleCol.children('span').first().text().trim();
-          const leaveCategory = $cells.eq(3).text().trim();
+          const leaveCategory = $cells.eq(3).find('span').first().text().trim() || $cells.eq(3).text().trim();
+          const reason = $cells.eq(3).find('.leave-reason-text').text().trim();
           const duration = $cells.eq(4).text().trim();
-          const reason = $cells.eq(5).text().trim();
-          const status = $cells.eq(6).text().trim();
+          const status = $cells.eq(5).text().trim();
 
           rows.push([
             empId,
@@ -4403,3 +4419,19 @@
 </body>
 
 </html>
+<script>
+window.addEventListener('load', function() {
+  setTimeout(function() {
+    var docWidth = document.documentElement.clientWidth;
+    console.log('Doc clientWidth:', docWidth);
+    var all = document.querySelectorAll('*');
+    for (var i = 0; i < all.length; i++) {
+      var el = all[i];
+      var rect = el.getBoundingClientRect();
+      if (rect.right > docWidth + 2) {
+        console.log('OVERFLOW:', el.tagName, el.id, el.className, 'rect.right:', rect.right);
+      }
+    }
+  }, 1000);
+});
+</script>

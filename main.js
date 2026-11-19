@@ -221,11 +221,21 @@ $(document).ready(function () {
     }
 
     /* Minimum table width on mobile so columns never get squished into vertical letters */
-    .overflow-x-auto > table,
-    .overflow-x-scroll > table,
-    .Aurelia-card table:not(#print-invoice-area table),
-    table.w-full {
+    .overflow-x-auto > table:not(#page-emp-leave-table),
+    .overflow-x-scroll > table:not(#page-emp-leave-table),
+    .Aurelia-card table:not(#print-invoice-area table):not(#page-emp-leave-table),
+    table.w-full:not(#page-emp-leave-table) {
       min-width: 560px !important;
+    }
+
+    #emp-leave-card,
+    #emp-leave-card .overflow-x-auto {
+      overflow-x: hidden !important;
+    }
+    #page-emp-leave-table {
+      min-width: 0 !important;
+      width: 100% !important;
+      max-width: 100% !important;
     }
 
     /* Table cells: compact font, clean padding, single-line data (never wrap letter by letter) */
