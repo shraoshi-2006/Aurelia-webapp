@@ -8,11 +8,18 @@
           var s = localStorage.getItem('aurelia_theme_settings');
           if (s) {
             var t = JSON.parse(s);
-            if (t.sidebarBg) document.documentElement.style.setProperty('--aurelia-sidebar-bg', t.sidebarBg);
-            if (t.cardBorder) {
-              document.documentElement.style.setProperty('--aurelia-card-border', t.cardBorder);
-              document.documentElement.style.setProperty('--aurelia-card-border-hover', t.cardBorder);
-            }
+            var sb = t.sidebarBg || '#494D5F';
+            var cb = t.cardBorder || 'rgba(255, 255, 255, 0.82)';
+            var isDef = !t.cardBorder || t.cardBorder.includes('rgba');
+            var rim = isDef ? 'linear-gradient(135deg, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0.5) 30%, rgba(255, 255, 255, 0.1) 65%, rgba(255, 255, 255, 0.75) 100%)' : cb;
+            
+            var st = document.createElement('style');
+            st.id = 'aurelia-dynamic-theme-override';
+            st.textContent = ':root{--aurelia-sidebar-bg:' + sb + ' !important;--aurelia-card-border:' + cb + ' !important;--aurelia-card-border-hover:' + cb + ' !important;--aurelia-card-rim-bg:' + rim + ' !important;}' +
+              '#app-sidebar,#mobile-user-menu-drawer,#mobile-drawer,.mobile-sidebar-drawer,#app-mobile-header,#btn-sidebar-collapse,#app-sidebar.is-collapsed #btn-sidebar-collapse{background:' + sb + ' !important;background-color:' + sb + ' !important;}' +
+              '.Aurelia-card,.aurelia-card,.finset-card,.spatial-card,#section-dashboard .Aurelia-card,#main-app-content .Aurelia-card,.glass-money-flow{border:2px solid ' + cb + ' !important;border-color:' + cb + ' !important;}' +
+              '.Aurelia-card::before,.aurelia-card::before,.finset-card::before,.spatial-card::before,#section-dashboard .Aurelia-card::before,#main-app-content .Aurelia-card::before,.glass-money-flow::before{background:' + rim + ' !important;}';
+            document.head.appendChild(st);
           }
         } catch(e){}
       })();
@@ -166,6 +173,10 @@
 
   <style>
     :root {
+      --aurelia-sidebar-bg: #494D5F;
+      --aurelia-card-border: rgba(255, 255, 255, 0.82);
+      --aurelia-card-border-hover: rgba(255, 255, 255, 0.98);
+      --aurelia-card-rim-bg: linear-gradient(135deg, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0.5) 30%, rgba(255, 255, 255, 0.1) 65%, rgba(255, 255, 255, 0.75) 100%);
       --app-bg: #F4F5F7;
       --sidebar-bg: #E5E5E5;
       --card-bg: rgba(255, 255, 255, 0.92);
@@ -268,11 +279,7 @@
       inset: 0;
       border-radius: inherit;
       padding: 1.5px;
-      background: linear-gradient(135deg,
-          rgba(255, 255, 255, 1) 0%,
-          rgba(255, 255, 255, 0.5) 30%,
-          rgba(255, 255, 255, 0.1) 65%,
-          rgba(255, 255, 255, 0.75) 100%);
+      background: var(--aurelia-card-rim-bg, linear-gradient(135deg, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0.5) 30%, rgba(255, 255, 255, 0.1) 65%, rgba(255, 255, 255, 0.75) 100%));
       mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
       -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
       -webkit-mask-composite: xor;
@@ -3360,7 +3367,7 @@
   <!-- Authentication Controller -->
   <script src="../auth.js?v=20261110_07"></script>
   <!-- Main JavaScript Logic -->
-  <script src="../main.js?v=20261119_v62"></script>
+  <script src="../main.js?v=20261119_v63"></script>
 
   <script>
     let isHrDocPrinting = false;

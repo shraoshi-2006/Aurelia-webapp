@@ -6,13 +6,65 @@
     const raw = localStorage.getItem('aurelia_theme_settings');
     if (raw) {
       const theme = JSON.parse(raw);
-      if (theme.sidebarBg) {
-        document.documentElement.style.setProperty('--aurelia-sidebar-bg', theme.sidebarBg);
+      const sidebarBg = theme.sidebarBg || '#494D5F';
+      const cardBorder = theme.cardBorder || 'rgba(255, 255, 255, 0.82)';
+      const isDefaultBorder = !theme.cardBorder || theme.cardBorder.includes('rgba');
+      const rimBgValue = isDefaultBorder 
+        ? 'linear-gradient(135deg, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0.5) 30%, rgba(255, 255, 255, 0.1) 65%, rgba(255, 255, 255, 0.75) 100%)' 
+        : cardBorder;
+
+      let style = document.getElementById('aurelia-dynamic-theme-override');
+      if (!style) {
+        style = document.createElement('style');
+        style.id = 'aurelia-dynamic-theme-override';
+        document.head.appendChild(style);
       }
-      if (theme.cardBorder) {
-        document.documentElement.style.setProperty('--aurelia-card-border', theme.cardBorder);
-        document.documentElement.style.setProperty('--aurelia-card-border-hover', theme.cardBorder);
-      }
+      style.textContent = `
+        :root {
+          --aurelia-sidebar-bg: ${sidebarBg} !important;
+          --aurelia-card-border: ${cardBorder} !important;
+          --aurelia-card-border-hover: ${cardBorder} !important;
+          --aurelia-card-rim-bg: ${rimBgValue} !important;
+        }
+        #app-sidebar,
+        #mobile-user-menu-drawer,
+        #mobile-drawer,
+        .mobile-sidebar-drawer,
+        #app-mobile-header,
+        #btn-sidebar-collapse,
+        #app-sidebar.is-collapsed #btn-sidebar-collapse {
+          background: ${sidebarBg} !important;
+          background-color: ${sidebarBg} !important;
+        }
+        .Aurelia-card,
+        .aurelia-card,
+        .finset-card,
+        .spatial-card,
+        #section-dashboard .Aurelia-card,
+        #main-app-content .Aurelia-card,
+        .glass-money-flow {
+          border: 2px solid ${cardBorder} !important;
+          border-color: ${cardBorder} !important;
+        }
+        .Aurelia-card:hover,
+        .aurelia-card:hover,
+        .finset-card:hover,
+        .spatial-card:hover,
+        #section-dashboard .Aurelia-card:hover,
+        #main-app-content .Aurelia-card:hover,
+        .glass-money-flow:hover {
+          border-color: ${cardBorder} !important;
+        }
+        .Aurelia-card::before,
+        .aurelia-card::before,
+        .finset-card::before,
+        .spatial-card::before,
+        #section-dashboard .Aurelia-card::before,
+        #main-app-content .Aurelia-card::before,
+        .glass-money-flow::before {
+          background: ${rimBgValue} !important;
+        }
+      `;
     }
   } catch (e) {}
 })();
@@ -8590,6 +8642,7 @@ $(document).ready(function () {
   function isColorLight(color) {
     try {
       let r = 0, g = 0, b = 0;
+      if (!color) return false;
       if (color.startsWith('#')) {
         let hex = color.replace('#', '');
         if (hex.length === 3) hex = hex.split('').map(c => c + c).join('');
@@ -8613,20 +8666,92 @@ $(document).ready(function () {
 
   function applyThemeColors(sidebarBg, cardBorder) {
     const root = document.documentElement;
+    const isDefaultBorder = !cardBorder || cardBorder.includes('rgba') || cardBorder === '#FFFFFF' || cardBorder.toLowerCase() === '#ffffff';
+    const rimBgValue = isDefaultBorder 
+      ? 'linear-gradient(135deg, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0.5) 30%, rgba(255, 255, 255, 0.1) 65%, rgba(255, 255, 255, 0.75) 100%)' 
+      : cardBorder;
+
     if (sidebarBg) {
       root.style.setProperty('--aurelia-sidebar-bg', sidebarBg);
-      const isLight = isColorLight(sidebarBg);
-      const $sidebar = $('#app-sidebar, #mobile-drawer');
-      if (isLight) {
-        $sidebar.addClass('sidebar-light-mode');
-      } else {
-        $sidebar.removeClass('sidebar-light-mode');
-      }
     }
     if (cardBorder) {
       root.style.setProperty('--aurelia-card-border', cardBorder);
       root.style.setProperty('--aurelia-card-border-hover', cardBorder);
+      root.style.setProperty('--aurelia-card-rim-bg', rimBgValue);
     }
+
+    // Dynamic style tag override to guarantee instant application across all elements
+    let dynamicStyle = document.getElementById('aurelia-dynamic-theme-override');
+    if (!dynamicStyle) {
+      dynamicStyle = document.createElement('style');
+      dynamicStyle.id = 'aurelia-dynamic-theme-override';
+      document.head.appendChild(dynamicStyle);
+    }
+
+    dynamicStyle.textContent = `
+      :root {
+        --aurelia-sidebar-bg: ${sidebarBg} !important;
+        --aurelia-card-border: ${cardBorder} !important;
+        --aurelia-card-border-hover: ${cardBorder} !important;
+        --aurelia-card-rim-bg: ${rimBgValue} !important;
+      }
+      #app-sidebar,
+      #mobile-user-menu-drawer,
+      #mobile-drawer,
+      .mobile-sidebar-drawer,
+      #app-mobile-header,
+      #btn-sidebar-collapse,
+      #app-sidebar.is-collapsed #btn-sidebar-collapse {
+        background: ${sidebarBg} !important;
+        background-color: ${sidebarBg} !important;
+      }
+      .Aurelia-card,
+      .aurelia-card,
+      .finset-card,
+      .spatial-card,
+      #section-dashboard .Aurelia-card,
+      #main-app-content .Aurelia-card,
+      .glass-money-flow {
+        border: 2px solid ${cardBorder} !important;
+        border-color: ${cardBorder} !important;
+      }
+      .Aurelia-card:hover,
+      .aurelia-card:hover,
+      .finset-card:hover,
+      .spatial-card:hover,
+      #section-dashboard .Aurelia-card:hover,
+      #main-app-content .Aurelia-card:hover,
+      .glass-money-flow:hover {
+        border-color: ${cardBorder} !important;
+      }
+      .Aurelia-card::before,
+      .aurelia-card::before,
+      .finset-card::before,
+      .spatial-card::before,
+      #section-dashboard .Aurelia-card::before,
+      #main-app-content .Aurelia-card::before,
+      .glass-money-flow::before {
+        background: ${rimBgValue} !important;
+      }
+    `;
+
+    // Apply inline style directly to ensure no specificity clashes
+    const $sidebarTargets = $('#app-sidebar, #mobile-user-menu-drawer, #mobile-drawer, #app-mobile-header, #btn-sidebar-collapse');
+    $sidebarTargets.each(function() {
+      this.style.setProperty('background', sidebarBg, 'important');
+      this.style.setProperty('background-color', sidebarBg, 'important');
+    });
+
+    if (isColorLight(sidebarBg)) {
+      $('#app-sidebar, #mobile-user-menu-drawer').addClass('sidebar-light-mode');
+    } else {
+      $('#app-sidebar, #mobile-user-menu-drawer').removeClass('sidebar-light-mode');
+    }
+
+    $('.Aurelia-card, .aurelia-card, .finset-card, .spatial-card, #section-dashboard .Aurelia-card, #main-app-content .Aurelia-card, .glass-money-flow').each(function() {
+      this.style.setProperty('border-color', cardBorder, 'important');
+      this.style.setProperty('border-width', '2px', 'important');
+    });
   }
 
   function updateThemeUI(theme) {
@@ -8643,7 +8768,7 @@ $(document).ready(function () {
     $('#tray-sidebar-colors .aurelia-theme-swatch').removeClass('active-swatch');
     const normSidebar = sidebarBg.toUpperCase();
     $('#tray-sidebar-colors .aurelia-theme-swatch').each(function () {
-      const c = ($(this).data('color') || '').toString().toUpperCase();
+      const c = ($(this).attr('data-color') || $(this).data('color') || '').toString().toUpperCase();
       if (c === normSidebar) {
         $(this).addClass('active-swatch');
       }
@@ -8661,7 +8786,7 @@ $(document).ready(function () {
     $('#tray-card-border-colors .aurelia-theme-swatch').removeClass('active-swatch');
     const isDefaultBorder = cardBorder.includes('rgba');
     $('#tray-card-border-colors .aurelia-theme-swatch').each(function () {
-      const c = ($(this).data('color') || '').toString();
+      const c = ($(this).attr('data-color') || $(this).data('color') || '').toString();
       if (isDefaultBorder && c.includes('rgba')) {
         $(this).addClass('active-swatch');
       } else if (!isDefaultBorder && c.toUpperCase() === cardBorder.toUpperCase()) {
@@ -8672,6 +8797,7 @@ $(document).ready(function () {
 
   function renderSettingsSection() {
     const theme = getSavedTheme();
+    applyThemeColors(theme.sidebarBg, theme.cardBorder);
     updateThemeUI(theme);
   }
 
@@ -8680,13 +8806,15 @@ $(document).ready(function () {
     applyThemeColors(currentTheme.sidebarBg, currentTheme.cardBorder);
     updateThemeUI(currentTheme);
 
-    // Click on circular preset swatch
+    // Click on circular preset swatch (with direct data/attr reading)
     $(document).on('click', '.aurelia-theme-swatch', function (e) {
       e.preventDefault();
-      const target = $(this).data('target');
-      const color = $(this).data('color');
-      const theme = getSavedTheme();
+      e.stopPropagation();
+      const target = $(this).attr('data-target') || $(this).data('target');
+      const color = $(this).attr('data-color') || $(this).data('color');
+      if (!target || !color) return;
 
+      const theme = getSavedTheme();
       if (target === 'sidebar') {
         theme.sidebarBg = color;
       } else if (target === 'cardBorder') {
@@ -8701,6 +8829,7 @@ $(document).ready(function () {
     // Custom Color Picker input & change events (instant real-time live preview)
     $(document).on('input change', '#sidebar-custom-color-input', function () {
       const color = $(this).val();
+      if (!color) return;
       const theme = getSavedTheme();
       theme.sidebarBg = color;
       applyThemeColors(theme.sidebarBg, theme.cardBorder);
@@ -8710,6 +8839,7 @@ $(document).ready(function () {
 
     $(document).on('input change', '#card-border-custom-color-input', function () {
       const color = $(this).val();
+      if (!color) return;
       const theme = getSavedTheme();
       theme.cardBorder = color;
       applyThemeColors(theme.sidebarBg, theme.cardBorder);
@@ -8720,7 +8850,8 @@ $(document).ready(function () {
     // Eyedropper API Tool
     $(document).on('click', '.theme-eyedropper-btn', async function (e) {
       e.preventDefault();
-      const target = $(this).data('target');
+      e.stopPropagation();
+      const target = $(this).attr('data-target') || $(this).data('target');
       if (window.EyeDropper) {
         try {
           const eyeDropper = new window.EyeDropper();
@@ -8741,7 +8872,6 @@ $(document).ready(function () {
           // User cancelled / dismissed the eyedropper
         }
       } else {
-        // Fallback: trigger custom color input
         const inputId = target === 'sidebar' ? '#sidebar-custom-color-input' : '#card-border-custom-color-input';
         $(inputId).trigger('click');
       }
