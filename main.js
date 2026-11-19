@@ -246,29 +246,37 @@ $(document).ready(function () {
   }
 
   table:not(#print-invoice-area table) tbody {
-    background-color: #FFFFFF !important;
+    background-color: transparent !important;
   }
 
   table:not(#print-invoice-area table) tbody tr {
-    background-color: #FFFFFF !important;
     position: relative;
     transition: background-color 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1), transform 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
   }
 
   table:not(#print-invoice-area table) tbody tr td {
-    background-color: #FFFFFF !important;
     transition: background-color 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
   }
 
-  table:not(#print-invoice-area table) tbody tr:hover {
+  /* Alternating Zebra Striping: 1 row light grey, 1 row white */
+  table:not(#print-invoice-area table) tbody tr:nth-child(odd),
+  table:not(#print-invoice-area table) tbody tr:nth-child(odd) td {
     background-color: #F1F5F9 !important;
+  }
+
+  table:not(#print-invoice-area table) tbody tr:nth-child(even),
+  table:not(#print-invoice-area table) tbody tr:nth-child(even) td {
+    background-color: #FFFFFF !important;
+  }
+
+  table:not(#print-invoice-area table) tbody tr:hover {
     box-shadow: 0 8px 24px -4px rgba(15, 23, 42, 0.16), 0 3px 8px -2px rgba(15, 23, 42, 0.08) !important;
     transform: translateY(-1px);
     z-index: 20;
   }
 
   table:not(#print-invoice-area table) tbody tr:hover td {
-    background-color: #F1F5F9 !important;
+    background-color: #E2E8F0 !important;
     border-color: #CBD5E1 !important;
   }
 
@@ -296,16 +304,25 @@ $(document).ready(function () {
     background-color: #1E293B !important;
   }
 
-  .dark table:not(#print-invoice-area table) tbody,
-  .dark table:not(#print-invoice-area table) tbody tr,
-  .dark table:not(#print-invoice-area table) tbody tr td {
+  .dark table:not(#print-invoice-area table) tbody {
     background-color: #0F172A !important;
   }
 
-  .dark table:not(#print-invoice-area table) tbody tr:hover,
+  .dark table:not(#print-invoice-area table) tbody tr:nth-child(odd),
+  .dark table:not(#print-invoice-area table) tbody tr:nth-child(odd) td {
+    background-color: #131E32 !important;
+  }
+
+  .dark table:not(#print-invoice-area table) tbody tr:nth-child(even),
+  .dark table:not(#print-invoice-area table) tbody tr:nth-child(even) td {
+    background-color: #0F172A !important;
+  }
+
   .dark table:not(#print-invoice-area table) tbody tr:hover td {
     background-color: #1E293B !important;
-    box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.5) !important;
+  }
+  .dark table:not(#print-invoice-area table) tbody tr:hover {
+    box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.6) !important;
   }
 
   .dark table:not(#print-invoice-area table) tbody tr.is-row-selected,

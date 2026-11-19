@@ -1344,29 +1344,37 @@
     }
 
     #page-staff-tbody {
-      background-color: #FFFFFF !important;
+      background-color: transparent !important;
     }
 
     #page-staff-tbody tr {
-      background-color: #FFFFFF !important;
       position: relative;
       transition: background-color 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1), transform 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
     }
 
     #page-staff-tbody tr td {
-      background-color: #FFFFFF !important;
       transition: background-color 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
     }
 
-    #page-staff-tbody tr:hover {
+    /* Alternating Zebra Striping: 1 row light grey, 1 row white */
+    #page-staff-tbody tr:nth-child(odd),
+    #page-staff-tbody tr:nth-child(odd) td {
       background-color: #F1F5F9 !important;
+    }
+
+    #page-staff-tbody tr:nth-child(even),
+    #page-staff-tbody tr:nth-child(even) td {
+      background-color: #FFFFFF !important;
+    }
+
+    #page-staff-tbody tr:hover {
       box-shadow: 0 8px 24px -4px rgba(15, 23, 42, 0.16), 0 3px 8px -2px rgba(15, 23, 42, 0.08) !important;
       transform: translateY(-1px);
       z-index: 20;
     }
 
     #page-staff-tbody tr:hover td {
-      background-color: #F1F5F9 !important;
+      background-color: #E2E8F0 !important;
       border-color: #CBD5E1 !important;
     }
 
@@ -1376,15 +1384,25 @@
     }
 
     .dark #page-staff-table,
-    .dark #page-staff-tbody,
-    .dark #page-staff-tbody tr td {
+    .dark #page-staff-tbody {
       background-color: #0F172A !important;
     }
 
-    .dark #page-staff-tbody tr:hover,
+    .dark #page-staff-tbody tr:nth-child(odd),
+    .dark #page-staff-tbody tr:nth-child(odd) td {
+      background-color: #131E32 !important;
+    }
+
+    .dark #page-staff-tbody tr:nth-child(even),
+    .dark #page-staff-tbody tr:nth-child(even) td {
+      background-color: #0F172A !important;
+    }
+
     .dark #page-staff-tbody tr:hover td {
       background-color: #1E293B !important;
-      box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.5) !important;
+    }
+    .dark #page-staff-tbody tr:hover {
+      box-shadow: 0 8px 24px -4px rgba(0, 0, 0, 0.6) !important;
     }
 
     /* Subtle custom scrollbar */
