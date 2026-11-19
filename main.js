@@ -368,6 +368,16 @@ $(document).ready(function () {
   #btn-sidebar-collapse {
     z-index: 60 !important;
   }
+
+  /* Spacing for mobile topbar right button (+ New Bill) */
+  #app-mobile-header {
+    padding-left: 1rem !important;
+    padding-right: 1.25rem !important;
+  }
+  #app-mobile-header .quick-nav-bill,
+  #app-mobile-header button:last-child {
+    margin-right: 6px !important;
+  }
       </style>
     `);
   }
