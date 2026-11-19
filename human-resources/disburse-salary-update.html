@@ -3360,14 +3360,14 @@
       <h2 class="text-lg font-bold text-slate-900">Salary Disbursement & Payout Batches</h2>
       <p class="text-xs text-slate-400">Execute monthly salary payouts, track bank transfer batch statuses & authorization</p>
     </div>
-    <div class="flex items-center space-x-2.5">
-      <button type="button" id="btn-disburse-batch" class="btn-Aurelia-primary text-xs py-2 px-3.5 flex items-center space-x-1.5 cursor-pointer">
-        <svg class="w-4 h-4 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-        <span>Authorize Batch Payout</span>
+    <div class="flex flex-wrap items-center gap-2.5">
+      <button type="button" id="btn-disburse-batch" class="btn-Aurelia-primary text-xs py-2 px-3.5 flex items-center space-x-1.5 cursor-pointer whitespace-nowrap flex-shrink-0">
+        <svg class="w-4 h-4 stroke-current flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+        <span class="whitespace-nowrap">Authorize Batch Payout</span>
       </button>
-      <button type="button" id="btn-download-neft" class="btn-Aurelia-secondary text-xs py-2 px-3.5 flex items-center space-x-1.5 cursor-pointer" onclick="openNeftDownloadModal(event)">
-        <svg class="w-4 h-4 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" /></svg>
-        <span>Download NEFT File</span>
+      <button type="button" id="btn-download-neft" class="btn-Aurelia-secondary text-xs py-2 px-3.5 flex items-center space-x-1.5 cursor-pointer whitespace-nowrap flex-shrink-0" onclick="openNeftDownloadModal(event)">
+        <svg class="w-4 h-4 stroke-current flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" /></svg>
+        <span class="whitespace-nowrap">Download NEFT File</span>
       </button>
     </div>
   </div>

@@ -696,6 +696,25 @@ $(document).ready(function () {
     display: none !important;
   }
 
+  /* Protection: Top action buttons (e.g. + New Order, Authorize Batch Payout) strictly stay on a single line */
+  #btn-quick-new-order,
+  #btn-disburse-batch,
+  #btn-download-neft,
+  .btn-Aurelia-primary,
+  .btn-Aurelia-secondary {
+    white-space: nowrap !important;
+  }
+  #btn-quick-new-order,
+  #btn-disburse-batch,
+  #btn-download-neft {
+    flex-shrink: 0 !important;
+  }
+  #btn-quick-new-order *,
+  #btn-disburse-batch *,
+  #btn-download-neft * {
+    white-space: nowrap !important;
+  }
+
   /* Spacing for mobile topbar right button (+ New Bill) */
   #app-mobile-header {
     padding-left: 1rem !important;
