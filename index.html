@@ -2,6 +2,22 @@
 <html lang="en" class="scroll-smooth light">
 
 <head>
+    <script>
+      (function(){
+        try {
+          var s = localStorage.getItem('aurelia_theme_settings');
+          if (s) {
+            var t = JSON.parse(s);
+            if (t.sidebarBg) document.documentElement.style.setProperty('--aurelia-sidebar-bg', t.sidebarBg);
+            if (t.cardBorder) {
+              document.documentElement.style.setProperty('--aurelia-card-border', t.cardBorder);
+              document.documentElement.style.setProperty('--aurelia-card-border-hover', t.cardBorder);
+            }
+          }
+        } catch(e){}
+      })();
+    </script>
+
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Aurelia | Hotel & Restaurant Financial Management</title>
@@ -218,7 +234,7 @@
           rgba(235, 243, 252, 0.45) 100%) !important;
       backdrop-filter: blur(28px) saturate(180%) !important;
       -webkit-backdrop-filter: blur(28px) saturate(180%) !important;
-      border: 1.5px solid rgba(255, 255, 255, 0.82) !important;
+      border: 1.5px solid var(--aurelia-card-border, rgba(255, 255, 255, 0.82)) !important;
       border-radius: 28px !important;
       box-shadow:
         /* Specular rim highlight on top & left (mimics light source) */
@@ -278,7 +294,7 @@
     #main-app-content .Aurelia-card:hover,
     .glass-money-flow:hover {
       transform: translateY(-3px) !important;
-      border-color: rgba(255, 255, 255, 0.98) !important;
+      border-color: var(--aurelia-card-border-hover, var(--aurelia-card-border, rgba(255, 255, 255, 0.98))) !important;
       box-shadow:
         inset 1.5px 1.5px 2px 0px rgba(255, 255, 255, 1),
         inset 0.5px 0.5px 1px 0px rgba(255, 255, 255, 0.95),
@@ -343,7 +359,7 @@
     /* SIDEBAR NAVIGATION IN SOPHISTICATED DEEP SLATE (#494D5F)                  */
     /* ========================================================================= */
     #app-sidebar {
-      background: #494D5F !important;
+      background: var(--aurelia-sidebar-bg, #494D5F) !important;
       border-right: 1px solid rgba(255, 255, 255, 0.08) !important;
       box-shadow: 4px 0 24px rgba(15, 23, 42, 0.12) !important;
       transition: width 0.25s cubic-bezier(0.4, 0, 0.2, 1);
@@ -719,7 +735,7 @@
       align-items: center !important;
       justify-content: center !important;
       padding-left: 3px !important;
-      background: #494D5F !important;
+      background: var(--aurelia-sidebar-bg, #494D5F) !important;
       border: none !important;
       color: #FFFFFF !important;
       box-shadow: none !important;
@@ -760,7 +776,7 @@
       align-items: center !important;
       justify-content: center !important;
       padding-left: 3px !important;
-      background: #494D5F !important;
+      background: var(--aurelia-sidebar-bg, #494D5F) !important;
       box-shadow: none !important;
       border: none !important;
       -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 72'%3E%3Cpath d='M 0,0 C 0,10 6,17 14,20 C 18,22 20,28 20,36 C 20,44 18,50 14,52 C 6,55 0,62 0,72 Z' fill='%23000000'/%3E%3C/svg%3E");
@@ -2159,7 +2175,48 @@
     vertical-align: middle !important;
   }
 
-</style>
+
+    /* ========================================================================= */
+    /* APPEARANCE & THEME DYNAMIC SYSTEM                                         */
+    /* ========================================================================= */
+    #mobile-drawer,
+    .mobile-sidebar-drawer,
+    #app-mobile-header {
+      background-color: var(--aurelia-sidebar-bg, #494D5F) !important;
+    }
+
+    .aurelia-theme-swatch.active-swatch {
+      box-shadow: 0 0 0 2.5px #161922, 0 0 0 5px #a855f7 !important;
+      transform: scale(1.08) !important;
+    }
+
+    .aurelia-theme-swatch:hover {
+      transform: scale(1.12);
+      transition: transform 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    #app-sidebar.sidebar-light-mode .sidebar-label,
+    #app-sidebar.sidebar-light-mode #sidebar-brand-title h2,
+    #app-sidebar.sidebar-light-mode .sidebar-section-header,
+    #app-sidebar.sidebar-light-mode .Aurelia-nav-item:not(.active),
+    #app-sidebar.sidebar-light-mode .aurelia-nav-item:not(.active),
+    #app-sidebar.sidebar-light-mode .finset-nav-item:not(.active),
+    #app-sidebar.sidebar-light-mode .hr-sub-item:not(.active),
+    #app-sidebar.sidebar-light-mode .dept-sub-item:not(.active),
+    #app-sidebar.sidebar-light-mode #btn-sidebar-help,
+    #app-sidebar.sidebar-light-mode #btn-sidebar-logout {
+      color: #1e293b !important;
+    }
+
+    #app-sidebar.sidebar-light-mode svg:not(.active svg):not(#btn-sidebar-collapse svg) {
+      color: #475569 !important;
+    }
+
+    #app-sidebar.sidebar-light-mode .sidebar-section-divider {
+      border-color: rgba(0, 0, 0, 0.08) !important;
+    }
+
+    </style>
 </head>
 
 
@@ -4123,6 +4180,170 @@
             <p class="text-xs text-slate-400">Configure front desk counters, tax rates, and hotel preferences</p>
           </div>
 
+          <!-- ============================================================= -->
+          <!-- APPEARANCE & THEME CUSTOMIZATION ENGINE                       -->
+          <!-- ============================================================= -->
+          <div class="Aurelia-card p-6 md:p-8 space-y-6">
+            <!-- Section Header with Title, Description, and Action Buttons -->
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-5 border-b border-slate-200/60 dark:border-slate-800/60 gap-4">
+              <div class="space-y-1">
+                <div class="flex items-center gap-2.5">
+                  <div class="w-9 h-9 rounded-xl bg-amber-500/10 text-amber-600 dark:text-amber-400 flex items-center justify-center font-bold shadow-xs">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M7 21a4 4 0 01-4-4 8.001 8.001 0 0113.657-5.657 8.001 8.001 0 01-1.343 9.657H7z" />
+                    </svg>
+                  </div>
+                  <div>
+                    <h3 class="text-base font-bold text-slate-900 dark:text-white">Appearance &amp; Theme</h3>
+                  </div>
+                </div>
+                <p class="text-xs text-slate-500 dark:text-slate-400 pl-11.5">
+                  Customize navigation sidebar background and card border styling with live instant preview
+                </p>
+              </div>
+
+              <!-- Actions: Reset to Default and Save Changes -->
+              <div class="flex items-center gap-3 self-end sm:self-center">
+                <button type="button" id="btn-theme-reset" class="px-4 py-2 text-xs font-semibold rounded-xl border border-slate-200 dark:border-slate-700 bg-white/70 dark:bg-slate-800/70 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 transition shadow-xs flex items-center gap-1.5 cursor-pointer">
+                  <svg class="w-3.5 h-3.5 text-slate-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                  </svg>
+                  <span>Reset to Default</span>
+                </button>
+                <button type="button" id="btn-theme-save" class="px-5 py-2 text-xs font-bold rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white shadow-md hover:shadow-lg transition flex items-center gap-1.5 cursor-pointer">
+                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                  </svg>
+                  <span>Save Changes</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Color Pickers Grid: Sidebar Theme on Left, Card Border on Right -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 pt-2">
+              <!-- 1. SIDEBAR THEME COLOR -->
+              <div class="space-y-4">
+                <div class="flex items-center justify-between">
+                  <div>
+                    <h4 class="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                      <span>Sidebar Theme Color</span>
+                    </h4>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Customize navigation background color</p>
+                  </div>
+                  <div class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-100/80 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 shadow-xs">
+                    <span id="preview-sidebar-dot" class="w-3.5 h-3.5 rounded-full border border-black/10 shadow-xs transition-colors" style="background-color: #494D5F;"></span>
+                    <span id="preview-sidebar-hex" class="text-xs font-mono font-semibold text-slate-700 dark:text-slate-300">#494D5F</span>
+                  </div>
+                </div>
+
+                <!-- Color Swatch Tray Matching Reference Photo -->
+                <div class="p-4 sm:p-5 rounded-2xl bg-[#161922] shadow-xl border border-white/10 w-full sm:w-fit">
+                  <div class="grid grid-cols-7 gap-2.5 sm:gap-3.5" id="tray-sidebar-colors">
+                    <!-- Row 1: Rainbow Custom Picker (+), Eyedropper, 5 preset swatches -->
+                    <label class="relative w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center cursor-pointer transition transform hover:scale-110 shadow-sm" style="background: conic-gradient(from 180deg, #ff0000, #ff8800, #ffff00, #00ff00, #00ffff, #0044ff, #ff00ff, #ff0000); padding: 2.5px;" title="Custom Color Picker">
+                      <input type="color" class="sr-only theme-custom-color-input" id="sidebar-custom-color-input" value="#494D5F">
+                      <div class="w-full h-full rounded-full bg-[#161922] flex items-center justify-center text-white">
+                        <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+                        </svg>
+                      </div>
+                    </label>
+                    <button type="button" class="theme-eyedropper-btn relative w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-[#1e2330] hover:bg-[#282f42] border border-white/20 flex items-center justify-center cursor-pointer transition transform hover:scale-110 shadow-sm text-white" data-target="sidebar" title="Eyedropper Tool">
+                      <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M19.4 4.6a2.121 2.121 0 00-3 0L3.7 17.3a1 1 0 00-.28.53l-.4 3.2a1 1 0 001.12 1.12l3.2-.4a1 1 0 00.53-.28L20.6 8.8a2.121 2.121 0 000-3l-1.2-1.2z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M14.5 6.5l3 3" />
+                      </svg>
+                    </button>
+                    <button type="button" class="aurelia-theme-swatch w-9 h-9 sm:w-10 sm:h-10 rounded-full transition transform hover:scale-110 shadow-sm relative cursor-pointer" data-target="sidebar" data-color="#E53935" style="background-color: #E53935;" title="#E53935"></button>
+                    <button type="button" class="aurelia-theme-swatch w-9 h-9 sm:w-10 sm:h-10 rounded-full transition transform hover:scale-110 shadow-sm relative cursor-pointer" data-target="sidebar" data-color="#EF4444" style="background-color: #EF4444;" title="#EF4444"></button>
+                    <button type="button" class="aurelia-theme-swatch w-9 h-9 sm:w-10 sm:h-10 rounded-full transition transform hover:scale-110 shadow-sm relative cursor-pointer" data-target="sidebar" data-color="#B45309" style="background-color: #B45309;" title="#B45309"></button>
+                    <button type="button" class="aurelia-theme-swatch w-9 h-9 sm:w-10 sm:h-10 rounded-full transition transform hover:scale-110 shadow-sm relative cursor-pointer" data-target="sidebar" data-color="#D97706" style="background-color: #D97706;" title="#D97706"></button>
+                    <button type="button" class="aurelia-theme-swatch w-9 h-9 sm:w-10 sm:h-10 rounded-full transition transform hover:scale-110 shadow-sm relative cursor-pointer" data-target="sidebar" data-color="#EAB308" style="background-color: #EAB308;" title="#EAB308"></button>
+
+                    <!-- Row 2: 7 preset swatches -->
+                    <button type="button" class="aurelia-theme-swatch w-9 h-9 sm:w-10 sm:h-10 rounded-full transition transform hover:scale-110 shadow-sm relative cursor-pointer" data-target="sidebar" data-color="#22C55E" style="background-color: #22C55E;" title="#22C55E"></button>
+                    <button type="button" class="aurelia-theme-swatch w-9 h-9 sm:w-10 sm:h-10 rounded-full transition transform hover:scale-110 shadow-sm relative cursor-pointer" data-target="sidebar" data-color="#16A34A" style="background-color: #16A34A;" title="#16A34A"></button>
+                    <button type="button" class="aurelia-theme-swatch w-9 h-9 sm:w-10 sm:h-10 rounded-full transition transform hover:scale-110 shadow-sm relative cursor-pointer" data-target="sidebar" data-color="#10B981" style="background-color: #10B981;" title="#10B981"></button>
+                    <button type="button" class="aurelia-theme-swatch w-9 h-9 sm:w-10 sm:h-10 rounded-full transition transform hover:scale-110 shadow-sm relative cursor-pointer" data-target="sidebar" data-color="#06B6D4" style="background-color: #06B6D4;" title="#06B6D4"></button>
+                    <button type="button" class="aurelia-theme-swatch w-9 h-9 sm:w-10 sm:h-10 rounded-full transition transform hover:scale-110 shadow-sm relative cursor-pointer" data-target="sidebar" data-color="#38BDF8" style="background-color: #38BDF8;" title="#38BDF8"></button>
+                    <button type="button" class="aurelia-theme-swatch w-9 h-9 sm:w-10 sm:h-10 rounded-full transition transform hover:scale-110 shadow-sm relative cursor-pointer" data-target="sidebar" data-color="#0284C7" style="background-color: #0284C7;" title="#0284C7"></button>
+                    <button type="button" class="aurelia-theme-swatch w-9 h-9 sm:w-10 sm:h-10 rounded-full transition transform hover:scale-110 shadow-sm relative cursor-pointer" data-target="sidebar" data-color="#2563EB" style="background-color: #2563EB;" title="#2563EB"></button>
+
+                    <!-- Row 3: 6 preset swatches -->
+                    <button type="button" class="aurelia-theme-swatch w-9 h-9 sm:w-10 sm:h-10 rounded-full transition transform hover:scale-110 shadow-sm relative cursor-pointer" data-target="sidebar" data-color="#94A3B8" style="background-color: #94A3B8;" title="#94A3B8"></button>
+                    <button type="button" class="aurelia-theme-swatch w-9 h-9 sm:w-10 sm:h-10 rounded-full transition transform hover:scale-110 shadow-sm relative cursor-pointer" data-target="sidebar" data-color="#1D4ED8" style="background-color: #1D4ED8;" title="#1D4ED8"></button>
+                    <button type="button" class="aurelia-theme-swatch w-9 h-9 sm:w-10 sm:h-10 rounded-full transition transform hover:scale-110 shadow-sm relative cursor-pointer" data-target="sidebar" data-color="#7C3AED" style="background-color: #7C3AED;" title="#7C3AED"></button>
+                    <button type="button" class="aurelia-theme-swatch w-9 h-9 sm:w-10 sm:h-10 rounded-full transition transform hover:scale-110 shadow-sm relative cursor-pointer" data-target="sidebar" data-color="#A855F7" style="background-color: #A855F7;" title="#A855F7"></button>
+                    <button type="button" class="aurelia-theme-swatch w-9 h-9 sm:w-10 sm:h-10 rounded-full transition transform hover:scale-110 shadow-sm relative cursor-pointer active-swatch" data-target="sidebar" data-color="#494D5F" style="background-color: #494D5F;" title="#494D5F (Default)"></button>
+                    <button type="button" class="aurelia-theme-swatch w-9 h-9 sm:w-10 sm:h-10 rounded-full transition transform hover:scale-110 shadow-sm relative cursor-pointer" data-target="sidebar" data-color="#FFFFFF" style="background-color: #FFFFFF; border: 1px solid rgba(255, 255, 255, 0.4);" title="#FFFFFF"></button>
+                    <div></div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 2. CARD BORDER COLOR -->
+              <div class="space-y-4">
+                <div class="flex items-center justify-between">
+                  <div>
+                    <h4 class="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                      <span>Card Border Color</span>
+                    </h4>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Customize glassmorphic card border accents</p>
+                  </div>
+                  <div class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-100/80 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 shadow-xs">
+                    <span id="preview-card-border-dot" class="w-3.5 h-3.5 rounded-full border border-black/10 shadow-xs transition-colors" style="background-color: rgba(255, 255, 255, 0.82);"></span>
+                    <span id="preview-card-border-hex" class="text-xs font-mono font-semibold text-slate-700 dark:text-slate-300">#FFFFFF (82%)</span>
+                  </div>
+                </div>
+
+                <!-- Color Swatch Tray Matching Reference Photo -->
+                <div class="p-4 sm:p-5 rounded-2xl bg-[#161922] shadow-xl border border-white/10 w-full sm:w-fit">
+                  <div class="grid grid-cols-7 gap-2.5 sm:gap-3.5" id="tray-card-border-colors">
+                    <!-- Row 1: Rainbow Custom Picker (+), Eyedropper, 5 preset swatches -->
+                    <label class="relative w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center cursor-pointer transition transform hover:scale-110 shadow-sm" style="background: conic-gradient(from 180deg, #ff0000, #ff8800, #ffff00, #00ff00, #00ffff, #0044ff, #ff00ff, #ff0000); padding: 2.5px;" title="Custom Color Picker">
+                      <input type="color" class="sr-only theme-custom-color-input" id="card-border-custom-color-input" value="#FFFFFF">
+                      <div class="w-full h-full rounded-full bg-[#161922] flex items-center justify-center text-white">
+                        <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+                        </svg>
+                      </div>
+                    </label>
+                    <button type="button" class="theme-eyedropper-btn relative w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-[#1e2330] hover:bg-[#282f42] border border-white/20 flex items-center justify-center cursor-pointer transition transform hover:scale-110 shadow-sm text-white" data-target="cardBorder" title="Eyedropper Tool">
+                      <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M19.4 4.6a2.121 2.121 0 00-3 0L3.7 17.3a1 1 0 00-.28.53l-.4 3.2a1 1 0 001.12 1.12l3.2-.4a1 1 0 00.53-.28L20.6 8.8a2.121 2.121 0 000-3l-1.2-1.2z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M14.5 6.5l3 3" />
+                      </svg>
+                    </button>
+                    <button type="button" class="aurelia-theme-swatch w-9 h-9 sm:w-10 sm:h-10 rounded-full transition transform hover:scale-110 shadow-sm relative cursor-pointer" data-target="cardBorder" data-color="#E53935" style="background-color: #E53935;" title="#E53935"></button>
+                    <button type="button" class="aurelia-theme-swatch w-9 h-9 sm:w-10 sm:h-10 rounded-full transition transform hover:scale-110 shadow-sm relative cursor-pointer" data-target="cardBorder" data-color="#EF4444" style="background-color: #EF4444;" title="#EF4444"></button>
+                    <button type="button" class="aurelia-theme-swatch w-9 h-9 sm:w-10 sm:h-10 rounded-full transition transform hover:scale-110 shadow-sm relative cursor-pointer" data-target="cardBorder" data-color="#B45309" style="background-color: #B45309;" title="#B45309"></button>
+                    <button type="button" class="aurelia-theme-swatch w-9 h-9 sm:w-10 sm:h-10 rounded-full transition transform hover:scale-110 shadow-sm relative cursor-pointer" data-target="cardBorder" data-color="#D97706" style="background-color: #D97706;" title="#D97706"></button>
+                    <button type="button" class="aurelia-theme-swatch w-9 h-9 sm:w-10 sm:h-10 rounded-full transition transform hover:scale-110 shadow-sm relative cursor-pointer" data-target="cardBorder" data-color="#EAB308" style="background-color: #EAB308;" title="#EAB308"></button>
+
+                    <!-- Row 2: 7 preset swatches -->
+                    <button type="button" class="aurelia-theme-swatch w-9 h-9 sm:w-10 sm:h-10 rounded-full transition transform hover:scale-110 shadow-sm relative cursor-pointer" data-target="cardBorder" data-color="#22C55E" style="background-color: #22C55E;" title="#22C55E"></button>
+                    <button type="button" class="aurelia-theme-swatch w-9 h-9 sm:w-10 sm:h-10 rounded-full transition transform hover:scale-110 shadow-sm relative cursor-pointer" data-target="cardBorder" data-color="#16A34A" style="background-color: #16A34A;" title="#16A34A"></button>
+                    <button type="button" class="aurelia-theme-swatch w-9 h-9 sm:w-10 sm:h-10 rounded-full transition transform hover:scale-110 shadow-sm relative cursor-pointer" data-target="cardBorder" data-color="#10B981" style="background-color: #10B981;" title="#10B981"></button>
+                    <button type="button" class="aurelia-theme-swatch w-9 h-9 sm:w-10 sm:h-10 rounded-full transition transform hover:scale-110 shadow-sm relative cursor-pointer" data-target="cardBorder" data-color="#06B6D4" style="background-color: #06B6D4;" title="#06B6D4"></button>
+                    <button type="button" class="aurelia-theme-swatch w-9 h-9 sm:w-10 sm:h-10 rounded-full transition transform hover:scale-110 shadow-sm relative cursor-pointer" data-target="cardBorder" data-color="#38BDF8" style="background-color: #38BDF8;" title="#38BDF8"></button>
+                    <button type="button" class="aurelia-theme-swatch w-9 h-9 sm:w-10 sm:h-10 rounded-full transition transform hover:scale-110 shadow-sm relative cursor-pointer" data-target="cardBorder" data-color="#0284C7" style="background-color: #0284C7;" title="#0284C7"></button>
+                    <button type="button" class="aurelia-theme-swatch w-9 h-9 sm:w-10 sm:h-10 rounded-full transition transform hover:scale-110 shadow-sm relative cursor-pointer" data-target="cardBorder" data-color="#2563EB" style="background-color: #2563EB;" title="#2563EB"></button>
+
+                    <!-- Row 3: 6 preset swatches -->
+                    <button type="button" class="aurelia-theme-swatch w-9 h-9 sm:w-10 sm:h-10 rounded-full transition transform hover:scale-110 shadow-sm relative cursor-pointer" data-target="cardBorder" data-color="#94A3B8" style="background-color: #94A3B8;" title="#94A3B8"></button>
+                    <button type="button" class="aurelia-theme-swatch w-9 h-9 sm:w-10 sm:h-10 rounded-full transition transform hover:scale-110 shadow-sm relative cursor-pointer" data-target="cardBorder" data-color="#1D4ED8" style="background-color: #1D4ED8;" title="#1D4ED8"></button>
+                    <button type="button" class="aurelia-theme-swatch w-9 h-9 sm:w-10 sm:h-10 rounded-full transition transform hover:scale-110 shadow-sm relative cursor-pointer" data-target="cardBorder" data-color="#7C3AED" style="background-color: #7C3AED;" title="#7C3AED"></button>
+                    <button type="button" class="aurelia-theme-swatch w-9 h-9 sm:w-10 sm:h-10 rounded-full transition transform hover:scale-110 shadow-sm relative cursor-pointer" data-target="cardBorder" data-color="#A855F7" style="background-color: #A855F7;" title="#A855F7"></button>
+                    <button type="button" class="aurelia-theme-swatch w-9 h-9 sm:w-10 sm:h-10 rounded-full transition transform hover:scale-110 shadow-sm relative cursor-pointer" data-target="cardBorder" data-color="#494D5F" style="background-color: #494D5F;" title="#494D5F"></button>
+                    <button type="button" class="aurelia-theme-swatch w-9 h-9 sm:w-10 sm:h-10 rounded-full transition transform hover:scale-110 shadow-sm relative cursor-pointer active-swatch" data-target="cardBorder" data-color="rgba(255, 255, 255, 0.82)" style="background-color: #FFFFFF; border: 1px solid rgba(255, 255, 255, 0.4);" title="#FFFFFF (Default)"></button>
+                    <div></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div class="Aurelia-card p-6 space-y-4">
               <h3 class="text-sm font-bold text-slate-900 dark:text-white">Hotel Information</h3>
@@ -5535,7 +5756,7 @@
   <!-- Authentication Controller -->
   <script src="auth.js?v=20261110_07"></script>
   <!-- Main JavaScript Logic -->
-  <script src="main.js?v=20261117_v61"></script>
+  <script src="main.js?v=20261119_v62"></script>
 </body>
 
 </html>

@@ -1,3 +1,22 @@
+// =========================================================================
+// ZERO-FOUC THEME INITIALIZER (Runs immediately before DOM ready)
+// =========================================================================
+(function () {
+  try {
+    const raw = localStorage.getItem('aurelia_theme_settings');
+    if (raw) {
+      const theme = JSON.parse(raw);
+      if (theme.sidebarBg) {
+        document.documentElement.style.setProperty('--aurelia-sidebar-bg', theme.sidebarBg);
+      }
+      if (theme.cardBorder) {
+        document.documentElement.style.setProperty('--aurelia-card-border', theme.cardBorder);
+        document.documentElement.style.setProperty('--aurelia-card-border-hover', theme.cardBorder);
+      }
+    }
+  } catch (e) {}
+})();
+
 /**
  * FinSet Hotel Financial & Billing Management System
  * Front Desk POS & Operational Financials Engine
@@ -363,7 +382,7 @@ $(document).ready(function () {
   }
   #app-sidebar {
     z-index: 55 !important;
-    background-color: #494D5F !important;
+    background-color: var(--aurelia-sidebar-bg, #494D5F) !important;
   }
   #btn-sidebar-collapse {
     z-index: 60 !important;
@@ -1159,6 +1178,7 @@ $(document).ready(function () {
 
     const sectionRenderers = {
       dashboard: renderDashboard,
+      settings: renderSettingsSection,
       billing: initBillingSection,
       'add-bill': initBillingSection,
       'billing-details': initBillingSection,
@@ -8533,6 +8553,227 @@ $(document).ready(function () {
       bulkObserver.observe(document.body, { childList: true, subtree: true });
     }
   })();
+
+
+  // =========================================================================
+  // APPEARANCE & THEME CUSTOMIZATION CONTROLLER (Sidebar & Card Border)
+  // =========================================================================
+  const DEFAULT_THEME = {
+    sidebarBg: '#494D5F',
+    cardBorder: 'rgba(255, 255, 255, 0.82)'
+  };
+
+  function getSavedTheme() {
+    try {
+      const raw = localStorage.getItem('aurelia_theme_settings');
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        return {
+          sidebarBg: parsed.sidebarBg || DEFAULT_THEME.sidebarBg,
+          cardBorder: parsed.cardBorder || DEFAULT_THEME.cardBorder
+        };
+      }
+    } catch (e) {
+      console.error('Error loading theme preferences:', e);
+    }
+    return { ...DEFAULT_THEME };
+  }
+
+  function saveTheme(theme) {
+    try {
+      localStorage.setItem('aurelia_theme_settings', JSON.stringify(theme));
+    } catch (e) {
+      console.error('Error saving theme preferences:', e);
+    }
+  }
+
+  function isColorLight(color) {
+    try {
+      let r = 0, g = 0, b = 0;
+      if (color.startsWith('#')) {
+        let hex = color.replace('#', '');
+        if (hex.length === 3) hex = hex.split('').map(c => c + c).join('');
+        r = parseInt(hex.substring(0, 2), 16);
+        g = parseInt(hex.substring(2, 4), 16);
+        b = parseInt(hex.substring(4, 6), 16);
+      } else if (color.startsWith('rgb')) {
+        const match = color.match(/\d+/g);
+        if (match && match.length >= 3) {
+          r = parseInt(match[0]);
+          g = parseInt(match[1]);
+          b = parseInt(match[2]);
+        }
+      }
+      const luma = 0.2126 * r + 0.7152 * g + 0.0722 * b;
+      return luma > 165;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  function applyThemeColors(sidebarBg, cardBorder) {
+    const root = document.documentElement;
+    if (sidebarBg) {
+      root.style.setProperty('--aurelia-sidebar-bg', sidebarBg);
+      const isLight = isColorLight(sidebarBg);
+      const $sidebar = $('#app-sidebar, #mobile-drawer');
+      if (isLight) {
+        $sidebar.addClass('sidebar-light-mode');
+      } else {
+        $sidebar.removeClass('sidebar-light-mode');
+      }
+    }
+    if (cardBorder) {
+      root.style.setProperty('--aurelia-card-border', cardBorder);
+      root.style.setProperty('--aurelia-card-border-hover', cardBorder);
+    }
+  }
+
+  function updateThemeUI(theme) {
+    const { sidebarBg, cardBorder } = theme;
+
+    // 1. Update Sidebar Theme UI
+    $('#preview-sidebar-dot').css('background-color', sidebarBg);
+    $('#preview-sidebar-hex').text(sidebarBg.toUpperCase());
+    if (sidebarBg.startsWith('#')) {
+      $('#sidebar-custom-color-input').val(sidebarBg);
+    }
+
+    // Update active swatch in sidebar tray
+    $('#tray-sidebar-colors .aurelia-theme-swatch').removeClass('active-swatch');
+    const normSidebar = sidebarBg.toUpperCase();
+    $('#tray-sidebar-colors .aurelia-theme-swatch').each(function () {
+      const c = ($(this).data('color') || '').toString().toUpperCase();
+      if (c === normSidebar) {
+        $(this).addClass('active-swatch');
+      }
+    });
+
+    // 2. Update Card Border Theme UI
+    $('#preview-card-border-dot').css('background-color', cardBorder);
+    const borderDisplay = cardBorder.includes('rgba') ? '#FFFFFF (82%)' : cardBorder.toUpperCase();
+    $('#preview-card-border-hex').text(borderDisplay);
+    if (cardBorder.startsWith('#')) {
+      $('#card-border-custom-color-input').val(cardBorder);
+    }
+
+    // Update active swatch in card border tray
+    $('#tray-card-border-colors .aurelia-theme-swatch').removeClass('active-swatch');
+    const isDefaultBorder = cardBorder.includes('rgba');
+    $('#tray-card-border-colors .aurelia-theme-swatch').each(function () {
+      const c = ($(this).data('color') || '').toString();
+      if (isDefaultBorder && c.includes('rgba')) {
+        $(this).addClass('active-swatch');
+      } else if (!isDefaultBorder && c.toUpperCase() === cardBorder.toUpperCase()) {
+        $(this).addClass('active-swatch');
+      }
+    });
+  }
+
+  function renderSettingsSection() {
+    const theme = getSavedTheme();
+    updateThemeUI(theme);
+  }
+
+  function initThemeSettings() {
+    const currentTheme = getSavedTheme();
+    applyThemeColors(currentTheme.sidebarBg, currentTheme.cardBorder);
+    updateThemeUI(currentTheme);
+
+    // Click on circular preset swatch
+    $(document).on('click', '.aurelia-theme-swatch', function (e) {
+      e.preventDefault();
+      const target = $(this).data('target');
+      const color = $(this).data('color');
+      const theme = getSavedTheme();
+
+      if (target === 'sidebar') {
+        theme.sidebarBg = color;
+      } else if (target === 'cardBorder') {
+        theme.cardBorder = color;
+      }
+
+      applyThemeColors(theme.sidebarBg, theme.cardBorder);
+      saveTheme(theme);
+      updateThemeUI(theme);
+    });
+
+    // Custom Color Picker input & change events (instant real-time live preview)
+    $(document).on('input change', '#sidebar-custom-color-input', function () {
+      const color = $(this).val();
+      const theme = getSavedTheme();
+      theme.sidebarBg = color;
+      applyThemeColors(theme.sidebarBg, theme.cardBorder);
+      saveTheme(theme);
+      updateThemeUI(theme);
+    });
+
+    $(document).on('input change', '#card-border-custom-color-input', function () {
+      const color = $(this).val();
+      const theme = getSavedTheme();
+      theme.cardBorder = color;
+      applyThemeColors(theme.sidebarBg, theme.cardBorder);
+      saveTheme(theme);
+      updateThemeUI(theme);
+    });
+
+    // Eyedropper API Tool
+    $(document).on('click', '.theme-eyedropper-btn', async function (e) {
+      e.preventDefault();
+      const target = $(this).data('target');
+      if (window.EyeDropper) {
+        try {
+          const eyeDropper = new window.EyeDropper();
+          const result = await eyeDropper.open();
+          if (result && result.sRGBHex) {
+            const hex = result.sRGBHex;
+            const theme = getSavedTheme();
+            if (target === 'sidebar') {
+              theme.sidebarBg = hex;
+            } else {
+              theme.cardBorder = hex;
+            }
+            applyThemeColors(theme.sidebarBg, theme.cardBorder);
+            saveTheme(theme);
+            updateThemeUI(theme);
+          }
+        } catch (err) {
+          // User cancelled / dismissed the eyedropper
+        }
+      } else {
+        // Fallback: trigger custom color input
+        const inputId = target === 'sidebar' ? '#sidebar-custom-color-input' : '#card-border-custom-color-input';
+        $(inputId).trigger('click');
+      }
+    });
+
+    // Save Changes Button (Confirmation feedback)
+    $(document).on('click', '#btn-theme-save', function (e) {
+      e.preventDefault();
+      const theme = getSavedTheme();
+      saveTheme(theme);
+      applyThemeColors(theme.sidebarBg, theme.cardBorder);
+      updateThemeUI(theme);
+      if (typeof showToast === 'function') {
+        showToast('Appearance & theme preferences saved successfully!', 'info');
+      }
+    });
+
+    // Reset to Default Button
+    $(document).on('click', '#btn-theme-reset', function (e) {
+      e.preventDefault();
+      const theme = { ...DEFAULT_THEME };
+      saveTheme(theme);
+      applyThemeColors(theme.sidebarBg, theme.cardBorder);
+      updateThemeUI(theme);
+      if (typeof showToast === 'function') {
+        showToast('Theme preferences reset to baseline defaults.', 'info');
+      }
+    });
+  }
+
+  // Initialize theme on ready
+  initThemeSettings();
 
 });
 
