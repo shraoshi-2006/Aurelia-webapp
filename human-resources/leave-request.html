@@ -3091,23 +3091,23 @@
 
   <div class="Aurelia-card p-0 overflow-hidden">
     <!-- Gmail-Inspired Top Filter Navigation with Aurelia Logo Gold Theme -->
-    <div class="flex items-center space-x-1 sm:space-x-4 border-b border-slate-200/80 dark:border-slate-700/80 px-4 bg-white/40 dark:bg-slate-900/40">
-      <button type="button" class="btn-lr-filter active flex items-center space-x-2 py-3 px-3.5 font-bold text-xs border-b-2 border-[#FCA311] text-[#FCA311] transition-all cursor-pointer" data-status="all">
-        <svg class="w-4 h-4 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"/></svg>
-        <span>All Requests</span>
-        <span class="px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-[#14213D] text-[#FCA311]">27</span>
+    <div class="grid grid-cols-4 items-center border-b border-slate-200/80 dark:border-slate-700/80 px-1 sm:px-4 bg-white/40 dark:bg-slate-900/40 w-full">
+      <button type="button" class="btn-lr-filter active flex items-center justify-center gap-1 sm:gap-2 py-2.5 sm:py-3 px-1 sm:px-3.5 font-bold text-[10px] sm:text-xs border-b-2 border-[#FCA311] text-[#FCA311] transition-all cursor-pointer" data-status="all">
+        <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4 stroke-current hidden sm:inline-block flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"/></svg>
+        <span class="whitespace-nowrap">All<span class="hidden sm:inline"> Requests</span></span>
+        <span class="px-1.5 py-0.2 sm:px-1.5 sm:py-0.5 rounded-full text-[9px] sm:text-[10px] font-bold bg-[#14213D] text-[#FCA311] flex-shrink-0">27</span>
       </button>
-      <button type="button" class="btn-lr-filter flex items-center space-x-2 py-3 px-3.5 font-semibold text-xs border-b-2 border-transparent text-slate-500 hover:text-slate-900 dark:hover:text-white transition-all cursor-pointer" data-status="pending">
-        <span>Pending Review</span>
-        <span class="px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800">6</span>
+      <button type="button" class="btn-lr-filter flex items-center justify-center gap-1 sm:gap-2 py-2.5 sm:py-3 px-1 sm:px-3.5 font-semibold text-[10px] sm:text-xs border-b-2 border-transparent text-slate-500 hover:text-slate-900 dark:hover:text-white transition-all cursor-pointer" data-status="pending">
+        <span class="whitespace-nowrap">Pending<span class="hidden sm:inline"> Review</span></span>
+        <span class="px-1.5 py-0.2 sm:px-1.5 sm:py-0.5 rounded-full text-[9px] sm:text-[10px] font-bold bg-amber-100 text-amber-800 flex-shrink-0">6</span>
       </button>
-      <button type="button" class="btn-lr-filter flex items-center space-x-2 py-3 px-3.5 font-semibold text-xs border-b-2 border-transparent text-slate-500 hover:text-slate-900 dark:hover:text-white transition-all cursor-pointer" data-status="approved">
-        <span>Approved</span>
-        <span class="px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800">18</span>
+      <button type="button" class="btn-lr-filter flex items-center justify-center gap-1 sm:gap-2 py-2.5 sm:py-3 px-1 sm:px-3.5 font-semibold text-[10px] sm:text-xs border-b-2 border-transparent text-slate-500 hover:text-slate-900 dark:hover:text-white transition-all cursor-pointer" data-status="approved">
+        <span class="whitespace-nowrap">Approved</span>
+        <span class="px-1.5 py-0.2 sm:px-1.5 sm:py-0.5 rounded-full text-[9px] sm:text-[10px] font-bold bg-emerald-100 text-emerald-800 flex-shrink-0">18</span>
       </button>
-      <button type="button" class="btn-lr-filter flex items-center space-x-2 py-3 px-3.5 font-semibold text-xs border-b-2 border-transparent text-slate-500 hover:text-slate-900 dark:hover:text-white transition-all cursor-pointer" data-status="rejected">
-        <span>Rejected</span>
-        <span class="px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-rose-100 text-rose-800">3</span>
+      <button type="button" class="btn-lr-filter flex items-center justify-center gap-1 sm:gap-2 py-2.5 sm:py-3 px-1 sm:px-3.5 font-semibold text-[10px] sm:text-xs border-b-2 border-transparent text-slate-500 hover:text-slate-900 dark:hover:text-white transition-all cursor-pointer" data-status="rejected">
+        <span class="whitespace-nowrap">Rejected</span>
+        <span class="px-1.5 py-0.2 sm:px-1.5 sm:py-0.5 rounded-full text-[9px] sm:text-[10px] font-bold bg-rose-100 text-rose-800 flex-shrink-0">3</span>
       </button>
     </div>
 
