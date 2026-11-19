@@ -1823,24 +1823,52 @@ $(document).ready(function () {
 
   // Mobile Drawer Toggle
   function openSidebar() {
-    $('#app-sidebar').removeClass('-translate-x-full');
+    $('#app-sidebar').removeClass('-translate-x-full is-collapsed');
     $('#mobile-drawer-backdrop').removeClass('hidden');
     $('body').addClass('overflow-hidden lg:overflow-auto');
+    if ($(window).width() < 1024) {
+      $('#btn-sidebar-collapse').find('svg').css('transform', 'rotate(0deg)');
+      $('#btn-sidebar-collapse').attr('title', 'Close sidebar');
+    }
   }
 
   function closeSidebar() {
     $('#app-sidebar').addClass('-translate-x-full');
     $('#mobile-drawer-backdrop').addClass('hidden');
     $('body').removeClass('overflow-hidden lg:overflow-auto');
+    if ($(window).width() < 1024) {
+      $('#btn-sidebar-collapse').find('svg').css('transform', 'rotate(180deg)');
+      $('#btn-sidebar-collapse').attr('title', 'Open sidebar');
+    }
   }
 
-  $('#btn-mobile-more').on('click', openSidebar);
-  $('#mobile-drawer-backdrop').on('click', closeSidebar);
+  $(document).on('click', '#btn-mobile-more, .btn-sidebar-trigger', openSidebar);
+  $(document).on('click', '#mobile-drawer-backdrop, #btn-sidebar-close-mobile', closeSidebar);
 
-  // Desktop Sidebar Collapse Toggle (<)
+  // Auto-close mobile drawer when tapping any navigation link
+  $(document).on('click', '#app-sidebar a, #app-sidebar .nav-link, #app-sidebar .hr-sub-item, #app-sidebar .dept-sub-item', function () {
+    if ($(window).width() < 1024 && !$(this).is('#btn-nav-hr, #btn-nav-dept, #btn-nav-billing, #btn-sub-leave-mgmt, #btn-sub-payroll')) {
+      closeSidebar();
+    }
+  });
+
+  // Sidebar Collapse / Mobile Drawer Toggle
   let sidebarCollapsed = false;
-  $('#btn-sidebar-collapse').on('click', function (e) {
+  $(document).on('click', '#btn-sidebar-collapse', function (e) {
     e.preventDefault();
+    e.stopPropagation();
+
+    // On mobile (< 1024px), toggle slide drawer open / closed
+    if ($(window).width() < 1024) {
+      if ($('#app-sidebar').hasClass('-translate-x-full')) {
+        openSidebar();
+      } else {
+        closeSidebar();
+      }
+      return;
+    }
+
+    // On Desktop, toggle between full width (lg:w-68) and compact icon width (is-collapsed)
     sidebarCollapsed = !sidebarCollapsed;
     if (sidebarCollapsed) {
       $('#app-sidebar').addClass('is-collapsed').removeClass('lg:w-68');
@@ -1850,6 +1878,31 @@ $(document).ready(function () {
       $('#app-sidebar').removeClass('is-collapsed').addClass('lg:w-68');
       $(this).find('svg').css('transform', 'rotate(0deg)');
       $(this).attr('title', 'Collapse sidebar');
+    }
+  });
+
+  // Set initial chevron position on mobile
+  if ($(window).width() < 1024) {
+    $('#btn-sidebar-collapse').find('svg').css('transform', 'rotate(180deg)');
+    $('#btn-sidebar-collapse').attr('title', 'Open sidebar');
+  }
+
+  $(window).on('resize', function () {
+    if ($(window).width() >= 1024) {
+      $('#app-sidebar').removeClass('-translate-x-full');
+      $('#mobile-drawer-backdrop').addClass('hidden');
+      $('body').removeClass('overflow-hidden');
+      if (sidebarCollapsed) {
+        $('#btn-sidebar-collapse').find('svg').css('transform', 'rotate(180deg)');
+      } else {
+        $('#btn-sidebar-collapse').find('svg').css('transform', 'rotate(0deg)');
+      }
+    } else {
+      if ($('#app-sidebar').hasClass('-translate-x-full')) {
+        $('#btn-sidebar-collapse').find('svg').css('transform', 'rotate(180deg)');
+      } else {
+        $('#btn-sidebar-collapse').find('svg').css('transform', 'rotate(0deg)');
+      }
     }
   });
 
