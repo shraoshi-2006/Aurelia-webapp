@@ -48,6 +48,7 @@
           background: ${sidebarBg} !important;
           background-color: ${sidebarBg} !important;
         }
+        ${isDefaultBorder ? `
         .Aurelia-card,
         .aurelia-card,
         .finset-card,
@@ -55,17 +56,9 @@
         #section-dashboard .Aurelia-card,
         #main-app-content .Aurelia-card,
         .glass-money-flow {
-          border: 2px solid ${cardBorder} !important;
-          border-color: ${cardBorder} !important;
-        }
-        .Aurelia-card:hover,
-        .aurelia-card:hover,
-        .finset-card:hover,
-        .spatial-card:hover,
-        #section-dashboard .Aurelia-card:hover,
-        #main-app-content .Aurelia-card:hover,
-        .glass-money-flow:hover {
-          border-color: ${cardBorder} !important;
+          border: 1.5px solid rgba(255, 255, 255, 0.82) !important;
+          outline: 0px !important;
+          outline-width: 0px !important;
         }
         .Aurelia-card::before,
         .aurelia-card::before,
@@ -76,6 +69,47 @@
         .glass-money-flow::before {
           background: ${rimBgValue} !important;
         }
+        ` : `
+        .Aurelia-card,
+        .aurelia-card,
+        .finset-card,
+        .spatial-card,
+        #section-dashboard .Aurelia-card,
+        #main-app-content .Aurelia-card,
+        .glass-money-flow {
+          border: 0px !important;
+          border-width: 0px !important;
+          border-color: transparent !important;
+          outline: 0px !important;
+          outline-width: 0px !important;
+          outline-color: transparent !important;
+          box-shadow: inset 1.5px 1.5px 2px 0px rgba(255, 255, 255, 0.98), inset 0.5px 0.5px 1px 0px rgba(255, 255, 255, 0.9), inset -1.5px -1.5px 2.5px 0px rgba(15, 23, 42, 0.08), inset 0 0 32px 0px rgba(255, 255, 255, 0.35), 0 24px 48px -12px rgba(15, 23, 42, 0.14), 0 8px 18px -4px rgba(15, 23, 42, 0.07) !important;
+        }
+        .Aurelia-card:hover,
+        .aurelia-card:hover,
+        .finset-card:hover,
+        .spatial-card:hover,
+        #section-dashboard .Aurelia-card:hover,
+        #main-app-content .Aurelia-card:hover,
+        .glass-money-flow:hover {
+          border: 0px !important;
+          border-width: 0px !important;
+          border-color: transparent !important;
+          outline: 0px !important;
+          outline-width: 0px !important;
+          outline-color: transparent !important;
+        }
+        .Aurelia-card::before,
+        .aurelia-card::before,
+        .finset-card::before,
+        .spatial-card::before,
+        #section-dashboard .Aurelia-card::before,
+        #main-app-content .Aurelia-card::before,
+        .glass-money-flow::before {
+          display: none !important;
+          content: none !important;
+        }
+        `}
         .btn-Aurelia-primary,
         .btn-aurelia-primary,
         .btn-finset-primary,
@@ -9166,6 +9200,7 @@ $(document).ready(function () {
         background: ${sidebarBg} !important;
         background-color: ${sidebarBg} !important;
       }
+      ${isDefaultBorder ? `
       .Aurelia-card,
       .aurelia-card,
       .finset-card,
@@ -9173,17 +9208,9 @@ $(document).ready(function () {
       #section-dashboard .Aurelia-card,
       #main-app-content .Aurelia-card,
       .glass-money-flow {
-        border: 2px solid ${cardBorder} !important;
-        border-color: ${cardBorder} !important;
-      }
-      .Aurelia-card:hover,
-      .aurelia-card:hover,
-      .finset-card:hover,
-      .spatial-card:hover,
-      #section-dashboard .Aurelia-card:hover,
-      #main-app-content .Aurelia-card:hover,
-      .glass-money-flow:hover {
-        border-color: ${cardBorder} !important;
+        border: 1.5px solid rgba(255, 255, 255, 0.82) !important;
+        outline: 0px !important;
+        outline-width: 0px !important;
       }
       .Aurelia-card::before,
       .aurelia-card::before,
@@ -9194,6 +9221,47 @@ $(document).ready(function () {
       .glass-money-flow::before {
         background: ${rimBgValue} !important;
       }
+      ` : `
+      .Aurelia-card,
+      .aurelia-card,
+      .finset-card,
+      .spatial-card,
+      #section-dashboard .Aurelia-card,
+      #main-app-content .Aurelia-card,
+      .glass-money-flow {
+        border: 0px !important;
+        border-width: 0px !important;
+        border-color: transparent !important;
+        outline: 0px !important;
+        outline-width: 0px !important;
+        outline-color: transparent !important;
+        box-shadow: inset 1.5px 1.5px 2px 0px rgba(255, 255, 255, 0.98), inset 0.5px 0.5px 1px 0px rgba(255, 255, 255, 0.9), inset -1.5px -1.5px 2.5px 0px rgba(15, 23, 42, 0.08), inset 0 0 32px 0px rgba(255, 255, 255, 0.35), 0 24px 48px -12px rgba(15, 23, 42, 0.14), 0 8px 18px -4px rgba(15, 23, 42, 0.07) !important;
+      }
+      .Aurelia-card:hover,
+      .aurelia-card:hover,
+      .finset-card:hover,
+      .spatial-card:hover,
+      #section-dashboard .Aurelia-card:hover,
+      #main-app-content .Aurelia-card:hover,
+      .glass-money-flow:hover {
+        border: 0px !important;
+        border-width: 0px !important;
+        border-color: transparent !important;
+        outline: 0px !important;
+        outline-width: 0px !important;
+        outline-color: transparent !important;
+      }
+      .Aurelia-card::before,
+      .aurelia-card::before,
+      .finset-card::before,
+      .spatial-card::before,
+      #section-dashboard .Aurelia-card::before,
+      #main-app-content .Aurelia-card::before,
+      .glass-money-flow::before {
+        display: none !important;
+        content: none !important;
+      }
+      `}
       .btn-Aurelia-primary,
       .btn-aurelia-primary,
       .btn-finset-primary,
