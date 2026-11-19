@@ -187,12 +187,120 @@ $(document).ready(function () {
     text-align: left !important;
   }
 
-  table tbody td,
-  table tfoot td,
-  table td,
-  .Aurelia-table-header td {
+  table tbody td:not(.whitespace-nowrap),
+  table tfoot td:not(.whitespace-nowrap),
+  table td:not(.whitespace-nowrap),
+  .Aurelia-table-header td:not(.whitespace-nowrap) {
     white-space: normal;
     word-break: break-word;
+  }
+
+  table td.whitespace-nowrap,
+  table th.whitespace-nowrap,
+  .whitespace-nowrap {
+    white-space: nowrap !important;
+  }
+
+  /* Mobile-only responsive containment and single-line table protection (Active ONLY on <= 767px) */
+  @media (max-width: 767px) {
+    html, body {
+      overflow-x: hidden !important;
+      max-width: 100vw !important;
+      width: 100% !important;
+    }
+
+    #app-dashboard-wrapper,
+    #main-app-content,
+    main,
+    section,
+    .app-main-content {
+      overflow-x: hidden !important;
+      max-width: 100% !important;
+      width: 100% !important;
+      min-width: 0 !important;
+    }
+
+    /* Ambient blur glow circles: hide on mobile to prevent canvas horizontal expansion */
+    #section-dashboard > div.absolute.rounded-full,
+    section > div.absolute.rounded-full.blur-3xl {
+      display: none !important;
+    }
+
+    /* Cards fit full mobile width cleanly with zero horizontal slide */
+    .Aurelia-card,
+    .aurelia-card {
+      max-width: 100% !important;
+    }
+
+    /* Table scroll container: allows smooth horizontal scroll INSIDE the card */
+    .overflow-x-auto,
+    .overflow-x-scroll,
+    .table-responsive,
+    div:has(> table) {
+      overflow-x: auto !important;
+      -webkit-overflow-scrolling: touch !important;
+      max-width: 100% !important;
+      display: block !important;
+      width: 100% !important;
+    }
+
+    /* Minimum table width on mobile so columns never get squished into vertical letters */
+    .overflow-x-auto > table,
+    .overflow-x-scroll > table,
+    .Aurelia-card table:not(#print-invoice-area table),
+    table.w-full {
+      min-width: 560px !important;
+    }
+
+    #emp-leave-card {
+      max-width: 100% !important;
+      overflow: hidden !important;
+    }
+    #emp-leave-card .overflow-x-auto {
+      overflow-x: auto !important;
+      -webkit-overflow-scrolling: touch !important;
+      display: block !important;
+      width: 100% !important;
+      max-width: 100% !important;
+    }
+    #page-emp-leave-table {
+      min-width: 620px !important;
+      width: 100% !important;
+    }
+
+    /* Table cells: compact font, clean padding, single-line data (never wrap letter by letter) */
+    table tbody td,
+    table tfoot td,
+    table td,
+    table th,
+    .Aurelia-table-header td,
+    .Aurelia-table-header th {
+      white-space: nowrap !important;
+      word-break: normal !important;
+      font-size: 11px !important;
+      padding-top: 0.5rem !important;
+      padding-bottom: 0.5rem !important;
+      padding-left: 0.5rem !important;
+      padding-right: 0.5rem !important;
+    }
+
+    /* Badges, pills, numbers must NEVER wrap letters into vertical stacks */
+    [class*="badge"],
+    .stat-badge-pill,
+    [id*="-badge-"],
+    table td span,
+    .inline-flex.rounded-full {
+      white-space: nowrap !important;
+      flex-shrink: 0 !important;
+      display: inline-flex !important;
+    }
+
+    /* Multi-line cells (like customer name + phone) */
+    table td .inline-flex.flex-col,
+    table td .flex-col {
+      white-space: nowrap !important;
+      min-width: 120px !important;
+    }
   }
 
   /* Default table headers and cell text left-aligned */
@@ -1091,37 +1199,37 @@ $(document).ready(function () {
     status = status || 'Pending';
     switch (status.toLowerCase()) {
       case 'active':
-        return `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-white text-[#15803d] border border-[#15803d] shadow-2xs">Active</span>`;
+        return `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-white text-[#15803d] border border-[#15803d] shadow-2xs whitespace-nowrap">Active</span>`;
       case 'not active':
       case 'not-active':
       case 'inactive':
-        return `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-white text-[#b91c1c] border border-[#b91c1c] shadow-2xs">${escapeHtml(status)}</span>`;
+        return `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-white text-[#b91c1c] border border-[#b91c1c] shadow-2xs whitespace-nowrap">${escapeHtml(status)}</span>`;
       case 'on duty':
       case 'onduty':
-        return `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-white text-[#15803d] border border-[#15803d] shadow-2xs">On Duty</span>`;
+        return `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-white text-[#15803d] border border-[#15803d] shadow-2xs whitespace-nowrap">On Duty</span>`;
       case 'on leave':
       case 'onleave':
       case 'leave':
-        return `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-white text-[#b91c1c] border border-[#b91c1c] shadow-2xs">On Leave</span>`;
+        return `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-white text-[#b91c1c] border border-[#b91c1c] shadow-2xs whitespace-nowrap">On Leave</span>`;
       case 'paid':
       case 'completed':
-        return `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-white text-[#15803d] border border-[#15803d] shadow-2xs">${escapeHtml(status)}</span>`;
+        return `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-white text-[#15803d] border border-[#15803d] shadow-2xs whitespace-nowrap">${escapeHtml(status)}</span>`;
       case 'draft':
-        return `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-white text-[#d97706] border border-[#d97706] shadow-2xs">Draft</span>`;
+        return `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-white text-[#d97706] border border-[#d97706] shadow-2xs whitespace-nowrap">Draft</span>`;
       case 'available':
-        return `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-white text-[#15803d] border border-[#15803d] shadow-2xs">${escapeHtml(status)}</span>`;
+        return `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-white text-[#15803d] border border-[#15803d] shadow-2xs whitespace-nowrap">${escapeHtml(status)}</span>`;
       case 'pending':
-        return `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-white text-[#ea580c] border border-[#ea580c] shadow-2xs">${escapeHtml(status)}</span>`;
+        return `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-white text-[#ea580c] border border-[#ea580c] shadow-2xs whitespace-nowrap">${escapeHtml(status)}</span>`;
       case 'preparing':
-        return `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-white text-[#ca8a04] border border-[#ca8a04] shadow-2xs">${escapeHtml(status)}</span>`;
+        return `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-white text-[#ca8a04] border border-[#ca8a04] shadow-2xs whitespace-nowrap">${escapeHtml(status)}</span>`;
       case 'served':
-        return `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-white text-[#0284c7] border border-[#0284c7] shadow-2xs">${escapeHtml(status)}</span>`;
+        return `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-white text-[#0284c7] border border-[#0284c7] shadow-2xs whitespace-nowrap">${escapeHtml(status)}</span>`;
       case 'cancelled':
       case 'unavailable':
       case 'refunded':
-        return `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-white text-[#b91c1c] border border-[#b91c1c] shadow-2xs">${escapeHtml(status)}</span>`;
+        return `<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-white text-[#b91c1c] border border-[#b91c1c] shadow-2xs whitespace-nowrap">${escapeHtml(status)}</span>`;
       default:
-        return `<span class="px-2.5 py-0.5 text-xs font-semibold rounded-full bg-white text-slate-700 border border-slate-300 dark:bg-slate-800 dark:text-slate-300">${escapeHtml(status)}</span>`;
+        return `<span class="inline-flex items-center px-2.5 py-0.5 text-xs font-semibold rounded-full bg-white text-slate-700 border border-slate-300 dark:bg-slate-800 dark:text-slate-300 whitespace-nowrap">${escapeHtml(status)}</span>`;
     }
   }
 
@@ -3266,24 +3374,24 @@ $(document).ready(function () {
             <td class="py-3 px-3 text-slate-500 dark:text-slate-400 font-medium whitespace-nowrap text-[11px]">
               ${formatDateTime(b.date)}
             </td>
-            <td class="py-3 px-3">
-              <div class="font-bold text-slate-900 dark:text-white">${escapeHtml(b.customerName || 'Walk-in Guest')}</div>
-              <div class="text-[10px] text-slate-400 font-mono">${escapeHtml(b.customerPhone || 'Counter Settlement')}</div>
-              ${b.customerEmail ? `<div class="text-[10px] text-amber-600 dark:text-amber-400 font-medium truncate max-w-[170px]">${escapeHtml(b.customerEmail)}</div>` : ''}
+            <td class="py-2.5 px-3 whitespace-nowrap">
+              <div class="font-bold text-slate-900 dark:text-white whitespace-nowrap">${escapeHtml(b.customerName || 'Walk-in Guest')}</div>
+              <div class="text-[10px] text-slate-400 font-mono whitespace-nowrap">${escapeHtml(b.customerPhone || 'Counter Settlement')}</div>
+              ${b.customerEmail ? `<div class="text-[10px] text-amber-600 dark:text-amber-400 font-medium whitespace-nowrap">${escapeHtml(b.customerEmail)}</div>` : ''}
             </td>
-            <td class="py-3 px-3 font-semibold text-slate-700 dark:text-slate-300 whitespace-nowrap">
-              <span class="px-2 py-0.5 rounded-md bg-amber-50 dark:bg-amber-950/40 text-amber-800 dark:text-amber-300 border border-amber-200/50 text-[10px]">
+            <td class="py-2.5 px-3 font-semibold text-slate-700 dark:text-slate-300 whitespace-nowrap">
+              <span class="px-2 py-0.5 rounded-md bg-amber-50 dark:bg-amber-950/40 text-amber-800 dark:text-amber-300 border border-amber-200/50 text-[10px] whitespace-nowrap">
                 ${escapeHtml(b.tableRoom || '-')}
               </span>
             </td>
-            <td class="py-3 px-3 text-center whitespace-nowrap">${payBadge}</td>
-            <td class="py-3 px-3 text-slate-600 dark:text-slate-300 font-medium" title="${escapeHtml(itemsList)}">
-              <div class="inline-flex items-center space-x-1.5 max-w-[210px]">
-                <span class="text-[10px] font-bold px-1.5 py-0.2 rounded bg-slate-100 dark:bg-slate-800 text-slate-500">${itemsCount}</span>
-                <span class="truncate text-xs">${escapeHtml(itemsPreview)}</span>
+            <td class="py-2.5 px-3 text-center whitespace-nowrap">${payBadge}</td>
+            <td class="py-2.5 px-3 text-slate-600 dark:text-slate-300 font-medium whitespace-nowrap" title="${escapeHtml(itemsList)}">
+              <div class="inline-flex items-center space-x-1.5 whitespace-nowrap">
+                <span class="text-[10px] font-bold px-1.5 py-0.2 rounded bg-slate-100 dark:bg-slate-800 text-slate-500 whitespace-nowrap">${itemsCount}</span>
+                <span class="whitespace-nowrap text-xs">${escapeHtml(itemsPreview)}</span>
               </div>
             </td>
-            <td class="py-3 px-3 text-center font-extrabold text-slate-900 dark:text-white whitespace-nowrap text-sm">
+            <td class="py-2.5 px-3 text-center font-extrabold text-slate-900 dark:text-white whitespace-nowrap text-sm">
               <span id="${rowAmtId}">${formatMoney(b.grandTotal)}</span>
             </td>
             <td class="py-3 px-3 text-center whitespace-nowrap space-x-1">
@@ -3783,25 +3891,25 @@ $(document).ready(function () {
           <td class="py-3 px-4 whitespace-nowrap">
             <span class="px-2.5 py-1 rounded text-xs font-mono font-bold bg-[#FCA311] text-black inline-block shadow-2xs whitespace-nowrap">${escapeHtml(row.id)}</span>
           </td>
-          <td class="py-3 px-4">
-            <div class="flex items-center space-x-2.5">
+          <td class="py-2.5 px-3 whitespace-nowrap">
+            <div class="flex items-center space-x-2.5 whitespace-nowrap">
               <div class="w-7 h-7 rounded-full ${row.avatarBg} flex items-center justify-center text-[10px] font-bold flex-shrink-0 shadow-xs">${escapeHtml(row.initials)}</div>
-              <div class="flex flex-col">
-                <span class="font-semibold text-slate-900 dark:text-white leading-tight">${escapeHtml(row.name)}</span>
-                <span class="text-[10px] text-slate-500 dark:text-slate-400">${escapeHtml(row.role)}</span>
+              <div class="flex flex-col whitespace-nowrap">
+                <span class="font-semibold text-slate-900 dark:text-white leading-tight whitespace-nowrap">${escapeHtml(row.name)}</span>
+                <span class="text-[10px] text-slate-500 dark:text-slate-400 whitespace-nowrap">${escapeHtml(row.role)}</span>
               </div>
             </div>
           </td>
-          <td class="py-3 px-4">
-            <div class="flex flex-col text-xs">
-              <span class="text-slate-800 dark:text-slate-200 font-medium">${escapeHtml(row.email)}</span>
-              <span class="text-slate-500 dark:text-slate-400 text-[11px] font-mono">${escapeHtml(row.phone)}</span>
+          <td class="py-2.5 px-3 whitespace-nowrap">
+            <div class="flex flex-col text-xs whitespace-nowrap">
+              <span class="text-slate-800 dark:text-slate-200 font-medium whitespace-nowrap">${escapeHtml(row.email)}</span>
+              <span class="text-slate-500 dark:text-slate-400 text-[11px] font-mono whitespace-nowrap">${escapeHtml(row.phone)}</span>
             </div>
           </td>
-          <td class="py-3 px-4">
-            <div class="flex items-center space-x-2">
+          <td class="py-2.5 px-3 whitespace-nowrap">
+            <div class="flex items-center space-x-2 whitespace-nowrap">
               ${deviceIcon}
-              <span class="text-slate-700 dark:text-slate-300 font-medium text-xs">${escapeHtml(row.deviceName)}</span>
+              <span class="text-slate-700 dark:text-slate-300 font-medium text-xs whitespace-nowrap">${escapeHtml(row.deviceName)}</span>
             </div>
           </td>
         </tr>
@@ -3880,31 +3988,31 @@ $(document).ready(function () {
 
       $tbody.append(`
         <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors">
-          <td class="py-3 px-3 whitespace-nowrap">
-            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-extrabold bg-[#EBF1FD] dark:bg-blue-950/60 text-[#1D4ED8] dark:text-blue-300 border border-[#D7E3FC] dark:border-blue-900/60 font-mono">${escapeHtml(row.terminalId)}</span>
+          <td class="py-2.5 px-3 whitespace-nowrap">
+            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-extrabold bg-[#EBF1FD] dark:bg-blue-950/60 text-[#1D4ED8] dark:text-blue-300 border border-[#D7E3FC] dark:border-blue-900/60 font-mono whitespace-nowrap">${escapeHtml(row.terminalId)}</span>
           </td>
-          <td class="py-3 px-3 whitespace-nowrap">
+          <td class="py-2.5 px-3 whitespace-nowrap">
             <span class="px-2.5 py-1 rounded text-xs font-mono font-bold bg-[#FCA311] text-black inline-block shadow-2xs whitespace-nowrap">${escapeHtml(row.id)}</span>
           </td>
-          <td class="py-3 px-3">
-            <div class="flex items-center space-x-2.5">
+          <td class="py-2.5 px-3 whitespace-nowrap">
+            <div class="flex items-center space-x-2.5 whitespace-nowrap">
               <div class="w-7 h-7 rounded-full ${row.avatarBg} flex items-center justify-center text-[10px] font-bold flex-shrink-0 shadow-xs">${escapeHtml(row.initials)}</div>
-              <div class="flex flex-col">
+              <div class="flex flex-col whitespace-nowrap">
                 <span class="font-semibold text-slate-900 dark:text-white leading-tight whitespace-nowrap">${escapeHtml(row.name)}</span>
                 <span class="text-[10px] text-slate-500 dark:text-slate-400 whitespace-nowrap">${escapeHtml(row.role)}</span>
               </div>
             </div>
           </td>
-          <td class="py-3 px-3">
-            <div class="flex flex-col text-xs">
-              <span class="text-slate-800 dark:text-slate-200 font-medium">${escapeHtml(row.email)}</span>
-              <span class="text-slate-500 dark:text-slate-400 text-[11px] font-mono">${escapeHtml(row.phone)}</span>
+          <td class="py-2.5 px-3 whitespace-nowrap">
+            <div class="flex flex-col text-xs whitespace-nowrap">
+              <span class="text-slate-800 dark:text-slate-200 font-medium whitespace-nowrap">${escapeHtml(row.email)}</span>
+              <span class="text-slate-500 dark:text-slate-400 text-[11px] font-mono whitespace-nowrap">${escapeHtml(row.phone)}</span>
             </div>
           </td>
-          <td class="py-3 px-3">
-            <div class="flex items-center space-x-2">
+          <td class="py-2.5 px-3 whitespace-nowrap">
+            <div class="flex items-center space-x-2 whitespace-nowrap">
               ${deviceIcon}
-              <span class="text-slate-700 dark:text-slate-300 font-medium text-xs">${escapeHtml(row.deviceName)}</span>
+              <span class="text-slate-700 dark:text-slate-300 font-medium text-xs whitespace-nowrap">${escapeHtml(row.deviceName)}</span>
             </div>
           </td>
           <td class="py-3 px-3 whitespace-nowrap">
@@ -4707,20 +4815,29 @@ $(document).ready(function () {
       filtered.forEach(b => {
         $tbody.append(`
           <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors" data-id="${escapeHtml(b.id)}">
-            <td class="py-3 px-4 font-mono font-bold text-[#14213D]">${escapeHtml(b.billNumber)}</td>
-            <td class="py-3 px-4">
-              <div class="inline-flex flex-col text-left">
-                <div class="font-bold text-slate-900 dark:text-white">${escapeHtml(b.customerName)}</div>
-                <div class="text-[11px] text-slate-400 font-mono">${escapeHtml(b.customerPhone || '-')}</div>
-                ${b.customerEmail ? `<div class="text-[10px] text-amber-600 font-medium truncate max-w-[150px]">${escapeHtml(b.customerEmail)}</div>` : ''}
+            <td class="py-2.5 px-3 font-mono font-bold text-[#14213D] whitespace-nowrap">${escapeHtml(b.billNumber)}</td>
+            <td class="py-2.5 px-3 whitespace-nowrap">
+              <div class="inline-flex flex-col text-left whitespace-nowrap">
+                <div class="font-bold text-slate-900 dark:text-white whitespace-nowrap">${escapeHtml(b.customerName)}</div>
+                <div class="text-[11px] text-slate-400 font-mono whitespace-nowrap">${escapeHtml(b.customerPhone || '-')}</div>
+                ${b.customerEmail ? `<div class="text-[10px] text-amber-600 font-medium whitespace-nowrap">${escapeHtml(b.customerEmail)}</div>` : ''}
               </div>
             </td>
+<<<<<<< HEAD
             <td class="py-3 px-4 text-slate-500 font-medium">${formatDateTime(b.date)}</td>
             <td class="py-3 px-4 text-slate-600 dark:text-slate-300 font-medium">${getPaymentMethodBadge(b.paymentMethod)}</td>
             <td class="py-3 px-4 text-center font-black text-slate-900 dark:text-white">${formatMoney(b.grandTotal)}</td>
             <td class="py-3 px-4 text-center">${getStatusBadge(b.status)}</td>
             <td class="py-3.5 px-4 text-center whitespace-nowrap">
               <div class="flex items-center justify-end space-x-1">
+=======
+            <td class="py-2.5 px-3 text-slate-500 font-medium whitespace-nowrap">${formatDateTime(b.date)}</td>
+            <td class="py-2.5 px-3 text-slate-600 dark:text-slate-300 font-medium whitespace-nowrap">${escapeHtml(b.paymentMethod)}</td>
+            <td class="py-2.5 px-3 text-center font-black text-slate-900 dark:text-white whitespace-nowrap">${formatMoney(b.grandTotal)}</td>
+            <td class="py-2.5 px-3 text-center whitespace-nowrap">${getStatusBadge(b.status)}</td>
+            <td class="py-2.5 px-3 text-center whitespace-nowrap">
+              <div class="flex items-center justify-end space-x-1 whitespace-nowrap">
+>>>>>>> bde29785e87425e2535ad968b22abb5f1a525ce2
                 <!-- View / Eye -->
                 <button type="button" class="btn-view-bill p-2 rounded-lg text-slate-500 hover:text-sky-600 hover:bg-sky-50 dark:hover:bg-slate-800 transition-colors cursor-pointer" title="View Invoice" data-id="${b.id}">
                   <svg class="w-4 h-4 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2">
@@ -5538,13 +5655,13 @@ $(document).ready(function () {
           <td class="py-3 px-4 text-center font-black text-[#14213D] dark:text-white whitespace-nowrap ${!isAvail ? 'opacity-65' : ''}">
             ${formatMoney(item.price)}
           </td>
-          <td class="py-3 px-4 text-center whitespace-nowrap">
+          <td class="py-2.5 px-3 text-center whitespace-nowrap">
             ${isAvail ? `
-              <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-white text-[#15803d] border border-[#15803d] shadow-2xs">
+              <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-white text-[#15803d] border border-[#15803d] shadow-2xs whitespace-nowrap">
                 Available
               </span>
             ` : `
-              <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-white text-[#b91c1c] border border-[#b91c1c] shadow-2xs">
+              <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-white text-[#b91c1c] border border-[#b91c1c] shadow-2xs whitespace-nowrap">
                 Unavailable
               </span>
             `}
@@ -5744,26 +5861,26 @@ $(document).ready(function () {
 
       $tbody.append(`
         <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors" data-id="${escapeHtml(ord.id)}">
-          <td class="py-3 px-4 font-mono font-bold text-slate-900 dark:text-white whitespace-nowrap">
+          <td class="py-2.5 px-3 font-mono font-bold text-slate-900 dark:text-white whitespace-nowrap">
             ${escapeHtml(ord.orderNumber)}
           </td>
-          <td class="py-3 px-4 text-slate-500 whitespace-nowrap text-xs">
+          <td class="py-2.5 px-3 text-slate-500 whitespace-nowrap text-xs">
             ${formatDateTime(ord.timestamp)}
           </td>
-          <td class="py-3 px-4 whitespace-nowrap">
-            <div class="font-bold text-slate-900 dark:text-white">${escapeHtml(ord.customerName)}</div>
-            <div class="text-[11px] text-slate-400 font-medium">${escapeHtml(ord.tableRoom)}</div>
+          <td class="py-2.5 px-3 whitespace-nowrap">
+            <div class="font-bold text-slate-900 dark:text-white whitespace-nowrap">${escapeHtml(ord.customerName)}</div>
+            <div class="text-[11px] text-slate-400 font-medium whitespace-nowrap">${escapeHtml(ord.tableRoom)}</div>
           </td>
-          <td class="py-3 px-4 text-center whitespace-nowrap">
-            <button type="button" class="btn-view-order-items btn-finset-primary text-xs py-1 px-3 cursor-pointer" data-id="${ord.id}" title="View ordered items list">
+          <td class="py-2.5 px-3 text-center whitespace-nowrap">
+            <button type="button" class="btn-view-order-items btn-finset-primary text-xs py-1 px-3 cursor-pointer whitespace-nowrap" data-id="${ord.id}" title="View ordered items list">
               Click here to see &rarr;
             </button>
           </td>
-          <td class="py-3 px-4 text-center font-black text-[#14213D] dark:text-white whitespace-nowrap">
+          <td class="py-2.5 px-3 text-center font-black text-[#14213D] dark:text-white whitespace-nowrap">
             ${formatMoney(estTotal)}
           </td>
-          <td class="py-3 px-4 text-center whitespace-nowrap">
-            <select class="order-status-inline-change py-1 px-2.5 text-xs font-semibold rounded-full cursor-pointer" data-id="${ord.id}" data-status="${escapeHtml((ord.status || 'Pending').toLowerCase())}">
+          <td class="py-2.5 px-3 text-center whitespace-nowrap">
+            <select class="order-status-inline-change py-1 px-2.5 text-xs font-semibold rounded-full cursor-pointer whitespace-nowrap" data-id="${ord.id}" data-status="${escapeHtml((ord.status || 'Pending').toLowerCase())}">
               <option value="Pending" ${ord.status === 'Pending' ? 'selected' : ''}>Pending</option>
               <option value="Preparing" ${ord.status === 'Preparing' ? 'selected' : ''}>Preparing</option>
               <option value="Served" ${ord.status === 'Served' ? 'selected' : ''}>Served</option>
@@ -5771,8 +5888,8 @@ $(document).ready(function () {
               <option value="Cancelled" ${ord.status === 'Cancelled' ? 'selected' : ''}>Cancelled</option>
             </select>
           </td>
-          <td class="py-3 px-4 text-center whitespace-nowrap">
-            <div class="inline-flex items-center gap-2">
+          <td class="py-2.5 px-3 text-center whitespace-nowrap">
+            <div class="inline-flex items-center gap-2 whitespace-nowrap">
               <button type="button" class="btn-view-order-details btn-finset-secondary text-xs py-1 px-3" data-id="${ord.id}">
                 Details
               </button>
@@ -6105,14 +6222,14 @@ $(document).ready(function () {
       filtered.forEach(c => {
         $tbody.append(`
           <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors" data-id="${escapeHtml(c.id)}">
-            <td class="py-3 px-4 font-bold text-slate-900 dark:text-white">${escapeHtml(c.name)}</td>
-            <td class="py-3 px-4 font-mono text-slate-500">${escapeHtml(c.phone)}</td>
-            <td class="py-3 px-4 text-slate-500">${escapeHtml(c.email || '-')}</td>
-            <td class="py-3 px-4 text-slate-500 max-w-xs truncate">${escapeHtml(c.address || '-')}</td>
-            <td class="py-3 px-4 text-center font-bold text-slate-800 dark:text-white">${c.visits || 0}</td>
-            <td class="py-3 px-4 text-center font-black text-[#14213D]">${formatMoney(c.totalSpend || 0)}</td>
-            <td class="py-3.5 px-4 text-center whitespace-nowrap">
-              <div class="flex items-center justify-end space-x-1">
+            <td class="py-2.5 px-3 font-bold text-slate-900 dark:text-white whitespace-nowrap">${escapeHtml(c.name)}</td>
+            <td class="py-2.5 px-3 font-mono text-slate-500 whitespace-nowrap">${escapeHtml(c.phone)}</td>
+            <td class="py-2.5 px-3 text-slate-500 whitespace-nowrap">${escapeHtml(c.email || '-')}</td>
+            <td class="py-2.5 px-3 text-slate-500 max-w-xs truncate whitespace-nowrap">${escapeHtml(c.address || '-')}</td>
+            <td class="py-2.5 px-3 text-center font-bold text-slate-800 dark:text-white whitespace-nowrap">${c.visits || 0}</td>
+            <td class="py-2.5 px-3 text-center font-black text-[#14213D] whitespace-nowrap">${formatMoney(c.totalSpend || 0)}</td>
+            <td class="py-2.5 px-3 text-center whitespace-nowrap">
+              <div class="flex items-center justify-end space-x-1 whitespace-nowrap">
                 <!-- View / Eye -->
                 <button type="button" class="btn-view-customer-profile p-2 rounded-lg text-slate-500 hover:text-sky-600 hover:bg-sky-50 dark:hover:bg-slate-800 transition-colors cursor-pointer" data-id="${c.id}" title="View profile" aria-label="View profile">
                   <svg class="w-4 h-4 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2">
