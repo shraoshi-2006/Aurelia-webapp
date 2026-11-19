@@ -3046,6 +3046,8 @@
             <span id="topbar-device-id-text" class="font-['Inter'] font-extrabold">DEV08</span>
           </div>
 
+          <!-- Desktop-only Top Controls (Hidden on Mobile because they are in the 3-lines menu drawer) -->
+          <div class="hidden lg:flex items-center gap-2.5 sm:gap-3.5">
           <!-- Notification Bell Button (Circle with 🔔 and badge "1") -->
           <div class="relative">
             <button type="button" id="btn-top-notifications"
@@ -3084,6 +3086,7 @@
               <img id="topbar-user-avatar-img" src="" alt="Profile Photo" class="w-full h-full object-cover hidden">
             </div>
           </button>
+          </div>
 
 
         </div>

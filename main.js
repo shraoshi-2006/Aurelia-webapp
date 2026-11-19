@@ -1973,7 +1973,11 @@ $(document).ready(function () {
     e.preventDefault();
     closeMobileUserMenu();
     setTimeout(() => {
-      $('#btn-top-notifications').trigger('click');
+      if (typeof showToast === 'function') {
+        showToast('Kitchen Ticket ORD-0082 (Room 304) is preparing. Front desk audit session active.', 'info');
+      } else {
+        $('#btn-top-notifications').trigger('click');
+      }
     }, 150);
   });
 
@@ -1981,7 +1985,12 @@ $(document).ready(function () {
     e.preventDefault();
     closeMobileUserMenu();
     setTimeout(() => {
-      $('#btn-top-settings').trigger('click');
+      window.location.hash = 'settings';
+      if (typeof switchSection === 'function') {
+        switchSection('settings');
+      } else {
+        $('#btn-top-settings').trigger('click');
+      }
     }, 150);
   });
 
@@ -1989,7 +1998,11 @@ $(document).ready(function () {
     e.preventDefault();
     closeMobileUserMenu();
     setTimeout(() => {
-      $('#topbar-profile-container button, #user-profile-capsule').first().trigger('click');
+      if (typeof openUserProfileModal === 'function') {
+        openUserProfileModal();
+      } else {
+        $('#topbar-profile-container button, #user-profile-capsule').first().trigger('click');
+      }
     }, 150);
   });
 
