@@ -228,136 +228,14 @@ $(document).ready(function () {
       min-width: 560px !important;
     }
 
-    /* Mobile responsive cards for Employee Leave Category Table */
-    #emp-leave-card {
-      background: transparent !important;
-      border: none !important;
-      box-shadow: none !important;
-      overflow-x: hidden !important;
-      max-width: 100% !important;
-      width: 100% !important;
-      padding: 0 !important;
-      margin: 0 !important;
-    }
+    #emp-leave-card,
     #emp-leave-card .overflow-x-auto {
       overflow-x: hidden !important;
-      max-width: 100% !important;
-      width: 100% !important;
-      padding: 0 !important;
     }
     #page-emp-leave-table {
-      display: block !important;
+      min-width: 0 !important;
       width: 100% !important;
       max-width: 100% !important;
-      min-width: 0 !important;
-      background: transparent !important;
-      border: none !important;
-      border-collapse: separate !important;
-    }
-    #page-emp-leave-table thead {
-      display: none !important;
-    }
-    #page-emp-leave-tbody {
-      display: flex !important;
-      flex-direction: column !important;
-      gap: 12px !important;
-      width: 100% !important;
-      max-width: 100% !important;
-      background: transparent !important;
-      padding: 0 !important;
-    }
-    #page-emp-leave-tbody tr {
-      display: grid !important;
-      grid-template-columns: minmax(0, 1fr) auto !important;
-      grid-template-areas:
-        "id status"
-        "name duration"
-        "role role"
-        "leave leave" !important;
-      gap: 8px 12px !important;
-      padding: 12px 14px !important;
-      border: 1px solid #e2e8f0 !important;
-      border-radius: 16px !important;
-      background: #ffffff !important;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04) !important;
-      width: 100% !important;
-      max-width: 100% !important;
-      box-sizing: border-box !important;
-      align-items: center !important;
-      transform: none !important;
-    }
-    .dark #page-emp-leave-tbody tr {
-      border-color: #334155 !important;
-      background: #0f172a !important;
-      box-shadow: none !important;
-    }
-    #page-emp-leave-tbody tr td {
-      padding: 0 !important;
-      border: none !important;
-      box-sizing: border-box !important;
-      background: transparent !important;
-      min-width: 0 !important;
-      white-space: normal !important;
-    }
-    #page-emp-leave-tbody tr td:nth-child(1) {
-      grid-area: id !important;
-      display: flex !important;
-      align-items: center !important;
-      white-space: nowrap !important;
-    }
-    #page-emp-leave-tbody tr td:nth-child(6) {
-      grid-area: status !important;
-      display: flex !important;
-      justify-content: flex-end !important;
-      align-items: center !important;
-      white-space: nowrap !important;
-    }
-    #page-emp-leave-tbody tr td:nth-child(2) {
-      grid-area: name !important;
-      display: flex !important;
-      align-items: center !important;
-      min-width: 0 !important;
-      white-space: nowrap !important;
-    }
-    #page-emp-leave-tbody tr td:nth-child(2) > div {
-      min-width: 0 !important;
-    }
-    #page-emp-leave-tbody tr td:nth-child(5) {
-      grid-area: duration !important;
-      display: flex !important;
-      justify-content: flex-end !important;
-      align-items: center !important;
-      white-space: nowrap !important;
-    }
-    #page-emp-leave-tbody tr td:nth-child(3) {
-      grid-area: role !important;
-      display: flex !important;
-      align-items: center !important;
-      flex-wrap: wrap !important;
-      gap: 6px !important;
-      padding-top: 2px !important;
-      min-width: 0 !important;
-      white-space: nowrap !important;
-    }
-    #page-emp-leave-tbody tr td:nth-child(4) {
-      grid-area: leave !important;
-      display: flex !important;
-      flex-direction: column !important;
-      align-items: flex-start !important;
-      gap: 4px !important;
-      padding-top: 6px !important;
-      border-top: 1px dashed #e2e8f0 !important;
-      min-width: 0 !important;
-      width: 100% !important;
-    }
-    .dark #page-emp-leave-tbody tr td:nth-child(4) {
-      border-top-color: #1e293b !important;
-    }
-    #page-emp-leave-tbody tr td:nth-child(4) span {
-      white-space: normal !important;
-    }
-    #page-emp-leave-tbody tr td:nth-child(4) .leave-reason-text {
-      white-space: normal !important;
     }
 
     /* Table cells: compact font, clean padding, single-line data (never wrap letter by letter) */
