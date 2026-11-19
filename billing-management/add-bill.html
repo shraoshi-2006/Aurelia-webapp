@@ -3551,10 +3551,24 @@
                       <div>
                         <label class="block text-[11px] text-slate-500 mb-1 font-semibold">Payment Method *</label>
                         <select id="select-payment-method" class="Aurelia-input w-full text-xs font-semibold">
-                          <option value="UPI" selected>UPI (GooglePay / PhonePe / Paytm)</option>
-                          <option value="Card">Credit / Debit Card</option>
-                          <option value="Cash">Cash Counter</option>
+                          <option value="UPI" selected>📱 UPI (GooglePay / PhonePe / Paytm)</option>
+                          <option value="Card">💳 Credit / Debit Card</option>
+                          <option value="Cash">💵 Cash Counter</option>
                         </select>
+                        <div class="flex items-center gap-2 mt-2" id="payment-method-pills">
+                          <button type="button" class="btn-pay-pill flex-1 py-1.5 px-2 rounded-xl border text-xs font-bold flex items-center justify-center gap-1.5 transition-all cursor-pointer border-purple-400 bg-purple-50 text-purple-700 dark:bg-purple-950/40 dark:text-purple-300 shadow-2xs" data-val="UPI">
+                            <svg class="w-3.5 h-3.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="5" y="2.5" width="14" height="19" rx="2.5" /><path stroke-linecap="round" stroke-linejoin="round" d="M12 18h.01" stroke-width="2.5" /><path stroke-linecap="round" stroke-linejoin="round" d="M10 7h4" /><path stroke-linecap="round" stroke-linejoin="round" d="M9 11.5l3-3 3 3M12 8.5v5.5" stroke-width="1.8" /></svg>
+                            UPI
+                          </button>
+                          <button type="button" class="btn-pay-pill flex-1 py-1.5 px-2 rounded-xl border text-xs font-bold flex items-center justify-center gap-1.5 transition-all cursor-pointer border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:border-blue-300 hover:text-blue-600" data-val="Card">
+                            <svg class="w-3.5 h-3.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><rect x="2" y="5" width="20" height="14" rx="2.5" /><line x1="2" y1="10" x2="22" y2="10" stroke-width="1.8" /><path stroke-linecap="round" stroke-linejoin="round" d="M6 15h3" stroke-width="2" /></svg>
+                            Card
+                          </button>
+                          <button type="button" class="btn-pay-pill flex-1 py-1.5 px-2 rounded-xl border text-xs font-bold flex items-center justify-center gap-1.5 transition-all cursor-pointer border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:border-emerald-300 hover:text-emerald-600" data-val="Cash">
+                            <svg class="w-3.5 h-3.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><rect x="2" y="6" width="20" height="12" rx="2.5" /><circle cx="12" cy="12" r="2.8" /><path stroke-linecap="round" d="M6 12h.01M18 12h.01" stroke-width="2.5" /></svg>
+                            Cash
+                          </button>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -4459,9 +4473,9 @@
         <div class="flex items-center space-x-2">
           <select id="modal-billings-filter-payment" class="Aurelia-input text-xs py-1.5 px-3 font-semibold">
             <option value="all">All Payment Methods</option>
-            <option value="UPI">UPI (GooglePay / PhonePe / Paytm)</option>
-            <option value="Card">Credit / Debit Card</option>
-            <option value="Cash">Cash Counter</option>
+            <option value="UPI">📱 UPI (GooglePay / PhonePe / Paytm)</option>
+            <option value="Card">💳 Credit / Debit Card</option>
+            <option value="Cash">💵 Cash Counter</option>
           </select>
           <select id="modal-billings-sort" class="Aurelia-input text-xs py-1.5 px-3 font-semibold">
             <option value="newest">Newest First</option>
@@ -5141,7 +5155,7 @@
   <!-- Authentication Controller -->
   <script src="../auth.js?v=20261110_07"></script>
   <!-- Main JavaScript Logic -->
-<script src="../main.js?v=20261119_v65"></script>
+<script src="../main.js?v=20261119_v66"></script>
 </body>
 
 </html>

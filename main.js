@@ -140,6 +140,30 @@
  */
 
 $(document).ready(function () {
+  // Payment Method Pill Switcher (Add Bill)
+  $(document).on('click', '.btn-pay-pill', function () {
+    const val = $(this).data('val');
+    $('#select-payment-method').val(val).trigger('change');
+  });
+
+  $(document).on('change', '#select-payment-method', function () {
+    const val = $(this).val();
+    $('.btn-pay-pill').each(function () {
+      const pVal = $(this).data('val');
+      if (pVal === val) {
+        if (pVal === 'UPI') {
+          $(this).removeClass('border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300').addClass('border-purple-400 bg-purple-50 text-purple-700 dark:bg-purple-950/40 dark:text-purple-300 shadow-2xs');
+        } else if (pVal === 'Card') {
+          $(this).removeClass('border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300').addClass('border-blue-400 bg-blue-50 text-blue-700 dark:bg-blue-950/40 dark:text-blue-300 shadow-2xs');
+        } else if (pVal === 'Cash') {
+          $(this).removeClass('border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300').addClass('border-emerald-400 bg-emerald-50 text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-300 shadow-2xs');
+        }
+      } else {
+        $(this).removeClass('border-purple-400 bg-purple-50 text-purple-700 dark:bg-purple-950/40 dark:text-purple-300 border-blue-400 bg-blue-50 text-blue-700 dark:bg-blue-950/40 dark:text-blue-300 border-emerald-400 bg-emerald-50 text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-300 shadow-2xs').addClass('border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300');
+      }
+    });
+  });
+
   'use strict';
 
   // Global Table Alignment Enforcer (Headings: Center, Details/Data: Left)
@@ -1100,6 +1124,36 @@ $(document).ready(function () {
         return `<span class="px-2.5 py-0.5 text-xs font-semibold rounded-full bg-white text-slate-700 border border-slate-300 dark:bg-slate-800 dark:text-slate-300">${escapeHtml(status)}</span>`;
     }
   }
+
+  function getPaymentMethodIconSvg(method) {
+    const m = (method || '').toLowerCase().trim();
+    if (m === 'cash') {
+      return `<svg class="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0 inline-block" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><rect x="2" y="6" width="20" height="12" rx="2.5" /><circle cx="12" cy="12" r="2.8" /><path stroke-linecap="round" d="M6 12h.01M18 12h.01" stroke-width="2.5" /></svg>`;
+    } else if (m === 'card') {
+      return `<svg class="w-4 h-4 text-blue-600 dark:text-blue-400 shrink-0 inline-block" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><rect x="2" y="5" width="20" height="14" rx="2.5" /><line x1="2" y1="10" x2="22" y2="10" stroke-width="1.8" /><path stroke-linecap="round" stroke-linejoin="round" d="M6 15h3" stroke-width="2" /></svg>`;
+    } else if (m === 'upi') {
+      return `<svg class="w-4 h-4 text-purple-600 dark:text-purple-400 shrink-0 inline-block" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="5" y="2.5" width="14" height="19" rx="2.5" /><path stroke-linecap="round" stroke-linejoin="round" d="M12 18h.01" stroke-width="2.5" /><path stroke-linecap="round" stroke-linejoin="round" d="M10 7h4" /><path stroke-linecap="round" stroke-linejoin="round" d="M9 11.5l3-3 3 3M12 8.5v5.5" stroke-width="1.8" /></svg>`;
+    }
+    return `<svg class="w-4 h-4 text-slate-400 shrink-0 inline-block" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9" /><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l2.5 2.5" /></svg>`;
+  }
+  window.getPaymentMethodIconSvg = getPaymentMethodIconSvg;
+
+  function getPaymentMethodBadge(method) {
+    const raw = method || 'Unpaid';
+    const m = raw.toLowerCase().trim();
+    const icon = getPaymentMethodIconSvg(m);
+
+    if (m === 'cash') {
+      return `<span class="inline-flex items-center gap-1.5 font-medium text-emerald-700 dark:text-emerald-300">${icon}<span>Cash</span></span>`;
+    } else if (m === 'card') {
+      return `<span class="inline-flex items-center gap-1.5 font-medium text-blue-700 dark:text-blue-300">${icon}<span>Card</span></span>`;
+    } else if (m === 'upi') {
+      return `<span class="inline-flex items-center gap-1.5 font-medium text-purple-700 dark:text-purple-300">${icon}<span>UPI</span></span>`;
+    } else {
+      return `<span class="inline-flex items-center gap-1.5 font-medium text-slate-500 dark:text-slate-400">${icon}<span>${escapeHtml(raw)}</span></span>`;
+    }
+  }
+  window.getPaymentMethodBadge = getPaymentMethodBadge;
 
   // =========================================================================
   // 3. NAVIGATION, SIDEBAR COLLAPSE & THEME CONTROLLER
@@ -3190,11 +3244,11 @@ $(document).ready(function () {
       filtered.forEach((b, idx) => {
         let payBadge = '';
         if (b.paymentMethod === 'UPI') {
-          payBadge = '<span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-purple-50 text-purple-700 dark:bg-purple-950/60 dark:text-purple-300 border border-purple-200/70"><span class="w-1.5 h-1.5 rounded-full bg-purple-500 mr-1"></span>UPI</span>';
+          payBadge = `<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-purple-50 text-purple-700 dark:bg-purple-950/60 dark:text-purple-300 border border-purple-200/70">${getPaymentMethodIconSvg('upi')}UPI</span>`;
         } else if (b.paymentMethod === 'Card') {
-          payBadge = '<span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-50 text-blue-700 dark:bg-blue-950/60 dark:text-blue-300 border border-blue-200/70"><span class="w-1.5 h-1.5 rounded-full bg-blue-500 mr-1"></span>Card</span>';
+          payBadge = `<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-blue-50 text-blue-700 dark:bg-blue-950/60 dark:text-blue-300 border border-blue-200/70">${getPaymentMethodIconSvg('card')}Card</span>`;
         } else {
-          payBadge = '<span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-200/70"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500 mr-1"></span>Cash</span>';
+          payBadge = `<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 dark:bg-emerald-950/60 dark:text-emerald-300 border border-emerald-200/70">${getPaymentMethodIconSvg('cash')}Cash</span>`;
         }
 
         const itemsList = (b.items || []).map(it => `${it.name} (x${it.qty})`).join(', ') || 'General Hotel Billing';
@@ -4662,7 +4716,7 @@ $(document).ready(function () {
               </div>
             </td>
             <td class="py-3 px-4 text-slate-500 font-medium">${formatDateTime(b.date)}</td>
-            <td class="py-3 px-4 text-slate-600 dark:text-slate-300 font-medium">${escapeHtml(b.paymentMethod)}</td>
+            <td class="py-3 px-4 text-slate-600 dark:text-slate-300 font-medium">${getPaymentMethodBadge(b.paymentMethod)}</td>
             <td class="py-3 px-4 text-center font-black text-slate-900 dark:text-white">${formatMoney(b.grandTotal)}</td>
             <td class="py-3 px-4 text-center">${getStatusBadge(b.status)}</td>
             <td class="py-3.5 px-4 text-center whitespace-nowrap">
@@ -4745,7 +4799,7 @@ $(document).ready(function () {
           <div class="text-right">
             <p><strong>Date:</strong> ${formatDateTime(bill.date)}</p>
             <p><strong>Phone:</strong> ${escapeHtml(bill.customerPhone || '-')}</p>
-            <p><strong>Mode:</strong> ${escapeHtml(bill.paymentMethod)}</p>
+            <p class="flex items-center gap-1.5"><strong>Mode:</strong> ${getPaymentMethodBadge(bill.paymentMethod)}</p>
             ${bill.customerEmail ? `<p class="text-emerald-600 font-semibold">✓ e-Invoice Dispatched</p>` : ''}
           </div>
         </div>
@@ -4882,7 +4936,7 @@ $(document).ready(function () {
             <td style="text-align: right;"><strong>Email:</strong> ${escapeHtml(bill.customerEmail || '-')}</td>
           </tr>
           <tr>
-            <td><strong>Mode:</strong> ${escapeHtml(bill.paymentMethod)}</td>
+            <td><strong>Mode:</strong> ${getPaymentMethodBadge(bill.paymentMethod)}</td>
             <td style="text-align: right;"><strong>Status:</strong> ${escapeHtml(bill.status || 'Paid')}</td>
           </tr>
         </table>
@@ -6227,7 +6281,7 @@ $(document).ready(function () {
           <tr>
             <td class="py-2 px-3 font-mono font-bold text-[#14213D]">${escapeHtml(b.billNumber)}</td>
             <td class="py-2 px-3 text-slate-500">${formatDateTime(b.date)}</td>
-            <td class="py-2 px-3 text-slate-600 dark:text-slate-300 font-medium">${escapeHtml(b.paymentMethod)}</td>
+            <td class="py-2 px-3 text-slate-600 dark:text-slate-300 font-medium">${getPaymentMethodBadge(b.paymentMethod)}</td>
             <td class="py-2 px-3 text-center font-black text-slate-900 dark:text-white">${formatMoney(b.grandTotal)}</td>
             <td class="py-2 px-3 text-center">
               <button type="button" class="btn-view-bill btn-finset-secondary text-xs py-0.5 px-2" data-id="${b.id}">View</button>
