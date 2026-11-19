@@ -369,14 +369,6 @@ $(document).ready(function () {
     z-index: 60 !important;
   }
 
-  @media (max-width: 1023px) {
-    #btn-sidebar-collapse {
-      background: #FCA311 !important;
-      color: #000000 !important;
-      box-shadow: 2px 0 10px rgba(252, 163, 17, 0.45) !important;
-    }
-  }
-
   /* Spacing for mobile topbar right button (+ New Bill) */
   #app-mobile-header {
     padding-left: 1rem !important;
@@ -1879,6 +1871,31 @@ $(document).ready(function () {
 
   $(document).on('click', '#btn-mobile-more, .btn-sidebar-trigger', openSidebar);
   $(document).on('click', '#mobile-drawer-backdrop, #btn-sidebar-close-mobile', closeSidebar);
+
+  // Mobile drawer quick controls (Notifications, Settings, Profile)
+  $(document).on('click', '#btn-sidebar-notifications-mobile', function (e) {
+    e.preventDefault();
+    closeSidebar();
+    setTimeout(() => {
+      $('#btn-top-notifications').trigger('click');
+    }, 150);
+  });
+
+  $(document).on('click', '#btn-sidebar-settings-mobile', function (e) {
+    e.preventDefault();
+    closeSidebar();
+    setTimeout(() => {
+      $('#btn-top-settings').trigger('click');
+    }, 150);
+  });
+
+  $(document).on('click', '#sidebar-mobile-profile', function (e) {
+    e.preventDefault();
+    closeSidebar();
+    setTimeout(() => {
+      $('#topbar-profile-container button, #user-profile-capsule').first().trigger('click');
+    }, 150);
+  });
 
   // Auto-close mobile drawer when tapping any navigation link
   $(document).on('click', '#app-sidebar a, #app-sidebar .nav-link, #app-sidebar .hr-sub-item, #app-sidebar .dept-sub-item', function () {
@@ -6187,17 +6204,9 @@ $(document).ready(function () {
     }
   });
 
-  // Notification button action (Desktop & Mobile)
-  $(document).on('click', '#btn-top-notifications, #btn-mobile-notifications, .btn-notifications-trigger', function () {
+  // Notification button action
+  $('#btn-top-notifications').on('click', function () {
     showToast('Kitchen Ticket ORD-0082 (Room 304) is preparing. Front desk audit session active.', 'info');
-  });
-
-  // Mobile Topbar Settings & Profile buttons
-  $(document).on('click', '#btn-mobile-settings, #btn-mobile-profile', function (e) {
-    e.preventDefault();
-    const target = $(this).attr('data-target') || 'settings';
-    window.location.hash = target;
-    if (typeof switchSection === 'function') switchSection(target);
   });
 
   // Device ID Badge (Default DEV08, click to copy)
