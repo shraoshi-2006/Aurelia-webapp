@@ -777,6 +777,24 @@ $(document).ready(function () {
       overflow: hidden !important;
       text-overflow: ellipsis !important;
     }
+
+    /* Mobile-only font scaling & single-line containment for Table Card Footers (e.g. Showing X of Y, Standards 2026) */
+    .Aurelia-card > div.border-t,
+    .aurelia-card > div.border-t,
+    div[class*="border-t"][class*="justify-between"] {
+      padding: 0.5rem 0.625rem !important;
+      font-size: 0.53125rem !important;
+      line-height: 0.85rem !important;
+      gap: 0.25rem !important;
+    }
+    .Aurelia-card > div.border-t > span,
+    .aurelia-card > div.border-t > span,
+    div[class*="border-t"][class*="justify-between"] > span {
+      white-space: nowrap !important;
+      font-size: 0.53125rem !important;
+      line-height: 0.85rem !important;
+      flex-shrink: 0 !important;
+    }
   }
 
   /* Ensure all header and modal icon badges are perfect circles and never squished */
