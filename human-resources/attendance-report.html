@@ -3685,18 +3685,20 @@
 
         const rows = [];
         $('#page-ar-tbody tr').each(function() {
-          const empId = $(this).find('td:nth-child(1)').text().trim();
-          const name = $(this).find('td:nth-child(2) .font-bold').text().trim();
-          const role = $(this).find('td:nth-child(2) .text-\\[11px\\]').text().trim();
-          const dept = $(this).find('td:nth-child(3)').text().trim();
-          const sched = $(this).find('td:nth-child(4)').text().trim();
-          const present = $(this).find('td:nth-child(5)').text().trim();
-          const absent = $(this).find('td:nth-child(6)').text().trim();
-          const leaves = $(this).find('td:nth-child(7)').text().trim();
-          const late = $(this).find('td:nth-child(8)').text().trim();
-          const ot = $(this).find('td:nth-child(9)').text().trim();
-          const rate = $(this).find('td:nth-child(10)').text().trim();
-          const status = $(this).find('td:nth-child(11)').text().trim();
+          const $cells = $(this).children('td:not(.bulk-cb-cell)');
+          if (!$cells.length) return;
+          const empId = $cells.eq(0).text().trim();
+          const name = $cells.eq(1).find('.font-bold').text().trim() || $cells.eq(1).text().trim();
+          const role = $cells.eq(1).find('.text-\\[11px\\], [class*="text-[11px]"]').text().trim();
+          const dept = $cells.eq(2).text().trim();
+          const sched = $cells.eq(3).text().trim();
+          const present = $cells.eq(4).text().trim();
+          const absent = $cells.eq(5).text().trim();
+          const leaves = $cells.eq(6).text().trim();
+          const late = $cells.eq(7).text().trim();
+          const ot = $cells.eq(8).text().trim();
+          const rate = $cells.eq(9).text().trim();
+          const status = $cells.eq(10).text().trim();
 
           rows.push([
             `"${empId}"`,
@@ -3758,17 +3760,19 @@
 
         let rowsHtml = '';
         $('#page-ar-tbody tr').each(function() {
-          const empId = $(this).find('td:nth-child(1)').text().trim();
-          const name = $(this).find('td:nth-child(2) .font-bold').text().trim();
-          const role = $(this).find('td:nth-child(2) .text-\\[11px\\]').text().trim();
-          const dept = $(this).find('td:nth-child(3)').text().trim();
-          const sched = $(this).find('td:nth-child(4)').text().trim();
-          const present = $(this).find('td:nth-child(5)').text().trim();
-          const absent = $(this).find('td:nth-child(6)').text().trim();
-          const leaves = $(this).find('td:nth-child(7)').text().trim();
-          const ot = $(this).find('td:nth-child(9)').text().trim();
-          const rate = $(this).find('td:nth-child(10)').text().trim();
-          const status = $(this).find('td:nth-child(11)').text().trim();
+          const $cells = $(this).children('td:not(.bulk-cb-cell)');
+          if (!$cells.length) return;
+          const empId = $cells.eq(0).text().trim();
+          const name = $cells.eq(1).find('.font-bold').text().trim() || $cells.eq(1).text().trim();
+          const role = $cells.eq(1).find('.text-\\[11px\\], [class*="text-[11px]"]').text().trim();
+          const dept = $cells.eq(2).text().trim();
+          const sched = $cells.eq(3).text().trim();
+          const present = $cells.eq(4).text().trim();
+          const absent = $cells.eq(5).text().trim();
+          const leaves = $cells.eq(6).text().trim();
+          const ot = $cells.eq(8).text().trim();
+          const rate = $cells.eq(9).text().trim();
+          const status = $cells.eq(10).text().trim();
 
           rowsHtml += `
             <tr style="border-bottom: 1px solid #e2e8f0;">
