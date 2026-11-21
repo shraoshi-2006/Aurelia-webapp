@@ -9332,7 +9332,7 @@ $(document).ready(function () {
 
     $('.Aurelia-card, .aurelia-card, .finset-card, .spatial-card, #section-dashboard .Aurelia-card, #main-app-content .Aurelia-card, .glass-money-flow').each(function() {
       this.style.setProperty('border-color', cardBorder, 'important');
-      this.style.setProperty('border-width', '2px', 'important');
+      this.style.setProperty('border-width', '0.1px', 'important');
     });
 
     $('.btn-Aurelia-primary, .btn-aurelia-primary, .btn-finset-primary, .btn-view-order-items, .btn-order-to-bill, .quick-nav-bill, #btn-theme-save').each(function() {
@@ -9390,10 +9390,22 @@ $(document).ready(function () {
     updateThemeUI(theme);
   }
 
+  function updateSaveButtonState(isSaved) {
+    const $btn = $('#btn-theme-save');
+    if (!$btn.length) return;
+    const $span = $btn.find('span');
+    if ($span.length) {
+      $span.text(isSaved ? 'Saved' : 'Save Changes');
+    } else {
+      $btn.text(isSaved ? 'Saved' : 'Save Changes');
+    }
+  }
+
   function initThemeSettings() {
     const currentTheme = getSavedTheme();
     applyThemeColors(currentTheme.sidebarBg, currentTheme.cardBorder);
     updateThemeUI(currentTheme);
+    updateSaveButtonState(false);
 
     // Click on circular preset swatch (with direct data/attr reading)
     $(document).on('click', '.aurelia-theme-swatch', function (e) {
@@ -9413,6 +9425,7 @@ $(document).ready(function () {
       applyThemeColors(theme.sidebarBg, theme.cardBorder);
       saveTheme(theme);
       updateThemeUI(theme);
+      updateSaveButtonState(false);
     });
 
     // Custom Color Picker input & change events (instant real-time live preview)
@@ -9424,6 +9437,7 @@ $(document).ready(function () {
       applyThemeColors(theme.sidebarBg, theme.cardBorder);
       saveTheme(theme);
       updateThemeUI(theme);
+      updateSaveButtonState(false);
     });
 
     $(document).on('input change', '#card-border-custom-color-input', function () {
@@ -9434,6 +9448,7 @@ $(document).ready(function () {
       applyThemeColors(theme.sidebarBg, theme.cardBorder);
       saveTheme(theme);
       updateThemeUI(theme);
+      updateSaveButtonState(false);
     });
 
     // Eyedropper API Tool
@@ -9456,6 +9471,7 @@ $(document).ready(function () {
             applyThemeColors(theme.sidebarBg, theme.cardBorder);
             saveTheme(theme);
             updateThemeUI(theme);
+            updateSaveButtonState(false);
           }
         } catch (err) {
           // User cancelled / dismissed the eyedropper
@@ -9473,6 +9489,7 @@ $(document).ready(function () {
       saveTheme(theme);
       applyThemeColors(theme.sidebarBg, theme.cardBorder);
       updateThemeUI(theme);
+      updateSaveButtonState(true);
       if (typeof showToast === 'function') {
         showToast('Appearance & theme preferences saved successfully!', 'info');
       }
@@ -9485,6 +9502,7 @@ $(document).ready(function () {
       saveTheme(theme);
       applyThemeColors(theme.sidebarBg, theme.cardBorder);
       updateThemeUI(theme);
+      updateSaveButtonState(false);
       if (typeof showToast === 'function') {
         showToast('Theme preferences reset to baseline defaults.', 'info');
       }
