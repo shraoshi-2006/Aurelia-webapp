@@ -56,7 +56,7 @@
         #section-dashboard .Aurelia-card,
         #main-app-content .Aurelia-card,
         .glass-money-flow {
-          border: 1.5px solid rgba(255, 255, 255, 0.82) !important;
+          border: 0.1px solid rgba(255, 255, 255, 0.82) !important;
           outline: 0px !important;
           outline-width: 0px !important;
         }
@@ -77,7 +77,7 @@
         #section-dashboard .Aurelia-card,
         #main-app-content .Aurelia-card,
         .glass-money-flow {
-          border: 1.5px solid ${cardBorder} !important;
+          border: 0.1px solid ${cardBorder} !important;
           border-color: ${cardBorder} !important;
           outline: 0px !important;
           outline-width: 0px !important;
@@ -90,7 +90,7 @@
         #section-dashboard .Aurelia-card:hover,
         #main-app-content .Aurelia-card:hover,
         .glass-money-flow:hover {
-          border: 1.5px solid ${cardBorder} !important;
+          border: 0.1px solid ${cardBorder} !important;
           border-color: ${cardBorder} !important;
           outline: 0px !important;
           outline-width: 0px !important;
@@ -9223,7 +9223,7 @@ $(document).ready(function () {
       #section-dashboard .Aurelia-card,
       #main-app-content .Aurelia-card,
       .glass-money-flow {
-        border: 1.5px solid rgba(255, 255, 255, 0.82) !important;
+        border: 0.1px solid rgba(255, 255, 255, 0.82) !important;
         outline: 0px !important;
         outline-width: 0px !important;
       }
@@ -9244,7 +9244,7 @@ $(document).ready(function () {
       #section-dashboard .Aurelia-card,
       #main-app-content .Aurelia-card,
       .glass-money-flow {
-        border: 1.5px solid ${cardBorder} !important;
+        border: 0.1px solid ${cardBorder} !important;
         border-color: ${cardBorder} !important;
         outline: 0px !important;
         outline-width: 0px !important;
@@ -9257,7 +9257,7 @@ $(document).ready(function () {
       #section-dashboard .Aurelia-card:hover,
       #main-app-content .Aurelia-card:hover,
       .glass-money-flow:hover {
-        border: 1.5px solid ${cardBorder} !important;
+        border: 0.1px solid ${cardBorder} !important;
         border-color: ${cardBorder} !important;
         outline: 0px !important;
         outline-width: 0px !important;
