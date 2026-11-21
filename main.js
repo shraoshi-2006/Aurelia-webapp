@@ -77,13 +77,11 @@
         #section-dashboard .Aurelia-card,
         #main-app-content .Aurelia-card,
         .glass-money-flow {
-          border: 0px !important;
-          border-width: 0px !important;
-          border-color: transparent !important;
+          border: 1.5px solid ${cardBorder} !important;
+          border-color: ${cardBorder} !important;
           outline: 0px !important;
           outline-width: 0px !important;
           outline-color: transparent !important;
-          box-shadow: inset 1.5px 1.5px 2px 0px rgba(255, 255, 255, 0.98), inset 0.5px 0.5px 1px 0px rgba(255, 255, 255, 0.9), inset -1.5px -1.5px 2.5px 0px rgba(15, 23, 42, 0.08), inset 0 0 32px 0px rgba(255, 255, 255, 0.35), 0 24px 48px -12px rgba(15, 23, 42, 0.14), 0 8px 18px -4px rgba(15, 23, 42, 0.07) !important;
         }
         .Aurelia-card:hover,
         .aurelia-card:hover,
@@ -92,9 +90,8 @@
         #section-dashboard .Aurelia-card:hover,
         #main-app-content .Aurelia-card:hover,
         .glass-money-flow:hover {
-          border: 0px !important;
-          border-width: 0px !important;
-          border-color: transparent !important;
+          border: 1.5px solid ${cardBorder} !important;
+          border-color: ${cardBorder} !important;
           outline: 0px !important;
           outline-width: 0px !important;
           outline-color: transparent !important;
@@ -9247,13 +9244,11 @@ $(document).ready(function () {
       #section-dashboard .Aurelia-card,
       #main-app-content .Aurelia-card,
       .glass-money-flow {
-        border: 0px !important;
-        border-width: 0px !important;
-        border-color: transparent !important;
+        border: 1.5px solid ${cardBorder} !important;
+        border-color: ${cardBorder} !important;
         outline: 0px !important;
         outline-width: 0px !important;
         outline-color: transparent !important;
-        box-shadow: inset 1.5px 1.5px 2px 0px rgba(255, 255, 255, 0.98), inset 0.5px 0.5px 1px 0px rgba(255, 255, 255, 0.9), inset -1.5px -1.5px 2.5px 0px rgba(15, 23, 42, 0.08), inset 0 0 32px 0px rgba(255, 255, 255, 0.35), 0 24px 48px -12px rgba(15, 23, 42, 0.14), 0 8px 18px -4px rgba(15, 23, 42, 0.07) !important;
       }
       .Aurelia-card:hover,
       .aurelia-card:hover,
@@ -9262,9 +9257,8 @@ $(document).ready(function () {
       #section-dashboard .Aurelia-card:hover,
       #main-app-content .Aurelia-card:hover,
       .glass-money-flow:hover {
-        border: 0px !important;
-        border-width: 0px !important;
-        border-color: transparent !important;
+        border: 1.5px solid ${cardBorder} !important;
+        border-color: ${cardBorder} !important;
         outline: 0px !important;
         outline-width: 0px !important;
         outline-color: transparent !important;
