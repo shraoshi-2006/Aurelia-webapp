@@ -33,6 +33,25 @@
               '.btn-Aurelia-primary *,.btn-aurelia-primary *,.btn-finset-primary *,.btn-view-order-items *,.btn-order-to-bill *,.quick-nav-bill *{color:' + btnText + ' !important;}' +
               '.btn-Aurelia-primary:hover,.btn-aurelia-primary:hover,.btn-finset-primary:hover,.btn-view-order-items:hover,.btn-order-to-bill:hover,.quick-nav-bill:hover,#btn-theme-save:hover{filter:brightness(0.92) !important;color:' + btnText + ' !important;box-shadow:none !important;}.btn-Aurelia-primary:active,.btn-aurelia-primary:active,.btn-finset-primary:active{box-shadow:none !important;}';
             document.head.appendChild(st);
+        // Instant Early Favicon Sync with Saved Brand Name
+        try {
+          var bn = localStorage.getItem('aurelia_custom_brand_name');
+          if (bn && bn.trim() && bn.trim().toUpperCase() !== 'AURELIA') {
+            var cleanB = bn.trim().toUpperCase();
+            var initChar = cleanB.charAt(0) || 'A';
+            var fSvg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><circle cx="100" cy="100" r="95" fill="#FCA311"/><circle cx="100" cy="100" r="86" fill="none" stroke="#14213D" stroke-width="2.2"/><text x="100" y="110" text-anchor="middle" dominant-baseline="central" fill="#14213D" font-family=\'Georgia, serif\' font-weight="700" font-size="115">' + initChar + '</text></svg>';
+            var fUrl = 'data:image/svg+xml,' + encodeURIComponent(fSvg);
+            var prevIcons = document.querySelectorAll("link[rel*='icon']");
+            for (var k = 0; k < prevIcons.length; k++) {
+              if (prevIcons[k].parentNode) prevIcons[k].parentNode.removeChild(prevIcons[k]);
+            }
+            var nLink = document.createElement('link');
+            nLink.rel = 'icon';
+            nLink.type = 'image/svg+xml';
+            nLink.href = fUrl;
+            document.head.appendChild(nLink);
+          }
+        } catch(e){}
           }
         } catch(e){}
       })();
@@ -3679,7 +3698,7 @@
   <!-- Authentication Controller -->
   <script src="../auth.js?v=20261110_07"></script>
   <!-- Main JavaScript Logic -->
-<script src="../main.js?v=20261123_v78"></script>
+<script src="../main.js?v=20261123_v80"></script>
 </body>
 
 </html>

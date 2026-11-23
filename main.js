@@ -10170,10 +10170,43 @@ if (typeof window !== 'undefined' && window.MutationObserver) {
       .replace(/>/g, '&gt;');
   }
 
-  function renderBrandLogo(brandName) {
-    const containers = document.querySelectorAll('#sidebar-logo-container');
-    if (!containers || !containers.length) return;
+  function updateFavicon(brandName) {
+    try {
+      const cleanName = (brandName || DEFAULT_BRAND_NAME).trim();
+      const isDefault = cleanName.toUpperCase() === DEFAULT_BRAND_NAME;
+      const initial = (cleanName.charAt(0) || 'A').toUpperCase();
 
+      let rawSvg = '';
+      if (isDefault) {
+        rawSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><circle cx="100" cy="100" r="95" fill="#FCA311"/><circle cx="100" cy="100" r="86" fill="none" stroke="#14213D" stroke-width="2.2"/><path d="M58 162 L100 46 L142 162" fill="none" stroke="#14213D" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/><line x1="71" y1="126" x2="129" y2="126" stroke="#14213D" stroke-width="6" stroke-linecap="round"/><circle cx="100" cy="104" r="8.5" fill="#FFFFFF"/></svg>`;
+      } else {
+        rawSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><circle cx="100" cy="100" r="95" fill="#FCA311"/><circle cx="100" cy="100" r="86" fill="none" stroke="#14213D" stroke-width="2.2"/><text x="100" y="110" text-anchor="middle" dominant-baseline="central" fill="#14213D" font-family="'Cormorant Garamond', Georgia, serif" font-weight="700" font-size="115">${escapeAttr(initial)}</text></svg>`;
+      }
+
+      const faviconUrl = 'data:image/svg+xml,' + encodeURIComponent(rawSvg);
+
+      // Remove old icon elements to force instant browser tab repaint
+      const oldIcons = document.querySelectorAll("link[rel*='icon']");
+      oldIcons.forEach(function (el) {
+        if (el.parentNode) el.parentNode.removeChild(el);
+      });
+
+      const iconLink = document.createElement('link');
+      iconLink.rel = 'icon';
+      iconLink.type = 'image/svg+xml';
+      iconLink.href = faviconUrl;
+      document.head.appendChild(iconLink);
+
+      const appleLink = document.createElement('link');
+      appleLink.rel = 'apple-touch-icon';
+      appleLink.href = faviconUrl;
+      document.head.appendChild(appleLink);
+    } catch (err) {
+      console.error('Favicon update error:', err);
+    }
+  }
+
+  function renderBrandLogo(brandName) {
     const cleanName = (brandName || DEFAULT_BRAND_NAME).trim();
     const isDefault = cleanName.toUpperCase() === DEFAULT_BRAND_NAME;
     const initial = (cleanName.charAt(0) || 'A').toUpperCase();
@@ -10201,9 +10234,33 @@ if (typeof window !== 'undefined' && window.MutationObserver) {
         `;
     }
 
+    const containers = document.querySelectorAll('#sidebar-logo-container');
     containers.forEach(function (container) {
       container.innerHTML = svgHtml;
     });
+
+    // Also update mobile header and mobile drawer emblems
+    document.querySelectorAll('#app-mobile-header img[src*="aurelia-mark"], #mobile-user-menu-drawer img[src*="aurelia-mark"]').forEach(function (img) {
+      const wrap = document.createElement('div');
+      wrap.className = img.className + ' flex items-center justify-center';
+      wrap.innerHTML = svgHtml.replace(/w-11 h-11/g, 'w-full h-full');
+      if (img.parentNode) img.parentNode.replaceChild(wrap, img);
+    });
+    document.querySelectorAll('#app-mobile-header #sidebar-logo-mark, #mobile-user-menu-drawer #sidebar-logo-mark').forEach(function (svg) {
+      svg.outerHTML = svgHtml.replace(/w-11 h-11/g, 'w-full h-full');
+    });
+
+    // Update mobile header and drawer brand title texts
+    document.querySelectorAll('#app-mobile-header span, #mobile-user-menu-drawer span').forEach(function (sp) {
+      const txt = sp.textContent.trim().toUpperCase();
+      if (txt === 'AURELIA' || sp.getAttribute('data-brand-synced') === 'true') {
+        sp.setAttribute('data-brand-synced', 'true');
+        sp.textContent = cleanName;
+      }
+    });
+
+    // Always update browser tab favicon
+    updateFavicon(cleanName);
   }
 
   function updateDocumentTitle(brandName) {
