@@ -3624,83 +3624,121 @@
           <!-- Add Employee Form Grid -->
           <form id="form-standalone-add-employee" class="grid grid-cols-1 lg:grid-cols-3 gap-6"
             onsubmit="return false;">
-            <!-- Left 2 Columns: Main Form Fields -->
-            <div class="lg:col-span-2 space-y-6">
-              <!-- 1. Personal Details Card -->
-              <div class="Aurelia-card p-6 space-y-4">
-                <div class="flex items-center space-x-3 pb-3 border-b border-slate-100 dark:border-slate-800">
-                  <div
-                    class="w-8 h-8 rounded-lg bg-[#14213D] text-[#FCA311] flex items-center justify-center font-bold text-xs flex-shrink-0">
-                    01
-                  </div>
-                  <div>
-                    <h3 class="text-sm font-bold text-slate-900 dark:text-white">Personal Information</h3>
-                    <p class="text-[11px] text-slate-400">Basic identification & legal contact credentials</p>
-                  </div>
+            <!-- 1. Personal Details Card (Col Span 2) -->
+            <div class="Aurelia-card p-6 space-y-4 lg:col-span-2">
+              <div class="flex items-center space-x-3 pb-3 border-b border-slate-100 dark:border-slate-800">
+                <div
+                  class="w-8 h-8 rounded-lg bg-[#14213D] text-[#FCA311] flex items-center justify-center font-bold text-xs flex-shrink-0">
+                  01
                 </div>
-
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
-                  <div>
-                    <label class="block font-bold text-slate-700 dark:text-slate-300 mb-1">
-                      Full Legal Name <span class="text-rose-500">*</span>
-                    </label>
-                    <input type="text" id="add-emp-name" required class="Aurelia-input w-full font-medium"
-                      placeholder="e.g. Vikramaditya Roy">
-                  </div>
-                  <div>
-                    <label class="block font-bold text-slate-700 dark:text-slate-300 mb-1">
-                      Employee ID <span class="text-xs text-slate-400">(Auto Generated)</span>
-                    </label>
-                    <input type="text" id="add-emp-id" readonly
-                      class="Aurelia-input w-full font-mono bg-slate-50 dark:bg-slate-900/50 text-slate-500"
-                      value="AUR-EMP-2026-049">
-                  </div>
-
-                  <div>
-                    <label class="block font-bold text-slate-700 dark:text-slate-300 mb-1">
-                      Email Address <span class="text-rose-500">*</span>
-                    </label>
-                    <input type="email" id="add-emp-email" required class="Aurelia-input w-full font-medium"
-                      placeholder="e.g. vikram.roy@aureliahotel.com">
-                  </div>
-                  <div>
-                    <label class="block font-bold text-slate-700 dark:text-slate-300 mb-1">
-                      Mobile Phone Number <span class="text-rose-500">*</span>
-                    </label>
-                    <input type="tel" id="add-emp-phone" required class="Aurelia-input w-full font-medium"
-                      placeholder="e.g. +91 98450 11223">
-                  </div>
-
-                  <div>
-                    <label class="block font-bold text-slate-700 dark:text-slate-300 mb-1">
-                      Date of Birth
-                    </label>
-                    <input type="date" id="add-emp-dob" class="Aurelia-input w-full font-medium" value="1995-05-18">
-                  </div>
-                  <div>
-                    <label class="block font-bold text-slate-700 dark:text-slate-300 mb-1">
-                      Gender
-                    </label>
-                    <select id="add-emp-gender" class="Aurelia-input w-full font-semibold">
-                      <option value="Male">Male</option>
-                      <option value="Female">Female</option>
-                      <option value="Non-Binary">Non-Binary</option>
-                      <option value="Prefer not to say">Prefer not to say</option>
-                    </select>
-                  </div>
-
-                  <div class="sm:col-span-2">
-                    <label class="block font-bold text-slate-700 dark:text-slate-300 mb-1">
-                      Residential Address
-                    </label>
-                    <textarea id="add-emp-address" rows="2" class="Aurelia-input w-full font-medium"
-                      placeholder="Permanent residential address, city, and pincode"></textarea>
-                  </div>
+                <div>
+                  <h3 class="text-sm font-bold text-slate-900 dark:text-white">Personal Information</h3>
+                  <p class="text-[11px] text-slate-400">Basic identification & legal contact credentials</p>
                 </div>
               </div>
 
-              <!-- 2. Operational Department & Shift Assignment Card -->
-              <div class="Aurelia-card p-6 space-y-4">
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+                <div>
+                  <label class="block font-bold text-slate-700 dark:text-slate-300 mb-1">
+                    Full Legal Name <span class="text-rose-500">*</span>
+                  </label>
+                  <input type="text" id="add-emp-name" required class="Aurelia-input w-full font-medium"
+                    placeholder="e.g. Vikramaditya Roy">
+                </div>
+                <div>
+                  <label class="block font-bold text-slate-700 dark:text-slate-300 mb-1">
+                    Employee ID <span class="text-xs text-slate-400">(Auto Generated)</span>
+                  </label>
+                  <input type="text" id="add-emp-id" readonly
+                    class="Aurelia-input w-full font-mono bg-slate-50 dark:bg-slate-900/50 text-slate-500"
+                    value="AUR-EMP-2026-049">
+                </div>
+
+                <div>
+                  <label class="block font-bold text-slate-700 dark:text-slate-300 mb-1">
+                    Email Address <span class="text-rose-500">*</span>
+                  </label>
+                  <input type="email" id="add-emp-email" required class="Aurelia-input w-full font-medium"
+                    placeholder="e.g. vikram.roy@aureliahotel.com">
+                </div>
+                <div>
+                  <label class="block font-bold text-slate-700 dark:text-slate-300 mb-1">
+                    Mobile Phone Number <span class="text-rose-500">*</span>
+                  </label>
+                  <input type="tel" id="add-emp-phone" required class="Aurelia-input w-full font-medium"
+                    placeholder="e.g. +91 98450 11223">
+                </div>
+
+                <div>
+                  <label class="block font-bold text-slate-700 dark:text-slate-300 mb-1">
+                    Date of Birth
+                  </label>
+                  <input type="date" id="add-emp-dob" class="Aurelia-input w-full font-medium" value="1995-05-18">
+                </div>
+                <div>
+                  <label class="block font-bold text-slate-700 dark:text-slate-300 mb-1">
+                    Gender
+                  </label>
+                  <select id="add-emp-gender" class="Aurelia-input w-full font-semibold">
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Non-Binary">Non-Binary</option>
+                    <option value="Prefer not to say">Prefer not to say</option>
+                  </select>
+                </div>
+
+                <div class="sm:col-span-2">
+                  <label class="block font-bold text-slate-700 dark:text-slate-300 mb-1">
+                    Residential Address
+                  </label>
+                  <textarea id="add-emp-address" rows="2" class="Aurelia-input w-full font-medium"
+                    placeholder="Permanent residential address, city, and pincode"></textarea>
+                </div>
+              </div>
+            </div>
+
+            <!-- Live Employee Badge Card (Col Span 1) -->
+            <div
+              class="Aurelia-card p-6 text-center space-y-4 bg-gradient-to-b from-[#14213D]/5 to-transparent dark:from-slate-800/40 lg:col-span-1 flex flex-col justify-between">
+              <div class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Digital Hotel ID Badge</div>
+              <div class="relative inline-block mx-auto">
+                <div id="preview-emp-avatar"
+                  class="w-20 h-20 rounded-full bg-[#14213D] text-[#FCA311] font-black text-2xl flex items-center justify-center border-4 border-white dark:border-slate-800 shadow-md mx-auto">
+                  VR
+                </div>
+                <span
+                  class="absolute bottom-0 right-0 w-5 h-5 rounded-full bg-emerald-500 border-2 border-white dark:border-slate-800"
+                  title="Active"></span>
+              </div>
+              <div>
+                <h4 id="preview-emp-name-display" class="font-bold text-base text-slate-900 dark:text-white">
+                  Vikramaditya Roy</h4>
+                <p id="preview-emp-role-display" class="text-xs text-[#14213D] dark:text-[#FCA311] font-semibold">
+                  Guest Relations Executive</p>
+                <p id="preview-emp-dept-display" class="text-[11px] text-slate-400">Front Office • On Duty</p>
+              </div>
+              <div
+                class="p-3 bg-white dark:bg-slate-800/80 rounded-xl border border-slate-200/60 dark:border-slate-700 text-left text-xs space-y-1.5 font-medium">
+                <div class="flex justify-between">
+                  <span class="text-slate-400">ID Code:</span>
+                  <span id="preview-emp-id-display"
+                    class="font-mono font-bold text-slate-700 dark:text-slate-300">AUR-EMP-2026-049</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-slate-400">Shift:</span>
+                  <span id="preview-emp-shift-display" class="font-mono text-slate-700 dark:text-slate-300">Morning
+                    (07:00-15:30)</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-slate-400">Status:</span>
+                  <span class="text-emerald-600 font-bold">● Active Roster</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- 2. Operational Department & Shift Assignment Card (Col Span 2, Matching Height) -->
+            <div class="Aurelia-card p-6 space-y-4 lg:col-span-2 h-full flex flex-col justify-between">
+              <div>
                 <div class="flex items-center space-x-3 pb-3 border-b border-slate-100 dark:border-slate-800">
                   <div
                     class="w-8 h-8 rounded-lg bg-[#14213D] text-[#FCA311] flex items-center justify-center font-bold text-xs flex-shrink-0">
@@ -3712,7 +3750,7 @@
                   </div>
                 </div>
 
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs mt-4">
                   <div>
                     <label class="block font-bold text-slate-700 dark:text-slate-300 mb-1">
                       Department <span class="text-rose-500">*</span>
@@ -3773,92 +3811,14 @@
                   </div>
                 </div>
               </div>
-
-              <!-- 3. Emergency Contacts Card -->
-              <div class="Aurelia-card p-6 space-y-4">
-                <div class="flex items-center space-x-3 pb-3 border-b border-slate-100 dark:border-slate-800">
-                  <div
-                    class="w-8 h-8 rounded-lg bg-[#14213D] text-[#FCA311] flex items-center justify-center font-bold text-xs flex-shrink-0">
-                    03
-                  </div>
-                  <div>
-                    <h3 class="text-sm font-bold text-slate-900 dark:text-white">Emergency Contacts & Verification</h3>
-                    <p class="text-[11px] text-slate-400">Next of kin & national ID verification</p>
-                  </div>
-                </div>
-
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
-                  <div>
-                    <label class="block font-bold text-slate-700 dark:text-slate-300 mb-1">
-                      Emergency Contact Name
-                    </label>
-                    <input type="text" id="add-emp-emer-name" class="Aurelia-input w-full font-medium"
-                      placeholder="e.g. Sunita Roy">
-                  </div>
-                  <div>
-                    <label class="block font-bold text-slate-700 dark:text-slate-300 mb-1">
-                      Relationship
-                    </label>
-                    <input type="text" id="add-emp-emer-rel" class="Aurelia-input w-full font-medium"
-                      placeholder="e.g. Spouse / Parent">
-                  </div>
-                  <div>
-                    <label class="block font-bold text-slate-700 dark:text-slate-300 mb-1">
-                      Emergency Phone
-                    </label>
-                    <input type="tel" id="add-emp-emer-phone" class="Aurelia-input w-full font-medium"
-                      placeholder="e.g. +91 98450 99887">
-                  </div>
-                </div>
-              </div>
             </div>
 
-            <!-- Right Column: Live Badge Preview & Compensation -->
-            <div class="space-y-6">
-              <!-- Live Employee Badge Card -->
-              <div
-                class="Aurelia-card p-6 text-center space-y-4 bg-gradient-to-b from-[#14213D]/5 to-transparent dark:from-slate-800/40">
-                <div class="text-[11px] font-bold uppercase tracking-wider text-slate-400">Digital Hotel ID Badge</div>
-                <div class="relative inline-block mx-auto">
-                  <div id="preview-emp-avatar"
-                    class="w-20 h-20 rounded-full bg-[#14213D] text-[#FCA311] font-black text-2xl flex items-center justify-center border-4 border-white dark:border-slate-800 shadow-md mx-auto">
-                    VR
-                  </div>
-                  <span
-                    class="absolute bottom-0 right-0 w-5 h-5 rounded-full bg-emerald-500 border-2 border-white dark:border-slate-800"
-                    title="Active"></span>
-                </div>
-                <div>
-                  <h4 id="preview-emp-name-display" class="font-bold text-base text-slate-900 dark:text-white">
-                    Vikramaditya Roy</h4>
-                  <p id="preview-emp-role-display" class="text-xs text-[#14213D] dark:text-[#FCA311] font-semibold">
-                    Guest Relations Executive</p>
-                  <p id="preview-emp-dept-display" class="text-[11px] text-slate-400">Front Office • On Duty</p>
-                </div>
-                <div
-                  class="p-3 bg-white dark:bg-slate-800/80 rounded-xl border border-slate-200/60 dark:border-slate-700 text-left text-xs space-y-1.5 font-medium">
-                  <div class="flex justify-between">
-                    <span class="text-slate-400">ID Code:</span>
-                    <span id="preview-emp-id-display"
-                      class="font-mono font-bold text-slate-700 dark:text-slate-300">AUR-EMP-2026-049</span>
-                  </div>
-                  <div class="flex justify-between">
-                    <span class="text-slate-400">Shift:</span>
-                    <span id="preview-emp-shift-display" class="font-mono text-slate-700 dark:text-slate-300">Morning
-                      (07:00-15:30)</span>
-                  </div>
-                  <div class="flex justify-between">
-                    <span class="text-slate-400">Status:</span>
-                    <span class="text-emerald-600 font-bold">● Active Roster</span>
-                  </div>
-                </div>
-              </div>
+            <!-- Compensation & Compliance Tier Card / Remuneration & Status (Col Span 1, Matching Height) -->
+            <div class="Aurelia-card p-6 space-y-4 lg:col-span-1 h-full flex flex-col justify-between">
+              <div>
+                <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400 mb-4">Remuneration & Status</h4>
 
-              <!-- Compensation & Compliance Tier Card -->
-              <div class="Aurelia-card p-6 space-y-4">
-                <h4 class="text-xs font-bold uppercase tracking-wider text-slate-400">Remuneration & Status</h4>
-
-                <div class="space-y-3 text-xs">
+                <div class="space-y-3.5 text-xs">
                   <div>
                     <label class="block font-bold text-slate-700 dark:text-slate-300 mb-1">
                       Monthly Base Salary (₹)
@@ -3881,7 +3841,7 @@
                     </select>
                   </div>
 
-                  <div class="pt-3 border-t border-slate-100 dark:border-slate-800 space-y-2">
+                  <div class="pt-3 border-t border-slate-100 dark:border-slate-800 space-y-2.5">
                     <label
                       class="flex items-center space-x-2.5 text-xs text-slate-600 dark:text-slate-300 cursor-pointer">
                       <input type="checkbox" id="add-emp-pf" checked
@@ -3902,15 +3862,53 @@
                     </label>
                   </div>
                 </div>
+              </div>
 
-                <div class="pt-2">
-                  <button type="submit" id="btn-submit-add-emp"
-                    class="w-full btn-Aurelia-primary py-2.5 text-xs font-bold shadow-md flex items-center justify-center space-x-2">
-                    <svg class="w-4 h-4 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2">
-                      <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-                    </svg>
-                    <span>Onboard & Register Staff</span>
-                  </button>
+              <div class="pt-3 mt-auto">
+                <button type="submit" id="btn-submit-add-emp"
+                  class="w-full btn-Aurelia-primary py-2.5 text-xs font-bold shadow-md flex items-center justify-center space-x-2">
+                  <svg class="w-4 h-4 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                  </svg>
+                  <span>Onboard & Register Staff</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- 3. Emergency Contacts Card (Full Width: Col Span 3) -->
+            <div class="Aurelia-card p-6 space-y-4 col-span-1 lg:col-span-3 w-full">
+              <div class="flex items-center space-x-3 pb-3 border-b border-slate-100 dark:border-slate-800">
+                <div
+                  class="w-8 h-8 rounded-lg bg-[#14213D] text-[#FCA311] flex items-center justify-center font-bold text-xs flex-shrink-0">
+                  03
+                </div>
+                <div>
+                  <h3 class="text-sm font-bold text-slate-900 dark:text-white">Emergency Contacts & Verification</h3>
+                  <p class="text-[11px] text-slate-400">Next of kin & national ID verification</p>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
+                <div>
+                  <label class="block font-bold text-slate-700 dark:text-slate-300 mb-1">
+                    Emergency Contact Name
+                  </label>
+                  <input type="text" id="add-emp-emer-name" class="Aurelia-input w-full font-medium"
+                    placeholder="e.g. Sunita Roy">
+                </div>
+                <div>
+                  <label class="block font-bold text-slate-700 dark:text-slate-300 mb-1">
+                    Relationship
+                  </label>
+                  <input type="text" id="add-emp-emer-rel" class="Aurelia-input w-full font-medium"
+                    placeholder="e.g. Spouse / Parent">
+                </div>
+                <div>
+                  <label class="block font-bold text-slate-700 dark:text-slate-300 mb-1">
+                    Emergency Phone
+                  </label>
+                  <input type="tel" id="add-emp-emer-phone" class="Aurelia-input w-full font-medium"
+                    placeholder="e.g. +91 98450 99887">
                 </div>
               </div>
             </div>
