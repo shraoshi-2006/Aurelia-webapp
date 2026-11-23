@@ -3730,7 +3730,7 @@
         <!-- 6. ANALYTICS & REPORTS SECTION -->
         <!-- ============================================================= -->
         <section id="section-analytics" class="space-y-6">
-          <div class="flex items-center justify-between pb-3">
+          <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between pb-3 gap-3">
             <div>
               <h2 class="text-lg font-bold text-slate-900 dark:text-white">Revenue & Sales Analytics</h2>
               <p class="text-xs text-slate-400">Deep financial summaries, tax breakdown, and top dishes</p>
@@ -3761,55 +3761,52 @@
                 </div>
               </div>
             </div>
+          </div>
 
-            <!-- 4 Report KPI Cards -->
-            <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
-              <div class="Aurelia-card p-5">
-                <span class="text-xs text-slate-500 font-semibold">Total Tax (GST 5%)</span>
-                <div id="report-tax-collected" class="text-xl font-bold text-slate-900 dark:text-white mt-1">₹0.00</div>
-                <span class="text-[10px] text-slate-400 mt-0.5 block">CGST 2.5% + SGST 2.5%</span>
-              </div>
-              <div class="Aurelia-card p-5">
-                <span class="text-xs text-slate-500 font-semibold">Total Discounts Given</span>
-                <div id="report-discounts-given" class="text-xl font-bold text-slate-900 dark:text-white mt-1">₹0.00
-                </div>
-                <span class="text-[10px] text-slate-400 mt-0.5 block">Promotional reductions</span>
-              </div>
-              <div class="Aurelia-card p-5">
-                <span class="text-xs text-slate-500 font-semibold">Average Bill Value</span>
-                <div id="report-avg-bill" class="text-xl font-bold text-slate-900 dark:text-white mt-1">₹0.00</div>
-                <span class="text-[10px] text-slate-400 mt-0.5 block">Per completed transaction</span>
-              </div>
-              <div class="Aurelia-card p-5">
-                <span class="text-xs text-slate-500 font-semibold">Net Period Revenue</span>
-                <div id="report-net-revenue" class="text-xl font-bold text-[#14213D] mt-1">₹0.00
-                </div>
-                <span class="text-[10px] text-slate-400 mt-0.5 block">Excluding statutory taxes</span>
-              </div>
+          <!-- 4 Report KPI Cards -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div class="Aurelia-card p-5">
+              <span class="text-xs text-slate-500 font-semibold">Total Tax (GST 5%)</span>
+              <div id="report-tax-collected" class="text-xl font-bold text-slate-900 dark:text-white mt-1">₹0.00</div>
+              <span class="text-[10px] text-slate-400 mt-0.5 block">CGST 2.5% + SGST 2.5%</span>
             </div>
+            <div class="Aurelia-card p-5">
+              <span class="text-xs text-slate-500 font-semibold">Total Discounts Given</span>
+              <div id="report-discounts-given" class="text-xl font-bold text-slate-900 dark:text-white mt-1">₹0.00</div>
+              <span class="text-[10px] text-slate-400 mt-0.5 block">Promotional reductions</span>
+            </div>
+            <div class="Aurelia-card p-5">
+              <span class="text-xs text-slate-500 font-semibold">Average Bill Value</span>
+              <div id="report-avg-bill" class="text-xl font-bold text-slate-900 dark:text-white mt-1">₹0.00</div>
+              <span class="text-[10px] text-slate-400 mt-0.5 block">Per completed transaction</span>
+            </div>
+            <div class="Aurelia-card p-5">
+              <span class="text-xs text-slate-500 font-semibold">Net Period Revenue</span>
+              <div id="report-net-revenue" class="text-xl font-bold text-[#14213D] mt-1">₹0.00</div>
+              <span class="text-[10px] text-slate-400 mt-0.5 block">Excluding statutory taxes</span>
+            </div>
+          </div>
 
-            <!-- Top 5 Selling Items Table -->
-            <div class="Aurelia-card p-6">
-              <h4 class="text-xs font-bold text-slate-800 dark:text-slate-200 uppercase tracking-wider mb-4">Top 5
-                Popular
-                Menu Items</h4>
-              <div class="overflow-x-auto">
-                <table class="w-full text-xs text-center">
-                  <thead>
-                    <tr class="Aurelia-table-header text-slate-500 dark:text-slate-400 font-semibold text-[11px]">
-                      <th class="py-2.5 px-4 w-12 text-center rounded-l-xl">#</th>
-                      <th class="py-2.5 px-4">Item Name</th>
-                      <th class="py-2.5 px-4">Category</th>
-                      <th class="py-2.5 px-4 text-center">Units Sold</th>
-                      <th class="py-2.5 px-4 text-center rounded-r-xl">Total Revenue</th>
-                    </tr>
-                  </thead>
-                  <tbody id="top-selling-items-tbody" class="divide-y divide-slate-100 dark:divide-slate-800">
-                    <!-- Dynamically populated -->
-                  </tbody>
-                </table>
-              </div>
+          <!-- Top 5 Selling Items Table -->
+          <div class="Aurelia-card p-6">
+            <h4 class="text-xs font-bold text-slate-800 dark:text-slate-200 uppercase tracking-wider mb-4">Top 5 Popular Menu Items</h4>
+            <div class="overflow-x-auto">
+              <table class="w-full text-xs">
+                <thead>
+                  <tr class="Aurelia-table-header text-slate-500 dark:text-slate-400 font-semibold text-[11px]">
+                    <th class="py-2.5 px-4 w-12 text-center rounded-l-xl">#</th>
+                    <th class="py-2.5 px-4 text-left">Item Name</th>
+                    <th class="py-2.5 px-4 text-left">Category</th>
+                    <th class="py-2.5 px-4 text-center">Units Sold</th>
+                    <th class="py-2.5 px-4 text-right rounded-r-xl">Total Revenue</th>
+                  </tr>
+                </thead>
+                <tbody id="top-selling-items-tbody" class="divide-y divide-slate-100 dark:divide-slate-800">
+                  <!-- Dynamically populated -->
+                </tbody>
+              </table>
             </div>
+          </div>
         </section>
 
 
@@ -5257,7 +5254,7 @@
 
   <!-- Authentication Controller -->
   <script src="auth.js?v=20261110_07"></script>
-  <!-- Main JavaScript Logic -->D
+  <!-- Main JavaScript Logic -->
   <script src="main.js?v=20261123_v76"></script>
 </body>
 

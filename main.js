@@ -6849,10 +6849,10 @@ $(document).ready(function () {
         $tbody.append(`
           <tr class="bg-white hover:bg-slate-100/90 dark:bg-slate-900 dark:hover:bg-slate-800 transition-all cursor-pointer relative">
             <td class="py-2.5 px-4 text-center text-slate-400 font-bold">${idx + 1}</td>
-            <td class="py-2.5 px-4 font-bold text-slate-900 dark:text-white">${escapeHtml(it.name)}</td>
-            <td class="py-2.5 px-4 text-slate-500 font-medium">${escapeHtml(it.category)}</td>
+            <td class="py-2.5 px-4 text-left font-bold text-slate-900 dark:text-white">${escapeHtml(it.name)}</td>
+            <td class="py-2.5 px-4 text-left text-slate-500 font-medium">${escapeHtml(it.category)}</td>
             <td class="py-2.5 px-4 text-center font-semibold text-slate-700 dark:text-slate-300">${it.qty}</td>
-            <td class="py-2.5 px-4 text-center font-black text-slate-900 dark:text-white">${formatMoney(it.revenue)}</td>
+            <td class="py-2.5 px-4 text-right font-black text-slate-900 dark:text-white">${formatMoney(it.revenue)}</td>
           </tr>
         `);
       });
