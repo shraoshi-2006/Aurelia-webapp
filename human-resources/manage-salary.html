@@ -33,32 +33,41 @@
               '.btn-Aurelia-primary *,.btn-aurelia-primary *,.btn-finset-primary *,.btn-view-order-items *,.btn-order-to-bill *,.quick-nav-bill *{color:' + btnText + ' !important;}' +
               '.btn-Aurelia-primary:hover,.btn-aurelia-primary:hover,.btn-finset-primary:hover,.btn-view-order-items:hover,.btn-order-to-bill:hover,.quick-nav-bill:hover,#btn-theme-save:hover{filter:brightness(0.92) !important;color:' + btnText + ' !important;box-shadow:none !important;}.btn-Aurelia-primary:active,.btn-aurelia-primary:active,.btn-finset-primary:active{box-shadow:none !important;}';
             document.head.appendChild(st);
-          // Instant Early Favicon Sync with Saved Brand Name and Card Border Color
+          // Instant Early Favicon Sync with Saved Brand Name, Card Border Color, and Custom Logo Image
           try {
-            var bn = localStorage.getItem('aurelia_custom_brand_name');
-            var cleanB = (bn && bn.trim()) ? bn.trim().toUpperCase() : 'AURELIA';
-            var initChar = cleanB.charAt(0) || 'A';
-            var logoBg = cb || '#FCA311';
-            var h = logoBg.replace('#', '');
-            if (h.length === 3) h = h[0] + h[0] + h[1] + h[1] + h[2] + h[2];
-            var lr = parseInt(h.substring(0, 2), 16) || 0, lg = parseInt(h.substring(2, 4), 16) || 0, lb = parseInt(h.substring(4, 6), 16) || 0;
-            var isL = ((0.2126 * lr + 0.7152 * lg + 0.0722 * lb) > 165);
-            var ac = isL ? '#14213D' : '#FFFFFF';
-            var pf = isL ? (logoBg.toUpperCase() === '#FFFFFF' ? '#FCA311' : '#FFFFFF') : '#FCA311';
-            var fSvg = '';
-            if (cleanB === 'AURELIA') {
-              fSvg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><circle cx="100" cy="100" r="95" fill="' + logoBg + '"/><circle cx="100" cy="100" r="86" fill="none" stroke="' + ac + '" stroke-width="2.2"/><path d="M58 162 L100 46 L142 162" fill="none" stroke="' + ac + '" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/><line x1="71" y1="126" x2="129" y2="126" stroke="' + ac + '" stroke-width="6" stroke-linecap="round"/><circle cx="100" cy="104" r="8.5" fill="' + pf + '"/></svg>';
+            var cLogo = localStorage.getItem('aurelia_custom_brand_logo_img');
+            var fUrl = '';
+            var isSvg = false;
+            if (cLogo) {
+              fUrl = cLogo;
+              isSvg = cLogo.indexOf('image/svg') !== -1;
             } else {
-              fSvg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><circle cx="100" cy="100" r="95" fill="' + logoBg + '"/><circle cx="100" cy="100" r="86" fill="none" stroke="' + ac + '" stroke-width="2.2"/><text x="100" y="110" text-anchor="middle" dominant-baseline="central" fill="' + ac + '" font-family="Georgia, serif" font-weight="700" font-size="115">' + initChar + '</text></svg>';
+              var bn = localStorage.getItem('aurelia_custom_brand_name');
+              var cleanB = (bn && bn.trim()) ? bn.trim().toUpperCase() : 'AURELIA';
+              var initChar = cleanB.charAt(0) || 'A';
+              var logoBg = cb || '#FCA311';
+              var h = logoBg.replace('#', '');
+              if (h.length === 3) h = h[0] + h[0] + h[1] + h[1] + h[2] + h[2];
+              var lr = parseInt(h.substring(0, 2), 16) || 0, lg = parseInt(h.substring(2, 4), 16) || 0, lb = parseInt(h.substring(4, 6), 16) || 0;
+              var isL = ((0.2126 * lr + 0.7152 * lg + 0.0722 * lb) > 165);
+              var ac = isL ? '#14213D' : '#FFFFFF';
+              var pf = isL ? (logoBg.toUpperCase() === '#FFFFFF' ? '#FCA311' : '#FFFFFF') : '#FCA311';
+              var fSvg = '';
+              if (cleanB === 'AURELIA') {
+                fSvg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><circle cx="100" cy="100" r="95" fill="' + logoBg + '"/><circle cx="100" cy="100" r="86" fill="none" stroke="' + ac + '" stroke-width="2.2"/><path d="M58 162 L100 46 L142 162" fill="none" stroke="' + ac + '" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/><line x1="71" y1="126" x2="129" y2="126" stroke="' + ac + '" stroke-width="6" stroke-linecap="round"/><circle cx="100" cy="104" r="8.5" fill="' + pf + '"/></svg>';
+              } else {
+                fSvg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><circle cx="100" cy="100" r="95" fill="' + logoBg + '"/><circle cx="100" cy="100" r="86" fill="none" stroke="' + ac + '" stroke-width="2.2"/><text x="100" y="110" text-anchor="middle" dominant-baseline="central" fill="' + ac + '" font-family="Georgia, serif" font-weight="700" font-size="115">' + initChar + '</text></svg>';
+              }
+              fUrl = 'data:image/svg+xml,' + encodeURIComponent(fSvg);
+              isSvg = true;
             }
-            var fUrl = 'data:image/svg+xml,' + encodeURIComponent(fSvg);
             var prevIcons = document.querySelectorAll("link[rel*='icon']");
             for (var k = 0; k < prevIcons.length; k++) {
               if (prevIcons[k].parentNode) prevIcons[k].parentNode.removeChild(prevIcons[k]);
             }
             var nLink = document.createElement('link');
             nLink.rel = 'icon';
-            nLink.type = 'image/svg+xml';
+            if (isSvg) nLink.type = 'image/svg+xml';
             nLink.href = fUrl;
             document.head.appendChild(nLink);
           } catch(e){}
@@ -4144,7 +4153,7 @@
   <!-- Authentication Controller -->
   <script src="../auth.js?v=20261110_07"></script>
   <!-- Main JavaScript Logic -->
-  <script src="../main.js?v=20261123_v83"></script>
+  <script src="../main.js?v=20261123_v84"></script>
 </body>
 
 </html>

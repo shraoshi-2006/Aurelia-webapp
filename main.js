@@ -10094,7 +10094,28 @@ if (typeof window !== 'undefined' && window.MutationObserver) {
 // =========================================================================
 (function initBrandCustomizationEngine() {
   const BRAND_STORAGE_KEY = 'aurelia_custom_brand_name';
+  const LOGO_IMG_STORAGE_KEY = 'aurelia_custom_brand_logo_img';
   const DEFAULT_BRAND_NAME = 'AURELIA';
+
+  function getCustomLogoImage() {
+    try {
+      return localStorage.getItem(LOGO_IMG_STORAGE_KEY) || null;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  function saveCustomLogoImage(dataUrl) {
+    try {
+      if (dataUrl) {
+        localStorage.setItem(LOGO_IMG_STORAGE_KEY, dataUrl);
+      } else {
+        localStorage.removeItem(LOGO_IMG_STORAGE_KEY);
+      }
+    } catch (e) {
+      console.error('Error saving custom logo image:', e);
+    }
+  }
 
   function getActiveCardBorderColor() {
     try {
@@ -10145,22 +10166,32 @@ if (typeof window !== 'undefined' && window.MutationObserver) {
 
   function updateFavicon(brandName, cardBorderColor) {
     try {
-      const cleanName = (brandName || getSavedBrandName()).trim();
-      const isDefault = cleanName.toUpperCase() === DEFAULT_BRAND_NAME;
-      const initial = (cleanName.charAt(0) || 'A').toUpperCase();
-      const logoBg = (cardBorderColor || getActiveCardBorderColor()).toUpperCase();
-      const isLight = isLightColor(logoBg);
-      const accentColor = isLight ? '#14213D' : '#FFFFFF';
-      const pearlFill = isLight ? (logoBg === '#FFFFFF' ? '#FCA311' : '#FFFFFF') : '#FCA311';
+      const customImg = getCustomLogoImage();
+      let faviconUrl = '';
+      let isSvg = false;
 
-      let rawSvg = '';
-      if (isDefault) {
-        rawSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><circle cx="100" cy="100" r="95" fill="${logoBg}"/><circle cx="100" cy="100" r="86" fill="none" stroke="${accentColor}" stroke-width="2.2"/><path d="M58 162 L100 46 L142 162" fill="none" stroke="${accentColor}" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/><line x1="71" y1="126" x2="129" y2="126" stroke="${accentColor}" stroke-width="6" stroke-linecap="round"/><circle cx="100" cy="104" r="8.5" fill="${pearlFill}"/></svg>`;
+      if (customImg) {
+        faviconUrl = customImg;
+        isSvg = customImg.startsWith('data:image/svg');
       } else {
-        rawSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><circle cx="100" cy="100" r="95" fill="${logoBg}"/><circle cx="100" cy="100" r="86" fill="none" stroke="${accentColor}" stroke-width="2.2"/><text x="100" y="110" text-anchor="middle" dominant-baseline="central" fill="${accentColor}" font-family="'Cormorant Garamond', Georgia, serif" font-weight="700" font-size="115">${escapeAttr(initial)}</text></svg>`;
-      }
+        const cleanName = (brandName || getSavedBrandName()).trim();
+        const isDefault = cleanName.toUpperCase() === DEFAULT_BRAND_NAME;
+        const initial = (cleanName.charAt(0) || 'A').toUpperCase();
+        const logoBg = (cardBorderColor || getActiveCardBorderColor()).toUpperCase();
+        const isLight = isLightColor(logoBg);
+        const accentColor = isLight ? '#14213D' : '#FFFFFF';
+        const pearlFill = isLight ? (logoBg === '#FFFFFF' ? '#FCA311' : '#FFFFFF') : '#FCA311';
 
-      const faviconUrl = 'data:image/svg+xml,' + encodeURIComponent(rawSvg);
+        let rawSvg = '';
+        if (isDefault) {
+          rawSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><circle cx="100" cy="100" r="95" fill="${logoBg}"/><circle cx="100" cy="100" r="86" fill="none" stroke="${accentColor}" stroke-width="2.2"/><path d="M58 162 L100 46 L142 162" fill="none" stroke="${accentColor}" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/><line x1="71" y1="126" x2="129" y2="126" stroke="${accentColor}" stroke-width="6" stroke-linecap="round"/><circle cx="100" cy="104" r="8.5" fill="${pearlFill}"/></svg>`;
+        } else {
+          rawSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><circle cx="100" cy="100" r="95" fill="${logoBg}"/><circle cx="100" cy="100" r="86" fill="none" stroke="${accentColor}" stroke-width="2.2"/><text x="100" y="110" text-anchor="middle" dominant-baseline="central" fill="${accentColor}" font-family="'Cormorant Garamond', Georgia, serif" font-weight="700" font-size="115">${escapeAttr(initial)}</text></svg>`;
+        }
+
+        faviconUrl = 'data:image/svg+xml,' + encodeURIComponent(rawSvg);
+        isSvg = true;
+      }
 
       // Remove old icon elements to force instant browser tab repaint
       const oldIcons = document.querySelectorAll("link[rel*='icon']");
@@ -10170,7 +10201,7 @@ if (typeof window !== 'undefined' && window.MutationObserver) {
 
       const iconLink = document.createElement('link');
       iconLink.rel = 'icon';
-      iconLink.type = 'image/svg+xml';
+      if (isSvg) iconLink.type = 'image/svg+xml';
       iconLink.href = faviconUrl;
       document.head.appendChild(iconLink);
 
@@ -10192,53 +10223,97 @@ if (typeof window !== 'undefined' && window.MutationObserver) {
     const accentColor = isLight ? '#14213D' : '#FFFFFF';
     const pearlFill = isLight ? (logoBg === '#FFFFFF' ? '#FCA311' : '#FFFFFF') : '#FCA311';
 
-    let svgHtml = '';
-    if (isDefault) {
-      // Exact Default Aurelia Medallion Emblem with stylized A and white pearl dot
-      svgHtml = `
-          <svg id="sidebar-logo-mark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" class="w-11 h-11 rounded-full object-contain" role="img" aria-label="Aurelia Emblem">
-            <circle cx="100" cy="100" r="95" fill="${logoBg}"/>
-            <circle cx="100" cy="100" r="86" fill="none" stroke="${accentColor}" stroke-width="2.2"/>
-            <path d="M58 162 L100 46 L142 162" fill="none" stroke="${accentColor}" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
-            <line x1="71" y1="126" x2="129" y2="126" stroke="${accentColor}" stroke-width="6" stroke-linecap="round"/>
-            <circle cx="100" cy="104" r="8.5" fill="${pearlFill}"/>
-          </svg>
-        `;
+    const customImg = getCustomLogoImage();
+
+    // Toggle remove button on the branding card
+    document.querySelectorAll('#btn-remove-brand-logo').forEach(function (btn) {
+      if (customImg) {
+        btn.classList.remove('hidden');
+      } else {
+        btn.classList.add('hidden');
+      }
+    });
+
+    if (customImg) {
+      // Render custom uploaded image across Desktop Sidebar, Settings Card, Mobile Header and Mobile Drawer
+      const sidebarHtml = `<img id="sidebar-logo-mark" src="${customImg}" alt="${escapeAttr(cleanName)} Logo" class="w-11 h-11 rounded-full object-cover shadow-sm">`;
+      document.querySelectorAll('#sidebar-logo-container').forEach(function (container) {
+        container.innerHTML = sidebarHtml;
+      });
+
+      const cardHtml = `<img src="${customImg}" alt="${escapeAttr(cleanName)} Logo" class="w-14 h-14 rounded-full object-cover shadow-sm">`;
+      document.querySelectorAll('#branding-card-logo-container').forEach(function (container) {
+        container.innerHTML = cardHtml;
+      });
+
+      // Mobile header and mobile drawer
+      document.querySelectorAll('#app-mobile-header img, #mobile-user-menu-drawer img').forEach(function (img) {
+        if ((img.src && (img.src.includes('aurelia-mark') || img.src.startsWith('data:image'))) || img.id === 'sidebar-logo-mark') {
+          img.src = customImg;
+          img.alt = escapeAttr(cleanName) + ' Logo';
+          img.classList.remove('object-contain');
+          img.classList.add('object-cover');
+        }
+      });
+      document.querySelectorAll('#app-mobile-header svg, #mobile-user-menu-drawer svg').forEach(function (svg) {
+        if (svg.id === 'sidebar-logo-mark' || (svg.getAttribute('aria-label') && svg.getAttribute('aria-label').includes('Emblem'))) {
+          const newImg = document.createElement('img');
+          newImg.id = 'sidebar-logo-mark';
+          newImg.src = customImg;
+          newImg.alt = escapeAttr(cleanName) + ' Logo';
+          newImg.className = 'w-full h-full rounded-full object-cover shadow-xs';
+          if (svg.parentNode) svg.parentNode.replaceChild(newImg, svg);
+        }
+      });
     } else {
-      // Dynamic First Alphabet Emblem retaining exact circular gold/navy medallion and brand serif
-      svgHtml = `
-          <svg id="sidebar-logo-mark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" class="w-11 h-11 rounded-full object-contain" role="img" aria-label="${escapeAttr(cleanName)} Emblem">
-            <circle cx="100" cy="100" r="95" fill="${logoBg}"/>
-            <circle cx="100" cy="100" r="86" fill="none" stroke="${accentColor}" stroke-width="2.2"/>
-            <text x="100" y="110" text-anchor="middle" dominant-baseline="central" fill="${accentColor}" font-family="'Cormorant Garamond', Georgia, serif" font-weight="700" font-size="115">${escapeAttr(initial)}</text>
-          </svg>
-        `;
+      let svgHtml = '';
+      if (isDefault) {
+        // Exact Default Aurelia Medallion Emblem with stylized A and white pearl dot
+        svgHtml = `
+            <svg id="sidebar-logo-mark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" class="w-11 h-11 rounded-full object-contain" role="img" aria-label="Aurelia Emblem">
+              <circle cx="100" cy="100" r="95" fill="${logoBg}"/>
+              <circle cx="100" cy="100" r="86" fill="none" stroke="${accentColor}" stroke-width="2.2"/>
+              <path d="M58 162 L100 46 L142 162" fill="none" stroke="${accentColor}" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+              <line x1="71" y1="126" x2="129" y2="126" stroke="${accentColor}" stroke-width="6" stroke-linecap="round"/>
+              <circle cx="100" cy="104" r="8.5" fill="${pearlFill}"/>
+            </svg>
+          `;
+      } else {
+        // Dynamic First Alphabet Emblem retaining exact circular gold/navy medallion and brand serif
+        svgHtml = `
+            <svg id="sidebar-logo-mark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" class="w-11 h-11 rounded-full object-contain" role="img" aria-label="${escapeAttr(cleanName)} Emblem">
+              <circle cx="100" cy="100" r="95" fill="${logoBg}"/>
+              <circle cx="100" cy="100" r="86" fill="none" stroke="${accentColor}" stroke-width="2.2"/>
+              <text x="100" y="110" text-anchor="middle" dominant-baseline="central" fill="${accentColor}" font-family="'Cormorant Garamond', Georgia, serif" font-weight="700" font-size="115">${escapeAttr(initial)}</text>
+            </svg>
+          `;
+      }
+
+      const containers = document.querySelectorAll('#sidebar-logo-container');
+      containers.forEach(function (container) {
+        container.innerHTML = svgHtml;
+      });
+
+      const cardContainers = document.querySelectorAll('#branding-card-logo-container');
+      cardContainers.forEach(function (container) {
+        container.innerHTML = svgHtml.replace(/w-11 h-11/g, 'w-14 h-14');
+      });
+
+      // Also update mobile header and mobile drawer emblems (Responsive Mobile)
+      document.querySelectorAll('#app-mobile-header img, #mobile-user-menu-drawer img').forEach(function (img) {
+        if ((img.src && (img.src.includes('aurelia-mark') || img.src.startsWith('data:image'))) || img.id === 'sidebar-logo-mark') {
+          const wrap = document.createElement('div');
+          wrap.className = (img.className || '').replace(/object-cover|object-contain/g, '').trim() + ' flex items-center justify-center';
+          wrap.innerHTML = svgHtml.replace(/w-11 h-11/g, 'w-full h-full');
+          if (img.parentNode) img.parentNode.replaceChild(wrap, img);
+        }
+      });
+      document.querySelectorAll('#app-mobile-header svg, #mobile-user-menu-drawer svg').forEach(function (svg) {
+        if (svg.id === 'sidebar-logo-mark' || (svg.getAttribute('aria-label') && svg.getAttribute('aria-label').includes('Emblem'))) {
+          svg.outerHTML = svgHtml.replace(/w-11 h-11/g, 'w-full h-full');
+        }
+      });
     }
-
-    const containers = document.querySelectorAll('#sidebar-logo-container');
-    containers.forEach(function (container) {
-      container.innerHTML = svgHtml;
-    });
-
-    const cardContainers = document.querySelectorAll('#branding-card-logo-container');
-    cardContainers.forEach(function (container) {
-      container.innerHTML = svgHtml.replace(/w-11 h-11/g, 'w-14 h-14');
-    });
-
-    // Also update mobile header and mobile drawer emblems (Responsive Mobile)
-    document.querySelectorAll('#app-mobile-header img, #mobile-user-menu-drawer img').forEach(function (img) {
-      if ((img.src && img.src.includes('aurelia-mark')) || img.id === 'sidebar-logo-mark') {
-        const wrap = document.createElement('div');
-        wrap.className = img.className + ' flex items-center justify-center';
-        wrap.innerHTML = svgHtml.replace(/w-11 h-11/g, 'w-full h-full');
-        if (img.parentNode) img.parentNode.replaceChild(wrap, img);
-      }
-    });
-    document.querySelectorAll('#app-mobile-header svg, #mobile-user-menu-drawer svg').forEach(function (svg) {
-      if (svg.id === 'sidebar-logo-mark' || (svg.getAttribute('aria-label') && svg.getAttribute('aria-label').includes('Emblem'))) {
-        svg.outerHTML = svgHtml.replace(/w-11 h-11/g, 'w-full h-full');
-      }
-    });
 
     // Update mobile header and drawer brand title texts
     document.querySelectorAll('#app-mobile-header span, #mobile-user-menu-drawer span').forEach(function (sp) {
@@ -10249,7 +10324,7 @@ if (typeof window !== 'undefined' && window.MutationObserver) {
       }
     });
 
-    // Always update browser tab favicon with matching card border color
+    // Always update browser tab favicon with matching card border color or custom logo
     updateFavicon(cleanName, logoBg);
   }
 
@@ -10291,6 +10366,12 @@ if (typeof window !== 'undefined' && window.MutationObserver) {
           min-width: 0;
           font-family: 'Cormorant Garamond', Georgia, serif;
           transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+        #btn-upload-brand-logo:hover {
+          transform: scale(1.12);
+        }
+        #btn-remove-brand-logo:hover {
+          transform: scale(1.15);
         }
       `;
     document.head.appendChild(style);
@@ -10402,7 +10483,34 @@ if (typeof window !== 'undefined' && window.MutationObserver) {
 
   // Event delegation for branding controls
   document.addEventListener('click', function (e) {
-    // 1. Edit button on card
+    // 1. Upload logo button on card ([+] sign)
+    const uploadBtn = e.target.closest('#btn-upload-brand-logo');
+    if (uploadBtn) {
+      e.preventDefault();
+      e.stopPropagation();
+      const fileInput = document.getElementById('input-brand-logo-file');
+      if (fileInput) {
+        fileInput.click();
+      }
+      return;
+    }
+
+    // 2. Remove custom logo button on card (red [X] sign)
+    const removeBtn = e.target.closest('#btn-remove-brand-logo');
+    if (removeBtn) {
+      e.preventDefault();
+      e.stopPropagation();
+      saveCustomLogoImage(null);
+      const fileInput = document.getElementById('input-brand-logo-file');
+      if (fileInput) fileInput.value = '';
+      renderBrandLogo();
+      if (typeof window.showToast === 'function') {
+        window.showToast('Custom logo image removed. Dynamic emblem restored.', 'info');
+      }
+      return;
+    }
+
+    // 3. Edit button on card
     const editBtn = e.target.closest('#btn-branding-card-edit');
     if (editBtn) {
       e.preventDefault();
@@ -10427,7 +10535,7 @@ if (typeof window !== 'undefined' && window.MutationObserver) {
       return;
     }
 
-    // 2. Save button on card
+    // 4. Save button on card
     const saveBtn = e.target.closest('#btn-branding-card-save');
     if (saveBtn) {
       e.preventDefault();
@@ -10436,7 +10544,7 @@ if (typeof window !== 'undefined' && window.MutationObserver) {
       return;
     }
 
-    // 3. Cancel button on card
+    // 5. Cancel button on card
     const cancelBtn = e.target.closest('#btn-branding-card-cancel');
     if (cancelBtn) {
       e.preventDefault();
@@ -10445,7 +10553,7 @@ if (typeof window !== 'undefined' && window.MutationObserver) {
       return;
     }
 
-    // 4. Reset to default button on card
+    // 6. Reset to default button on card
     const resetBtn = e.target.closest('#btn-branding-card-reset');
     if (resetBtn) {
       e.preventDefault();
@@ -10453,6 +10561,9 @@ if (typeof window !== 'undefined' && window.MutationObserver) {
       try {
         localStorage.removeItem(BRAND_STORAGE_KEY);
       } catch (err) { }
+      saveCustomLogoImage(null);
+      const fileInput = document.getElementById('input-brand-logo-file');
+      if (fileInput) fileInput.value = '';
       applyBrandName(DEFAULT_BRAND_NAME, true);
       cancelBrandNameCardEdit();
       return;
@@ -10461,6 +10572,87 @@ if (typeof window !== 'undefined' && window.MutationObserver) {
     const brandInput = e.target.closest('#input-branding-card-name');
     if (brandInput) {
       e.stopPropagation();
+    }
+  }, true);
+
+  // File upload change listener
+  document.addEventListener('change', function (e) {
+    const fileInput = e.target.closest ? e.target.closest('#input-brand-logo-file') : null;
+    if (fileInput && fileInput.files && fileInput.files[0]) {
+      const file = fileInput.files[0];
+      if (!file.type.startsWith('image/')) {
+        if (typeof window.showToast === 'function') {
+          window.showToast('Please select a valid image file (PNG, JPG, SVG, WebP).', 'error');
+        }
+        return;
+      }
+
+      if (file.size > 5 * 1024 * 1024) {
+        if (typeof window.showToast === 'function') {
+          window.showToast('Image size should be less than 5MB.', 'warning');
+        }
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = function (evt) {
+        const rawDataUrl = evt.target.result;
+        if (file.type === 'image/svg+xml') {
+          saveCustomLogoImage(rawDataUrl);
+          renderBrandLogo();
+          if (typeof window.showToast === 'function') {
+            window.showToast('Company logo updated successfully!', 'success');
+          }
+          return;
+        }
+
+        // Optimize raster images using Canvas (max 300x300) to keep localStorage lightweight and fast
+        const img = new Image();
+        img.onload = function () {
+          try {
+            const canvas = document.createElement('canvas');
+            const maxDim = 300;
+            let width = img.width;
+            let height = img.height;
+
+            if (width > height) {
+              if (width > maxDim) {
+                height = Math.round((height * maxDim) / width);
+                width = maxDim;
+              }
+            } else {
+              if (height > maxDim) {
+                width = Math.round((width * maxDim) / height);
+                height = maxDim;
+              }
+            }
+
+            canvas.width = width;
+            canvas.height = height;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, width, height);
+            const optimizedDataUrl = canvas.toDataURL(file.type === 'image/jpeg' ? 'image/jpeg' : 'image/png', 0.9);
+            saveCustomLogoImage(optimizedDataUrl);
+            renderBrandLogo();
+            if (typeof window.showToast === 'function') {
+              window.showToast('Company logo updated successfully!', 'success');
+            }
+          } catch (err) {
+            console.error('Canvas processing failed, using raw data URL:', err);
+            saveCustomLogoImage(rawDataUrl);
+            renderBrandLogo();
+            if (typeof window.showToast === 'function') {
+              window.showToast('Company logo updated successfully!', 'success');
+            }
+          }
+        };
+        img.onerror = function () {
+          saveCustomLogoImage(rawDataUrl);
+          renderBrandLogo();
+        };
+        img.src = rawDataUrl;
+      };
+      reader.readAsDataURL(file);
     }
   }, true);
 
@@ -10482,6 +10674,8 @@ if (typeof window !== 'undefined' && window.MutationObserver) {
   window.addEventListener('storage', function (e) {
     if (e.key === BRAND_STORAGE_KEY) {
       applyBrandName(getSavedBrandName(), false);
+    } else if (e.key === LOGO_IMG_STORAGE_KEY) {
+      renderBrandLogo(null);
     } else if (e.key === 'aurelia_theme_settings') {
       renderBrandLogo(null);
     }
