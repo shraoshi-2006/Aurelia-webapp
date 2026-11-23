@@ -699,6 +699,23 @@ $(document).ready(function () {
     }
   }
 
+  /* Universal Table Bulk Action Bar Layout & Spacing */
+  .table-bulk-action-bar {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 0.625rem 0.75rem !important;
+    box-sizing: border-box !important;
+    width: 100% !important;
+  }
+  .table-bulk-action-bar.hidden {
+    display: none !important;
+  }
+  .table-bulk-action-bar .bulk-count-wrap {
+    flex-shrink: 0 !important;
+  }
+
   /* CRITICAL: Mobile drawer stacking context fix.
      Ensures the backdrop sits strictly above the sticky header (z-50) and below the mobile sidebar drawer (z-100),
      blurring everything behind it. When mobile drawer is open, DEV08 badge is hidden completely. */
@@ -6343,7 +6360,7 @@ $(document).ready(function () {
     if (!$modal.length) {
       $('body').append(`
         <div id="modal-order-items-list" class="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-sm hidden flex items-center justify-center p-4">
-          <div class="Aurelia-card max-w-md w-full p-6 space-y-4 shadow-2xl">
+          <div class="Aurelia-card max-w-lg sm:max-w-xl w-full p-6 space-y-4 shadow-2xl">
             <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
               <div>
                 <h3 id="modal-order-items-title" class="text-base font-bold text-slate-900 dark:text-white">Ordered Items</h3>
@@ -8712,17 +8729,17 @@ $(document).ready(function () {
       const isFlushCard = $parent.hasClass('p-0') || ($parent.hasClass('Aurelia-card') && !$parent.hasClass('p-6') && !$parent.hasClass('p-4')) || $parent.hasClass('overflow-hidden');
       const barPadClass = isFlushCard
         ? 'px-4 py-2.5 border-b border-slate-100 dark:border-slate-800/80 bg-slate-50/60 dark:bg-slate-900/40'
-        : 'pb-2 pt-0.5 mb-1 border-b border-slate-100/80 dark:border-slate-800/60';
+        : 'pb-2.5 pt-1 mb-2 border-b border-slate-100/80 dark:border-slate-800/60';
 
       const toolbarHtml = `
-        <div class="table-bulk-action-bar ${barPadClass} text-xs transition-all hidden" data-for-table="${bulkId}">
-          <div class="flex items-center gap-2 min-w-0">
+        <div class="table-bulk-action-bar ${barPadClass} flex flex-wrap items-center justify-between gap-3 text-xs transition-all hidden" data-for-table="${bulkId}">
+          <div class="flex items-center gap-2 min-w-0 flex-shrink-0">
             <div class="bulk-count-wrap inline-flex items-center gap-2 px-2.5 py-1 rounded-lg bg-amber-50 dark:bg-amber-950/40 border border-amber-200/80 dark:border-amber-800/60">
               <span class="inline-block w-2 h-2 rounded-full bg-[#FCA311]"></span>
               <span class="bulk-count-text font-bold text-[#14213D] dark:text-amber-300 text-xs whitespace-nowrap">Selected row count: 0</span>
             </div>
           </div>
-          <div class="flex items-center gap-2 ml-auto flex-wrap justify-end">
+          <div class="flex items-center gap-2 flex-wrap justify-end ml-auto">
             <button type="button" class="btn-bulk-select-all inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-xl bg-[#14213D] text-white hover:bg-[#1f325d] dark:bg-[#FCA311] dark:text-[#14213D] dark:hover:bg-[#e5940f] shadow-2xs transition-all cursor-pointer" title="Select or deselect all rows">
               <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.4">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
