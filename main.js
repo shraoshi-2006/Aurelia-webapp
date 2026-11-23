@@ -3882,7 +3882,23 @@ $(document).ready(function () {
     } else {
       $('#modal-staff-empty').addClass('hidden');
       filtered.forEach(s => {
-        const initials = (s.name || 'Staff').split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+        const isSubdir = window.location.pathname.includes('/human-resources/') ||
+                         window.location.pathname.includes('/department/') ||
+                         window.location.pathname.includes('/billing-management/');
+        const pfx = isSubdir ? '../assets/images/' : 'assets/images/';
+        let avatarSrc;
+        if (s.name === 'Adaline Lively' || s.id === 'EMP-2026-01') {
+          avatarSrc = pfx + 'badge-fo-sample.png';
+        } else {
+          const femaleNames = [
+            'tanvi', 'priya', 'priyanka', 'ananya', 'neha', 'sunita', 'meenakshi',
+            'aarti', 'pooja', 'deepa', 'simran', 'shanti', 'lakshmi', 'rekha',
+            'geeta', 'mary', 'savita', 'kavita', 'shreya', 'trisha'
+          ];
+          const isFemale = femaleNames.some(fn => (s.name || '').toLowerCase().includes(fn));
+          avatarSrc = pfx + (isFemale ? 'avatar-female.png' : 'avatar-male.png');
+        }
+
         const isOnDuty = s.status === 'On Duty';
 
         const statusPill = isOnDuty
@@ -3901,8 +3917,8 @@ $(document).ready(function () {
           <tr class="bg-white hover:bg-slate-100/90 dark:bg-slate-900 dark:hover:bg-slate-800 transition-all cursor-pointer relative">
             <td class="py-2.5 px-3">
               <div class="flex items-center space-x-2.5">
-                <div class="relative w-8 h-8 rounded-full bg-[#14213D] text-[#FCA311] font-bold text-xs flex items-center justify-center flex-shrink-0 shadow-xs">
-                  ${initials}
+                <div class="relative w-8 h-8 rounded-full flex-shrink-0 shadow-xs">
+                  <img src="${avatarSrc}" alt="${escapeHtml(s.name)}" class="w-8 h-8 rounded-full object-cover border border-white/60 dark:border-slate-700">
                   ${avatarDot}
                 </div>
                 <div>
@@ -7893,48 +7909,25 @@ $(document).ready(function () {
       $('#page-staff-empty').removeClass('hidden');
     } else {
       $('#page-staff-empty').addClass('hidden');
-      const avatarGradients = [
-        'linear-gradient(135deg, #14213D 0%, #be123c 60%, #FCA311 100%)',
-        'linear-gradient(135deg, #14213D 0%, #854d0e 60%, #FCA311 100%)',
-        'linear-gradient(135deg, #14213D 0%, #0369a1 60%, #FCA311 100%)',
-        'linear-gradient(135deg, #14213D 0%, #b45309 60%, #FCA311 100%)',
-        'linear-gradient(135deg, #14213D 0%, #475569 60%, #FCA311 100%)',
-        'linear-gradient(135deg, #14213D 0%, #0d9488 60%, #FCA311 100%)',
-        'linear-gradient(135deg, #14213D 0%, #4338ca 60%, #FCA311 100%)',
-        'linear-gradient(135deg, #14213D 0%, #7e22ce 60%, #FCA311 100%)'
-      ];
-
       filtered.forEach((s, idx) => {
-        let avatarBadgeText = (s.name || 'Staff').split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
-        let avatarStyle = avatarGradients[idx % avatarGradients.length];
-
-        if (s.id === 'EMP-2026-08' || s.name === 'Tanvi Agarwal') {
-          avatarBadgeText = 'TA';
-          avatarStyle = 'linear-gradient(135deg, #14213D 0%, #be123c 60%, #FCA311 100%)';
-        } else if (s.id === 'EMP-2026-01' || s.name === 'Adaline Lively') {
-          avatarBadgeText = 'FO';
-          avatarStyle = 'linear-gradient(135deg, #14213D 0%, #854d0e 60%, #FCA311 100%)';
-        } else if (s.id === 'EMP-2026-02' || s.name === 'Vikram Malhotra') {
-          avatarBadgeText = 'VM';
-          avatarStyle = 'linear-gradient(135deg, #14213D 0%, #0369a1 60%, #FCA311 100%)';
-        } else if (s.id === 'EMP-2026-03' || s.name === 'Priyanka Sharma') {
-          avatarBadgeText = 'PS';
-          avatarStyle = 'linear-gradient(135deg, #14213D 0%, #b45309 60%, #FCA311 100%)';
-        } else if (s.id === 'EMP-2026-04' || s.name === 'Rohan Desai') {
-          avatarBadgeText = 'RD';
-          avatarStyle = 'linear-gradient(135deg, #14213D 0%, #475569 60%, #FCA311 100%)';
-        } else if (s.id === 'EMP-2026-05' || s.name === 'Ananya Sen') {
-          avatarBadgeText = 'AS';
-          avatarStyle = 'linear-gradient(135deg, #14213D 0%, #0d9488 60%, #FCA311 100%)';
-        } else if (s.id === 'EMP-2026-06' || s.name === 'Sameer Joshi') {
-          avatarBadgeText = 'SJ';
-          avatarStyle = 'linear-gradient(135deg, #14213D 0%, #4338ca 60%, #FCA311 100%)';
-        } else if (s.id === 'EMP-2026-07' || s.name === 'Neha Pillai') {
-          avatarBadgeText = 'NP';
-          avatarStyle = 'linear-gradient(135deg, #14213D 0%, #7e22ce 60%, #FCA311 100%)';
+        const isSubdir = window.location.pathname.includes('/human-resources/') ||
+                         window.location.pathname.includes('/department/') ||
+                         window.location.pathname.includes('/billing-management/');
+        const pfx = isSubdir ? '../assets/images/' : 'assets/images/';
+        let avatarSrc;
+        if (s.name === 'Adaline Lively' || s.id === 'EMP-2026-01') {
+          avatarSrc = pfx + 'badge-fo-sample.png';
+        } else {
+          const femaleNames = [
+            'tanvi', 'priya', 'priyanka', 'ananya', 'neha', 'sunita', 'meenakshi',
+            'aarti', 'pooja', 'deepa', 'simran', 'shanti', 'lakshmi', 'rekha',
+            'geeta', 'mary', 'savita', 'kavita', 'shreya', 'trisha'
+          ];
+          const isFemale = femaleNames.some(fn => (s.name || '').toLowerCase().includes(fn));
+          avatarSrc = pfx + (isFemale ? 'avatar-female.png' : 'avatar-male.png');
         }
 
-        const avatarHtml = `<div class="w-8 h-8 md:w-9 md:h-9 rounded-xl flex items-center justify-center font-black text-xs md:text-sm text-white shadow-xs border border-white/20 flex-shrink-0" style="background: ${avatarStyle};">${avatarBadgeText}</div>`;
+        const avatarHtml = `<img src="${avatarSrc}" alt="${escapeHtml(s.name)}" class="w-8 h-8 md:w-9 md:h-9 rounded-xl object-cover shadow-xs border border-white/60 dark:border-slate-700 flex-shrink-0">`;
         const isOnDuty = s.status === 'On Duty';
         const rowBg = idx % 2 === 0 ? 'bg-white' : 'bg-slate-100/80 dark:bg-slate-800/60';
 
