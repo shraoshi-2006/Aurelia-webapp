@@ -563,10 +563,14 @@ $(document).ready(function () {
   /* ========================================================================= */
   /* GLOBAL LIST TABLE ENGINE: Pure White default, Grey background + Grey shadow on hover */
   /* ========================================================================= */
-  .Aurelia-card:has(table),
-  .aurelia-card:has(table),
-  div:has(> .overflow-x-auto > table),
-  div:has(> table) {
+  #main-app-content .Aurelia-card:has(table),
+  #main-app-content .aurelia-card:has(table),
+  #main-app-content div:has(> .overflow-x-auto > table),
+  #main-app-content div:has(> table),
+  section .Aurelia-card:has(table),
+  section .aurelia-card:has(table),
+  section div:has(> .overflow-x-auto > table),
+  section div:has(> table) {
     background: #FFFFFF !important;
     border: 1px solid rgba(226, 232, 240, 0.95) !important;
     box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.06), 0 1px 3px rgba(15, 23, 42, 0.04) !important;
@@ -574,10 +578,53 @@ $(document).ready(function () {
     -webkit-backdrop-filter: none !important;
   }
 
-  .Aurelia-card:has(table)::before,
-  .aurelia-card:has(table)::before,
-  div:has(> .overflow-x-auto > table)::before,
-  div:has(> table)::before {
+  /* Modals: Ensure inner content and wrappers never inherit table-card borders, backgrounds or shadows */
+  div.fixed.z-50:not(#app-sidebar):not(#toast-container) .space-y-3.5,
+  div.fixed.z-50:not(#app-sidebar):not(#toast-container) .space-y-4,
+  div[id*="modal"] .space-y-3.5,
+  div[id*="modal"] .space-y-4,
+  div.fixed.z-50:not(#app-sidebar):not(#toast-container) div:has(> .overflow-x-auto > table):not(.Aurelia-card):not(.aurelia-card),
+  div.fixed.z-50:not(#app-sidebar):not(#toast-container) div:has(> table):not(.Aurelia-card):not(.aurelia-card):not(.overflow-x-auto),
+  div[id*="modal"] div:has(> .overflow-x-auto > table):not(.Aurelia-card):not(.aurelia-card),
+  div[id*="modal"] div:has(> table):not(.Aurelia-card):not(.aurelia-card):not(.overflow-x-auto) {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+  }
+
+  /* Table container inside modals */
+  div.fixed.z-50:not(#app-sidebar):not(#toast-container) .overflow-x-auto,
+  div[id*="modal"] .overflow-x-auto {
+    border: 1px solid rgba(226, 232, 240, 0.95) !important;
+    border-radius: 0.75rem !important;
+    overflow: hidden !important;
+    margin-top: 0.5rem !important;
+    margin-bottom: 0.5rem !important;
+  }
+  .dark div.fixed.z-50:not(#app-sidebar):not(#toast-container) .overflow-x-auto,
+  .dark div[id*="modal"] .overflow-x-auto {
+    border-color: #334155 !important;
+  }
+
+  #modal-view-order table th,
+  #modal-view-order table td,
+  #modal-order-items-list table th,
+  #modal-order-items-list table td {
+    padding-top: 0.625rem !important;
+    padding-bottom: 0.625rem !important;
+    padding-left: 0.875rem !important;
+    padding-right: 0.875rem !important;
+  }
+
+  #main-app-content .Aurelia-card:has(table)::before,
+  #main-app-content .aurelia-card:has(table)::before,
+  #main-app-content div:has(> .overflow-x-auto > table)::before,
+  #main-app-content div:has(> table)::before,
+  section .Aurelia-card:has(table)::before,
+  section .aurelia-card:has(table)::before,
+  section div:has(> .overflow-x-auto > table)::before,
+  section div:has(> table)::before {
     display: none !important;
     content: none !important;
   }
@@ -638,10 +685,14 @@ $(document).ready(function () {
   }
 
   /* Dark mode overrides for all tables */
-  .dark .Aurelia-card:has(table),
-  .dark .aurelia-card:has(table),
-  .dark div:has(> .overflow-x-auto > table),
-  .dark div:has(> table) {
+  .dark #main-app-content .Aurelia-card:has(table),
+  .dark #main-app-content .aurelia-card:has(table),
+  .dark #main-app-content div:has(> .overflow-x-auto > table),
+  .dark #main-app-content div:has(> table),
+  .dark section .Aurelia-card:has(table),
+  .dark section .aurelia-card:has(table),
+  .dark section div:has(> .overflow-x-auto > table),
+  .dark section div:has(> table) {
     background: #0F172A !important;
     border-color: #334155 !important;
   }
