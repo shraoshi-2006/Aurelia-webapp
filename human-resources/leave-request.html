@@ -3274,38 +3274,37 @@
           
 
 
-  <div class="Aurelia-card p-0 overflow-hidden">
-    <!-- Gmail-Inspired Top Filter Navigation with Aurelia Logo Gold Theme -->
-    <div class="grid grid-cols-4 items-center border-b border-slate-200/80 dark:border-slate-700/80 px-1 sm:px-4 bg-white/40 dark:bg-slate-900/40 w-full">
-      <button type="button" class="btn-lr-filter active flex items-center justify-center gap-1 sm:gap-2 py-2.5 sm:py-3 px-1 sm:px-3.5 font-bold text-[10px] sm:text-xs border-b-2 border-[#FCA311] text-[#FCA311] transition-all cursor-pointer" data-status="all">
-        <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4 stroke-current hidden sm:inline-block flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"/></svg>
-        <span class="whitespace-nowrap">All<span class="hidden sm:inline"> Requests</span></span>
-        <span class="px-1.5 py-0.2 sm:px-1.5 sm:py-0.5 rounded-full text-[9px] sm:text-[10px] font-bold bg-[#14213D] text-[#FCA311] flex-shrink-0">27</span>
-      </button>
-      <button type="button" class="btn-lr-filter flex items-center justify-center gap-1 sm:gap-2 py-2.5 sm:py-3 px-1 sm:px-3.5 font-semibold text-[10px] sm:text-xs border-b-2 border-transparent text-slate-500 hover:text-slate-900 dark:hover:text-white transition-all cursor-pointer" data-status="pending">
-        <span class="whitespace-nowrap">Pending<span class="hidden sm:inline"> Review</span></span>
-        <span class="px-1.5 py-0.2 sm:px-1.5 sm:py-0.5 rounded-full text-[9px] sm:text-[10px] font-bold bg-amber-100 text-amber-800 flex-shrink-0">6</span>
-      </button>
-      <button type="button" class="btn-lr-filter flex items-center justify-center gap-1 sm:gap-2 py-2.5 sm:py-3 px-1 sm:px-3.5 font-semibold text-[10px] sm:text-xs border-b-2 border-transparent text-slate-500 hover:text-slate-900 dark:hover:text-white transition-all cursor-pointer" data-status="approved">
-        <span class="whitespace-nowrap">Approved</span>
-        <span class="px-1.5 py-0.2 sm:px-1.5 sm:py-0.5 rounded-full text-[9px] sm:text-[10px] font-bold bg-emerald-100 text-emerald-800 flex-shrink-0">18</span>
-      </button>
-      <button type="button" class="btn-lr-filter flex items-center justify-center gap-1 sm:gap-2 py-2.5 sm:py-3 px-1 sm:px-3.5 font-semibold text-[10px] sm:text-xs border-b-2 border-transparent text-slate-500 hover:text-slate-900 dark:hover:text-white transition-all cursor-pointer" data-status="rejected">
-        <span class="whitespace-nowrap">Rejected</span>
-        <span class="px-1.5 py-0.2 sm:px-1.5 sm:py-0.5 rounded-full text-[9px] sm:text-[10px] font-bold bg-rose-100 text-rose-800 flex-shrink-0">3</span>
-      </button>
+  <!-- Filter Controls -->
+  <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+    <div class="flex items-center space-x-3 w-full md:w-auto">
+      <select id="select-lr-status" class="Aurelia-input text-xs md:text-sm py-2 pl-4 pr-10 font-semibold cursor-pointer">
+        <option value="all" selected>All Requests (27)</option>
+        <option value="pending">Pending Review (6)</option>
+        <option value="approved">Approved (18)</option>
+        <option value="rejected">Rejected (3)</option>
+      </select>
     </div>
 
-    <!-- Gmail-Inspired Leave Stream Table -->
-    <div class="overflow-x-auto">
-      <table class="w-full text-xs text-center">
-        <thead class="bg-slate-50/70 dark:bg-slate-800/50 text-slate-400 font-semibold text-[11px] border-b border-slate-200/80 dark:border-slate-700/80">
+    <div class="relative w-full md:w-64">
+      <input type="text" id="input-lr-search" class="Aurelia-input w-full text-xs md:text-sm pl-9 pr-4 font-medium"
+        placeholder="Search leave requests...">
+      <svg class="w-4 h-4 stroke-current text-slate-400 absolute left-3 top-2.5" fill="none" viewBox="0 0 24 24" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+      </svg>
+    </div>
+  </div>
+
+  <div class="Aurelia-card p-0 overflow-hidden">
+    <!-- Leave Stream Table (Non-scrollable, table-fixed) -->
+    <div id="wrap-table-leave-requests" class="w-full overflow-hidden">
+      <table id="table-leave-requests" class="w-full table-fixed text-xs text-center">
+        <thead class="sticky top-0 z-10 bg-slate-50/95 dark:bg-slate-800/95 backdrop-blur-md text-slate-400 font-semibold text-[11px] border-b border-slate-200/80 dark:border-slate-700/80">
           <tr>
-            <th class="py-2.5 px-4 w-36">Employee ID</th>
-            <th class="py-2.5 px-4 w-48">Employee</th>
-            <th class="py-2.5 px-4">Leave Application & Reason Snippet</th>
-            <th class="py-2.5 px-4 text-center">Status</th>
-            <th class="py-2.5 px-4 text-center pr-6">Dates & Actions</th>
+            <th class="py-2.5 px-3 text-left w-32">Employee ID</th>
+            <th class="py-2.5 px-3 text-left w-40">Employee</th>
+            <th class="py-2.5 px-3 text-left">Leave Application & Reason Snippet</th>
+            <th class="py-2.5 px-2 text-center w-24">Status</th>
+            <th class="py-2.5 px-3 text-center w-56">Dates & Actions</th>
           </tr>
         </thead>
         <tbody id="page-lr-tbody" class="divide-y divide-slate-100 dark:divide-slate-800/80">
@@ -3314,31 +3313,31 @@
           <tr class="hover:bg-amber-50/40 dark:hover:bg-slate-800/60 transition-all border-b border-slate-100 dark:border-slate-800/80 group cursor-pointer"
               data-status="pending" id="row-LR-2026-089"
               data-id="LR-2026-089" data-emp="EMP-2026-08" data-name="Tanvi Agarwal" data-role="Front Desk Agent" data-email="tanvi.a@aureliahotel.com" data-type="Casual Leave (CL)" data-days="3" data-dates="08 Nov - 10 Nov 2026" data-reason="Family function; handover to Rajesh V.">
-            <td class="py-3 px-4 whitespace-nowrap">
-              <div class="flex items-center space-x-2.5">
+            <td class="py-3 px-3 whitespace-nowrap text-left">
+              <div class="flex items-center space-x-2">
                 <span class="text-[#FCA311] text-xs">★</span>
-                <span class="px-2.5 py-1 rounded text-xs font-mono font-bold bg-[#FCA311] text-black inline-block shadow-2xs">EMP-2026-08</span>
+                <span class="px-2 py-0.5 rounded text-xs font-mono font-bold bg-[#FCA311] text-black inline-block shadow-2xs">EMP-2026-08</span>
               </div>
             </td>
-            <td class="py-3 px-4 whitespace-nowrap">
-              <div class="flex items-center space-x-3">
-                <img src="../assets/images/avatar-female.png" alt="Tanvi Agarwal" class="w-8 h-8 md:w-9 md:h-9 rounded-xl object-cover shadow-xs border border-white/60 dark:border-slate-700 flex-shrink-0">
-                <div class="font-bold text-slate-900 dark:text-white text-xs">Tanvi Agarwal</div>
+            <td class="py-3 px-3 whitespace-nowrap text-left">
+              <div class="flex items-center space-x-2.5 min-w-0">
+                <img src="../assets/images/avatar-female.png" alt="Tanvi Agarwal" class="w-7 h-7 sm:w-8 sm:h-8 rounded-xl object-cover shadow-xs border border-white/60 dark:border-slate-700 flex-shrink-0">
+                <div class="font-bold text-slate-900 dark:text-white text-xs truncate">Tanvi Agarwal</div>
               </div>
             </td>
-            <td class="py-3 px-4">
-              <div class="flex items-center space-x-1.5 text-xs truncate max-w-xl">
-                <span class="font-bold text-slate-900 dark:text-white flex-shrink-0">Casual Leave (CL) &bull; 3 Days</span>
-                <span class="text-slate-400 dark:text-slate-500">—</span>
-                <span class="text-slate-500 dark:text-slate-400 truncate">Family function; handover to Rajesh V. &bull; Reception Desk 03</span>
+            <td class="py-3 px-3 text-left">
+              <div class="flex items-center space-x-1.5 text-xs w-full min-w-0 overflow-hidden">
+                <span class="font-bold text-slate-900 dark:text-white flex-shrink-0 whitespace-nowrap">Casual Leave (CL) &bull; 3 Days</span>
+                <span class="text-slate-400 dark:text-slate-500 flex-shrink-0">—</span>
+                <span class="text-slate-500 dark:text-slate-400 truncate min-w-0">Family function; handover to Rajesh V. &bull; Reception Desk 03</span>
               </div>
             </td>
-            <td class="py-3 px-4 text-center status-col whitespace-nowrap">
+            <td class="py-3 px-2 text-center status-col whitespace-nowrap">
               <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800">Pending</span>
             </td>
-            <td class="py-3 px-4 text-center pr-6 whitespace-nowrap action-col">
-              <div class="flex items-center justify-end space-x-2">
-                <span class="text-xs font-mono text-slate-500 dark:text-slate-400 mr-1">08 Nov - 10 Nov</span>
+            <td class="py-3 px-3 text-center whitespace-nowrap action-col">
+              <div class="flex items-center justify-end space-x-1.5">
+                <span class="text-xs font-mono text-slate-500 dark:text-slate-400 mr-1 whitespace-nowrap">08 Nov - 10 Nov</span>
                 <button class="btn-Aurelia-primary text-[10px] py-1 px-2.5 font-bold btn-approve-lr cursor-pointer" data-target="LR-2026-089">Approve</button>
                 <button class="btn-Aurelia-secondary text-[10px] py-1 px-2 text-rose-600 btn-reject-lr cursor-pointer" data-target="LR-2026-089">Reject</button>
               </div>
@@ -3347,7 +3346,7 @@
 
           <!-- Inside Message Drawer for Tanvi Agarwal (Opened via "See More" from popup) -->
           <tr id="detail-LR-2026-089" class="hidden bg-gradient-to-r from-amber-50/70 via-white/90 to-amber-50/50 dark:from-slate-800/80 dark:via-slate-900/90 dark:to-slate-800/80 border-b border-amber-200/70 dark:border-slate-700/80 transition-all">
-            <td colspan="5" class="py-3 px-4 sm:px-6">
+            <td colspan="6" class="py-3 px-4 sm:px-6">
               <div class="inside-message-box rounded-2xl p-4 bg-white/95 dark:bg-slate-800/95 border border-amber-200/90 dark:border-slate-700 shadow-md space-y-3 transition-all">
                 <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between border-b border-slate-100 dark:border-slate-700/80 pb-2.5 gap-2">
                   <div class="flex items-center space-x-2.5">
@@ -3389,31 +3388,31 @@
           <tr class="hover:bg-amber-50/40 dark:hover:bg-slate-800/60 transition-all border-b border-slate-100 dark:border-slate-800/80 group cursor-pointer"
               data-status="pending" id="row-LR-2026-088"
               data-id="LR-2026-088" data-emp="EMP-2026-10" data-name="Tariq Mansoor" data-role="Sous Chef" data-email="tariq.m@aureliahotel.com" data-type="Sick Leave (SL)" data-days="2" data-dates="06 Nov - 07 Nov 2026" data-reason="Viral flu; clinic prescription attached">
-            <td class="py-3 px-4 whitespace-nowrap">
-              <div class="flex items-center space-x-2.5">
+            <td class="py-3 px-3 whitespace-nowrap text-left">
+              <div class="flex items-center space-x-2">
                 <span class="text-[#FCA311] text-xs">★</span>
-                <span class="px-2.5 py-1 rounded text-xs font-mono font-bold bg-[#FCA311] text-black inline-block shadow-2xs">EMP-2026-10</span>
+                <span class="px-2 py-0.5 rounded text-xs font-mono font-bold bg-[#FCA311] text-black inline-block shadow-2xs">EMP-2026-10</span>
               </div>
             </td>
-            <td class="py-3 px-4 whitespace-nowrap">
-              <div class="flex items-center space-x-3">
-                <img src="../assets/images/avatar-male.png" alt="Tariq Mansoor" class="w-8 h-8 md:w-9 md:h-9 rounded-xl object-cover shadow-xs border border-white/60 dark:border-slate-700 flex-shrink-0">
-                <div class="font-bold text-slate-900 dark:text-white text-xs">Tariq Mansoor</div>
+            <td class="py-3 px-3 whitespace-nowrap text-left">
+              <div class="flex items-center space-x-2.5 min-w-0">
+                <img src="../assets/images/avatar-male.png" alt="Tariq Mansoor" class="w-7 h-7 sm:w-8 sm:h-8 rounded-xl object-cover shadow-xs border border-white/60 dark:border-slate-700 flex-shrink-0">
+                <div class="font-bold text-slate-900 dark:text-white text-xs truncate">Tariq Mansoor</div>
               </div>
             </td>
-            <td class="py-3 px-4">
-              <div class="flex items-center space-x-1.5 text-xs truncate max-w-xl">
-                <span class="font-bold text-slate-900 dark:text-white flex-shrink-0">Sick Leave (SL) &bull; 2 Days</span>
-                <span class="text-slate-400 dark:text-slate-500">—</span>
-                <span class="text-slate-500 dark:text-slate-400 truncate">Viral flu; clinic prescription attached &bull; Hot Line & Saute</span>
+            <td class="py-3 px-3 text-left">
+              <div class="flex items-center space-x-1.5 text-xs w-full min-w-0 overflow-hidden">
+                <span class="font-bold text-slate-900 dark:text-white flex-shrink-0 whitespace-nowrap">Sick Leave (SL) &bull; 2 Days</span>
+                <span class="text-slate-400 dark:text-slate-500 flex-shrink-0">—</span>
+                <span class="text-slate-500 dark:text-slate-400 truncate min-w-0">Viral flu; clinic prescription attached &bull; Hot Line & Saute</span>
               </div>
             </td>
-            <td class="py-3 px-4 text-center status-col whitespace-nowrap">
+            <td class="py-3 px-2 text-center status-col whitespace-nowrap">
               <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800">Pending</span>
             </td>
-            <td class="py-3 px-4 text-center pr-6 whitespace-nowrap action-col">
-              <div class="flex items-center justify-end space-x-2">
-                <span class="text-xs font-mono text-slate-500 dark:text-slate-400 mr-1">06 Nov - 07 Nov</span>
+            <td class="py-3 px-3 text-center whitespace-nowrap action-col">
+              <div class="flex items-center justify-end space-x-1.5">
+                <span class="text-xs font-mono text-slate-500 dark:text-slate-400 mr-1 whitespace-nowrap">06 Nov - 07 Nov</span>
                 <button class="btn-Aurelia-primary text-[10px] py-1 px-2.5 font-bold btn-approve-lr cursor-pointer" data-target="LR-2026-088">Approve</button>
                 <button class="btn-Aurelia-secondary text-[10px] py-1 px-2 text-rose-600 btn-reject-lr cursor-pointer" data-target="LR-2026-088">Reject</button>
               </div>
@@ -3422,96 +3421,102 @@
 
           <!-- 3. Meenakshi Sundaram -->
           <tr id="row-LR-2026-087" class="hover:bg-slate-50/70 dark:hover:bg-slate-800/40 transition-all border-b border-slate-100 dark:border-slate-800/80 group cursor-pointer" data-status="approved">
-            <td class="py-3 px-4 whitespace-nowrap">
-              <div class="flex items-center space-x-2.5">
+            <td class="py-3 px-3 whitespace-nowrap text-left">
+              <div class="flex items-center space-x-2">
                 <span class="text-slate-300 text-xs">☆</span>
-                <span class="px-2.5 py-1 rounded text-xs font-mono font-bold bg-[#FCA311] text-black inline-block shadow-2xs">EMP-2026-11</span>
+                <span class="px-2 py-0.5 rounded text-xs font-mono font-bold bg-[#FCA311] text-black inline-block shadow-2xs">EMP-2026-11</span>
               </div>
             </td>
-            <td class="py-3 px-4 whitespace-nowrap">
-              <div class="flex items-center space-x-3">
-                <img src="../assets/images/avatar-female.png" alt="Meenakshi Sundaram" class="w-8 h-8 md:w-9 md:h-9 rounded-xl object-cover shadow-xs border border-white/60 dark:border-slate-700 flex-shrink-0">
-                <div class="font-bold text-slate-900 dark:text-white text-xs">Meenakshi Sundaram</div>
+            <td class="py-3 px-3 whitespace-nowrap text-left">
+              <div class="flex items-center space-x-2.5 min-w-0">
+                <img src="../assets/images/avatar-female.png" alt="Meenakshi Sundaram" class="w-7 h-7 sm:w-8 sm:h-8 rounded-xl object-cover shadow-xs border border-white/60 dark:border-slate-700 flex-shrink-0">
+                <div class="font-bold text-slate-900 dark:text-white text-xs truncate">Meenakshi Sundaram</div>
               </div>
             </td>
-            <td class="py-3 px-4">
-              <div class="flex items-center space-x-1.5 text-xs truncate max-w-xl">
-                <span class="font-bold text-slate-900 dark:text-white flex-shrink-0">Earned Leave (EL) &bull; 5 Days</span>
-                <span class="text-slate-400 dark:text-slate-500">—</span>
-                <span class="text-slate-500 dark:text-slate-400 truncate">Annual personal vacation; covered by Chef Priya &bull; Bakery</span>
+            <td class="py-3 px-3 text-left">
+              <div class="flex items-center space-x-1.5 text-xs w-full min-w-0 overflow-hidden">
+                <span class="font-bold text-slate-900 dark:text-white flex-shrink-0 whitespace-nowrap">Earned Leave (EL) &bull; 5 Days</span>
+                <span class="text-slate-400 dark:text-slate-500 flex-shrink-0">—</span>
+                <span class="text-slate-500 dark:text-slate-400 truncate min-w-0">Annual personal vacation; covered by Chef Priya &bull; Bakery</span>
               </div>
             </td>
-            <td class="py-3 px-4 text-center whitespace-nowrap status-col">
+            <td class="py-3 px-2 text-center whitespace-nowrap status-col">
               <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#15803d] text-white shadow-2xs">Approved</span>
             </td>
-            <td class="py-3 px-4 text-center pr-6 whitespace-nowrap text-slate-400 text-xs font-mono action-col">
-              01 Nov - 05 Nov
+            <td class="py-3 px-3 text-center whitespace-nowrap text-slate-400 text-xs font-mono action-col">
+              <div class="flex items-center justify-end">
+                <span class="text-xs font-mono text-slate-500 dark:text-slate-400 whitespace-nowrap">01 Nov - 05 Nov</span>
+              </div>
             </td>
           </tr>
 
           <!-- 4. Rohan Desai -->
           <tr id="row-LR-2026-086" class="hover:bg-slate-50/70 dark:hover:bg-slate-800/40 transition-all border-b border-slate-100 dark:border-slate-800/80 group cursor-pointer" data-status="rejected">
-            <td class="py-3 px-4 whitespace-nowrap">
-              <div class="flex items-center space-x-2.5">
+            <td class="py-3 px-3 whitespace-nowrap text-left">
+              <div class="flex items-center space-x-2">
                 <span class="text-slate-300 text-xs">☆</span>
-                <span class="px-2.5 py-1 rounded text-xs font-mono font-bold bg-[#FCA311] text-black inline-block shadow-2xs">EMP-2026-04</span>
+                <span class="px-2 py-0.5 rounded text-xs font-mono font-bold bg-[#FCA311] text-black inline-block shadow-2xs">EMP-2026-04</span>
               </div>
             </td>
-            <td class="py-3 px-4 whitespace-nowrap">
-              <div class="flex items-center space-x-3">
-                <img src="../assets/images/avatar-male.png" alt="Rohan Desai" class="w-8 h-8 md:w-9 md:h-9 rounded-xl object-cover shadow-xs border border-white/60 dark:border-slate-700 flex-shrink-0">
-                <div class="font-bold text-slate-900 dark:text-white text-xs">Rohan Desai</div>
+            <td class="py-3 px-3 whitespace-nowrap text-left">
+              <div class="flex items-center space-x-2.5 min-w-0">
+                <img src="../assets/images/avatar-male.png" alt="Rohan Desai" class="w-7 h-7 sm:w-8 sm:h-8 rounded-xl object-cover shadow-xs border border-white/60 dark:border-slate-700 flex-shrink-0">
+                <div class="font-bold text-slate-900 dark:text-white text-xs truncate">Rohan Desai</div>
               </div>
             </td>
-            <td class="py-3 px-4">
-              <div class="flex items-center space-x-1.5 text-xs truncate max-w-xl">
-                <span class="font-bold text-slate-900 dark:text-white flex-shrink-0">Casual Leave (CL) &bull; 1 Day</span>
-                <span class="text-slate-400 dark:text-slate-500">—</span>
-                <span class="text-slate-500 dark:text-slate-400 truncate">Month-end close conflict; night auditor cover absent</span>
+            <td class="py-3 px-3 text-left">
+              <div class="flex items-center space-x-1.5 text-xs w-full min-w-0 overflow-hidden">
+                <span class="font-bold text-slate-900 dark:text-white flex-shrink-0 whitespace-nowrap">Casual Leave (CL) &bull; 1 Day</span>
+                <span class="text-slate-400 dark:text-slate-500 flex-shrink-0">—</span>
+                <span class="text-slate-500 dark:text-slate-400 truncate min-w-0">Month-end close conflict; night auditor cover absent</span>
               </div>
             </td>
-            <td class="py-3 px-4 text-center whitespace-nowrap status-col">
+            <td class="py-3 px-2 text-center whitespace-nowrap status-col">
               <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-100 text-rose-800">Rejected</span>
             </td>
-            <td class="py-3 px-4 text-center pr-6 whitespace-nowrap text-slate-400 text-xs font-mono action-col">
-              31 Oct 2026
+            <td class="py-3 px-3 text-center whitespace-nowrap text-slate-400 text-xs font-mono action-col">
+              <div class="flex items-center justify-end">
+                <span class="text-xs font-mono text-slate-500 dark:text-slate-400 whitespace-nowrap">31 Oct 2026</span>
+              </div>
             </td>
           </tr>
 
           <!-- 5. Adaline Lively -->
           <tr id="row-LR-2026-085" class="hover:bg-slate-50/70 dark:hover:bg-slate-800/40 transition-all border-b border-slate-100 dark:border-slate-800/80 group cursor-pointer" data-status="approved">
-            <td class="py-3 px-4 whitespace-nowrap">
-              <div class="flex items-center space-x-2.5">
+            <td class="py-3 px-3 whitespace-nowrap text-left">
+              <div class="flex items-center space-x-2">
                 <span class="text-slate-300 text-xs">☆</span>
-                <span class="px-2.5 py-1 rounded text-xs font-mono font-bold bg-[#FCA311] text-black inline-block shadow-2xs">EMP-2026-01</span>
+                <span class="px-2 py-0.5 rounded text-xs font-mono font-bold bg-[#FCA311] text-black inline-block shadow-2xs">EMP-2026-01</span>
               </div>
             </td>
-            <td class="py-3 px-4 whitespace-nowrap">
-              <div class="flex items-center space-x-3">
-                <img src="../assets/images/badge-fo-sample.png" alt="Adaline Lively" class="w-8 h-8 md:w-9 md:h-9 rounded-xl object-cover shadow-xs border border-white/60 dark:border-slate-700 flex-shrink-0">
-                <div class="font-bold text-slate-900 dark:text-white text-xs">Adaline Lively</div>
+            <td class="py-3 px-3 whitespace-nowrap text-left">
+              <div class="flex items-center space-x-2.5 min-w-0">
+                <img src="../assets/images/badge-fo-sample.png" alt="Adaline Lively" class="w-7 h-7 sm:w-8 sm:h-8 rounded-xl object-cover shadow-xs border border-white/60 dark:border-slate-700 flex-shrink-0">
+                <div class="font-bold text-slate-900 dark:text-white text-xs truncate">Adaline Lively</div>
               </div>
             </td>
-            <td class="py-3 px-4">
-              <div class="flex items-center space-x-1.5 text-xs truncate max-w-xl">
-                <span class="font-bold text-slate-900 dark:text-white flex-shrink-0">Earned Leave (EL) &bull; 5 Days</span>
-                <span class="text-slate-400 dark:text-slate-500">—</span>
-                <span class="text-slate-500 dark:text-slate-400 truncate">Planned family vacation; duty delegated to Vikram Malhotra</span>
+            <td class="py-3 px-3 text-left">
+              <div class="flex items-center space-x-1.5 text-xs w-full min-w-0 overflow-hidden">
+                <span class="font-bold text-slate-900 dark:text-white flex-shrink-0 whitespace-nowrap">Earned Leave (EL) &bull; 5 Days</span>
+                <span class="text-slate-400 dark:text-slate-500 flex-shrink-0">—</span>
+                <span class="text-slate-500 dark:text-slate-400 truncate min-w-0">Planned family vacation; duty delegated to Vikram Malhotra</span>
               </div>
             </td>
-            <td class="py-3 px-4 text-center whitespace-nowrap">
+            <td class="py-3 px-2 text-center whitespace-nowrap">
               <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#15803d] text-white shadow-2xs">Approved</span>
             </td>
-            <td class="py-3 px-4 text-center pr-6 whitespace-nowrap text-slate-400 text-xs font-mono">
-              20 Nov - 24 Nov
+            <td class="py-3 px-3 text-center whitespace-nowrap text-slate-400 text-xs font-mono">
+              <div class="flex items-center justify-end">
+                <span class="text-xs font-mono text-slate-500 dark:text-slate-400 whitespace-nowrap">20 Nov - 24 Nov</span>
+              </div>
             </td>
           </tr>
 
         </tbody>
       </table>
     </div>
-    <div class="px-2.5 py-2 sm:p-3.5 border-t border-slate-100 flex items-center justify-between gap-1.5 sm:gap-2 text-[8.5px] sm:text-xs text-slate-400">
-      <span class="whitespace-nowrap flex-shrink-0">Showing 5 of 27 Leave Requests</span>
+    <div class="px-3 sm:px-4 py-2.5 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between gap-2 text-xs text-slate-400">
+      <span id="lr-table-summary" class="whitespace-nowrap flex-shrink-0">Showing 5 of 27 Leave Requests</span>
       <span class="whitespace-nowrap flex-shrink-0 text-right">Aurelia Hospitality Labor Standards 2026</span>
     </div>
   </div>
@@ -3962,28 +3967,60 @@
       border-color: rgba(0, 0, 0, 0.08) !important;
     }
 
+    /* Fixed & Non-Scrollable Table Layout (Zero Horizontal Scroll) */
+    #wrap-table-leave-requests {
+      overflow-x: hidden !important;
+      overflow-y: visible !important;
+      width: 100% !important;
+      max-width: 100% !important;
+    }
+    #table-leave-requests {
+      width: 100% !important;
+      max-width: 100% !important;
+      table-layout: fixed !important;
+      min-width: 0 !important;
+      border-collapse: collapse !important;
+    }
+    #table-leave-requests th,
+    #table-leave-requests td {
+      box-sizing: border-box !important;
+    }
+    #table-leave-requests thead {
+      position: sticky !important;
+      top: 0 !important;
+      z-index: 10 !important;
+    }
+
     </style>
 
   <script>
     $(document).ready(function() {
-      // 1. GMAIL-STYLE TAB FILTER BUTTONS (AURELIA LOGO THEME)
-      $('.btn-lr-filter').on('click', function() {
-        $('.btn-lr-filter').removeClass('active border-[#FCA311] text-[#FCA311]').addClass('border-transparent text-slate-500');
-        $(this).addClass('active border-[#FCA311] text-[#FCA311]').removeClass('border-transparent text-slate-500');
-        const st = $(this).data('status');
-        if (st === 'all') {
-          $('#page-lr-tbody > tr[id^="row-"]:not(.is-deleted)').show();
-        } else {
-          $('#page-lr-tbody > tr[id^="row-"]').hide();
-          $('#page-lr-tbody > tr[id^="row-"][data-status="' + st + '"]:not(.is-deleted)').show();
-        }
-      });
+      // 1. STATUS FILTER DROPDOWN & SEARCH
+      function filterLeaveRequests() {
+        const st = $('#select-lr-status').val() || 'all';
+        const q = ($('#input-lr-search').val() || '').toLowerCase().trim();
 
-      // 2. SEARCH
-      $('#input-lr-search').on('input', function() {
-        const q = $(this).val().toLowerCase();
-        $('#page-lr-tbody tr').each(function() { $(this).toggle($(this).text().toLowerCase().includes(q)); });
-      });
+        $('#page-lr-tbody > tr[id^="row-"]:not(.is-deleted)').each(function() {
+          const rowStatus = $(this).attr('data-status') || $(this).data('status');
+          const matchesStatus = (st === 'all' || rowStatus === st);
+          const matchesSearch = !q || $(this).text().toLowerCase().includes(q);
+          const showRow = matchesStatus && matchesSearch;
+
+          $(this).toggle(showRow);
+
+          const rowId = $(this).attr('id');
+          if (!showRow && rowId) {
+            $('#detail-' + rowId.replace('row-', '')).addClass('hidden');
+          }
+        });
+
+        // Update footer summary count
+        const visibleCount = $('#page-lr-tbody > tr[id^="row-"]:not(.is-deleted):visible').length;
+        $('#lr-table-summary').text(`Showing ${visibleCount} of 27 Leave Requests`);
+      }
+
+      $('#select-lr-status').on('change', filterLeaveRequests);
+      $('#input-lr-search').on('input', filterLeaveRequests);
 
       // 3. APPLY ON BEHALF MODAL
       $('#btn-apply-behalf').on('click', function() { $('#modal-apply-behalf').removeClass('hidden'); });
@@ -4217,6 +4254,7 @@
                 <a href="leave-assign.html?emp=${ctx.emp}#row-emp-2026-08" class="text-[10px] text-sky-600 hover:underline font-bold ml-1">View Sync &rarr;</a>
               </div>
             `);
+            filterLeaveRequests();
           }
 
           // Dismiss modal & notification
@@ -4240,6 +4278,7 @@
         $row.find('.status-col').html('<span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-rose-100 text-rose-800">Rejected</span>');
         $row.find('.action-col').html('<span class="text-rose-600 font-semibold text-[11px]">Declined</span>');
         $('#detail-' + id).addClass('hidden');
+        filterLeaveRequests();
 
         if (typeof showToast === 'function') showToast('Leave request declined and employee notified.', 'info');
       });
