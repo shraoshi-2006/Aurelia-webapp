@@ -10180,6 +10180,11 @@ if (typeof window !== 'undefined' && window.MutationObserver) {
       container.innerHTML = svgHtml;
     });
 
+    const cardContainers = document.querySelectorAll('#branding-card-logo-container');
+    cardContainers.forEach(function (container) {
+      container.innerHTML = svgHtml.replace(/w-11 h-11/g, 'w-14 h-14');
+    });
+
     // Also update mobile header and mobile drawer emblems
     document.querySelectorAll('#app-mobile-header img[src*="aurelia-mark"], #mobile-user-menu-drawer img[src*="aurelia-mark"]').forEach(function (img) {
       const wrap = document.createElement('div');
@@ -10225,43 +10230,20 @@ if (typeof window !== 'undefined' && window.MutationObserver) {
     const style = document.createElement('style');
     style.id = 'aurelia-brand-customizer-styles';
     style.textContent = `
-        #brand-display-mode {
-          display: flex;
-          align-items: center;
-          gap: 4px;
-        }
-        #btn-edit-brand-name {
+        #btn-branding-card-edit {
           opacity: 0.7;
           transition: opacity 0.2s ease, color 0.2s ease, transform 0.2s ease;
         }
-        #btn-edit-brand-name:hover {
+        #btn-branding-card-edit:hover {
           opacity: 1;
           color: #FCA311 !important;
           transform: scale(1.1);
         }
-        #input-brand-name {
+        #input-branding-card-name {
           outline: none;
           min-width: 0;
           font-family: 'Cormorant Garamond', Georgia, serif;
           transition: border-color 0.2s ease, box-shadow 0.2s ease;
-        }
-        #app-sidebar:not(.sidebar-light-mode) #input-brand-name {
-          background-color: #0b1329 !important;
-          color: #FFFFFF !important;
-          border-color: #FCA311 !important;
-        }
-        #app-sidebar.sidebar-light-mode #input-brand-name {
-          background-color: #FFFFFF !important;
-          color: #14213D !important;
-          border-color: #FCA311 !important;
-        }
-        #app-sidebar:not(.sidebar-light-mode) #btn-cancel-brand-name {
-          background-color: #1e293b !important;
-          color: #94a3b8 !important;
-        }
-        #app-sidebar:not(.sidebar-light-mode) #btn-cancel-brand-name:hover {
-          background-color: #334155 !important;
-          color: #f1f5f9 !important;
         }
       `;
     document.head.appendChild(style);
@@ -10274,40 +10256,24 @@ if (typeof window !== 'undefined' && window.MutationObserver) {
     renderBrandLogo(currentName);
     updateDocumentTitle(currentName);
 
+    // Sidebar: pure display, NO editing icons or form controls
     const brandTitleElements = document.querySelectorAll('#sidebar-brand-title');
-    if (!brandTitleElements || !brandTitleElements.length) return;
-
-    brandTitleElements.forEach(function (brandTitle) {
-      if (brandTitle.getAttribute('data-brand-customizer-init') === 'true') {
-        const nameText = brandTitle.querySelector('#sidebar-brand-name-text');
-        if (nameText) nameText.textContent = currentName;
-        const input = brandTitle.querySelector('#input-brand-name');
-        if (input && document.activeElement !== input) input.value = currentName;
-        return;
-      }
-
-      brandTitle.setAttribute('data-brand-customizer-init', 'true');
-      brandTitle.innerHTML = `
-          <div id="brand-display-mode" class="flex items-center space-x-1 min-w-0">
+    if (brandTitleElements && brandTitleElements.length) {
+      brandTitleElements.forEach(function (brandTitle) {
+        brandTitle.innerHTML = `
             <h2 id="sidebar-brand-name-text" class="text-xl font-bold tracking-[0.22em] leading-none uppercase truncate" style="font-family: 'Cormorant Garamond', Georgia, serif;">${escapeAttr(currentName)}</h2>
-            <button type="button" id="btn-edit-brand-name" class="p-0.5 rounded text-slate-400 hover:text-[#FCA311] transition-colors cursor-pointer flex-shrink-0" title="Edit Website Name" aria-label="Edit Website Name">
-              <svg class="w-3.5 h-3.5 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125"/>
-              </svg>
-            </button>
-          </div>
-          <div id="brand-edit-mode" class="hidden flex items-center space-x-1 mb-1">
-            <input type="text" id="input-brand-name" maxlength="24" value="${escapeAttr(currentName)}" class="text-xs font-bold px-1.5 py-0.5 bg-white text-[#14213D] border border-[#FCA311] rounded shadow-xs focus:outline-none focus:ring-1 focus:ring-[#FCA311] w-28 uppercase tracking-wider" style="font-family: 'Cormorant Garamond', Georgia, serif;">
-            <button type="button" id="btn-save-brand-name" class="p-1 bg-[#14213D] hover:bg-[#FCA311] text-[#FCA311] hover:text-[#14213D] rounded transition-colors shadow-2xs cursor-pointer flex-shrink-0" title="Save" aria-label="Save">
-              <svg class="w-3.5 h-3.5 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg>
-            </button>
-            <button type="button" id="btn-cancel-brand-name" class="p-1 bg-slate-100 hover:bg-slate-200 text-slate-500 rounded transition-colors cursor-pointer flex-shrink-0" title="Cancel" aria-label="Cancel">
-              <svg class="w-3.5 h-3.5 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
-            </button>
-          </div>
-          <div class="w-8 h-[1.5px] bg-[#FCA311] my-1 shadow-xs"></div>
-          <span class="text-[9px] font-semibold text-[#5C677D] tracking-[0.22em] uppercase leading-tight truncate">Hotel &amp; Restaurant</span>
-        `;
+            <div class="w-8 h-[1.5px] bg-[#FCA311] my-1 shadow-xs"></div>
+            <span class="text-[9px] font-semibold text-[#5C677D] tracking-[0.22em] uppercase leading-tight truncate">Hotel &amp; Restaurant</span>
+          `;
+      });
+    }
+
+    // Card 1: Website Branding & Identity
+    document.querySelectorAll('#branding-card-name-text').forEach(function (el) {
+      el.textContent = currentName;
+    });
+    document.querySelectorAll('#input-branding-card-name').forEach(function (inp) {
+      if (document.activeElement !== inp) inp.value = currentName;
     });
   }
 
@@ -10320,12 +10286,17 @@ if (typeof window !== 'undefined' && window.MutationObserver) {
       el.textContent = cleanName;
     });
 
+    // Update card brand text elements
+    document.querySelectorAll('#branding-card-name-text').forEach(function (el) {
+      el.textContent = cleanName;
+    });
+
     // Update all inputs
-    document.querySelectorAll('#input-brand-name').forEach(function (inp) {
+    document.querySelectorAll('#input-branding-card-name, #input-brand-name').forEach(function (inp) {
       inp.value = cleanName;
     });
 
-    // Update logo
+    // Update logos
     renderBrandLogo(cleanName);
 
     // Update document title
@@ -10340,14 +10311,14 @@ if (typeof window !== 'undefined' && window.MutationObserver) {
     }
   }
 
-  function saveBrandNameFromInput() {
-    const input = document.getElementById('input-brand-name');
+  function saveBrandNameFromCard() {
+    const input = document.getElementById('input-branding-card-name');
     const rawVal = input ? input.value : '';
     const trimmedVal = (rawVal || '').trim();
 
     if (!trimmedVal) {
       // Validation: Do not allow empty names or names containing only spaces.
-      // Default Reset: If the customer clears the saved name, restore the default branding "AURELIA" with the letter "A" in the logo.
+      // Default Reset: If the customer clears the saved name, restore default branding "AURELIA" with letter "A" in logo
       try {
         localStorage.removeItem(BRAND_STORAGE_KEY);
       } catch (e) { }
@@ -10360,45 +10331,46 @@ if (typeof window !== 'undefined' && window.MutationObserver) {
       applyBrandName(finalName, true);
     }
 
-    // Exit edit mode
-    document.querySelectorAll('#brand-edit-mode').forEach(function (em) {
+    // Exit card edit mode
+    document.querySelectorAll('#branding-card-edit-mode').forEach(function (em) {
       em.classList.add('hidden');
     });
-    document.querySelectorAll('#brand-display-mode').forEach(function (dm) {
+    document.querySelectorAll('#branding-card-display-mode').forEach(function (dm) {
       dm.classList.remove('hidden');
     });
   }
 
-  function cancelBrandNameEdit() {
+  function cancelBrandNameCardEdit() {
     const current = getSavedBrandName();
-    document.querySelectorAll('#input-brand-name').forEach(function (inp) {
+    document.querySelectorAll('#input-branding-card-name').forEach(function (inp) {
       inp.value = current;
     });
-    document.querySelectorAll('#brand-edit-mode').forEach(function (em) {
+    document.querySelectorAll('#branding-card-edit-mode').forEach(function (em) {
       em.classList.add('hidden');
     });
-    document.querySelectorAll('#brand-display-mode').forEach(function (dm) {
+    document.querySelectorAll('#branding-card-display-mode').forEach(function (dm) {
       dm.classList.remove('hidden');
     });
   }
 
-  // Event delegation
+  // Event delegation for branding controls
   document.addEventListener('click', function (e) {
-    const editBtn = e.target.closest('#btn-edit-brand-name');
+    // 1. Edit button on card
+    const editBtn = e.target.closest('#btn-branding-card-edit');
     if (editBtn) {
       e.preventDefault();
       e.stopPropagation();
       const current = getSavedBrandName();
-      document.querySelectorAll('#input-brand-name').forEach(function (inp) {
+      document.querySelectorAll('#input-branding-card-name').forEach(function (inp) {
         inp.value = current;
       });
-      document.querySelectorAll('#brand-display-mode').forEach(function (dm) {
+      document.querySelectorAll('#branding-card-display-mode').forEach(function (dm) {
         dm.classList.add('hidden');
       });
-      document.querySelectorAll('#brand-edit-mode').forEach(function (em) {
+      document.querySelectorAll('#branding-card-edit-mode').forEach(function (em) {
         em.classList.remove('hidden');
       });
-      const activeInput = document.getElementById('input-brand-name');
+      const activeInput = document.getElementById('input-branding-card-name');
       if (activeInput) {
         setTimeout(function () {
           activeInput.focus();
@@ -10408,38 +10380,53 @@ if (typeof window !== 'undefined' && window.MutationObserver) {
       return;
     }
 
-    const saveBtn = e.target.closest('#btn-save-brand-name');
+    // 2. Save button on card
+    const saveBtn = e.target.closest('#btn-branding-card-save');
     if (saveBtn) {
       e.preventDefault();
       e.stopPropagation();
-      saveBrandNameFromInput();
+      saveBrandNameFromCard();
       return;
     }
 
-    const cancelBtn = e.target.closest('#btn-cancel-brand-name');
+    // 3. Cancel button on card
+    const cancelBtn = e.target.closest('#btn-branding-card-cancel');
     if (cancelBtn) {
       e.preventDefault();
       e.stopPropagation();
-      cancelBrandNameEdit();
+      cancelBrandNameCardEdit();
       return;
     }
 
-    const brandInput = e.target.closest('#input-brand-name');
+    // 4. Reset to default button on card
+    const resetBtn = e.target.closest('#btn-branding-card-reset');
+    if (resetBtn) {
+      e.preventDefault();
+      e.stopPropagation();
+      try {
+        localStorage.removeItem(BRAND_STORAGE_KEY);
+      } catch (err) { }
+      applyBrandName(DEFAULT_BRAND_NAME, true);
+      cancelBrandNameCardEdit();
+      return;
+    }
+
+    const brandInput = e.target.closest('#input-branding-card-name');
     if (brandInput) {
       e.stopPropagation();
     }
   }, true);
 
   document.addEventListener('keydown', function (e) {
-    const brandInput = e.target.closest ? e.target.closest('#input-brand-name') : null;
+    const brandInput = e.target.closest ? e.target.closest('#input-branding-card-name') : null;
     if (brandInput) {
       e.stopPropagation();
       if (e.key === 'Enter') {
         e.preventDefault();
-        saveBrandNameFromInput();
+        saveBrandNameFromCard();
       } else if (e.key === 'Escape') {
         e.preventDefault();
-        cancelBrandNameEdit();
+        cancelBrandNameCardEdit();
       }
     }
   }, true);

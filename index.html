@@ -4572,146 +4572,247 @@
             <p class="text-xs text-slate-400">Configure front desk counters, tax rates, and hotel preferences</p>
           </div>
 
-                    <!-- ============================================================= -->
-          <!-- APPEARANCE & THEME CUSTOMIZATION ENGINE                       -->
+                    
           <!-- ============================================================= -->
-          <div class="Aurelia-card p-6 space-y-6">
-            <!-- Section Header with Title, Description, and Action Buttons -->
-            <div
-              class="flex flex-col sm:flex-row sm:items-center justify-between pb-5 border-b border-slate-200/60 dark:border-slate-800/60 gap-4">
-              <div class="space-y-1">
-                <div class="flex items-center gap-2.5">
-                  <div
-                    class="w-9 h-9 rounded-xl bg-amber-500/10 text-amber-600 dark:text-amber-400 flex items-center justify-center font-bold shadow-xs">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round"
-                        d="M7 21a4 4 0 01-4-4 8.001 8.001 0 0113.657-5.657 8.001 8.001 0 01-1.343 9.657H7z" />
-                    </svg>
-                  </div>
-                  <div>
-                    <h3 class="text-base font-bold text-slate-900 dark:text-white">Appearance &amp; Theme</h3>
+          <!-- 4-CARD SETTINGS GRID LAYOUT (2-COLUMN)                          -->
+          <!-- ============================================================= -->
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 items-stretch">
+
+            <!-- ============================================================= -->
+            <!-- CARD 1: WEBSITE BRANDING & IDENTITY (LEFT TOP)                -->
+            <!-- ============================================================= -->
+            <div class="Aurelia-card p-6 flex flex-col justify-between space-y-5">
+              <div class="space-y-4">
+                <!-- Card Header -->
+                <div class="flex items-center justify-between pb-4 border-b border-slate-200/60 dark:border-slate-800/60">
+                  <div class="flex items-center gap-2.5">
+                    <div
+                      class="w-9 h-9 rounded-xl bg-amber-500/10 text-amber-600 dark:text-amber-400 flex items-center justify-center font-bold shadow-xs">
+                      <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                          d="M9.53 16.122a3 3 0 00-5.78 1.128 2.25 2.25 0 01-2.4 2.245 4.5 4.5 0 008.4-2.245c0-.399-.078-.78-.22-1.128zm0 0a15.998 15.998 0 003.388-1.62m-5.043-.025a15.994 15.994 0 011.622-3.395m3.42 3.42a15.995 15.995 0 004.764-4.648l3.876-5.814a1.151 1.151 0 00-1.597-1.597L14.14 6.368a15.996 15.996 0 00-4.649 4.763m3.42 3.42a6.776 6.776 0 00-3.42-3.42" />
+                      </svg>
+                    </div>
+                    <div>
+                      <h3 class="text-base font-bold text-slate-900 dark:text-white">Website Branding &amp; Identity</h3>
+                    </div>
                   </div>
                 </div>
-                <p class="text-xs text-slate-500 dark:text-slate-400 pl-11.5">
+                <p class="text-xs text-slate-500 dark:text-slate-400">
+                  Customize hotel website name, logo initial, and brand typography
+                </p>
+
+                <!-- Branding Card Preview & Inline Edit Panel -->
+                <div
+                  class="p-4 rounded-2xl bg-slate-50/80 dark:bg-slate-800/50 border border-slate-200/70 dark:border-slate-700/60 space-y-3">
+                  <div class="flex items-center gap-4">
+                    <!-- Circular Medallion Logo -->
+                    <div id="branding-card-logo-container"
+                      class="w-14 h-14 rounded-full flex items-center justify-center flex-shrink-0 shadow-md">
+                      <!-- Dynamically rendered via SVG -->
+                    </div>
+
+                    <!-- Display Mode (Default) -->
+                    <div id="branding-card-display-mode" class="flex-1 min-w-0">
+                      <div class="flex items-center gap-2">
+                        <h4 id="branding-card-name-text"
+                          class="text-2xl font-bold tracking-[0.22em] text-[#14213D] dark:text-white uppercase truncate"
+                          style="font-family: 'Cormorant Garamond', Georgia, serif;">AURELIA</h4>
+                        <button type="button" id="btn-branding-card-edit"
+                          class="p-1 rounded-lg text-slate-400 hover:text-amber-500 hover:bg-amber-500/10 transition-colors cursor-pointer flex-shrink-0"
+                          title="Edit Website Name" aria-label="Edit Website Name">
+                          <svg class="w-4 h-4 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                              d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125" />
+                          </svg>
+                        </button>
+                      </div>
+                      <div class="w-8 h-[1.5px] bg-[#FCA311] my-1 shadow-xs"></div>
+                      <p class="text-[9px] font-semibold text-[#5C677D] tracking-[0.22em] uppercase">Hotel &amp; Restaurant</p>
+                    </div>
+
+                    <!-- Edit Mode (Hidden initially) -->
+                    <div id="branding-card-edit-mode" class="hidden flex-1 min-w-0 space-y-2">
+                      <input type="text" id="input-branding-card-name" maxlength="24" value="AURELIA"
+                        class="Aurelia-input text-xs font-bold tracking-wider uppercase px-2.5 py-1.5 w-full bg-white dark:bg-slate-900 border border-amber-500 rounded-lg shadow-xs focus:outline-none focus:ring-1 focus:ring-amber-500"
+                        style="font-family: 'Cormorant Garamond', Georgia, serif;" placeholder="ENTER HOTEL NAME">
+                      <div class="flex items-center gap-2">
+                        <button type="button" id="btn-branding-card-save"
+                          class="px-3 py-1 text-xs font-bold rounded-lg bg-amber-500 hover:bg-amber-600 text-white shadow-xs transition flex items-center gap-1 cursor-pointer">
+                          <svg class="w-3.5 h-3.5 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                          </svg>
+                          <span>Save</span>
+                        </button>
+                        <button type="button" id="btn-branding-card-cancel"
+                          class="px-3 py-1 text-xs font-semibold rounded-lg bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-200 transition flex items-center gap-1 cursor-pointer">
+                          <svg class="w-3.5 h-3.5 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                          </svg>
+                          <span>Cancel</span>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="text-[11px] text-slate-500 dark:text-slate-400 space-y-0.5">
+                  <p>• Updates branding across sidebar, browser tabs, and emblem initial.</p>
+                  <p>• Emblem letter dynamically tracks the first character of website name.</p>
+                </div>
+              </div>
+
+              <!-- Reset to Default Branding Action -->
+              <div class="pt-2 border-t border-slate-200/50 dark:border-slate-800/50 flex justify-between items-center text-xs">
+                <span class="text-slate-400 text-[11px]">Default: AURELIA ("A")</span>
+                <button type="button" id="btn-branding-card-reset"
+                  class="text-amber-600 dark:text-amber-400 hover:underline font-semibold cursor-pointer">
+                  Restore Default
+                </button>
+              </div>
+            </div>
+
+            <!-- ============================================================= -->
+            <!-- CARD 2: APPEARANCE & THEME (RIGHT TOP)                       -->
+            <!-- ============================================================= -->
+            <div class="Aurelia-card p-6 flex flex-col justify-between space-y-5">
+              <div class="space-y-4">
+                <!-- Section Header with Title, Description, and Action Buttons -->
+                <div
+                  class="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-slate-200/60 dark:border-slate-800/60 gap-3">
+                  <div class="flex items-center gap-2.5">
+                    <div
+                      class="w-9 h-9 rounded-xl bg-amber-500/10 text-amber-600 dark:text-amber-400 flex items-center justify-center font-bold shadow-xs">
+                      <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                          d="M7 21a4 4 0 01-4-4 8.001 8.001 0 0113.657-5.657 8.001 8.001 0 01-1.343 9.657H7z" />
+                      </svg>
+                    </div>
+                    <div>
+                      <h3 class="text-base font-bold text-slate-900 dark:text-white">Appearance &amp; Theme</h3>
+                    </div>
+                  </div>
+
+                  <!-- Actions: Reset to Default and Save Changes -->
+                  <div class="flex items-center gap-2 self-end sm:self-center">
+                    <button type="button" id="btn-theme-reset"
+                      class="px-3 py-1.5 text-xs font-semibold rounded-xl border border-slate-200 dark:border-slate-700 bg-white/70 dark:bg-slate-800/70 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 transition shadow-xs flex items-center gap-1 cursor-pointer">
+                      <svg class="w-3.5 h-3.5 text-slate-500" fill="none" stroke="currentColor" stroke-width="2"
+                        viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                          d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                      </svg>
+                      <span>Reset</span>
+                    </button>
+                    <button type="button" id="btn-theme-save"
+                      class="px-4 py-1.5 text-xs font-bold rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white shadow-md hover:shadow-lg transition flex items-center gap-1 cursor-pointer">
+                      <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                      </svg>
+                      <span>Save Changes</span>
+                    </button>
+                  </div>
+                </div>
+
+                <p class="text-xs text-slate-500 dark:text-slate-400">
                   Customize navigation sidebar background and card border styling with live instant preview
                 </p>
+
+                <!-- Color Pickers Grid: Sidebar Theme on Left, Card Border on Right -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
+                  <!-- 1. SIDEBAR THEME COLOR -->
+                  <div class="space-y-3">
+                    <div class="flex items-center justify-between">
+                      <div>
+                        <h4 class="text-xs font-bold text-slate-900 dark:text-white">Sidebar Theme Color</h4>
+                        <p class="text-[10px] text-slate-500 dark:text-slate-400">Navigation background</p>
+                      </div>
+                      <div
+                        class="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-100/80 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 shadow-xs">
+                        <span id="preview-sidebar-dot"
+                          class="w-3 h-3 rounded-full border border-black/10 shadow-xs transition-colors"
+                          style="background-color: #130481;"></span>
+                        <span id="preview-sidebar-hex"
+                          class="text-[11px] font-mono font-semibold text-slate-700 dark:text-slate-300">#130481</span>
+                      </div>
+                    </div>
+
+                    <!-- Color Swatch Tray: 4 Fixed Palette Options -->
+                    <div class="p-2.5 sm:p-3 rounded-2xl bg-[#161922] shadow-xl border border-white/10 w-fit">
+                      <div class="flex items-center gap-2.5" id="tray-sidebar-colors">
+                        <button type="button"
+                          class="aurelia-theme-swatch w-8 h-8 rounded-full transition transform hover:scale-110 shadow-sm relative cursor-pointer"
+                          data-target="sidebar" data-color="#0284C7" style="background-color: #0284C7;"
+                          title="Blue (#0284C7)"></button>
+                        <button type="button"
+                          class="aurelia-theme-swatch w-8 h-8 rounded-full transition transform hover:scale-110 shadow-sm relative cursor-pointer"
+                          data-target="sidebar" data-color="#FFFFFF"
+                          style="background-color: #FFFFFF; border: 1px solid rgba(255, 255, 255, 0.4);"
+                          title="White (#FFFFFF)"></button>
+                        <button type="button"
+                          class="aurelia-theme-swatch w-8 h-8 rounded-full transition transform hover:scale-110 shadow-sm relative cursor-pointer active-swatch"
+                          data-target="sidebar" data-color="#130481" style="background-color: #130481;"
+                          title="Navy (#130481)"></button>
+                        <button type="button"
+                          class="aurelia-theme-swatch w-8 h-8 rounded-full transition transform hover:scale-110 shadow-sm relative cursor-pointer"
+                          data-target="sidebar" data-color="#FCA311" style="background-color: #FCA311;"
+                          title="Marigold Yellow (#FCA311)"></button>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- 2. CARD BORDER COLOR -->
+                  <div class="space-y-3">
+                    <div class="flex items-center justify-between">
+                      <div>
+                        <h4 class="text-xs font-bold text-slate-900 dark:text-white">Card Border Color</h4>
+                        <p class="text-[10px] text-slate-500 dark:text-slate-400">Card border accents</p>
+                      </div>
+                      <div
+                        class="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-100/80 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 shadow-xs">
+                        <span id="preview-card-border-dot"
+                          class="w-3 h-3 rounded-full border border-black/10 shadow-xs transition-colors"
+                          style="background-color: #FCA311;"></span>
+                        <span id="preview-card-border-hex"
+                          class="text-[11px] font-mono font-semibold text-slate-700 dark:text-slate-300">#FCA311</span>
+                      </div>
+                    </div>
+
+                    <!-- Color Swatch Tray: 4 Fixed Palette Options -->
+                    <div class="p-2.5 sm:p-3 rounded-2xl bg-[#161922] shadow-xl border border-white/10 w-fit">
+                      <div class="flex items-center gap-2.5" id="tray-card-border-colors">
+                        <button type="button"
+                          class="aurelia-theme-swatch w-8 h-8 rounded-full transition transform hover:scale-110 shadow-sm relative cursor-pointer"
+                          data-target="cardBorder" data-color="#0284C7" style="background-color: #0284C7;"
+                          title="Blue (#0284C7)"></button>
+                        <button type="button"
+                          class="aurelia-theme-swatch w-8 h-8 rounded-full transition transform hover:scale-110 shadow-sm relative cursor-pointer"
+                          data-target="cardBorder" data-color="#FFFFFF"
+                          style="background-color: #FFFFFF; border: 1px solid rgba(255, 255, 255, 0.4);"
+                          title="White (#FFFFFF)"></button>
+                        <button type="button"
+                          class="aurelia-theme-swatch w-8 h-8 rounded-full transition transform hover:scale-110 shadow-sm relative cursor-pointer"
+                          data-target="cardBorder" data-color="#130481" style="background-color: #130481;"
+                          title="Navy (#130481)"></button>
+                        <button type="button"
+                          class="aurelia-theme-swatch w-8 h-8 rounded-full transition transform hover:scale-110 shadow-sm relative cursor-pointer active-swatch"
+                          data-target="cardBorder" data-color="#FCA311" style="background-color: #FCA311;"
+                          title="Marigold Yellow (#FCA311)"></button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
 
-              <!-- Actions: Reset to Default and Save Changes -->
-              <div class="flex items-center gap-3 self-end sm:self-center">
-                <button type="button" id="btn-theme-reset"
-                  class="px-4 py-2 text-xs font-semibold rounded-xl border border-slate-200 dark:border-slate-700 bg-white/70 dark:bg-slate-800/70 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 transition shadow-xs flex items-center gap-1.5 cursor-pointer">
-                  <svg class="w-3.5 h-3.5 text-slate-500" fill="none" stroke="currentColor" stroke-width="2"
-                    viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                      d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-                  </svg>
-                  <span>Reset to Default</span>
-                </button>
-                <button type="button" id="btn-theme-save"
-                  class="px-5 py-2 text-xs font-bold rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-white shadow-md hover:shadow-lg transition flex items-center gap-1.5 cursor-pointer">
-                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
-                  </svg>
-                  <span>Save Changes</span>
-                </button>
-              </div>
-            </div>
-
-            <!-- Color Pickers Grid: Sidebar Theme on Left, Card Border on Right -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
-              <!-- 1. SIDEBAR THEME COLOR -->
-              <div class="space-y-4">
-                <div class="flex items-center justify-between">
-                  <div>
-                    <h4 class="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                      <span>Sidebar Theme Color</span>
-                    </h4>
-                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Customize navigation background color
-                    </p>
-                  </div>
-                  <div
-                    class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-100/80 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 shadow-xs">
-                    <span id="preview-sidebar-dot"
-                      class="w-3.5 h-3.5 rounded-full border border-black/10 shadow-xs transition-colors"
-                      style="background-color: #130481;"></span>
-                    <span id="preview-sidebar-hex"
-                      class="text-xs font-mono font-semibold text-slate-700 dark:text-slate-300">#130481</span>
-                  </div>
-                </div>
-
-                <!-- Color Swatch Tray: 4 Fixed Palette Options (Blue, White, Navy, Slate Gray) -->
-                <div class="p-3.5 sm:p-4 rounded-2xl bg-[#161922] shadow-xl border border-white/10 w-fit">
-                  <div class="flex items-center gap-3 sm:gap-3.5" id="tray-sidebar-colors">
-                    <button type="button"
-                      class="aurelia-theme-swatch w-9 h-9 sm:w-10 sm:h-10 rounded-full transition transform hover:scale-110 shadow-sm relative cursor-pointer"
-                      data-target="sidebar" data-color="#0284C7" style="background-color: #0284C7;"
-                      title="Blue (#0284C7)"></button>
-                    <button type="button"
-                      class="aurelia-theme-swatch w-9 h-9 sm:w-10 sm:h-10 rounded-full transition transform hover:scale-110 shadow-sm relative cursor-pointer"
-                      data-target="sidebar" data-color="#FFFFFF"
-                      style="background-color: #FFFFFF; border: 1px solid rgba(255, 255, 255, 0.4);"
-                      title="White (#FFFFFF)"></button>
-                    <button type="button"
-                      class="aurelia-theme-swatch w-9 h-9 sm:w-10 sm:h-10 rounded-full transition transform hover:scale-110 shadow-sm relative cursor-pointer active-swatch"
-                      data-target="sidebar" data-color="#130481" style="background-color: #130481;"
-                      title="Navy (#130481)"></button>
-                    <button type="button"
-                      class="aurelia-theme-swatch w-9 h-9 sm:w-10 sm:h-10 rounded-full transition transform hover:scale-110 shadow-sm relative cursor-pointer"
-                      data-target="sidebar" data-color="#494D5F" style="background-color: #494D5F;"
-                      title="Slate Gray (#494D5F)"></button>
-                  </div>
-                </div>
-              </div>
-
-              <!-- 2. CARD BORDER COLOR -->
-              <div class="space-y-4">
-                <div class="flex items-center justify-between">
-                  <div>
-                    <h4 class="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
-                      <span>Card Border Color</span>
-                    </h4>
-                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Customize glassmorphic card border
-                      accents</p>
-                  </div>
-                  <div
-                    class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-100/80 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 shadow-xs">
-                    <span id="preview-card-border-dot"
-                      class="w-3.5 h-3.5 rounded-full border border-black/10 shadow-xs transition-colors"
-                      style="background-color: #FCA311;"></span>
-                    <span id="preview-card-border-hex"
-                      class="text-xs font-mono font-semibold text-slate-700 dark:text-slate-300">#FCA311</span>
-                  </div>
-                </div>
-
-                <!-- Color Swatch Tray: 4 Fixed Palette Options (Blue, White, Navy, Marigold Yellow) -->
-                <div class="p-3.5 sm:p-4 rounded-2xl bg-[#161922] shadow-xl border border-white/10 w-fit">
-                  <div class="flex items-center gap-3 sm:gap-3.5" id="tray-card-border-colors">
-                    <button type="button"
-                      class="aurelia-theme-swatch w-9 h-9 sm:w-10 sm:h-10 rounded-full transition transform hover:scale-110 shadow-sm relative cursor-pointer"
-                      data-target="cardBorder" data-color="#0284C7" style="background-color: #0284C7;"
-                      title="Blue (#0284C7)"></button>
-                    <button type="button"
-                      class="aurelia-theme-swatch w-9 h-9 sm:w-10 sm:h-10 rounded-full transition transform hover:scale-110 shadow-sm relative cursor-pointer"
-                      data-target="cardBorder" data-color="#FFFFFF"
-                      style="background-color: #FFFFFF; border: 1px solid rgba(255, 255, 255, 0.4);"
-                      title="White (#FFFFFF)"></button>
-                    <button type="button"
-                      class="aurelia-theme-swatch w-9 h-9 sm:w-10 sm:h-10 rounded-full transition transform hover:scale-110 shadow-sm relative cursor-pointer"
-                      data-target="cardBorder" data-color="#130481" style="background-color: #130481;"
-                      title="Navy (#130481)"></button>
-                    <button type="button"
-                      class="aurelia-theme-swatch w-9 h-9 sm:w-10 sm:h-10 rounded-full transition transform hover:scale-110 shadow-sm relative cursor-pointer active-swatch"
-                      data-target="cardBorder" data-color="#FCA311" style="background-color: #FCA311;"
-                      title="Marigold Yellow (#FCA311)"></button>
-                  </div>
-                </div>
+              <div class="pt-2 border-t border-slate-200/50 dark:border-slate-800/50 flex justify-between items-center text-xs">
+                <span class="text-slate-400 text-[11px]">Instant live preview enabled</span>
+                <span class="text-slate-400 text-[11px]">Defaults: Navy &amp; Slate</span>
               </div>
             </div>
-          </div>
 
-
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- ============================================================= -->
+            <!-- CARD 3: HOTEL INFORMATION (LEFT BOTTOM)                       -->
+            <!-- ============================================================= -->
             <div class="Aurelia-card p-6 space-y-4">
               <h3 class="text-sm font-bold text-slate-900 dark:text-white">Hotel Information</h3>
               <div class="space-y-3 text-xs">
@@ -4730,6 +4831,9 @@
               </div>
             </div>
 
+            <!-- ============================================================= -->
+            <!-- CARD 4: DATA MANAGEMENT (RIGHT BOTTOM)                         -->
+            <!-- ============================================================= -->
             <div class="Aurelia-card p-6 space-y-4">
               <h3 class="text-sm font-bold text-slate-900 dark:text-white">Data Management</h3>
               <p class="text-xs text-slate-500">Reset local database to default realistic October 2026 data.</p>
@@ -4739,6 +4843,7 @@
                 </button>
               </div>
             </div>
+
           </div>
         </section>
 
