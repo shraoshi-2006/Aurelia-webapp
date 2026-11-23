@@ -3906,8 +3906,8 @@ $(document).ready(function () {
       $('#modal-staff-empty').addClass('hidden');
       filtered.forEach(s => {
         const isSubdir = window.location.pathname.includes('/human-resources/') ||
-                         window.location.pathname.includes('/department/') ||
-                         window.location.pathname.includes('/billing-management/');
+          window.location.pathname.includes('/department/') ||
+          window.location.pathname.includes('/billing-management/');
         const pfx = isSubdir ? '../assets/images/' : 'assets/images/';
         const femaleNames = [
           'tanvi', 'priya', 'priyanka', 'ananya', 'neha', 'sunita', 'meenakshi',
@@ -7647,7 +7647,7 @@ $(document).ready(function () {
         verifyBadge = '<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-[#d97706] text-white shadow-2xs">Pending</span>';
       }
 
-            // Profile Picture
+      // Profile Picture
       const femaleNames = [
         'tanvi', 'priya', 'priyanka', 'ananya', 'neha', 'sunita', 'meenakshi',
         'aarti', 'pooja', 'deepa', 'simran', 'shanti', 'lakshmi', 'rekha',
@@ -7930,8 +7930,8 @@ $(document).ready(function () {
       $('#page-staff-empty').addClass('hidden');
       filtered.forEach((s, idx) => {
         const isSubdir = window.location.pathname.includes('/human-resources/') ||
-                         window.location.pathname.includes('/department/') ||
-                         window.location.pathname.includes('/billing-management/');
+          window.location.pathname.includes('/department/') ||
+          window.location.pathname.includes('/billing-management/');
         const pfx = isSubdir ? '../assets/images/' : 'assets/images/';
         const femaleNames = [
           'tanvi', 'priya', 'priyanka', 'ananya', 'neha', 'sunita', 'meenakshi',
@@ -9242,8 +9242,8 @@ $(document).ready(function () {
   function applyThemeColors(sidebarBg, cardBorder) {
     const root = document.documentElement;
     const isDefaultBorder = !cardBorder || cardBorder.includes('rgba');
-    const rimBgValue = isDefaultBorder 
-      ? 'linear-gradient(135deg, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0.5) 30%, rgba(255, 255, 255, 0.1) 65%, rgba(255, 255, 255, 0.75) 100%)' 
+    const rimBgValue = isDefaultBorder
+      ? 'linear-gradient(135deg, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0.5) 30%, rgba(255, 255, 255, 0.1) 65%, rgba(255, 255, 255, 0.75) 100%)'
       : cardBorder;
 
     // Match primary button color (e.g. "Click here to see ->", "+ New Bill", "Save") to Card Border Color
@@ -9412,7 +9412,7 @@ $(document).ready(function () {
 
     // Apply inline style directly to ensure no specificity clashes
     const $sidebarTargets = $('#app-sidebar, #mobile-user-menu-drawer, #mobile-drawer, #app-mobile-header, #btn-sidebar-collapse');
-    $sidebarTargets.each(function() {
+    $sidebarTargets.each(function () {
       this.style.setProperty('background', sidebarBg, 'important');
       this.style.setProperty('background-color', sidebarBg, 'important');
     });
@@ -9431,12 +9431,12 @@ $(document).ready(function () {
       $('#app-sidebar, #mobile-user-menu-drawer').removeClass('sidebar-light-mode');
     }
 
-    $('.Aurelia-card, .aurelia-card, .finset-card, .spatial-card, #section-dashboard .Aurelia-card, #main-app-content .Aurelia-card, .glass-money-flow').each(function() {
+    $('.Aurelia-card, .aurelia-card, .finset-card, .spatial-card, #section-dashboard .Aurelia-card, #main-app-content .Aurelia-card, .glass-money-flow').each(function () {
       this.style.setProperty('border-color', cardBorder, 'important');
       this.style.setProperty('border-width', '0.1px', 'important');
     });
 
-    $('.btn-Aurelia-primary, .btn-aurelia-primary, .btn-finset-primary, .btn-view-order-items, .btn-order-to-bill, .quick-nav-bill, #btn-theme-save').each(function() {
+    $('.btn-Aurelia-primary, .btn-aurelia-primary, .btn-finset-primary, .btn-view-order-items, .btn-order-to-bill, .quick-nav-bill, #btn-theme-save').each(function () {
       this.style.setProperty('background', btnBg, 'important');
       this.style.setProperty('background-color', btnBg, 'important');
       this.style.setProperty('color', btnText, 'important');
@@ -10083,105 +10083,105 @@ $(document).ready(function () {
   }
 })();
 
-  // =========================================================================
-  // UNIVERSAL 3D MAGNIFYING GLASS SEARCH ICON ENGINE
-  // =========================================================================
-  function applyUniversalSearchIcons() {
-    try {
-      const searchInputs = document.querySelectorAll(
-        'input[id*="search" i], input[id*="Search"], input[placeholder*="search" i], input[placeholder*="Search"], input[type="search"]'
-      );
-      searchInputs.forEach(function (inp) {
-        inp.classList.add('aurelia-search-input');
-        if (inp.parentElement) {
-          const svgs = inp.parentElement.querySelectorAll(':scope > svg, :scope > div > svg');
-          svgs.forEach(function (svg) {
-            svg.style.display = 'none';
-            svg.style.opacity = '0';
-            svg.style.visibility = 'hidden';
-            svg.setAttribute('aria-hidden', 'true');
-          });
-        }
-      });
-    } catch (e) {
-      console.warn('applyUniversalSearchIcons error:', e);
-    }
-  }
-
-  // Run on ready and observe DOM for search inputs in modals
-  applyUniversalSearchIcons();
-  $(document).ready(function () {
-    applyUniversalSearchIcons();
-    setTimeout(applyUniversalSearchIcons, 100);
-    setTimeout(applyUniversalSearchIcons, 500);
-  });
-
-  if (typeof window !== 'undefined' && window.MutationObserver) {
-    const aureliaSearchObserver = new MutationObserver(function (mutations) {
-      let shouldCheck = false;
-      for (let i = 0; i < mutations.length; i++) {
-        const added = mutations[i].addedNodes;
-        if (added && added.length > 0) {
-          for (let j = 0; j < added.length; j++) {
-            if (added[j].nodeType === 1) {
-              shouldCheck = true;
-              break;
-            }
-          }
-        }
-        if (shouldCheck) break;
-      }
-      if (shouldCheck) {
-        applyUniversalSearchIcons();
+// =========================================================================
+// UNIVERSAL 3D MAGNIFYING GLASS SEARCH ICON ENGINE
+// =========================================================================
+function applyUniversalSearchIcons() {
+  try {
+    const searchInputs = document.querySelectorAll(
+      'input[id*="search" i], input[id*="Search"], input[placeholder*="search" i], input[placeholder*="Search"], input[type="search"]'
+    );
+    searchInputs.forEach(function (inp) {
+      inp.classList.add('aurelia-search-input');
+      if (inp.parentElement) {
+        const svgs = inp.parentElement.querySelectorAll(':scope > svg, :scope > div > svg');
+        svgs.forEach(function (svg) {
+          svg.style.display = 'none';
+          svg.style.opacity = '0';
+          svg.style.visibility = 'hidden';
+          svg.setAttribute('aria-hidden', 'true');
+        });
       }
     });
-    if (document.body) {
-      aureliaSearchObserver.observe(document.body, { childList: true, subtree: true });
-    } else {
-      document.addEventListener('DOMContentLoaded', function () {
-        aureliaSearchObserver.observe(document.body, { childList: true, subtree: true });
-      });
+  } catch (e) {
+    console.warn('applyUniversalSearchIcons error:', e);
+  }
+}
+
+// Run on ready and observe DOM for search inputs in modals
+applyUniversalSearchIcons();
+$(document).ready(function () {
+  applyUniversalSearchIcons();
+  setTimeout(applyUniversalSearchIcons, 100);
+  setTimeout(applyUniversalSearchIcons, 500);
+});
+
+if (typeof window !== 'undefined' && window.MutationObserver) {
+  const aureliaSearchObserver = new MutationObserver(function (mutations) {
+    let shouldCheck = false;
+    for (let i = 0; i < mutations.length; i++) {
+      const added = mutations[i].addedNodes;
+      if (added && added.length > 0) {
+        for (let j = 0; j < added.length; j++) {
+          if (added[j].nodeType === 1) {
+            shouldCheck = true;
+            break;
+          }
+        }
+      }
+      if (shouldCheck) break;
     }
+    if (shouldCheck) {
+      applyUniversalSearchIcons();
+    }
+  });
+  if (document.body) {
+    aureliaSearchObserver.observe(document.body, { childList: true, subtree: true });
+  } else {
+    document.addEventListener('DOMContentLoaded', function () {
+      aureliaSearchObserver.observe(document.body, { childList: true, subtree: true });
+    });
+  }
+}
+
+// =========================================================================
+// UNIVERSAL EDITABLE BRAND NAME & DYNAMIC LOGO ENGINE
+// =========================================================================
+(function initBrandCustomizationEngine() {
+  const BRAND_STORAGE_KEY = 'aurelia_custom_brand_name';
+  const DEFAULT_BRAND_NAME = 'AURELIA';
+
+  function getSavedBrandName() {
+    try {
+      const saved = localStorage.getItem(BRAND_STORAGE_KEY);
+      if (saved && saved.trim()) {
+        return saved.trim();
+      }
+    } catch (e) { }
+    return DEFAULT_BRAND_NAME;
   }
 
-  // =========================================================================
-  // UNIVERSAL EDITABLE BRAND NAME & DYNAMIC LOGO ENGINE
-  // =========================================================================
-  (function initBrandCustomizationEngine() {
-    const BRAND_STORAGE_KEY = 'aurelia_custom_brand_name';
-    const DEFAULT_BRAND_NAME = 'AURELIA';
+  function escapeAttr(str) {
+    return String(str || '')
+      .replace(/&/g, '&amp;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;');
+  }
 
-    function getSavedBrandName() {
-      try {
-        const saved = localStorage.getItem(BRAND_STORAGE_KEY);
-        if (saved && saved.trim()) {
-          return saved.trim();
-        }
-      } catch (e) {}
-      return DEFAULT_BRAND_NAME;
-    }
+  function renderBrandLogo(brandName) {
+    const containers = document.querySelectorAll('#sidebar-logo-container');
+    if (!containers || !containers.length) return;
 
-    function escapeAttr(str) {
-      return String(str || '')
-        .replace(/&/g, '&amp;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#039;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;');
-    }
+    const cleanName = (brandName || DEFAULT_BRAND_NAME).trim();
+    const isDefault = cleanName.toUpperCase() === DEFAULT_BRAND_NAME;
+    const initial = (cleanName.charAt(0) || 'A').toUpperCase();
 
-    function renderBrandLogo(brandName) {
-      const containers = document.querySelectorAll('#sidebar-logo-container');
-      if (!containers || !containers.length) return;
-
-      const cleanName = (brandName || DEFAULT_BRAND_NAME).trim();
-      const isDefault = cleanName.toUpperCase() === DEFAULT_BRAND_NAME;
-      const initial = (cleanName.charAt(0) || 'A').toUpperCase();
-
-      let svgHtml = '';
-      if (isDefault) {
-        // Exact Default Aurelia Medallion Emblem with stylized A and white pearl dot
-        svgHtml = `
+    let svgHtml = '';
+    if (isDefault) {
+      // Exact Default Aurelia Medallion Emblem with stylized A and white pearl dot
+      svgHtml = `
           <svg id="sidebar-logo-mark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" class="w-11 h-11 rounded-full object-contain" role="img" aria-label="Aurelia Emblem">
             <circle cx="100" cy="100" r="95" fill="#FCA311"/>
             <circle cx="100" cy="100" r="86" fill="none" stroke="#14213D" stroke-width="2.2"/>
@@ -10190,43 +10190,43 @@ $(document).ready(function () {
             <circle cx="100" cy="104" r="8.5" fill="#FFFFFF"/>
           </svg>
         `;
-      } else {
-        // Dynamic First Alphabet Emblem retaining exact circular gold/navy medallion and brand serif
-        svgHtml = `
+    } else {
+      // Dynamic First Alphabet Emblem retaining exact circular gold/navy medallion and brand serif
+      svgHtml = `
           <svg id="sidebar-logo-mark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" class="w-11 h-11 rounded-full object-contain" role="img" aria-label="${escapeAttr(cleanName)} Emblem">
             <circle cx="100" cy="100" r="95" fill="#FCA311"/>
             <circle cx="100" cy="100" r="86" fill="none" stroke="#14213D" stroke-width="2.2"/>
             <text x="100" y="110" text-anchor="middle" dominant-baseline="central" fill="#14213D" font-family="'Cormorant Garamond', Georgia, serif" font-weight="700" font-size="115">${escapeAttr(initial)}</text>
           </svg>
         `;
+    }
+
+    containers.forEach(function (container) {
+      container.innerHTML = svgHtml;
+    });
+  }
+
+  function updateDocumentTitle(brandName) {
+    try {
+      const cleanName = (brandName || DEFAULT_BRAND_NAME).trim();
+      if (!document.title) return;
+      if (!document.documentElement.dataset.origTitle) {
+        document.documentElement.dataset.origTitle = document.title;
       }
+      const baseTitle = document.documentElement.dataset.origTitle;
+      if (cleanName.toUpperCase() === DEFAULT_BRAND_NAME) {
+        document.title = baseTitle;
+      } else {
+        document.title = baseTitle.replace(/Aurelia/gi, cleanName);
+      }
+    } catch (e) { }
+  }
 
-      containers.forEach(function (container) {
-        container.innerHTML = svgHtml;
-      });
-    }
-
-    function updateDocumentTitle(brandName) {
-      try {
-        const cleanName = (brandName || DEFAULT_BRAND_NAME).trim();
-        if (!document.title) return;
-        if (!document.documentElement.dataset.origTitle) {
-          document.documentElement.dataset.origTitle = document.title;
-        }
-        const baseTitle = document.documentElement.dataset.origTitle;
-        if (cleanName.toUpperCase() === DEFAULT_BRAND_NAME) {
-          document.title = baseTitle;
-        } else {
-          document.title = baseTitle.replace(/Aurelia/gi, cleanName);
-        }
-      } catch (e) {}
-    }
-
-    function applyStyles() {
-      if (document.getElementById('aurelia-brand-customizer-styles')) return;
-      const style = document.createElement('style');
-      style.id = 'aurelia-brand-customizer-styles';
-      style.textContent = `
+  function applyStyles() {
+    if (document.getElementById('aurelia-brand-customizer-styles')) return;
+    const style = document.createElement('style');
+    style.id = 'aurelia-brand-customizer-styles';
+    style.textContent = `
         #brand-display-mode {
           display: flex;
           align-items: center;
@@ -10266,30 +10266,30 @@ $(document).ready(function () {
           color: #f1f5f9 !important;
         }
       `;
-      document.head.appendChild(style);
-    }
+    document.head.appendChild(style);
+  }
 
-    function setupBrandingUI() {
-      applyStyles();
+  function setupBrandingUI() {
+    applyStyles();
 
-      const currentName = getSavedBrandName();
-      renderBrandLogo(currentName);
-      updateDocumentTitle(currentName);
+    const currentName = getSavedBrandName();
+    renderBrandLogo(currentName);
+    updateDocumentTitle(currentName);
 
-      const brandTitleElements = document.querySelectorAll('#sidebar-brand-title');
-      if (!brandTitleElements || !brandTitleElements.length) return;
+    const brandTitleElements = document.querySelectorAll('#sidebar-brand-title');
+    if (!brandTitleElements || !brandTitleElements.length) return;
 
-      brandTitleElements.forEach(function (brandTitle) {
-        if (brandTitle.getAttribute('data-brand-customizer-init') === 'true') {
-          const nameText = brandTitle.querySelector('#sidebar-brand-name-text');
-          if (nameText) nameText.textContent = currentName;
-          const input = brandTitle.querySelector('#input-brand-name');
-          if (input && document.activeElement !== input) input.value = currentName;
-          return;
-        }
+    brandTitleElements.forEach(function (brandTitle) {
+      if (brandTitle.getAttribute('data-brand-customizer-init') === 'true') {
+        const nameText = brandTitle.querySelector('#sidebar-brand-name-text');
+        if (nameText) nameText.textContent = currentName;
+        const input = brandTitle.querySelector('#input-brand-name');
+        if (input && document.activeElement !== input) input.value = currentName;
+        return;
+      }
 
-        brandTitle.setAttribute('data-brand-customizer-init', 'true');
-        brandTitle.innerHTML = `
+      brandTitle.setAttribute('data-brand-customizer-init', 'true');
+      brandTitle.innerHTML = `
           <div id="brand-display-mode" class="flex items-center space-x-1 min-w-0">
             <h2 id="sidebar-brand-name-text" class="text-xl font-bold tracking-[0.22em] leading-none uppercase truncate" style="font-family: 'Cormorant Garamond', Georgia, serif;">${escapeAttr(currentName)}</h2>
             <button type="button" id="btn-edit-brand-name" class="p-0.5 rounded text-slate-400 hover:text-[#FCA311] transition-colors cursor-pointer flex-shrink-0" title="Edit Website Name" aria-label="Edit Website Name">
@@ -10310,197 +10310,197 @@ $(document).ready(function () {
           <div class="w-8 h-[1.5px] bg-[#FCA311] my-1 shadow-xs"></div>
           <span class="text-[9px] font-semibold text-[#5C677D] tracking-[0.22em] uppercase leading-tight truncate">Hotel &amp; Restaurant</span>
         `;
-      });
-    }
+    });
+  }
 
-    function applyBrandName(name, showFeedback = true) {
-      const cleanName = (name || DEFAULT_BRAND_NAME).trim();
-      const isDefault = cleanName.toUpperCase() === DEFAULT_BRAND_NAME;
+  function applyBrandName(name, showFeedback = true) {
+    const cleanName = (name || DEFAULT_BRAND_NAME).trim();
+    const isDefault = cleanName.toUpperCase() === DEFAULT_BRAND_NAME;
 
-      // Update all sidebar brand text elements
-      document.querySelectorAll('#sidebar-brand-name-text').forEach(function (el) {
-        el.textContent = cleanName;
-      });
+    // Update all sidebar brand text elements
+    document.querySelectorAll('#sidebar-brand-name-text').forEach(function (el) {
+      el.textContent = cleanName;
+    });
 
-      // Update all inputs
-      document.querySelectorAll('#input-brand-name').forEach(function (inp) {
-        inp.value = cleanName;
-      });
+    // Update all inputs
+    document.querySelectorAll('#input-brand-name').forEach(function (inp) {
+      inp.value = cleanName;
+    });
 
-      // Update logo
-      renderBrandLogo(cleanName);
+    // Update logo
+    renderBrandLogo(cleanName);
 
-      // Update document title
-      updateDocumentTitle(cleanName);
+    // Update document title
+    updateDocumentTitle(cleanName);
 
-      if (showFeedback && typeof window.showToast === 'function') {
-        if (isDefault) {
-          window.showToast('Restored default branding: AURELIA', 'info');
-        } else {
-          window.showToast(`Website name updated to "${cleanName}"`, 'success');
-        }
-      }
-    }
-
-    function saveBrandNameFromInput() {
-      const input = document.getElementById('input-brand-name');
-      const rawVal = input ? input.value : '';
-      const trimmedVal = (rawVal || '').trim();
-
-      if (!trimmedVal) {
-        // Validation: Do not allow empty names or names containing only spaces.
-        // Default Reset: If the customer clears the saved name, restore the default branding "AURELIA" with the letter "A" in the logo.
-        try {
-          localStorage.removeItem(BRAND_STORAGE_KEY);
-        } catch (e) {}
-        applyBrandName(DEFAULT_BRAND_NAME, true);
+    if (showFeedback && typeof window.showToast === 'function') {
+      if (isDefault) {
+        window.showToast('Restored default branding: AURELIA', 'info');
       } else {
-        const finalName = trimmedVal.toUpperCase();
-        try {
-          localStorage.setItem(BRAND_STORAGE_KEY, finalName);
-        } catch (e) {}
-        applyBrandName(finalName, true);
+        window.showToast(`Website name updated to "${cleanName}"`, 'success');
       }
+    }
+  }
 
-      // Exit edit mode
-      document.querySelectorAll('#brand-edit-mode').forEach(function (em) {
-        em.classList.add('hidden');
-      });
-      document.querySelectorAll('#brand-display-mode').forEach(function (dm) {
-        dm.classList.remove('hidden');
-      });
+  function saveBrandNameFromInput() {
+    const input = document.getElementById('input-brand-name');
+    const rawVal = input ? input.value : '';
+    const trimmedVal = (rawVal || '').trim();
+
+    if (!trimmedVal) {
+      // Validation: Do not allow empty names or names containing only spaces.
+      // Default Reset: If the customer clears the saved name, restore the default branding "AURELIA" with the letter "A" in the logo.
+      try {
+        localStorage.removeItem(BRAND_STORAGE_KEY);
+      } catch (e) { }
+      applyBrandName(DEFAULT_BRAND_NAME, true);
+    } else {
+      const finalName = trimmedVal.toUpperCase();
+      try {
+        localStorage.setItem(BRAND_STORAGE_KEY, finalName);
+      } catch (e) { }
+      applyBrandName(finalName, true);
     }
 
-    function cancelBrandNameEdit() {
+    // Exit edit mode
+    document.querySelectorAll('#brand-edit-mode').forEach(function (em) {
+      em.classList.add('hidden');
+    });
+    document.querySelectorAll('#brand-display-mode').forEach(function (dm) {
+      dm.classList.remove('hidden');
+    });
+  }
+
+  function cancelBrandNameEdit() {
+    const current = getSavedBrandName();
+    document.querySelectorAll('#input-brand-name').forEach(function (inp) {
+      inp.value = current;
+    });
+    document.querySelectorAll('#brand-edit-mode').forEach(function (em) {
+      em.classList.add('hidden');
+    });
+    document.querySelectorAll('#brand-display-mode').forEach(function (dm) {
+      dm.classList.remove('hidden');
+    });
+  }
+
+  // Event delegation
+  document.addEventListener('click', function (e) {
+    const editBtn = e.target.closest('#btn-edit-brand-name');
+    if (editBtn) {
+      e.preventDefault();
+      e.stopPropagation();
       const current = getSavedBrandName();
       document.querySelectorAll('#input-brand-name').forEach(function (inp) {
         inp.value = current;
       });
-      document.querySelectorAll('#brand-edit-mode').forEach(function (em) {
-        em.classList.add('hidden');
-      });
       document.querySelectorAll('#brand-display-mode').forEach(function (dm) {
-        dm.classList.remove('hidden');
+        dm.classList.add('hidden');
       });
+      document.querySelectorAll('#brand-edit-mode').forEach(function (em) {
+        em.classList.remove('hidden');
+      });
+      const activeInput = document.getElementById('input-brand-name');
+      if (activeInput) {
+        setTimeout(function () {
+          activeInput.focus();
+          activeInput.select();
+        }, 30);
+      }
+      return;
     }
 
-    // Event delegation
-    document.addEventListener('click', function (e) {
-      const editBtn = e.target.closest('#btn-edit-brand-name');
-      if (editBtn) {
-        e.preventDefault();
-        e.stopPropagation();
-        const current = getSavedBrandName();
-        document.querySelectorAll('#input-brand-name').forEach(function (inp) {
-          inp.value = current;
-        });
-        document.querySelectorAll('#brand-display-mode').forEach(function (dm) {
-          dm.classList.add('hidden');
-        });
-        document.querySelectorAll('#brand-edit-mode').forEach(function (em) {
-          em.classList.remove('hidden');
-        });
-        const activeInput = document.getElementById('input-brand-name');
-        if (activeInput) {
-          setTimeout(function () {
-            activeInput.focus();
-            activeInput.select();
-          }, 30);
-        }
-        return;
-      }
+    const saveBtn = e.target.closest('#btn-save-brand-name');
+    if (saveBtn) {
+      e.preventDefault();
+      e.stopPropagation();
+      saveBrandNameFromInput();
+      return;
+    }
 
-      const saveBtn = e.target.closest('#btn-save-brand-name');
-      if (saveBtn) {
+    const cancelBtn = e.target.closest('#btn-cancel-brand-name');
+    if (cancelBtn) {
+      e.preventDefault();
+      e.stopPropagation();
+      cancelBrandNameEdit();
+      return;
+    }
+
+    const brandInput = e.target.closest('#input-brand-name');
+    if (brandInput) {
+      e.stopPropagation();
+    }
+  }, true);
+
+  document.addEventListener('keydown', function (e) {
+    const brandInput = e.target.closest ? e.target.closest('#input-brand-name') : null;
+    if (brandInput) {
+      e.stopPropagation();
+      if (e.key === 'Enter') {
         e.preventDefault();
-        e.stopPropagation();
         saveBrandNameFromInput();
-        return;
-      }
-
-      const cancelBtn = e.target.closest('#btn-cancel-brand-name');
-      if (cancelBtn) {
+      } else if (e.key === 'Escape') {
         e.preventDefault();
-        e.stopPropagation();
         cancelBrandNameEdit();
-        return;
       }
-
-      const brandInput = e.target.closest('#input-brand-name');
-      if (brandInput) {
-        e.stopPropagation();
-      }
-    }, true);
-
-    document.addEventListener('keydown', function (e) {
-      const brandInput = e.target.closest ? e.target.closest('#input-brand-name') : null;
-      if (brandInput) {
-        e.stopPropagation();
-        if (e.key === 'Enter') {
-          e.preventDefault();
-          saveBrandNameFromInput();
-        } else if (e.key === 'Escape') {
-          e.preventDefault();
-          cancelBrandNameEdit();
-        }
-      }
-    }, true);
-
-    // Cross-tab synchronization via storage event
-    window.addEventListener('storage', function (e) {
-      if (e.key === BRAND_STORAGE_KEY) {
-        applyBrandName(getSavedBrandName(), false);
-      }
-    });
-
-    // Run setup immediately and on DOM events
-    setupBrandingUI();
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', setupBrandingUI);
-    } else {
-      setTimeout(setupBrandingUI, 50);
     }
-  })();
+  }, true);
 
-  // =========================================================================
-  // UNIVERSAL SIDEBAR DROPDOWN EXPAND ARROW ENGINE (Collapsed: ">", Expanded: "v")
-  // =========================================================================
-  function syncExpandChevrons() {
-    const chevronConfigs = [
-      { id: 'chevron-nav-billing', submenuId: 'submenu-billing' },
-      { id: 'chevron-nav-hr', submenuId: 'submenu-human-resource' },
-      { id: 'chevron-sub-leave', submenuId: 'nested-leave-mgmt-menu' },
-      { id: 'chevron-sub-payroll', submenuId: 'nested-payroll-menu' },
-      { id: 'chevron-nav-dept', submenuId: 'submenu-department' }
-    ];
+  // Cross-tab synchronization via storage event
+  window.addEventListener('storage', function (e) {
+    if (e.key === BRAND_STORAGE_KEY) {
+      applyBrandName(getSavedBrandName(), false);
+    }
+  });
 
-    chevronConfigs.forEach(function (cfg) {
-      const chevrons = document.querySelectorAll('#' + cfg.id);
-      const submenu = document.getElementById(cfg.submenuId);
-      const isExpanded = submenu && !submenu.classList.contains('hidden');
-
-      chevrons.forEach(function (svg) {
-        // Enforce right-pointing arrow ">"
-        const path = svg.querySelector('path');
-        if (path && path.getAttribute('d') !== 'M8.25 4.5l7.5 7.5-7.5 7.5') {
-          path.setAttribute('d', 'M8.25 4.5l7.5 7.5-7.5 7.5');
-        }
-        svg.classList.remove('rotate-180');
-        if (isExpanded) {
-          svg.classList.add('rotate-90');
-        } else {
-          svg.classList.remove('rotate-90');
-        }
-      });
-    });
+  // Run setup immediately and on DOM events
+  setupBrandingUI();
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', setupBrandingUI);
+  } else {
+    setTimeout(setupBrandingUI, 50);
   }
+})();
 
-  // Inject styles to guarantee rotate-90 always renders pointing DOWN "v"
-  (function initChevronStyles() {
-    if (document.getElementById('aurelia-chevron-expand-styles')) return;
-    const style = document.createElement('style');
-    style.id = 'aurelia-chevron-expand-styles';
-    style.textContent = `
+// =========================================================================
+// UNIVERSAL SIDEBAR DROPDOWN EXPAND ARROW ENGINE (Collapsed: ">", Expanded: "v")
+// =========================================================================
+function syncExpandChevrons() {
+  const chevronConfigs = [
+    { id: 'chevron-nav-billing', submenuId: 'submenu-billing' },
+    { id: 'chevron-nav-hr', submenuId: 'submenu-human-resource' },
+    { id: 'chevron-sub-leave', submenuId: 'nested-leave-mgmt-menu' },
+    { id: 'chevron-sub-payroll', submenuId: 'nested-payroll-menu' },
+    { id: 'chevron-nav-dept', submenuId: 'submenu-department' }
+  ];
+
+  chevronConfigs.forEach(function (cfg) {
+    const chevrons = document.querySelectorAll('#' + cfg.id);
+    const submenu = document.getElementById(cfg.submenuId);
+    const isExpanded = submenu && !submenu.classList.contains('hidden');
+
+    chevrons.forEach(function (svg) {
+      // Enforce right-pointing arrow ">"
+      const path = svg.querySelector('path');
+      if (path && path.getAttribute('d') !== 'M8.25 4.5l7.5 7.5-7.5 7.5') {
+        path.setAttribute('d', 'M8.25 4.5l7.5 7.5-7.5 7.5');
+      }
+      svg.classList.remove('rotate-180');
+      if (isExpanded) {
+        svg.classList.add('rotate-90');
+      } else {
+        svg.classList.remove('rotate-90');
+      }
+    });
+  });
+}
+
+// Inject styles to guarantee rotate-90 always renders pointing DOWN "v"
+(function initChevronStyles() {
+  if (document.getElementById('aurelia-chevron-expand-styles')) return;
+  const style = document.createElement('style');
+  style.id = 'aurelia-chevron-expand-styles';
+  style.textContent = `
       #chevron-nav-billing,
       #chevron-nav-hr,
       #chevron-sub-leave,
@@ -10517,11 +10517,11 @@ $(document).ready(function () {
         transform: rotate(90deg) !important;
       }
     `;
-    document.head.appendChild(style);
-  })();
+  document.head.appendChild(style);
+})();
 
-  $(document).ready(function () {
-    syncExpandChevrons();
-    setTimeout(syncExpandChevrons, 100);
-    setTimeout(syncExpandChevrons, 400);
-  });
+$(document).ready(function () {
+  syncExpandChevrons();
+  setTimeout(syncExpandChevrons, 100);
+  setTimeout(syncExpandChevrons, 400);
+});
