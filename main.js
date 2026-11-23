@@ -6,7 +6,7 @@
     const raw = localStorage.getItem('aurelia_theme_settings');
     if (raw) {
       const theme = JSON.parse(raw);
-      const ALLOWED_THEME_COLORS = ['#0284C7', '#FFFFFF', '#130481', '#494D5F'];
+      const ALLOWED_THEME_COLORS = ['#0284C7', '#FFFFFF', '#130481', '#494D5F', '#FCA311'];
       const sidebarBg = (theme.sidebarBg && ALLOWED_THEME_COLORS.includes(theme.sidebarBg.toUpperCase())) ? theme.sidebarBg.toUpperCase() : '#130481';
       const cardBorder = (theme.cardBorder && ALLOWED_THEME_COLORS.includes(theme.cardBorder.toUpperCase())) ? theme.cardBorder.toUpperCase() : '#494D5F';
       const isDefaultBorder = !theme.cardBorder || theme.cardBorder.includes('rgba');
@@ -9186,7 +9186,7 @@ $(document).ready(function () {
   // =========================================================================
   // APPEARANCE & THEME CUSTOMIZATION CONTROLLER (Sidebar & Card Border)
   // =========================================================================
-  const FIXED_THEME_COLORS = ['#0284C7', '#FFFFFF', '#130481', '#494D5F'];
+  const FIXED_THEME_COLORS = ['#0284C7', '#FFFFFF', '#130481', '#494D5F', '#FCA311'];
   const DEFAULT_THEME = {
     sidebarBg: '#130481',
     cardBorder: '#494D5F'
