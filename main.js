@@ -1689,7 +1689,7 @@ $(document).ready(function () {
     ];
     if (allHrTargets.includes(target)) {
       $('#submenu-human-resource').removeClass('hidden');
-      $('#chevron-nav-hr').addClass('rotate-180');
+      $('#chevron-nav-hr').addClass('rotate-90');
 
       const hrActionMap = {
         'hr-documents': 'hr-doc-templates',
@@ -1713,7 +1713,7 @@ $(document).ready(function () {
 
       if (['leave-category', 'leave-assign', 'leave-request'].includes(target)) {
         $('#nested-leave-mgmt-menu').removeClass('hidden');
-        $('#chevron-sub-leave').addClass('rotate-180');
+        $('#chevron-sub-leave').addClass('rotate-90');
       }
       if (['salary-grade', 'manage-salary', 'disburse-salary-update', 'pay-slip'].includes(target)) {
         $('#nested-payroll-menu').removeClass('hidden');
@@ -1730,7 +1730,7 @@ $(document).ready(function () {
     // Auto-sync Department submenu expansion and active pill
     if (['all-departments', 'all-department', 'add-department'].includes(target)) {
       $('#submenu-department').removeClass('hidden');
-      $('#chevron-nav-dept').addClass('rotate-180');
+      $('#chevron-nav-dept').addClass('rotate-90');
       const deptActionMap = {
         'all-departments': 'all-department',
         'all-department': 'all-department',
@@ -1747,7 +1747,7 @@ $(document).ready(function () {
     // Auto-sync Billing submenu expansion and active pill
     if (['billing', 'add-bill', 'billing-details'].includes(target)) {
       $('#submenu-billing').removeClass('hidden');
-      $('#chevron-nav-billing').addClass('rotate-180');
+      $('#chevron-nav-billing').addClass('rotate-90');
       $('#btn-nav-billing').addClass('active');
       const act = target === 'billing-details' ? 'billing-details' : 'add-bill';
       $('.billing-sub-item').removeClass('text-[#FCA311] font-bold active').addClass('text-slate-300');
@@ -1966,11 +1966,11 @@ $(document).ready(function () {
 
     if (isExpanded) {
       $submenu.addClass('hidden');
-      $chevron.removeClass('rotate-180');
+      $chevron.removeClass('rotate-90');
       $(this).removeClass('active');
     } else {
       $submenu.removeClass('hidden');
-      $chevron.addClass('rotate-180');
+      $chevron.addClass('rotate-90');
       $(this).addClass('active');
     }
   });
@@ -1986,10 +1986,10 @@ $(document).ready(function () {
 
     if (isExpanded) {
       $nestedMenu.addClass('hidden');
-      $chevron.removeClass('rotate-180');
+      $chevron.removeClass('rotate-90');
     } else {
       $nestedMenu.removeClass('hidden');
-      $chevron.addClass('rotate-180');
+      $chevron.addClass('rotate-90');
       setTimeout(() => keepActiveSidebarItemVisible(true), 60);
     }
   });
@@ -2349,11 +2349,11 @@ $(document).ready(function () {
 
     if (isExpanded) {
       $submenu.addClass('hidden');
-      $chevron.removeClass('rotate-180');
+      $chevron.removeClass('rotate-90');
       $(this).removeClass('active');
     } else {
       $submenu.removeClass('hidden');
-      $chevron.addClass('rotate-180');
+      $chevron.addClass('rotate-90');
       $(this).addClass('active');
     }
   });
@@ -2411,11 +2411,11 @@ $(document).ready(function () {
 
     if (isExpanded) {
       $submenu.addClass('hidden');
-      $chevron.removeClass('rotate-180');
+      $chevron.removeClass('rotate-90');
       $(this).removeClass('active');
     } else {
       $submenu.removeClass('hidden');
-      $chevron.addClass('rotate-180');
+      $chevron.addClass('rotate-90');
       $(this).addClass('active');
     }
   });
@@ -10461,3 +10461,67 @@ $(document).ready(function () {
       setTimeout(setupBrandingUI, 50);
     }
   })();
+
+  // =========================================================================
+  // UNIVERSAL SIDEBAR DROPDOWN EXPAND ARROW ENGINE (Collapsed: ">", Expanded: "v")
+  // =========================================================================
+  function syncExpandChevrons() {
+    const chevronConfigs = [
+      { id: 'chevron-nav-billing', submenuId: 'submenu-billing' },
+      { id: 'chevron-nav-hr', submenuId: 'submenu-human-resource' },
+      { id: 'chevron-sub-leave', submenuId: 'nested-leave-mgmt-menu' },
+      { id: 'chevron-sub-payroll', submenuId: 'nested-payroll-menu' },
+      { id: 'chevron-nav-dept', submenuId: 'submenu-department' }
+    ];
+
+    chevronConfigs.forEach(function (cfg) {
+      const chevrons = document.querySelectorAll('#' + cfg.id);
+      const submenu = document.getElementById(cfg.submenuId);
+      const isExpanded = submenu && !submenu.classList.contains('hidden');
+
+      chevrons.forEach(function (svg) {
+        // Enforce right-pointing arrow ">"
+        const path = svg.querySelector('path');
+        if (path && path.getAttribute('d') !== 'M8.25 4.5l7.5 7.5-7.5 7.5') {
+          path.setAttribute('d', 'M8.25 4.5l7.5 7.5-7.5 7.5');
+        }
+        svg.classList.remove('rotate-180');
+        if (isExpanded) {
+          svg.classList.add('rotate-90');
+        } else {
+          svg.classList.remove('rotate-90');
+        }
+      });
+    });
+  }
+
+  // Inject styles to guarantee rotate-90 always renders pointing DOWN "v"
+  (function initChevronStyles() {
+    if (document.getElementById('aurelia-chevron-expand-styles')) return;
+    const style = document.createElement('style');
+    style.id = 'aurelia-chevron-expand-styles';
+    style.textContent = `
+      #chevron-nav-billing,
+      #chevron-nav-hr,
+      #chevron-sub-leave,
+      #chevron-sub-payroll,
+      #chevron-nav-dept {
+        transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        transform-origin: center center !important;
+      }
+      #chevron-nav-billing.rotate-90,
+      #chevron-nav-hr.rotate-90,
+      #chevron-sub-leave.rotate-90,
+      #chevron-sub-payroll.rotate-90,
+      #chevron-nav-dept.rotate-90 {
+        transform: rotate(90deg) !important;
+      }
+    `;
+    document.head.appendChild(style);
+  })();
+
+  $(document).ready(function () {
+    syncExpandChevrons();
+    setTimeout(syncExpandChevrons, 100);
+    setTimeout(syncExpandChevrons, 400);
+  });
