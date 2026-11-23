@@ -10283,6 +10283,107 @@ if (typeof window !== 'undefined' && window.MutationObserver) {
     }
   }
 
+  function syncAuthBrandingUI(brandName, cardBorderColor, customLogo) {
+    const cleanName = (brandName || getSavedBrandName()).trim();
+    const logoBg = (cardBorderColor || getActiveCardBorderColor()).toUpperCase();
+    const customImg = customLogo !== undefined ? customLogo : getCustomLogoImage();
+    const isDefault = cleanName.toUpperCase() === DEFAULT_BRAND_NAME;
+    const initial = (cleanName.charAt(0) || 'A').toUpperCase();
+    const isLight = isLightColor(logoBg);
+    const accentColor = isLight ? '#14213D' : '#FFFFFF';
+    const pearlFill = isLight ? (logoBg === '#FFFFFF' ? '#FCA311' : '#FFFFFF') : '#FCA311';
+
+    let svgHtml = '';
+    if (isDefault) {
+      svgHtml = `
+          <svg id="auth-logo-mark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" class="w-full h-full object-contain" role="img" aria-label="Aurelia Emblem">
+            <circle cx="100" cy="100" r="95" fill="${logoBg}"/>
+            <circle cx="100" cy="100" r="86" fill="none" stroke="${accentColor}" stroke-width="2.2"/>
+            <path d="M58 162 L100 46 L142 162" fill="none" stroke="${accentColor}" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+            <line x1="71" y1="126" x2="129" y2="126" stroke="${accentColor}" stroke-width="6" stroke-linecap="round"/>
+            <circle cx="100" cy="104" r="8.5" fill="${pearlFill}"/>
+          </svg>
+        `;
+    } else {
+      svgHtml = `
+          <svg id="auth-logo-mark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" class="w-full h-full object-contain" role="img" aria-label="${escapeAttr(cleanName)} Emblem">
+            <circle cx="100" cy="100" r="95" fill="${logoBg}"/>
+            <circle cx="100" cy="100" r="86" fill="none" stroke="${accentColor}" stroke-width="2.2"/>
+            <text x="100" y="110" text-anchor="middle" dominant-baseline="central" fill="${accentColor}" font-family="'Cormorant Garamond', Georgia, serif" font-weight="700" font-size="115">${escapeAttr(initial)}</text>
+          </svg>
+        `;
+    }
+
+    document.querySelectorAll('#auth-container').forEach(function (authBox) {
+      // 1. Auth logo emblem or image
+      authBox.querySelectorAll('img, svg').forEach(function (el) {
+        if ((el.src && (el.src.includes('aurelia-mark') || el.src.startsWith('data:image'))) || el.id === 'auth-logo-mark' || (el.getAttribute('aria-label') && el.getAttribute('aria-label').includes('Emblem'))) {
+          if (customImg) {
+            if (el.tagName && el.tagName.toLowerCase() === 'img') {
+              el.src = customImg;
+              el.alt = escapeAttr(cleanName) + ' Logo';
+              el.className = 'w-full h-full object-cover rounded-full';
+            } else {
+              const newImg = document.createElement('img');
+              newImg.id = 'auth-logo-mark';
+              newImg.src = customImg;
+              newImg.alt = escapeAttr(cleanName) + ' Logo';
+              newImg.className = 'w-full h-full object-cover rounded-full';
+              if (el.parentNode) el.parentNode.replaceChild(newImg, el);
+            }
+          } else {
+            const wrap = document.createElement('div');
+            wrap.className = 'w-full h-full flex items-center justify-center';
+            wrap.innerHTML = svgHtml;
+            if (el.parentNode) el.parentNode.replaceChild(wrap, el);
+          }
+        }
+      });
+
+      // 2. Auth top-bar brand title (e.g. "SURELIA")
+      authBox.querySelectorAll('span').forEach(function (sp) {
+        const style = sp.getAttribute('style') || '';
+        const txt = sp.textContent.trim().toUpperCase();
+        if (style.includes('Cormorant Garamond') || sp.getAttribute('data-auth-brand-name') === 'true') {
+          sp.setAttribute('data-auth-brand-name', 'true');
+          sp.textContent = cleanName;
+        } else if (txt.includes('LUXURY POS') || sp.getAttribute('data-luxury-badge') === 'true') {
+          sp.setAttribute('data-luxury-badge', 'true');
+          sp.textContent = `${cleanName} Luxury POS`;
+        } else if (txt.includes('STAFF') && (txt.includes('JOIN') || sp.getAttribute('data-join-badge') === 'true')) {
+          sp.setAttribute('data-join-badge', 'true');
+          sp.textContent = `Join ${cleanName} Staff`;
+        }
+      });
+
+      // 3. Login submit button: "Sign In to [cleanName]"
+      const loginBtnSpan = authBox.querySelector('#btn-login-submit > span');
+      if (loginBtnSpan) {
+        loginBtnSpan.textContent = `Sign In to ${cleanName}`;
+      }
+
+      // 4. Register subtitle
+      const regSubtitle = authBox.querySelector('#auth-card-register p');
+      if (regSubtitle && regSubtitle.textContent.includes('operations')) {
+        regSubtitle.innerHTML = `Register a new profile for ${escapeAttr(cleanName)} Hotel &amp; Restaurant operations.`;
+      }
+
+      // 5. Terms & Privacy disclaimers
+      authBox.querySelectorAll('p, span').forEach(function (el) {
+        if (el.textContent.includes('Hotel Management') || el.getAttribute('data-terms-disclaimer') === 'true') {
+          el.setAttribute('data-terms-disclaimer', 'true');
+          el.innerHTML = `By clicking Sign In, Google, or LinkedIn, you agree to ${escapeAttr(cleanName)} Hotel Management <span class="underline">Terms &amp; Conditions</span> and <span class="underline">Privacy Policy</span>.`;
+        } else if (el.textContent.includes('Terms of Service & privacy') || el.getAttribute('data-reg-terms') === 'true') {
+          el.setAttribute('data-reg-terms', 'true');
+          el.textContent = `I agree to the ${cleanName} Terms of Service & privacy confidentiality policy.`;
+        }
+      });
+    });
+  }
+
+  window.syncAuthBrandingUI = syncAuthBrandingUI;
+  window.getSavedBrandName = getSavedBrandName;
+
   function renderBrandLogo(brandName, cardBorderColor) {
     const cleanName = (brandName || getSavedBrandName()).trim();
     const isDefault = cleanName.toUpperCase() === DEFAULT_BRAND_NAME;
@@ -10395,6 +10496,9 @@ if (typeof window !== 'undefined' && window.MutationObserver) {
 
     // Always update browser tab favicon with matching card border color or custom logo
     updateFavicon(cleanName, logoBg);
+
+    // Sync Auth / Login Stage branding (Emblem/Logo + Brand Name + Buttons)
+    syncAuthBrandingUI(cleanName, logoBg, customImg);
   }
 
   window.renderBrandLogo = renderBrandLogo;
@@ -10475,6 +10579,9 @@ if (typeof window !== 'undefined' && window.MutationObserver) {
 
     // Card 3: Hotel Information
     syncHotelInfoUI();
+
+    // Login / Auth Stage Branding
+    syncAuthBrandingUI(currentName);
   }
 
   function applyBrandName(name, showFeedback = true) {
@@ -10510,6 +10617,9 @@ if (typeof window !== 'undefined' && window.MutationObserver) {
 
     // Update logos
     renderBrandLogo(cleanName);
+
+    // Sync Login / Auth Stage branding
+    syncAuthBrandingUI(cleanName);
 
     // Update document title
     updateDocumentTitle(cleanName);

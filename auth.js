@@ -313,6 +313,10 @@
       DOM.authContainer.style.display = 'flex';
     }
 
+    if (typeof window.syncAuthBrandingUI === 'function') {
+      window.syncAuthBrandingUI();
+    }
+
     if (DOM.dashboardWrapper) {
       DOM.dashboardWrapper.classList.add('hidden');
       DOM.dashboardWrapper.style.display = 'none';
@@ -581,6 +585,10 @@
     }
 
     showView(targetView);
+
+    if (typeof window.syncAuthBrandingUI === 'function') {
+      window.syncAuthBrandingUI();
+    }
   }
 
   /**
