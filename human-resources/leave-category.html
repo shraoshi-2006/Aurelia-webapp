@@ -8,8 +8,8 @@
           var s = localStorage.getItem('aurelia_theme_settings');
           if (s) {
             var t = JSON.parse(s);
-            var sb = t.sidebarBg || '#130481';
-            var cb = t.cardBorder || '#494D5F';
+            var sb = t.sidebarBg || '#494D5F';
+            var cb = t.cardBorder || '#FCA311';
             var isDef = !t.cardBorder || t.cardBorder.includes('rgba');
             var rim = isDef ? 'linear-gradient(135deg, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0.5) 30%, rgba(255, 255, 255, 0.1) 65%, rgba(255, 255, 255, 0.75) 100%)' : cb;
             var btnBg = isDef ? '#FCA311' : cb;
@@ -4608,7 +4608,7 @@
   <!-- Authentication Controller -->
   <script src="../auth.js?v=20261110_07"></script>
   <!-- Main JavaScript Logic -->
-  <script src="../main.js?v=20261123_v81"></script>
+  <script src="../main.js?v=20261123_v82"></script>
 </body>
 
 </html>

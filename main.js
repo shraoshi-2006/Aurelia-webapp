@@ -7,8 +7,8 @@
     if (raw) {
       const theme = JSON.parse(raw);
       const ALLOWED_THEME_COLORS = ['#0284C7', '#FFFFFF', '#130481', '#494D5F', '#FCA311'];
-      const sidebarBg = (theme.sidebarBg && ALLOWED_THEME_COLORS.includes(theme.sidebarBg.toUpperCase())) ? theme.sidebarBg.toUpperCase() : '#130481';
-      const cardBorder = (theme.cardBorder && ALLOWED_THEME_COLORS.includes(theme.cardBorder.toUpperCase())) ? theme.cardBorder.toUpperCase() : '#494D5F';
+      const sidebarBg = (theme.sidebarBg && ALLOWED_THEME_COLORS.includes(theme.sidebarBg.toUpperCase())) ? theme.sidebarBg.toUpperCase() : '#494D5F';
+      const cardBorder = (theme.cardBorder && ALLOWED_THEME_COLORS.includes(theme.cardBorder.toUpperCase())) ? theme.cardBorder.toUpperCase() : '#FCA311';
       const isDefaultBorder = !theme.cardBorder || theme.cardBorder.includes('rgba');
       const rimBgValue = isDefaultBorder
         ? 'linear-gradient(135deg, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0.5) 30%, rgba(255, 255, 255, 0.1) 65%, rgba(255, 255, 255, 0.75) 100%)'
@@ -9188,8 +9188,8 @@ $(document).ready(function () {
   // =========================================================================
   const FIXED_THEME_COLORS = ['#0284C7', '#FFFFFF', '#130481', '#494D5F', '#FCA311'];
   const DEFAULT_THEME = {
-    sidebarBg: '#130481',
-    cardBorder: '#494D5F'
+    sidebarBg: '#494D5F',
+    cardBorder: '#FCA311'
   };
 
   function getSavedTheme() {
