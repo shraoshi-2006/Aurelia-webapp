@@ -2535,12 +2535,12 @@ $(document).ready(function () {
   // Mobile 3-Lines User Menu Drawer (Pure Path / Image 1 style: Notifications, Settings, Profile ONLY)
   function openMobileUserMenu() {
     $('#mobile-user-menu-backdrop').removeClass('hidden');
-    $('#mobile-user-menu-drawer').removeClass('-translate-x-full');
+    $('#mobile-user-menu-drawer').removeClass('-translate-x-full translate-x-full').addClass('translate-x-0');
     $('body').addClass('overflow-hidden');
   }
 
   function closeMobileUserMenu() {
-    $('#mobile-user-menu-drawer').addClass('-translate-x-full');
+    $('#mobile-user-menu-drawer').removeClass('translate-x-0').addClass('translate-x-full');
     $('#mobile-user-menu-backdrop').addClass('hidden');
     $('body').removeClass('overflow-hidden');
   }
