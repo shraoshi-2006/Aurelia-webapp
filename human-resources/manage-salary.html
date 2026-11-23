@@ -636,6 +636,15 @@
       border-color: #FCA311 !important;
     }
 
+    /* Keep all table values & numbers strictly in one line */
+    #page-ms-tbody td,
+    #page-ms-tbody th,
+    #page-ms-tbody td *,
+    table thead th {
+      white-space: nowrap !important;
+      word-break: normal !important;
+    }
+
     /* Danger Pill Button */
     .btn-Aurelia-danger,
     .btn-aurelia-danger,
@@ -1969,8 +1978,12 @@
 
   table td.whitespace-nowrap,
   table th.whitespace-nowrap,
-  .whitespace-nowrap {
+  .whitespace-nowrap,
+  #page-ms-tbody td,
+  #page-ms-tbody th,
+  #page-ms-tbody td * {
     white-space: nowrap !important;
+    word-break: normal !important;
   }
 
   /* Default table headers and cell text left-aligned */
@@ -3548,19 +3561,19 @@
 
   <div class="Aurelia-card p-0 overflow-hidden">
     <div class="overflow-x-auto">
-      <table class="w-full text-xs text-center">
+      <table class="w-full text-xs text-center whitespace-nowrap">
         <thead class="bg-slate-50 text-slate-500 font-semibold text-[11px] border-b border-slate-200">
           <tr>
             <th class="py-3 px-4 whitespace-nowrap">Employee ID</th>
-            <th class="py-3 px-4">Employee</th>
-            <th class="py-3 px-4">Grade</th>
-            <th class="py-3 px-4">Basic Pay (₹)</th>
-            <th class="py-3 px-4">Allowances (₹)</th>
-            <th class="py-3 px-4 font-bold text-slate-900">Gross (₹)</th>
-            <th class="py-3 px-4 text-rose-600">Deductions (₹)</th>
-            <th class="py-3 px-4 font-bold text-emerald-600">Net Pay (₹)</th>
-            <th class="py-3 px-4">Bank Account</th>
-            <th class="py-3 px-4 text-center">Actions</th>
+            <th class="py-3 px-4 whitespace-nowrap">Employee</th>
+            <th class="py-3 px-4 whitespace-nowrap">Grade</th>
+            <th class="py-3 px-4 whitespace-nowrap">Basic Pay (₹)</th>
+            <th class="py-3 px-4 whitespace-nowrap">Allowances (₹)</th>
+            <th class="py-3 px-4 font-bold text-slate-900 whitespace-nowrap">Gross (₹)</th>
+            <th class="py-3 px-4 text-rose-600 whitespace-nowrap">Deductions (₹)</th>
+            <th class="py-3 px-4 font-bold text-emerald-600 whitespace-nowrap">Net Pay (₹)</th>
+            <th class="py-3 px-4 whitespace-nowrap">Bank Account</th>
+            <th class="py-3 px-4 text-center whitespace-nowrap">Actions</th>
           </tr>
         </thead>
         <tbody id="page-ms-tbody" class="divide-y divide-slate-100">
@@ -3568,7 +3581,7 @@
             <td class="py-3.5 px-4 whitespace-nowrap">
               <span class="px-2.5 py-1 rounded text-xs font-mono font-bold bg-[#FCA311] text-black inline-block shadow-2xs">EMP-2026-02</span>
             </td>
-            <td class="py-3.5 px-4">
+            <td class="py-3.5 px-4 whitespace-nowrap">
               <div class="flex items-center space-x-3">
                 <div class="w-9 h-9 rounded-xl flex items-center justify-center font-black text-xs text-white shadow-xs border border-white/20 flex-shrink-0"
                      style="background: linear-gradient(135deg, #14213D 0%, #0369a1 60%, #FCA311 100%);">VM</div>
@@ -3578,13 +3591,13 @@
                 </div>
               </div>
             </td>
-            <td class="py-3.5 px-4"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-800">GRD-EXEC-A</span></td>
-            <td class="py-3.5 px-4 font-mono font-medium">₹1,10,000</td>
-            <td class="py-3.5 px-4 font-mono text-slate-600">₹69,000</td>
-            <td class="py-3.5 px-4 font-mono font-bold text-slate-900">₹1,79,000</td>
-            <td class="py-3.5 px-4 font-mono text-rose-600">-₹23,400</td>
-            <td class="py-3.5 px-4 font-mono font-bold text-emerald-600 text-sm">₹1,55,600</td>
-            <td class="py-3.5 px-4 font-mono text-slate-500">HDFC ••••4812</td>
+            <td class="py-3.5 px-4 whitespace-nowrap"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-800">GRD-EXEC-A</span></td>
+            <td class="py-3.5 px-4 font-mono font-medium whitespace-nowrap">₹1,10,000</td>
+            <td class="py-3.5 px-4 font-mono text-slate-600 whitespace-nowrap">₹69,000</td>
+            <td class="py-3.5 px-4 font-mono font-bold text-slate-900 whitespace-nowrap">₹1,79,000</td>
+            <td class="py-3.5 px-4 font-mono text-rose-600 whitespace-nowrap">-₹23,400</td>
+            <td class="py-3.5 px-4 font-mono font-bold text-emerald-600 text-sm whitespace-nowrap">₹1,55,600</td>
+            <td class="py-3.5 px-4 font-mono text-slate-500 whitespace-nowrap">HDFC ••••4812</td>
             <td class="py-3.5 px-4 text-center whitespace-nowrap">
               <div class="inline-flex items-center justify-center gap-1.5">
                 <a href="pay-slip.html?emp=EMP-2026-02" class="btn-Aurelia-secondary btn-action-icon text-slate-600 hover:text-[#14213D]" title="View Pay Slip" aria-label="View Pay Slip">
@@ -3604,7 +3617,7 @@
             <td class="py-3.5 px-4 whitespace-nowrap">
               <span class="px-2.5 py-1 rounded text-xs font-mono font-bold bg-[#FCA311] text-black inline-block shadow-2xs">EMP-2026-03</span>
             </td>
-            <td class="py-3.5 px-4">
+            <td class="py-3.5 px-4 whitespace-nowrap">
               <div class="flex items-center space-x-3">
                 <div class="w-9 h-9 rounded-xl flex items-center justify-center font-black text-xs text-white shadow-xs border border-white/20 flex-shrink-0"
                      style="background: linear-gradient(135deg, #14213D 0%, #b45309 60%, #FCA311 100%);">PS</div>
@@ -3614,13 +3627,13 @@
                 </div>
               </div>
             </td>
-            <td class="py-3.5 px-4"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800">GRD-MGT-B</span></td>
-            <td class="py-3.5 px-4 font-mono font-medium">₹75,000</td>
-            <td class="py-3.5 px-4 font-mono text-slate-600">₹44,000</td>
-            <td class="py-3.5 px-4 font-mono font-bold text-slate-900">₹1,19,000</td>
-            <td class="py-3.5 px-4 font-mono text-rose-600">-₹14,280</td>
-            <td class="py-3.5 px-4 font-mono font-bold text-emerald-600 text-sm">₹1,04,720</td>
-            <td class="py-3.5 px-4 font-mono text-slate-500">ICICI ••••2910</td>
+            <td class="py-3.5 px-4 whitespace-nowrap"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800">GRD-MGT-B</span></td>
+            <td class="py-3.5 px-4 font-mono font-medium whitespace-nowrap">₹75,000</td>
+            <td class="py-3.5 px-4 font-mono text-slate-600 whitespace-nowrap">₹44,000</td>
+            <td class="py-3.5 px-4 font-mono font-bold text-slate-900 whitespace-nowrap">₹1,19,000</td>
+            <td class="py-3.5 px-4 font-mono text-rose-600 whitespace-nowrap">-₹14,280</td>
+            <td class="py-3.5 px-4 font-mono font-bold text-emerald-600 text-sm whitespace-nowrap">₹1,04,720</td>
+            <td class="py-3.5 px-4 font-mono text-slate-500 whitespace-nowrap">ICICI ••••2910</td>
             <td class="py-3.5 px-4 text-center whitespace-nowrap">
               <div class="inline-flex items-center justify-center gap-1.5">
                 <a href="pay-slip.html?emp=EMP-2026-03" class="btn-Aurelia-secondary btn-action-icon text-slate-600 hover:text-[#14213D]" title="View Pay Slip" aria-label="View Pay Slip">
@@ -3640,7 +3653,7 @@
             <td class="py-3.5 px-4 whitespace-nowrap">
               <span class="px-2.5 py-1 rounded text-xs font-mono font-bold bg-[#FCA311] text-black inline-block shadow-2xs">EMP-2026-04</span>
             </td>
-            <td class="py-3.5 px-4">
+            <td class="py-3.5 px-4 whitespace-nowrap">
               <div class="flex items-center space-x-3">
                 <div class="w-9 h-9 rounded-xl flex items-center justify-center font-black text-xs text-white shadow-xs border border-white/20 flex-shrink-0"
                      style="background: linear-gradient(135deg, #14213D 0%, #1d4ed8 60%, #FCA311 100%);">RV</div>
@@ -3650,13 +3663,13 @@
                 </div>
               </div>
             </td>
-            <td class="py-3.5 px-4"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-100 text-blue-800">GRD-MGT-B</span></td>
-            <td class="py-3.5 px-4 font-mono font-medium">₹68,000</td>
-            <td class="py-3.5 px-4 font-mono text-slate-600">₹41,200</td>
-            <td class="py-3.5 px-4 font-mono font-bold text-slate-900">₹1,09,200</td>
-            <td class="py-3.5 px-4 font-mono text-rose-600">-₹12,850</td>
-            <td class="py-3.5 px-4 font-mono font-bold text-emerald-600 text-sm">₹96,350</td>
-            <td class="py-3.5 px-4 font-mono text-slate-500">SBI ••••8821</td>
+            <td class="py-3.5 px-4 whitespace-nowrap"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-100 text-blue-800">GRD-MGT-B</span></td>
+            <td class="py-3.5 px-4 font-mono font-medium whitespace-nowrap">₹68,000</td>
+            <td class="py-3.5 px-4 font-mono text-slate-600 whitespace-nowrap">₹41,200</td>
+            <td class="py-3.5 px-4 font-mono font-bold text-slate-900 whitespace-nowrap">₹1,09,200</td>
+            <td class="py-3.5 px-4 font-mono text-rose-600 whitespace-nowrap">-₹12,850</td>
+            <td class="py-3.5 px-4 font-mono font-bold text-emerald-600 text-sm whitespace-nowrap">₹96,350</td>
+            <td class="py-3.5 px-4 font-mono text-slate-500 whitespace-nowrap">SBI ••••8821</td>
             <td class="py-3.5 px-4 text-center whitespace-nowrap">
               <div class="inline-flex items-center justify-center gap-1.5">
                 <a href="pay-slip.html?emp=EMP-2026-04" class="btn-Aurelia-secondary btn-action-icon text-slate-600 hover:text-[#14213D]" title="View Pay Slip" aria-label="View Pay Slip">
@@ -3676,7 +3689,7 @@
             <td class="py-3.5 px-4 whitespace-nowrap">
               <span class="px-2.5 py-1 rounded text-xs font-mono font-bold bg-[#FCA311] text-black inline-block shadow-2xs">EMP-2026-06</span>
             </td>
-            <td class="py-3.5 px-4">
+            <td class="py-3.5 px-4 whitespace-nowrap">
               <div class="flex items-center space-x-3">
                 <div class="w-9 h-9 rounded-xl flex items-center justify-center font-black text-xs text-white shadow-xs border border-white/20 flex-shrink-0"
                      style="background: linear-gradient(135deg, #14213D 0%, #b45309 60%, #FCA311 100%);">SP</div>
@@ -3686,13 +3699,13 @@
                 </div>
               </div>
             </td>
-            <td class="py-3.5 px-4"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-100 text-blue-800">GRD-SVC-E</span></td>
-            <td class="py-3.5 px-4 font-mono font-medium">₹26,000</td>
-            <td class="py-3.5 px-4 font-mono text-slate-600">₹13,200</td>
-            <td class="py-3.5 px-4 font-mono font-bold text-slate-900">₹39,200</td>
-            <td class="py-3.5 px-4 font-mono text-rose-600">-₹3,840</td>
-            <td class="py-3.5 px-4 font-mono font-bold text-emerald-600 text-sm">₹35,360</td>
-            <td class="py-3.5 px-4 font-mono text-slate-500">Axis ••••7109</td>
+            <td class="py-3.5 px-4 whitespace-nowrap"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-100 text-blue-800">GRD-SVC-E</span></td>
+            <td class="py-3.5 px-4 font-mono font-medium whitespace-nowrap">₹26,000</td>
+            <td class="py-3.5 px-4 font-mono text-slate-600 whitespace-nowrap">₹13,200</td>
+            <td class="py-3.5 px-4 font-mono font-bold text-slate-900 whitespace-nowrap">₹39,200</td>
+            <td class="py-3.5 px-4 font-mono text-rose-600 whitespace-nowrap">-₹3,840</td>
+            <td class="py-3.5 px-4 font-mono font-bold text-emerald-600 text-sm whitespace-nowrap">₹35,360</td>
+            <td class="py-3.5 px-4 font-mono text-slate-500 whitespace-nowrap">Axis ••••7109</td>
             <td class="py-3.5 px-4 text-center whitespace-nowrap">
               <div class="inline-flex items-center justify-center gap-1.5">
                 <a href="pay-slip.html?emp=EMP-2026-06" class="btn-Aurelia-secondary btn-action-icon text-slate-600 hover:text-[#14213D]" title="View Pay Slip" aria-label="View Pay Slip">
@@ -3712,7 +3725,7 @@
             <td class="py-3.5 px-4 whitespace-nowrap">
               <span class="px-2.5 py-1 rounded text-xs font-mono font-bold bg-[#FCA311] text-black inline-block shadow-2xs">EMP-2026-08</span>
             </td>
-            <td class="py-3.5 px-4">
+            <td class="py-3.5 px-4 whitespace-nowrap">
               <div class="flex items-center space-x-3">
                 <div class="w-9 h-9 rounded-xl flex items-center justify-center font-black text-xs text-white shadow-xs border border-white/20 flex-shrink-0"
                      style="background: linear-gradient(135deg, #14213D 0%, #0f766e 60%, #2dd4bf 100%);">AR</div>
@@ -3722,13 +3735,13 @@
                 </div>
               </div>
             </td>
-            <td class="py-3.5 px-4"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-purple-100 text-purple-800">GRD-OPS-D</span></td>
-            <td class="py-3.5 px-4 font-mono font-medium">₹38,000</td>
-            <td class="py-3.5 px-4 font-mono text-slate-600">₹20,700</td>
-            <td class="py-3.5 px-4 font-mono font-bold text-slate-900">₹58,700</td>
-            <td class="py-3.5 px-4 font-mono text-rose-600">-₹6,450</td>
-            <td class="py-3.5 px-4 font-mono font-bold text-emerald-600 text-sm">₹52,250</td>
-            <td class="py-3.5 px-4 font-mono text-slate-500">HDFC ••••1102</td>
+            <td class="py-3.5 px-4 whitespace-nowrap"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-purple-100 text-purple-800">GRD-OPS-D</span></td>
+            <td class="py-3.5 px-4 font-mono font-medium whitespace-nowrap">₹38,000</td>
+            <td class="py-3.5 px-4 font-mono text-slate-600 whitespace-nowrap">₹20,700</td>
+            <td class="py-3.5 px-4 font-mono font-bold text-slate-900 whitespace-nowrap">₹58,700</td>
+            <td class="py-3.5 px-4 font-mono text-rose-600 whitespace-nowrap">-₹6,450</td>
+            <td class="py-3.5 px-4 font-mono font-bold text-emerald-600 text-sm whitespace-nowrap">₹52,250</td>
+            <td class="py-3.5 px-4 font-mono text-slate-500 whitespace-nowrap">HDFC ••••1102</td>
             <td class="py-3.5 px-4 text-center whitespace-nowrap">
               <div class="inline-flex items-center justify-center gap-1.5">
                 <a href="pay-slip.html?emp=EMP-2026-08" class="btn-Aurelia-secondary btn-action-icon text-slate-600 hover:text-[#14213D]" title="View Pay Slip" aria-label="View Pay Slip">
@@ -3748,7 +3761,7 @@
             <td class="py-3.5 px-4 whitespace-nowrap">
               <span class="px-2.5 py-1 rounded text-xs font-mono font-bold bg-[#FCA311] text-black inline-block shadow-2xs">EMP-2026-01</span>
             </td>
-            <td class="py-3.5 px-4">
+            <td class="py-3.5 px-4 whitespace-nowrap">
               <div class="flex items-center space-x-3">
                 <div class="w-9 h-9 rounded-xl flex items-center justify-center font-black text-xs text-white shadow-xs border border-white/20 flex-shrink-0"
                      style="background: linear-gradient(135deg, #14213D 0%, #854d0e 60%, #FCA311 100%);">AL</div>
@@ -3758,13 +3771,13 @@
                 </div>
               </div>
             </td>
-            <td class="py-3.5 px-4"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-100 text-blue-800">GRD-MGT-C</span></td>
-            <td class="py-3.5 px-4 font-mono font-medium">₹48,000</td>
-            <td class="py-3.5 px-4 font-mono text-slate-600">₹24,500</td>
-            <td class="py-3.5 px-4 font-mono font-bold text-slate-900">₹72,500</td>
-            <td class="py-3.5 px-4 font-mono text-rose-600">-₹7,975</td>
-            <td class="py-3.5 px-4 font-mono font-bold text-emerald-600 text-sm">₹64,525</td>
-            <td class="py-3.5 px-4 font-mono text-slate-500">HDFC ••••8814</td>
+            <td class="py-3.5 px-4 whitespace-nowrap"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-100 text-blue-800">GRD-MGT-C</span></td>
+            <td class="py-3.5 px-4 font-mono font-medium whitespace-nowrap">₹48,000</td>
+            <td class="py-3.5 px-4 font-mono text-slate-600 whitespace-nowrap">₹24,500</td>
+            <td class="py-3.5 px-4 font-mono font-bold text-slate-900 whitespace-nowrap">₹72,500</td>
+            <td class="py-3.5 px-4 font-mono text-rose-600 whitespace-nowrap">-₹7,975</td>
+            <td class="py-3.5 px-4 font-mono font-bold text-emerald-600 text-sm whitespace-nowrap">₹64,525</td>
+            <td class="py-3.5 px-4 font-mono text-slate-500 whitespace-nowrap">HDFC ••••8814</td>
             <td class="py-3.5 px-4 text-center whitespace-nowrap">
               <div class="inline-flex items-center justify-center gap-1.5">
                 <a href="pay-slip.html?emp=EMP-2026-01" class="btn-Aurelia-secondary btn-action-icon text-slate-600 hover:text-[#14213D]" title="View Pay Slip" aria-label="View Pay Slip">
@@ -3784,7 +3797,7 @@
             <td class="py-3.5 px-4 whitespace-nowrap">
               <span class="px-2.5 py-1 rounded text-xs font-mono font-bold bg-[#FCA311] text-black inline-block shadow-2xs">EMP-2026-09</span>
             </td>
-            <td class="py-3.5 px-4">
+            <td class="py-3.5 px-4 whitespace-nowrap">
               <div class="flex items-center space-x-3">
                 <div class="w-9 h-9 rounded-xl flex items-center justify-center font-black text-xs text-white shadow-xs border border-white/20 flex-shrink-0"
                      style="background: linear-gradient(135deg, #14213D 0%, #15803d 60%, #FCA311 100%);">RK</div>
@@ -3794,13 +3807,13 @@
                 </div>
               </div>
             </td>
-            <td class="py-3.5 px-4"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800">GRD-MGT-C</span></td>
-            <td class="py-3.5 px-4 font-mono font-medium">₹52,000</td>
-            <td class="py-3.5 px-4 font-mono text-slate-600">₹27,000</td>
-            <td class="py-3.5 px-4 font-mono font-bold text-slate-900">₹79,000</td>
-            <td class="py-3.5 px-4 font-mono text-rose-600">-₹8,690</td>
-            <td class="py-3.5 px-4 font-mono font-bold text-emerald-600 text-sm">₹70,310</td>
-            <td class="py-3.5 px-4 font-mono text-slate-500">SBI ••••3319</td>
+            <td class="py-3.5 px-4 whitespace-nowrap"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800">GRD-MGT-C</span></td>
+            <td class="py-3.5 px-4 font-mono font-medium whitespace-nowrap">₹52,000</td>
+            <td class="py-3.5 px-4 font-mono text-slate-600 whitespace-nowrap">₹27,000</td>
+            <td class="py-3.5 px-4 font-mono font-bold text-slate-900 whitespace-nowrap">₹79,000</td>
+            <td class="py-3.5 px-4 font-mono text-rose-600 whitespace-nowrap">-₹8,690</td>
+            <td class="py-3.5 px-4 font-mono font-bold text-emerald-600 text-sm whitespace-nowrap">₹70,310</td>
+            <td class="py-3.5 px-4 font-mono text-slate-500 whitespace-nowrap">SBI ••••3319</td>
             <td class="py-3.5 px-4 text-center whitespace-nowrap">
               <div class="inline-flex items-center justify-center gap-1.5">
                 <a href="pay-slip.html?emp=EMP-2026-09" class="btn-Aurelia-secondary btn-action-icon text-slate-600 hover:text-[#14213D]" title="View Pay Slip" aria-label="View Pay Slip">
@@ -3820,7 +3833,7 @@
             <td class="py-3.5 px-4 whitespace-nowrap">
               <span class="px-2.5 py-1 rounded text-xs font-mono font-bold bg-[#FCA311] text-black inline-block shadow-2xs">EMP-2026-10</span>
             </td>
-            <td class="py-3.5 px-4">
+            <td class="py-3.5 px-4 whitespace-nowrap">
               <div class="flex items-center space-x-3">
                 <div class="w-9 h-9 rounded-xl flex items-center justify-center font-black text-xs text-white shadow-xs border border-white/20 flex-shrink-0"
                      style="background: linear-gradient(135deg, #14213D 0%, #c2410c 60%, #FCA311 100%);">TM</div>
@@ -3830,13 +3843,13 @@
                 </div>
               </div>
             </td>
-            <td class="py-3.5 px-4"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-purple-100 text-purple-800">GRD-SVC-E</span></td>
-            <td class="py-3.5 px-4 font-mono font-medium">₹30,000</td>
-            <td class="py-3.5 px-4 font-mono text-slate-600">₹14,500</td>
-            <td class="py-3.5 px-4 font-mono font-bold text-slate-900">₹44,500</td>
-            <td class="py-3.5 px-4 font-mono text-rose-600">-₹4,450</td>
-            <td class="py-3.5 px-4 font-mono font-bold text-emerald-600 text-sm">₹40,050</td>
-            <td class="py-3.5 px-4 font-mono text-slate-500">ICICI ••••5521</td>
+            <td class="py-3.5 px-4 whitespace-nowrap"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-purple-100 text-purple-800">GRD-SVC-E</span></td>
+            <td class="py-3.5 px-4 font-mono font-medium whitespace-nowrap">₹30,000</td>
+            <td class="py-3.5 px-4 font-mono text-slate-600 whitespace-nowrap">₹14,500</td>
+            <td class="py-3.5 px-4 font-mono font-bold text-slate-900 whitespace-nowrap">₹44,500</td>
+            <td class="py-3.5 px-4 font-mono text-rose-600 whitespace-nowrap">-₹4,450</td>
+            <td class="py-3.5 px-4 font-mono font-bold text-emerald-600 text-sm whitespace-nowrap">₹40,050</td>
+            <td class="py-3.5 px-4 font-mono text-slate-500 whitespace-nowrap">ICICI ••••5521</td>
             <td class="py-3.5 px-4 text-center whitespace-nowrap">
               <div class="inline-flex items-center justify-center gap-1.5">
                 <a href="pay-slip.html?emp=EMP-2026-10" class="btn-Aurelia-secondary btn-action-icon text-slate-600 hover:text-[#14213D]" title="View Pay Slip" aria-label="View Pay Slip">
@@ -3856,7 +3869,7 @@
             <td class="py-3.5 px-4 whitespace-nowrap">
               <span class="px-2.5 py-1 rounded text-xs font-mono font-bold bg-[#FCA311] text-black inline-block shadow-2xs">EMP-2026-11</span>
             </td>
-            <td class="py-3.5 px-4">
+            <td class="py-3.5 px-4 whitespace-nowrap">
               <div class="flex items-center space-x-3">
                 <div class="w-9 h-9 rounded-xl flex items-center justify-center font-black text-xs text-white shadow-xs border border-white/20 flex-shrink-0"
                      style="background: linear-gradient(135deg, #14213D 0%, #7c3aed 60%, #FCA311 100%);">KM</div>
@@ -3866,13 +3879,13 @@
                 </div>
               </div>
             </td>
-            <td class="py-3.5 px-4"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-indigo-100 text-indigo-800">GRD-MGT-C</span></td>
-            <td class="py-3.5 px-4 font-mono font-medium">₹54,000</td>
-            <td class="py-3.5 px-4 font-mono text-slate-600">₹28,200</td>
-            <td class="py-3.5 px-4 font-mono font-bold text-slate-900">₹82,200</td>
-            <td class="py-3.5 px-4 font-mono text-rose-600">-₹9,040</td>
-            <td class="py-3.5 px-4 font-mono font-bold text-emerald-600 text-sm">₹73,160</td>
-            <td class="py-3.5 px-4 font-mono text-slate-500">Kotak ••••7721</td>
+            <td class="py-3.5 px-4 whitespace-nowrap"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-indigo-100 text-indigo-800">GRD-MGT-C</span></td>
+            <td class="py-3.5 px-4 font-mono font-medium whitespace-nowrap">₹54,000</td>
+            <td class="py-3.5 px-4 font-mono text-slate-600 whitespace-nowrap">₹28,200</td>
+            <td class="py-3.5 px-4 font-mono font-bold text-slate-900 whitespace-nowrap">₹82,200</td>
+            <td class="py-3.5 px-4 font-mono text-rose-600 whitespace-nowrap">-₹9,040</td>
+            <td class="py-3.5 px-4 font-mono font-bold text-emerald-600 text-sm whitespace-nowrap">₹73,160</td>
+            <td class="py-3.5 px-4 font-mono text-slate-500 whitespace-nowrap">Kotak ••••7721</td>
             <td class="py-3.5 px-4 text-center whitespace-nowrap">
               <div class="inline-flex items-center justify-center gap-1.5">
                 <a href="pay-slip.html?emp=EMP-2026-11" class="btn-Aurelia-secondary btn-action-icon text-slate-600 hover:text-[#14213D]" title="View Pay Slip" aria-label="View Pay Slip">
@@ -3892,7 +3905,7 @@
             <td class="py-3.5 px-4 whitespace-nowrap">
               <span class="px-2.5 py-1 rounded text-xs font-mono font-bold bg-[#FCA311] text-black inline-block shadow-2xs">EMP-2026-12</span>
             </td>
-            <td class="py-3.5 px-4">
+            <td class="py-3.5 px-4 whitespace-nowrap">
               <div class="flex items-center space-x-3">
                 <div class="w-9 h-9 rounded-xl flex items-center justify-center font-black text-xs text-white shadow-xs border border-white/20 flex-shrink-0"
                      style="background: linear-gradient(135deg, #14213D 0%, #334155 60%, #94a3b8 100%);">AS</div>
@@ -3902,13 +3915,13 @@
                 </div>
               </div>
             </td>
-            <td class="py-3.5 px-4"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-100 text-blue-800">GRD-OPS-D</span></td>
-            <td class="py-3.5 px-4 font-mono font-medium">₹42,000</td>
-            <td class="py-3.5 px-4 font-mono text-slate-600">₹22,400</td>
-            <td class="py-3.5 px-4 font-mono font-bold text-slate-900">₹64,400</td>
-            <td class="py-3.5 px-4 font-mono text-rose-600">-₹7,080</td>
-            <td class="py-3.5 px-4 font-mono font-bold text-emerald-600 text-sm">₹57,320</td>
-            <td class="py-3.5 px-4 font-mono text-slate-500">PNB ••••9912</td>
+            <td class="py-3.5 px-4 whitespace-nowrap"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-100 text-blue-800">GRD-OPS-D</span></td>
+            <td class="py-3.5 px-4 font-mono font-medium whitespace-nowrap">₹42,000</td>
+            <td class="py-3.5 px-4 font-mono text-slate-600 whitespace-nowrap">₹22,400</td>
+            <td class="py-3.5 px-4 font-mono font-bold text-slate-900 whitespace-nowrap">₹64,400</td>
+            <td class="py-3.5 px-4 font-mono text-rose-600 whitespace-nowrap">-₹7,080</td>
+            <td class="py-3.5 px-4 font-mono font-bold text-emerald-600 text-sm whitespace-nowrap">₹57,320</td>
+            <td class="py-3.5 px-4 font-mono text-slate-500 whitespace-nowrap">PNB ••••9912</td>
             <td class="py-3.5 px-4 text-center whitespace-nowrap">
               <div class="inline-flex items-center justify-center gap-1.5">
                 <a href="pay-slip.html?emp=EMP-2026-12" class="btn-Aurelia-secondary btn-action-icon text-slate-600 hover:text-[#14213D]" title="View Pay Slip" aria-label="View Pay Slip">

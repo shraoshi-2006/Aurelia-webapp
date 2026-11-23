@@ -1948,8 +1948,12 @@
 
   table td.whitespace-nowrap,
   table th.whitespace-nowrap,
-  .whitespace-nowrap {
+  .whitespace-nowrap,
+  #page-ds-tbody td,
+  #page-ds-tbody th,
+  #page-ds-tbody td * {
     white-space: nowrap !important;
+    word-break: normal !important;
   }
 
   /* Default table headers and cell text left-aligned */
