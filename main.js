@@ -48,6 +48,20 @@
           background: ${sidebarBg} !important;
           background-color: ${sidebarBg} !important;
         }
+        #btn-sidebar-collapse,
+        #btn-sidebar-collapse svg,
+        #app-sidebar.is-collapsed #btn-sidebar-collapse,
+        #app-sidebar.is-collapsed #btn-sidebar-collapse svg {
+          color: ${isLight ? '#000000' : '#FFFFFF'} !important;
+          stroke: ${isLight ? '#000000' : '#FFFFFF'} !important;
+        }
+        #btn-sidebar-collapse:hover,
+        #btn-sidebar-collapse:hover svg,
+        #app-sidebar.is-collapsed #btn-sidebar-collapse:hover,
+        #app-sidebar.is-collapsed #btn-sidebar-collapse:hover svg {
+          color: #000000 !important;
+          stroke: #000000 !important;
+        }
         ${isDefaultBorder ? `
         .Aurelia-card,
         .aurelia-card,
@@ -3886,18 +3900,13 @@ $(document).ready(function () {
                          window.location.pathname.includes('/department/') ||
                          window.location.pathname.includes('/billing-management/');
         const pfx = isSubdir ? '../assets/images/' : 'assets/images/';
-        let avatarSrc;
-        if (s.name === 'Adaline Lively' || s.id === 'EMP-2026-01') {
-          avatarSrc = pfx + 'badge-fo-sample.png';
-        } else {
-          const femaleNames = [
-            'tanvi', 'priya', 'priyanka', 'ananya', 'neha', 'sunita', 'meenakshi',
-            'aarti', 'pooja', 'deepa', 'simran', 'shanti', 'lakshmi', 'rekha',
-            'geeta', 'mary', 'savita', 'kavita', 'shreya', 'trisha'
-          ];
-          const isFemale = femaleNames.some(fn => (s.name || '').toLowerCase().includes(fn));
-          avatarSrc = pfx + (isFemale ? 'avatar-female.png' : 'avatar-male.png');
-        }
+        const femaleNames = [
+          'tanvi', 'priya', 'priyanka', 'ananya', 'neha', 'sunita', 'meenakshi',
+          'aarti', 'pooja', 'deepa', 'simran', 'shanti', 'lakshmi', 'rekha',
+          'geeta', 'mary', 'savita', 'kavita', 'shreya', 'trisha', 'adaline', 'elena', 'sophia'
+        ];
+        const isFemale = femaleNames.some(fn => (s.name || '').toLowerCase().includes(fn));
+        const avatarSrc = pfx + (isFemale ? 'avatar-female.png' : 'avatar-male.png');
 
         const isOnDuty = s.status === 'On Duty';
 
@@ -7382,8 +7391,8 @@ $(document).ready(function () {
       id: 'doc-emp-02',
       empId: 'FD-26-DY02',
       empName: 'Adaline Lively',
-      avatar: 'images/badge-fo-sample.png',
-      initials: 'FO',
+      avatar: 'images/avatar-female.png',
+      initials: 'AL',
       department: 'Front Desk',
       deptCode: 'FD',
       format: 'PDF',
@@ -7408,7 +7417,7 @@ $(document).ready(function () {
       id: 'doc-emp-04',
       empId: 'HK-26-DY04',
       empName: 'Elena Rostova',
-      avatar: null,
+      avatar: 'images/avatar-female.png',
       initials: 'ER',
       department: 'Housekeeping',
       deptCode: 'HK',
@@ -7421,7 +7430,7 @@ $(document).ready(function () {
       id: 'doc-emp-05',
       empId: 'FB-26-DY05',
       empName: 'Chef Jean-Marc',
-      avatar: null,
+      avatar: 'images/avatar-male.png',
       initials: 'JM',
       department: 'Food & Beverage',
       deptCode: 'FB',
@@ -7434,7 +7443,7 @@ $(document).ready(function () {
       id: 'doc-emp-06',
       empId: 'FB-26-DY06',
       empName: 'Sophia Chen',
-      avatar: null,
+      avatar: 'images/avatar-female.png',
       initials: 'SC',
       department: 'Food & Beverage',
       deptCode: 'FB',
@@ -7460,7 +7469,7 @@ $(document).ready(function () {
       id: 'doc-emp-08',
       empId: 'HR-26-DY08',
       empName: 'Sunita Rao',
-      avatar: null,
+      avatar: 'images/avatar-female.png',
       initials: 'SR',
       department: 'Human Resources',
       deptCode: 'HR',
@@ -7473,7 +7482,7 @@ $(document).ready(function () {
       id: 'doc-emp-09',
       empId: 'AC-26-DY09',
       empName: 'Ananya Deshmukh',
-      avatar: null,
+      avatar: 'images/avatar-female.png',
       initials: 'AC',
       department: 'Accounts & Finance',
       deptCode: 'AC',
@@ -7486,7 +7495,7 @@ $(document).ready(function () {
       id: 'doc-emp-10',
       empId: 'AC-26-DY10',
       empName: 'Vikramaditya Roy',
-      avatar: null,
+      avatar: 'images/avatar-male.png',
       initials: 'VR',
       department: 'Accounts & Finance',
       deptCode: 'AC',
@@ -7499,7 +7508,7 @@ $(document).ready(function () {
       id: 'doc-emp-11',
       empId: 'FB-26-DY11',
       empName: 'Kavita Nair',
-      avatar: null,
+      avatar: 'images/avatar-female.png',
       initials: 'KN',
       department: 'Food & Beverage',
       deptCode: 'FB',
@@ -7512,7 +7521,7 @@ $(document).ready(function () {
       id: 'doc-emp-12',
       empId: 'MG-26-DY12',
       empName: 'David Miller',
-      avatar: null,
+      avatar: 'images/avatar-male.png',
       initials: 'MG',
       department: 'Management',
       deptCode: 'MG',
@@ -7525,7 +7534,7 @@ $(document).ready(function () {
 
   let HR_TEMPLATES = [];
   try {
-    let storedHrTpls = localStorage.getItem('aurelia_hr_templates_v7');
+    let storedHrTpls = localStorage.getItem('aurelia_hr_templates_v8');
     if (!storedHrTpls) {
       const v6 = localStorage.getItem('aurelia_hr_templates_v6') || localStorage.getItem('aurelia_hr_templates_v5');
       if (v6) {
@@ -7540,7 +7549,7 @@ $(document).ready(function () {
             }
           });
           storedHrTpls = JSON.stringify(parsed);
-          localStorage.setItem('aurelia_hr_templates_v7', storedHrTpls);
+          localStorage.setItem('aurelia_hr_templates_v8', storedHrTpls);
         } catch (e) { }
       }
     }
@@ -7555,10 +7564,10 @@ $(document).ready(function () {
           p.isVerified = 'Rejected';
         }
       });
-      localStorage.setItem('aurelia_hr_templates_v7', JSON.stringify(HR_TEMPLATES));
+      localStorage.setItem('aurelia_hr_templates_v8', JSON.stringify(HR_TEMPLATES));
     } else {
       HR_TEMPLATES = [...DEFAULT_HR_TEMPLATES];
-      localStorage.setItem('aurelia_hr_templates_v7', JSON.stringify(HR_TEMPLATES));
+      localStorage.setItem('aurelia_hr_templates_v8', JSON.stringify(HR_TEMPLATES));
     }
   } catch (err) {
     HR_TEMPLATES = [...DEFAULT_HR_TEMPLATES];
@@ -7629,30 +7638,31 @@ $(document).ready(function () {
         verifyBadge = '<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-[#d97706] text-white shadow-2xs">Pending</span>';
       }
 
-      // Profile Picture or Squircle Badge Logo (exactly matching the uploaded FO badge size)
-      let avatarHtml = '';
-      if (tpl.avatar) {
-        let avatarPath = tpl.avatar;
-        if (typeof avatarPath === 'string' && avatarPath.startsWith('employees/')) {
-          avatarPath = avatarPath.replace('employees/', 'images/');
-        }
-        const imgSrc = (avatarPath.startsWith('data:') || avatarPath.startsWith('http'))
-          ? avatarPath
-          : (assetPrefix + avatarPath);
-        avatarHtml = `
-          <img src="${imgSrc}" alt="${escapeHtml(tpl.empName)}"
-            class="w-9 h-9 rounded-xl object-cover object-top shadow-xs border border-white/60 dark:border-slate-700 flex-shrink-0"
-            onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\\'w-9 h-9 rounded-xl flex items-center justify-center font-bold text-xs text-white shadow-xs flex-shrink-0\\' style=\\'background: linear-gradient(135deg, #14213D 0%, #92400e 50%, #FCA311 100%);\\'><span>${tpl.initials || 'EM'}</span></div>';">
-        `;
-      } else {
-        const badgeText = tpl.initials || tpl.deptCode || 'FO';
-        avatarHtml = `
-          <div class="w-9 h-9 rounded-xl flex items-center justify-center font-black text-xs text-white shadow-xs border border-white/20 flex-shrink-0"
-            style="background: linear-gradient(135deg, #14213D 0%, #92400e 50%, #FCA311 100%); letter-spacing: -0.5px;">
-            <span>${badgeText}</span>
-          </div>
-        `;
+            // Profile Picture
+      const femaleNames = [
+        'tanvi', 'priya', 'priyanka', 'ananya', 'neha', 'sunita', 'meenakshi',
+        'aarti', 'pooja', 'deepa', 'simran', 'shanti', 'lakshmi', 'rekha',
+        'geeta', 'mary', 'savita', 'kavita', 'shreya', 'trisha', 'adaline', 'elena', 'sophia'
+      ];
+      const isFemale = femaleNames.some(fn => (tpl.empName || '').toLowerCase().includes(fn));
+      const defaultAvatarFile = isFemale ? 'avatar-female.png' : 'avatar-male.png';
+
+      let avatarPath = tpl.avatar;
+      if (!avatarPath || (typeof avatarPath === 'string' && avatarPath.includes('badge-fo-sample'))) {
+        avatarPath = 'images/' + defaultAvatarFile;
       }
+      if (typeof avatarPath === 'string' && avatarPath.startsWith('employees/')) {
+        avatarPath = avatarPath.replace('employees/', 'images/');
+      }
+      const imgSrc = (avatarPath.startsWith('data:') || avatarPath.startsWith('http'))
+        ? avatarPath
+        : (assetPrefix + avatarPath);
+
+      const avatarHtml = `
+        <img src="${imgSrc}" alt="${escapeHtml(tpl.empName)}"
+          class="w-9 h-9 rounded-xl object-cover object-top shadow-xs border border-white/60 dark:border-slate-700 flex-shrink-0"
+          onerror="this.onerror=null; this.src='${assetPrefix}images/${defaultAvatarFile}';">
+      `;
 
       html += `
         <tr class="hover:bg-slate-50/70 dark:hover:bg-slate-800/50 transition-colors group" data-id="${escapeHtml(tpl.id)}">
@@ -7759,7 +7769,7 @@ $(document).ready(function () {
     }
     tpl.empName = trimmed;
     try {
-      localStorage.setItem('aurelia_hr_templates_v7', JSON.stringify(HR_TEMPLATES));
+      localStorage.setItem('aurelia_hr_templates_v8', JSON.stringify(HR_TEMPLATES));
     } catch (e) { }
     renderHrDocumentsSection();
     showToast(`Updated record for ${tpl.empId}`, 'success');
@@ -7775,7 +7785,7 @@ $(document).ready(function () {
     if (confirm(`Are you sure you want to delete employee record ${item.empName} (${item.empId})?`)) {
       HR_TEMPLATES.splice(idx, 1);
       try {
-        localStorage.setItem('aurelia_hr_templates_v7', JSON.stringify(HR_TEMPLATES));
+        localStorage.setItem('aurelia_hr_templates_v8', JSON.stringify(HR_TEMPLATES));
       } catch (e) { }
       renderHrDocumentsSection();
       showToast(`Record ${item.empId} deleted successfully.`, 'info');
@@ -7861,7 +7871,7 @@ $(document).ready(function () {
 
     HR_TEMPLATES.unshift(newDoc);
     try {
-      localStorage.setItem('aurelia_hr_templates_v7', JSON.stringify(HR_TEMPLATES));
+      localStorage.setItem('aurelia_hr_templates_v8', JSON.stringify(HR_TEMPLATES));
     } catch (e) {
       console.warn('Failed to save HR templates to localStorage', e);
     }
@@ -7914,18 +7924,13 @@ $(document).ready(function () {
                          window.location.pathname.includes('/department/') ||
                          window.location.pathname.includes('/billing-management/');
         const pfx = isSubdir ? '../assets/images/' : 'assets/images/';
-        let avatarSrc;
-        if (s.name === 'Adaline Lively' || s.id === 'EMP-2026-01') {
-          avatarSrc = pfx + 'badge-fo-sample.png';
-        } else {
-          const femaleNames = [
-            'tanvi', 'priya', 'priyanka', 'ananya', 'neha', 'sunita', 'meenakshi',
-            'aarti', 'pooja', 'deepa', 'simran', 'shanti', 'lakshmi', 'rekha',
-            'geeta', 'mary', 'savita', 'kavita', 'shreya', 'trisha'
-          ];
-          const isFemale = femaleNames.some(fn => (s.name || '').toLowerCase().includes(fn));
-          avatarSrc = pfx + (isFemale ? 'avatar-female.png' : 'avatar-male.png');
-        }
+        const femaleNames = [
+          'tanvi', 'priya', 'priyanka', 'ananya', 'neha', 'sunita', 'meenakshi',
+          'aarti', 'pooja', 'deepa', 'simran', 'shanti', 'lakshmi', 'rekha',
+          'geeta', 'mary', 'savita', 'kavita', 'shreya', 'trisha', 'adaline', 'elena', 'sophia'
+        ];
+        const isFemale = femaleNames.some(fn => (s.name || '').toLowerCase().includes(fn));
+        const avatarSrc = pfx + (isFemale ? 'avatar-female.png' : 'avatar-male.png');
 
         const avatarHtml = `<img src="${avatarSrc}" alt="${escapeHtml(s.name)}" class="w-8 h-8 md:w-9 md:h-9 rounded-xl object-cover shadow-xs border border-white/60 dark:border-slate-700 flex-shrink-0">`;
         const isOnDuty = s.status === 'On Duty';
@@ -8994,7 +8999,7 @@ $(document).ready(function () {
         const ids = selectedTrs.map(extractRowId).filter(Boolean);
         HR_TEMPLATES = HR_TEMPLATES.filter(t => !ids.includes(String(t.id)));
         try {
-          localStorage.setItem('aurelia_hr_templates_v7', JSON.stringify(HR_TEMPLATES));
+          localStorage.setItem('aurelia_hr_templates_v8', JSON.stringify(HR_TEMPLATES));
         } catch (e) { }
         renderHrDocumentsSection();
         showToast(`Deleted ${count} HR record${count > 1 ? 's' : ''} successfully.`, 'info');
@@ -9276,6 +9281,20 @@ $(document).ready(function () {
         background: ${sidebarBg} !important;
         background-color: ${sidebarBg} !important;
       }
+      #btn-sidebar-collapse,
+      #btn-sidebar-collapse svg,
+      #app-sidebar.is-collapsed #btn-sidebar-collapse,
+      #app-sidebar.is-collapsed #btn-sidebar-collapse svg {
+        color: ${isColorLight(sidebarBg) ? '#000000' : '#FFFFFF'} !important;
+        stroke: ${isColorLight(sidebarBg) ? '#000000' : '#FFFFFF'} !important;
+      }
+      #btn-sidebar-collapse:hover,
+      #btn-sidebar-collapse:hover svg,
+      #app-sidebar.is-collapsed #btn-sidebar-collapse:hover,
+      #app-sidebar.is-collapsed #btn-sidebar-collapse:hover svg {
+        color: #000000 !important;
+        stroke: #000000 !important;
+      }
       ${isDefaultBorder ? `
       .Aurelia-card,
       .aurelia-card,
@@ -9383,6 +9402,14 @@ $(document).ready(function () {
     $sidebarTargets.each(function() {
       this.style.setProperty('background', sidebarBg, 'important');
       this.style.setProperty('background-color', sidebarBg, 'important');
+    });
+
+    const isSbLightMode = isColorLight(sidebarBg);
+    const arrowCol = isSbLightMode ? '#000000' : '#FFFFFF';
+    $('#btn-sidebar-collapse').css('color', arrowCol);
+    $('#btn-sidebar-collapse svg').css({
+      'color': arrowCol,
+      'stroke': arrowCol
     });
 
     if (isColorLight(sidebarBg)) {
