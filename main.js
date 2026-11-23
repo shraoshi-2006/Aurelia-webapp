@@ -9446,6 +9446,10 @@ $(document).ready(function () {
       this.style.setProperty('color', btnText, 'important');
       this.style.setProperty('box-shadow', 'none', 'important');
     });
+
+    if (typeof window.renderBrandLogo === 'function') {
+      window.renderBrandLogo(null, cardBorder);
+    }
   }
 
   function updateThemeUI(theme) {
@@ -10092,6 +10096,34 @@ if (typeof window !== 'undefined' && window.MutationObserver) {
   const BRAND_STORAGE_KEY = 'aurelia_custom_brand_name';
   const DEFAULT_BRAND_NAME = 'AURELIA';
 
+  function getActiveCardBorderColor() {
+    try {
+      const raw = localStorage.getItem('aurelia_theme_settings');
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (parsed.cardBorder) return parsed.cardBorder.toUpperCase();
+      }
+    } catch (e) { }
+    return '#FCA311';
+  }
+
+  function isLightColor(color) {
+    try {
+      let r = 0, g = 0, b = 0;
+      if (!color) return false;
+      if (color.startsWith('#')) {
+        let hex = color.replace('#', '');
+        if (hex.length === 3) hex = hex.split('').map(c => c + c).join('');
+        r = parseInt(hex.substring(0, 2), 16);
+        g = parseInt(hex.substring(2, 4), 16);
+        b = parseInt(hex.substring(4, 6), 16);
+      }
+      return (0.2126 * r + 0.7152 * g + 0.0722 * b) > 165;
+    } catch (e) {
+      return false;
+    }
+  }
+
   function getSavedBrandName() {
     try {
       const saved = localStorage.getItem(BRAND_STORAGE_KEY);
@@ -10111,17 +10143,21 @@ if (typeof window !== 'undefined' && window.MutationObserver) {
       .replace(/>/g, '&gt;');
   }
 
-  function updateFavicon(brandName) {
+  function updateFavicon(brandName, cardBorderColor) {
     try {
-      const cleanName = (brandName || DEFAULT_BRAND_NAME).trim();
+      const cleanName = (brandName || getSavedBrandName()).trim();
       const isDefault = cleanName.toUpperCase() === DEFAULT_BRAND_NAME;
       const initial = (cleanName.charAt(0) || 'A').toUpperCase();
+      const logoBg = (cardBorderColor || getActiveCardBorderColor()).toUpperCase();
+      const isLight = isLightColor(logoBg);
+      const accentColor = isLight ? '#14213D' : '#FFFFFF';
+      const pearlFill = isLight ? (logoBg === '#FFFFFF' ? '#FCA311' : '#FFFFFF') : '#FCA311';
 
       let rawSvg = '';
       if (isDefault) {
-        rawSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><circle cx="100" cy="100" r="95" fill="#FCA311"/><circle cx="100" cy="100" r="86" fill="none" stroke="#14213D" stroke-width="2.2"/><path d="M58 162 L100 46 L142 162" fill="none" stroke="#14213D" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/><line x1="71" y1="126" x2="129" y2="126" stroke="#14213D" stroke-width="6" stroke-linecap="round"/><circle cx="100" cy="104" r="8.5" fill="#FFFFFF"/></svg>`;
+        rawSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><circle cx="100" cy="100" r="95" fill="${logoBg}"/><circle cx="100" cy="100" r="86" fill="none" stroke="${accentColor}" stroke-width="2.2"/><path d="M58 162 L100 46 L142 162" fill="none" stroke="${accentColor}" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/><line x1="71" y1="126" x2="129" y2="126" stroke="${accentColor}" stroke-width="6" stroke-linecap="round"/><circle cx="100" cy="104" r="8.5" fill="${pearlFill}"/></svg>`;
       } else {
-        rawSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><circle cx="100" cy="100" r="95" fill="#FCA311"/><circle cx="100" cy="100" r="86" fill="none" stroke="#14213D" stroke-width="2.2"/><text x="100" y="110" text-anchor="middle" dominant-baseline="central" fill="#14213D" font-family="'Cormorant Garamond', Georgia, serif" font-weight="700" font-size="115">${escapeAttr(initial)}</text></svg>`;
+        rawSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><circle cx="100" cy="100" r="95" fill="${logoBg}"/><circle cx="100" cy="100" r="86" fill="none" stroke="${accentColor}" stroke-width="2.2"/><text x="100" y="110" text-anchor="middle" dominant-baseline="central" fill="${accentColor}" font-family="'Cormorant Garamond', Georgia, serif" font-weight="700" font-size="115">${escapeAttr(initial)}</text></svg>`;
       }
 
       const faviconUrl = 'data:image/svg+xml,' + encodeURIComponent(rawSvg);
@@ -10147,30 +10183,34 @@ if (typeof window !== 'undefined' && window.MutationObserver) {
     }
   }
 
-  function renderBrandLogo(brandName) {
-    const cleanName = (brandName || DEFAULT_BRAND_NAME).trim();
+  function renderBrandLogo(brandName, cardBorderColor) {
+    const cleanName = (brandName || getSavedBrandName()).trim();
     const isDefault = cleanName.toUpperCase() === DEFAULT_BRAND_NAME;
     const initial = (cleanName.charAt(0) || 'A').toUpperCase();
+    const logoBg = (cardBorderColor || getActiveCardBorderColor()).toUpperCase();
+    const isLight = isLightColor(logoBg);
+    const accentColor = isLight ? '#14213D' : '#FFFFFF';
+    const pearlFill = isLight ? (logoBg === '#FFFFFF' ? '#FCA311' : '#FFFFFF') : '#FCA311';
 
     let svgHtml = '';
     if (isDefault) {
       // Exact Default Aurelia Medallion Emblem with stylized A and white pearl dot
       svgHtml = `
           <svg id="sidebar-logo-mark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" class="w-11 h-11 rounded-full object-contain" role="img" aria-label="Aurelia Emblem">
-            <circle cx="100" cy="100" r="95" fill="#FCA311"/>
-            <circle cx="100" cy="100" r="86" fill="none" stroke="#14213D" stroke-width="2.2"/>
-            <path d="M58 162 L100 46 L142 162" fill="none" stroke="#14213D" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
-            <line x1="71" y1="126" x2="129" y2="126" stroke="#14213D" stroke-width="6" stroke-linecap="round"/>
-            <circle cx="100" cy="104" r="8.5" fill="#FFFFFF"/>
+            <circle cx="100" cy="100" r="95" fill="${logoBg}"/>
+            <circle cx="100" cy="100" r="86" fill="none" stroke="${accentColor}" stroke-width="2.2"/>
+            <path d="M58 162 L100 46 L142 162" fill="none" stroke="${accentColor}" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+            <line x1="71" y1="126" x2="129" y2="126" stroke="${accentColor}" stroke-width="6" stroke-linecap="round"/>
+            <circle cx="100" cy="104" r="8.5" fill="${pearlFill}"/>
           </svg>
         `;
     } else {
       // Dynamic First Alphabet Emblem retaining exact circular gold/navy medallion and brand serif
       svgHtml = `
           <svg id="sidebar-logo-mark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" class="w-11 h-11 rounded-full object-contain" role="img" aria-label="${escapeAttr(cleanName)} Emblem">
-            <circle cx="100" cy="100" r="95" fill="#FCA311"/>
-            <circle cx="100" cy="100" r="86" fill="none" stroke="#14213D" stroke-width="2.2"/>
-            <text x="100" y="110" text-anchor="middle" dominant-baseline="central" fill="#14213D" font-family="'Cormorant Garamond', Georgia, serif" font-weight="700" font-size="115">${escapeAttr(initial)}</text>
+            <circle cx="100" cy="100" r="95" fill="${logoBg}"/>
+            <circle cx="100" cy="100" r="86" fill="none" stroke="${accentColor}" stroke-width="2.2"/>
+            <text x="100" y="110" text-anchor="middle" dominant-baseline="central" fill="${accentColor}" font-family="'Cormorant Garamond', Georgia, serif" font-weight="700" font-size="115">${escapeAttr(initial)}</text>
           </svg>
         `;
     }
@@ -10185,15 +10225,19 @@ if (typeof window !== 'undefined' && window.MutationObserver) {
       container.innerHTML = svgHtml.replace(/w-11 h-11/g, 'w-14 h-14');
     });
 
-    // Also update mobile header and mobile drawer emblems
-    document.querySelectorAll('#app-mobile-header img[src*="aurelia-mark"], #mobile-user-menu-drawer img[src*="aurelia-mark"]').forEach(function (img) {
-      const wrap = document.createElement('div');
-      wrap.className = img.className + ' flex items-center justify-center';
-      wrap.innerHTML = svgHtml.replace(/w-11 h-11/g, 'w-full h-full');
-      if (img.parentNode) img.parentNode.replaceChild(wrap, img);
+    // Also update mobile header and mobile drawer emblems (Responsive Mobile)
+    document.querySelectorAll('#app-mobile-header img, #mobile-user-menu-drawer img').forEach(function (img) {
+      if ((img.src && img.src.includes('aurelia-mark')) || img.id === 'sidebar-logo-mark') {
+        const wrap = document.createElement('div');
+        wrap.className = img.className + ' flex items-center justify-center';
+        wrap.innerHTML = svgHtml.replace(/w-11 h-11/g, 'w-full h-full');
+        if (img.parentNode) img.parentNode.replaceChild(wrap, img);
+      }
     });
-    document.querySelectorAll('#app-mobile-header #sidebar-logo-mark, #mobile-user-menu-drawer #sidebar-logo-mark').forEach(function (svg) {
-      svg.outerHTML = svgHtml.replace(/w-11 h-11/g, 'w-full h-full');
+    document.querySelectorAll('#app-mobile-header svg, #mobile-user-menu-drawer svg').forEach(function (svg) {
+      if (svg.id === 'sidebar-logo-mark' || (svg.getAttribute('aria-label') && svg.getAttribute('aria-label').includes('Emblem'))) {
+        svg.outerHTML = svgHtml.replace(/w-11 h-11/g, 'w-full h-full');
+      }
     });
 
     // Update mobile header and drawer brand title texts
@@ -10205,9 +10249,12 @@ if (typeof window !== 'undefined' && window.MutationObserver) {
       }
     });
 
-    // Always update browser tab favicon
-    updateFavicon(cleanName);
+    // Always update browser tab favicon with matching card border color
+    updateFavicon(cleanName, logoBg);
   }
+
+  window.renderBrandLogo = renderBrandLogo;
+  window.updateFavicon = updateFavicon;
 
   function updateDocumentTitle(brandName) {
     try {
@@ -10435,6 +10482,8 @@ if (typeof window !== 'undefined' && window.MutationObserver) {
   window.addEventListener('storage', function (e) {
     if (e.key === BRAND_STORAGE_KEY) {
       applyBrandName(getSavedBrandName(), false);
+    } else if (e.key === 'aurelia_theme_settings') {
+      renderBrandLogo(null);
     }
   });
 
