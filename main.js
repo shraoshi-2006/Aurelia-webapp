@@ -55,12 +55,16 @@
           color: ${isLight ? '#000000' : '#FFFFFF'} !important;
           stroke: ${isLight ? '#000000' : '#FFFFFF'} !important;
         }
-        #btn-sidebar-collapse:hover,
         #btn-sidebar-collapse:hover svg,
-        #app-sidebar.is-collapsed #btn-sidebar-collapse:hover,
-        #app-sidebar.is-collapsed #btn-sidebar-collapse:hover svg {
-          color: #000000 !important;
-          stroke: #000000 !important;
+        #btn-sidebar-collapse:hover svg path,
+        #app-sidebar.is-collapsed #btn-sidebar-collapse:hover svg,
+        #app-sidebar.is-collapsed #btn-sidebar-collapse:hover svg path {
+          color: ${isLight ? '#000000' : '#FFFFFF'} !important;
+          stroke: ${isLight ? '#000000' : '#FFFFFF'} !important;
+        }
+        #btn-sidebar-collapse:hover,
+        #app-sidebar.is-collapsed #btn-sidebar-collapse:hover {
+          filter: brightness(1.15);
         }
         ${isDefaultBorder ? `
         .Aurelia-card,
@@ -2507,6 +2511,11 @@ $(document).ready(function () {
     if ($(window).width() < 1024) {
       $('#btn-sidebar-collapse').find('svg').css('transform', 'rotate(0deg)');
       $('#btn-sidebar-collapse').attr('title', 'Close sidebar');
+      const curTheme = typeof getSavedTheme === 'function' ? getSavedTheme() : { sidebarBg: '#494D5F' };
+      const curLight = isColorLight(curTheme.sidebarBg);
+      const curCol = curLight ? '#000000' : '#FFFFFF';
+      $('#btn-sidebar-collapse').css('color', curCol);
+      $('#btn-sidebar-collapse svg, #btn-sidebar-collapse svg path').css({ 'color': curCol, 'stroke': curCol }).attr('stroke', curCol);
     }
   }
 
@@ -9288,12 +9297,16 @@ $(document).ready(function () {
         color: ${isColorLight(sidebarBg) ? '#000000' : '#FFFFFF'} !important;
         stroke: ${isColorLight(sidebarBg) ? '#000000' : '#FFFFFF'} !important;
       }
-      #btn-sidebar-collapse:hover,
       #btn-sidebar-collapse:hover svg,
-      #app-sidebar.is-collapsed #btn-sidebar-collapse:hover,
-      #app-sidebar.is-collapsed #btn-sidebar-collapse:hover svg {
-        color: #000000 !important;
-        stroke: #000000 !important;
+      #btn-sidebar-collapse:hover svg path,
+      #app-sidebar.is-collapsed #btn-sidebar-collapse:hover svg,
+      #app-sidebar.is-collapsed #btn-sidebar-collapse:hover svg path {
+        color: ${isColorLight(sidebarBg) ? '#000000' : '#FFFFFF'} !important;
+        stroke: ${isColorLight(sidebarBg) ? '#000000' : '#FFFFFF'} !important;
+      }
+      #btn-sidebar-collapse:hover,
+      #app-sidebar.is-collapsed #btn-sidebar-collapse:hover {
+        filter: brightness(1.15);
       }
       ${isDefaultBorder ? `
       .Aurelia-card,
@@ -9407,10 +9420,10 @@ $(document).ready(function () {
     const isSbLightMode = isColorLight(sidebarBg);
     const arrowCol = isSbLightMode ? '#000000' : '#FFFFFF';
     $('#btn-sidebar-collapse').css('color', arrowCol);
-    $('#btn-sidebar-collapse svg').css({
+    $('#btn-sidebar-collapse svg, #btn-sidebar-collapse svg path, #btn-sidebar-collapse path').css({
       'color': arrowCol,
       'stroke': arrowCol
-    });
+    }).attr('stroke', arrowCol);
 
     if (isColorLight(sidebarBg)) {
       $('#app-sidebar, #mobile-user-menu-drawer').addClass('sidebar-light-mode');
