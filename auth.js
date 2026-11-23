@@ -1391,6 +1391,414 @@
     });
   }
 
+  /* ==========================================================================
+     GOOGLE IDENTITY & ACCOUNT CHOOSER MODAL (accounts.google.com Theme)
+     ========================================================================== */
+
+  const DEFAULT_GOOGLE_ACCOUNTS = [
+    {
+      name: 'EuphoniousXZyzva Lenscape',
+      email: 'lenscape.euphonious@gmail.com',
+      avatarText: 'E',
+      avatarBg: '#7B1FA2'
+    },
+    {
+      name: 'Piyush Barua',
+      email: 'piyushbarua9@gmail.com',
+      avatarText: 'P',
+      avatarBg: '#D97706'
+    },
+    {
+      name: 'Piyush Barua',
+      email: 'piyushbarua77@gmail.com',
+      avatarText: 'P',
+      avatarBg: '#E11D48'
+    },
+    {
+      name: 'Alur bhay',
+      email: 'alurbhay6@gmail.com',
+      avatarText: 'A',
+      avatarBg: '#0D9488'
+    },
+    {
+      name: 'Piuxhus Bap',
+      email: 'baruapiyush8@gmail.com',
+      avatarText: 'P',
+      avatarBg: '#16A34A'
+    },
+    {
+      name: 'Piyush Barua',
+      email: 'piyushbarua432@gmail.com',
+      avatarText: 'P',
+      avatarBg: '#475569'
+    },
+    {
+      name: 'Pintu Bokshis',
+      email: 'pintubokshis@gmail.com',
+      avatarText: 'P',
+      avatarBg: '#2E7D32'
+    }
+  ];
+
+  function getGoogleAccountsList() {
+    let recent = [];
+    try {
+      const stored = localStorage.getItem('aurelia_google_recent_accounts');
+      if (stored) {
+        recent = JSON.parse(stored);
+        if (!Array.isArray(recent)) recent = [];
+      }
+    } catch (e) {
+      recent = [];
+    }
+    const combined = [...recent];
+    DEFAULT_GOOGLE_ACCOUNTS.forEach(defAcc => {
+      if (!combined.some(a => a.email && a.email.toLowerCase() === defAcc.email.toLowerCase())) {
+        combined.push(defAcc);
+      }
+    });
+    return combined;
+  }
+
+  function saveCustomGoogleAccount(account) {
+    if (!account || !account.email) return;
+    try {
+      const list = getGoogleAccountsList();
+      const existingIdx = list.findIndex(a => a.email.toLowerCase() === account.email.toLowerCase());
+      if (existingIdx >= 0) {
+        list[existingIdx] = { ...list[existingIdx], ...account };
+      } else {
+        list.unshift(account);
+      }
+      localStorage.setItem('aurelia_google_recent_accounts', JSON.stringify(list));
+    } catch (e) { }
+  }
+
+  function authenticateWithGoogleAccount(accountData) {
+    if (!accountData || !accountData.email) return;
+
+    // Check active login tab for role
+    const adminRoleBtn = $('tab-login-admin');
+    const isAdminActive = adminRoleBtn && (
+      adminRoleBtn.classList.contains('bg-[#14213d]') ||
+      adminRoleBtn.classList.contains('active')
+    );
+    const assignedRole = isAdminActive ? 'General Manager' : 'Front Desk Supervisor';
+    const assignedDept = isAdminActive ? 'Hotel Administration' : 'Front Office';
+
+    const cleanEmail = accountData.email.trim().toLowerCase();
+    const cleanName = (accountData.name || cleanEmail.split('@')[0] || 'Google User').trim();
+    const avatar = accountData.avatarImg || null;
+
+    // Ensure user is in local users registry
+    const localUsers = getLocalUsers();
+    let existing = localUsers.find(u => u.email && u.email.toLowerCase() === cleanEmail);
+
+    let userObj;
+    if (existing) {
+      userObj = {
+        ...existing,
+        name: existing.name || cleanName,
+        avatar: existing.avatar || avatar,
+        authProvider: 'google'
+      };
+    } else {
+      userObj = {
+        id: 'usr-g-' + Date.now().toString(36),
+        name: cleanName,
+        email: cleanEmail,
+        password: 'google_oauth_session',
+        role: assignedRole,
+        department: assignedDept,
+        empId: 'EMP-G-' + Math.floor(1000 + Math.random() * 9000),
+        avatar: avatar,
+        authProvider: 'google'
+      };
+      saveLocalUser(userObj);
+    }
+
+    // Save custom account so it appears in recent list
+    saveCustomGoogleAccount({
+      name: cleanName,
+      email: cleanEmail,
+      avatarText: cleanName.charAt(0).toUpperCase(),
+      avatarBg: accountData.avatarBg || '#4285F4'
+    });
+
+    // Generate valid session token
+    const token = 'g_oauth_' + btoa(cleanEmail) + '_' + Date.now();
+    AuthState.token = token;
+
+    try {
+      localStorage.setItem(STORAGE_KEY_TOKEN, token);
+      localStorage.setItem(STORAGE_KEY_USER, JSON.stringify(userObj));
+    } catch (e) { }
+
+    closeGoogleAccountChooserModal();
+
+    if (typeof window.showToast === 'function') {
+      window.showToast(`Signed in with Google as ${cleanName}`, 'success');
+    }
+
+    renderAuthenticatedState(userObj);
+  }
+
+  function getBrandInfoForGoogleChooser() {
+    let brandName = 'Aurelia';
+    let brandColor = '#FCA311';
+    let brandLogoImg = null;
+
+    try {
+      if (typeof window.getSavedBrandName === 'function') {
+        brandName = window.getSavedBrandName();
+      } else {
+        brandName = localStorage.getItem('aurelia_custom_brand_name') || 'Aurelia';
+      }
+      brandName = brandName.trim();
+
+      const themeSettings = localStorage.getItem('aurelia_theme_settings');
+      if (themeSettings) {
+        const parsed = JSON.parse(themeSettings);
+        if (parsed.cardBorder) brandColor = parsed.cardBorder;
+      }
+      brandLogoImg = localStorage.getItem('aurelia_custom_brand_logo_img') || null;
+    } catch (e) { }
+
+    return {
+      name: brandName,
+      initial: (brandName.charAt(0) || 'A').toUpperCase(),
+      color: brandColor,
+      logoImg: brandLogoImg
+    };
+  }
+
+  function openGoogleAccountChooserModal() {
+    let modal = $('google-account-chooser-modal');
+    if (!modal) {
+      modal = document.createElement('div');
+      modal.id = 'google-account-chooser-modal';
+      document.body.appendChild(modal);
+    }
+
+    const brand = getBrandInfoForGoogleChooser();
+    const accounts = getGoogleAccountsList();
+
+    const brandEmblemHtml = brand.logoImg
+      ? `<img src="${brand.logoImg}" alt="${escapeHtml(brand.name)}" class="w-12 h-12 rounded-full object-cover border border-[#5f6368] shadow-md mb-3" />`
+      : `<div class="w-12 h-12 rounded-full flex items-center justify-center font-bold text-xl shadow-md mb-3" style="background-color: ${brand.color}; color: #14213D;">
+           ${brand.initial}
+         </div>`;
+
+    const accountsRowsHtml = accounts.map(acc => `
+      <div class="g-account-item flex items-center gap-3.5 px-3.5 py-3 rounded-xl hover:bg-[#303134] cursor-pointer transition-colors group" data-email="${escapeHtml(acc.email)}" data-name="${escapeHtml(acc.name)}" data-bg="${acc.avatarBg || '#4285F4'}">
+        <div class="w-9 h-9 rounded-full flex items-center justify-center font-medium text-white text-sm shrink-0 shadow-xs" style="background-color: ${acc.avatarBg || '#4285F4'};">
+          ${escapeHtml(acc.avatarText || (acc.name ? acc.name.charAt(0).toUpperCase() : 'G'))}
+        </div>
+        <div class="flex-1 min-w-0 text-left">
+          <div class="text-[14px] font-medium text-[#e8eaed] truncate group-hover:text-white">${escapeHtml(acc.name)}</div>
+          <div class="text-[12px] text-[#9aa0a6] truncate">${escapeHtml(acc.email)}</div>
+        </div>
+      </div>
+    `).join('');
+
+    modal.className = 'fixed inset-0 z-[999999] flex items-center justify-center p-4 bg-black/75 backdrop-blur-xs transition-opacity duration-200';
+    modal.innerHTML = `
+      <div class="w-full max-w-[480px] bg-[#202124] text-[#e8eaed] rounded-[28px] border border-[#3c4043] shadow-2xl overflow-hidden flex flex-col animate-in fade-in zoom-in-95 duration-200" style="font-family: Roboto, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
+        <!-- Header: Google Sign-in bar & Close button -->
+        <div class="flex items-center justify-between px-6 pt-5 pb-2">
+          <div class="flex items-center gap-2.5">
+            <svg class="w-5 h-5 shrink-0" viewBox="0 0 24 24">
+              <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
+              <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
+              <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" />
+              <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" />
+            </svg>
+            <span class="text-sm font-medium text-[#e8eaed]">Sign in with Google</span>
+          </div>
+          <button type="button" id="btn-close-google-modal" class="w-8 h-8 rounded-full flex items-center justify-center text-[#9aa0a6] hover:text-white hover:bg-[#303134] transition-colors cursor-pointer" title="Close">
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"></path></svg>
+          </button>
+        </div>
+
+        <!-- Main Chooser View -->
+        <div id="g-view-chooser" class="px-6 pb-6 pt-2 flex flex-col">
+          <div class="mb-4">
+            ${brandEmblemHtml}
+            <h2 class="text-2xl font-normal text-[#e8eaed] tracking-tight">Choose an account</h2>
+            <p class="text-sm text-[#9aa0a6] mt-1">
+              to continue to <span class="font-medium text-[#e8eaed]">${escapeHtml(brand.name)}</span>
+            </p>
+          </div>
+
+          <!-- Accounts List with Dividers -->
+          <div class="max-h-[310px] overflow-y-auto space-y-0.5 divide-y divide-[#3c4043]/60 pr-1 -mr-1 custom-scroll">
+            ${accountsRowsHtml}
+
+            <!-- Use Another Account Row -->
+            <div id="btn-g-show-custom" class="flex items-center gap-3.5 px-3.5 py-3 rounded-xl hover:bg-[#303134] cursor-pointer transition-colors group mt-1 pt-3">
+              <div class="w-9 h-9 rounded-full border border-[#5f6368] flex items-center justify-center text-[#9aa0a6] group-hover:border-[#8ab4f8] group-hover:text-[#8ab4f8] transition-colors shrink-0">
+                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+              </div>
+              <div class="text-[14px] font-medium text-[#e8eaed] group-hover:text-white">Use another account</div>
+            </div>
+          </div>
+
+          <!-- Footer Disclaimer -->
+          <div class="mt-5 pt-3 border-t border-[#3c4043]/50 text-[11.5px] leading-relaxed text-[#9aa0a6]">
+            To continue, Google will share your name, email address, language preference, and profile picture with ${escapeHtml(brand.name)}. Before using this app, you can review ${escapeHtml(brand.name)}'s <a href="#" class="text-[#8ab4f8] hover:underline" onclick="event.preventDefault();">Privacy Policy</a> and <a href="#" class="text-[#8ab4f8] hover:underline" onclick="event.preventDefault();">Terms of Service</a>.
+          </div>
+        </div>
+
+        <!-- Custom Account / Use Another Account Form View (Initially Hidden) -->
+        <div id="g-view-custom" class="px-6 pb-6 pt-2 flex flex-col hidden">
+          <div class="mb-5">
+            ${brandEmblemHtml}
+            <h2 class="text-2xl font-normal text-[#e8eaed] tracking-tight">Sign in with Google</h2>
+            <p class="text-sm text-[#9aa0a6] mt-1">
+              Enter any Google Account to continue to <span class="font-medium text-[#e8eaed]">${escapeHtml(brand.name)}</span>
+            </p>
+          </div>
+
+          <form id="form-g-custom-account" class="space-y-4">
+            <div>
+              <label class="block text-xs font-medium text-[#9aa0a6] mb-1.5">Email address <span class="text-red-400">*</span></label>
+              <input type="email" id="g-custom-email" required placeholder="example@gmail.com"
+                class="w-full px-3.5 py-2.5 bg-transparent border border-[#5f6368] rounded-lg text-sm text-[#e8eaed] placeholder-[#80868b] focus:outline-hidden focus:border-[#8ab4f8] focus:ring-1 focus:ring-[#8ab4f8] transition-colors" />
+            </div>
+
+            <div>
+              <label class="block text-xs font-medium text-[#9aa0a6] mb-1.5">Full Name (optional)</label>
+              <input type="text" id="g-custom-name" placeholder="Your Name"
+                class="w-full px-3.5 py-2.5 bg-transparent border border-[#5f6368] rounded-lg text-sm text-[#e8eaed] placeholder-[#80868b] focus:outline-hidden focus:border-[#8ab4f8] focus:ring-1 focus:ring-[#8ab4f8] transition-colors" />
+            </div>
+
+            <div id="g-custom-error" class="text-xs text-red-400 hidden"></div>
+
+            <div class="flex items-center justify-between pt-4">
+              <button type="button" id="btn-g-back-to-list" class="text-sm font-medium text-[#8ab4f8] hover:text-[#aecbfa] px-3 py-2 rounded-lg transition-colors cursor-pointer">
+                Back
+              </button>
+              <button type="submit" class="px-6 py-2 bg-[#8ab4f8] hover:bg-[#aecbfa] text-[#202124] rounded-full text-sm font-medium transition-colors cursor-pointer shadow-sm">
+                Next
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    `;
+
+    // Bind modal interactions
+    $('btn-close-google-modal')?.addEventListener('click', closeGoogleAccountChooserModal);
+
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) {
+        closeGoogleAccountChooserModal();
+      }
+    });
+
+    const onKeydown = (e) => {
+      if (e.key === 'Escape') {
+        closeGoogleAccountChooserModal();
+        window.removeEventListener('keydown', onKeydown);
+      }
+    };
+    window.addEventListener('keydown', onKeydown);
+
+    // Account row click: authenticate
+    modal.querySelectorAll('.g-account-item').forEach(item => {
+      item.addEventListener('click', () => {
+        const email = item.getAttribute('data-email');
+        const name = item.getAttribute('data-name');
+        const bg = item.getAttribute('data-bg');
+        authenticateWithGoogleAccount({ email, name, avatarBg: bg });
+      });
+    });
+
+    // "Use another account" button click
+    $('btn-g-show-custom')?.addEventListener('click', () => {
+      $('g-view-chooser')?.classList.add('hidden');
+      $('g-view-custom')?.classList.remove('hidden');
+      $('g-custom-email')?.focus();
+    });
+
+    // "Back" button click in custom view
+    $('btn-g-back-to-list')?.addEventListener('click', () => {
+      $('g-view-custom')?.classList.add('hidden');
+      $('g-view-chooser')?.classList.remove('hidden');
+    });
+
+    // Custom form submission
+    $('form-g-custom-account')?.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const email = ($('g-custom-email')?.value || '').trim();
+      const name = ($('g-custom-name')?.value || '').trim();
+      const errBox = $('g-custom-error');
+
+      if (!email || !email.includes('@')) {
+        if (errBox) {
+          errBox.textContent = 'Please enter a valid email address.';
+          errBox.classList.remove('hidden');
+        }
+        return;
+      }
+
+      authenticateWithGoogleAccount({
+        email: email,
+        name: name || email.split('@')[0],
+        avatarBg: '#4285F4'
+      });
+    });
+  }
+
+  function closeGoogleAccountChooserModal() {
+    const modal = $('google-account-chooser-modal');
+    if (modal) {
+      modal.classList.add('hidden');
+      modal.remove();
+    }
+  }
+
+  function triggerGoogleLogin() {
+    const configuredClientId = localStorage.getItem('aurelia_google_client_id');
+    if (configuredClientId && window.google?.accounts?.oauth2) {
+      try {
+        const tokenClient = window.google.accounts.oauth2.initTokenClient({
+          client_id: configuredClientId,
+          scope: 'email profile openid',
+          prompt: 'select_account',
+          callback: (res) => {
+            if (res && res.access_token) {
+              fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+                headers: { Authorization: `Bearer ${res.access_token}` }
+              })
+                .then(r => r.json())
+                .then(profile => {
+                  authenticateWithGoogleAccount({
+                    name: profile.name,
+                    email: profile.email,
+                    avatarImg: profile.picture
+                  });
+                })
+                .catch(() => {
+                  openGoogleAccountChooserModal();
+                });
+            }
+          }
+        });
+        tokenClient.requestAccessToken();
+        return;
+      } catch (err) {
+        console.warn('[Google OAuth] Error requesting token client:', err);
+      }
+    }
+
+    // Default: Open the authentic interactive Google Account Chooser
+    openGoogleAccountChooserModal();
+  }
+
   /**
    * Bind event listeners
    */
@@ -1472,9 +1880,7 @@
 
     $('btn-social-google')?.addEventListener('click', (e) => {
       e.preventDefault();
-      if (emailField) emailField.value = 'adalinea@gmail.com';
-      if (passField) passField.value = 'password123';
-      handleLogin(e);
+      triggerGoogleLogin();
     });
 
     // View toggle links and side welcome buttons (Instagram Reel sliding toggle)
@@ -1550,6 +1956,9 @@
     showLogoutConfirmation,
     hideLogoutConfirmation,
     syncUserProfile,
+    triggerGoogleLogin,
+    openGoogleAccountChooserModal,
+    closeGoogleAccountChooserModal,
     isAuthenticated: () => AuthState.isAuthenticated
   };
 
