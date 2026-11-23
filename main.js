@@ -10095,7 +10095,76 @@ if (typeof window !== 'undefined' && window.MutationObserver) {
 (function initBrandCustomizationEngine() {
   const BRAND_STORAGE_KEY = 'aurelia_custom_brand_name';
   const LOGO_IMG_STORAGE_KEY = 'aurelia_custom_brand_logo_img';
+  const HOTEL_INFO_STORAGE_KEY = 'aurelia_hotel_info';
   const DEFAULT_BRAND_NAME = 'AURELIA';
+
+  function getSavedHotelInfo() {
+    try {
+      const raw = localStorage.getItem(HOTEL_INFO_STORAGE_KEY);
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (parsed && typeof parsed === 'object') return parsed;
+      }
+    } catch (e) { }
+    const currentBrand = getSavedBrandName();
+    return {
+      hotelName: currentBrand === 'AURELIA' ? 'Hotel Aurelia' : currentBrand,
+      gstin: '29AABCU9603R1Z7',
+      posCounter: 'Counter 01 - Executive Front Desk'
+    };
+  }
+
+  function saveHotelInfo(data) {
+    try {
+      localStorage.setItem(HOTEL_INFO_STORAGE_KEY, JSON.stringify(data));
+    } catch (e) {
+      console.error('Error saving hotel info:', e);
+    }
+  }
+
+  function syncHotelInfoUI() {
+    const info = getSavedHotelInfo();
+    document.querySelectorAll('#input-hotel-info-name').forEach(function (inp) {
+      if (document.activeElement !== inp) inp.value = info.hotelName || '';
+    });
+    document.querySelectorAll('#input-hotel-info-gstin').forEach(function (inp) {
+      if (document.activeElement !== inp) inp.value = info.gstin || '';
+    });
+    document.querySelectorAll('#input-hotel-info-pos').forEach(function (inp) {
+      if (document.activeElement !== inp) inp.value = info.posCounter || '';
+    });
+  }
+
+  function saveHotelInfoFromCard() {
+    const nameInput = document.getElementById('input-hotel-info-name');
+    const gstinInput = document.getElementById('input-hotel-info-gstin');
+    const posInput = document.getElementById('input-hotel-info-pos');
+
+    const rawName = nameInput ? nameInput.value : '';
+    const cleanHotelName = (rawName || '').trim();
+    const gstin = gstinInput ? gstinInput.value.trim() : '';
+    const pos = posInput ? posInput.value.trim() : '';
+
+    const newInfo = {
+      hotelName: cleanHotelName || DEFAULT_BRAND_NAME,
+      gstin: gstin || '29AABCU9603R1Z7',
+      posCounter: pos || 'Counter 01 - Executive Front Desk'
+    };
+    saveHotelInfo(newInfo);
+
+    // Sync hotel name across the branding engine (Card 1, sidebar, mobile header, page title)
+    if (cleanHotelName) {
+      const finalBrandName = cleanHotelName.toUpperCase();
+      try {
+        localStorage.setItem(BRAND_STORAGE_KEY, finalBrandName);
+      } catch (e) { }
+      applyBrandName(finalBrandName, false);
+    }
+
+    if (typeof window.showToast === 'function') {
+      window.showToast('Hotel information and branding saved successfully!', 'success');
+    }
+  }
 
   function getCustomLogoImage() {
     try {
@@ -10403,6 +10472,9 @@ if (typeof window !== 'undefined' && window.MutationObserver) {
     document.querySelectorAll('#input-branding-card-name').forEach(function (inp) {
       if (document.activeElement !== inp) inp.value = currentName;
     });
+
+    // Card 3: Hotel Information
+    syncHotelInfoUI();
   }
 
   function applyBrandName(name, showFeedback = true) {
@@ -10423,6 +10495,18 @@ if (typeof window !== 'undefined' && window.MutationObserver) {
     document.querySelectorAll('#input-branding-card-name, #input-brand-name').forEach(function (inp) {
       inp.value = cleanName;
     });
+
+    // Update Hotel Information input as well
+    document.querySelectorAll('#input-hotel-info-name').forEach(function (inp) {
+      if (document.activeElement !== inp) {
+        inp.value = cleanName;
+      }
+    });
+    try {
+      const currInfo = getSavedHotelInfo();
+      currInfo.hotelName = cleanName;
+      saveHotelInfo(currInfo);
+    } catch (e) { }
 
     // Update logos
     renderBrandLogo(cleanName);
@@ -10569,6 +10653,15 @@ if (typeof window !== 'undefined' && window.MutationObserver) {
       return;
     }
 
+    // 7. Save button on Hotel Information card
+    const saveHotelBtn = e.target.closest('#btn-save-hotel-info');
+    if (saveHotelBtn) {
+      e.preventDefault();
+      e.stopPropagation();
+      saveHotelInfoFromCard();
+      return;
+    }
+
     const brandInput = e.target.closest('#input-branding-card-name');
     if (brandInput) {
       e.stopPropagation();
@@ -10667,6 +10760,15 @@ if (typeof window !== 'undefined' && window.MutationObserver) {
         e.preventDefault();
         cancelBrandNameCardEdit();
       }
+      return;
+    }
+
+    const hotelInput = e.target.closest ? e.target.closest('#input-hotel-info-name, #input-hotel-info-gstin, #input-hotel-info-pos') : null;
+    if (hotelInput && e.key === 'Enter') {
+      e.preventDefault();
+      e.stopPropagation();
+      saveHotelInfoFromCard();
+      return;
     }
   }, true);
 
@@ -10674,6 +10776,9 @@ if (typeof window !== 'undefined' && window.MutationObserver) {
   window.addEventListener('storage', function (e) {
     if (e.key === BRAND_STORAGE_KEY) {
       applyBrandName(getSavedBrandName(), false);
+      syncHotelInfoUI();
+    } else if (e.key === HOTEL_INFO_STORAGE_KEY) {
+      syncHotelInfoUI();
     } else if (e.key === LOGO_IMG_STORAGE_KEY) {
       renderBrandLogo(null);
     } else if (e.key === 'aurelia_theme_settings') {
