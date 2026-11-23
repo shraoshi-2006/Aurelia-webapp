@@ -10130,3 +10130,321 @@ $(document).ready(function () {
       });
     }
   }
+
+  // =========================================================================
+  // UNIVERSAL EDITABLE BRAND NAME & DYNAMIC LOGO ENGINE
+  // =========================================================================
+  (function initBrandCustomizationEngine() {
+    const BRAND_STORAGE_KEY = 'aurelia_custom_brand_name';
+    const DEFAULT_BRAND_NAME = 'AURELIA';
+
+    function getSavedBrandName() {
+      try {
+        const saved = localStorage.getItem(BRAND_STORAGE_KEY);
+        if (saved && saved.trim()) {
+          return saved.trim();
+        }
+      } catch (e) {}
+      return DEFAULT_BRAND_NAME;
+    }
+
+    function escapeAttr(str) {
+      return String(str || '')
+        .replace(/&/g, '&amp;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+    }
+
+    function renderBrandLogo(brandName) {
+      const containers = document.querySelectorAll('#sidebar-logo-container');
+      if (!containers || !containers.length) return;
+
+      const cleanName = (brandName || DEFAULT_BRAND_NAME).trim();
+      const isDefault = cleanName.toUpperCase() === DEFAULT_BRAND_NAME;
+      const initial = (cleanName.charAt(0) || 'A').toUpperCase();
+
+      let svgHtml = '';
+      if (isDefault) {
+        // Exact Default Aurelia Medallion Emblem with stylized A and white pearl dot
+        svgHtml = `
+          <svg id="sidebar-logo-mark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" class="w-11 h-11 rounded-full object-contain" role="img" aria-label="Aurelia Emblem">
+            <circle cx="100" cy="100" r="95" fill="#FCA311"/>
+            <circle cx="100" cy="100" r="86" fill="none" stroke="#14213D" stroke-width="2.2"/>
+            <path d="M58 162 L100 46 L142 162" fill="none" stroke="#14213D" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+            <line x1="71" y1="126" x2="129" y2="126" stroke="#14213D" stroke-width="6" stroke-linecap="round"/>
+            <circle cx="100" cy="104" r="8.5" fill="#FFFFFF"/>
+          </svg>
+        `;
+      } else {
+        // Dynamic First Alphabet Emblem retaining exact circular gold/navy medallion and brand serif
+        svgHtml = `
+          <svg id="sidebar-logo-mark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" class="w-11 h-11 rounded-full object-contain" role="img" aria-label="${escapeAttr(cleanName)} Emblem">
+            <circle cx="100" cy="100" r="95" fill="#FCA311"/>
+            <circle cx="100" cy="100" r="86" fill="none" stroke="#14213D" stroke-width="2.2"/>
+            <text x="100" y="110" text-anchor="middle" dominant-baseline="central" fill="#14213D" font-family="'Cormorant Garamond', Georgia, serif" font-weight="700" font-size="115">${escapeAttr(initial)}</text>
+          </svg>
+        `;
+      }
+
+      containers.forEach(function (container) {
+        container.innerHTML = svgHtml;
+      });
+    }
+
+    function updateDocumentTitle(brandName) {
+      try {
+        const cleanName = (brandName || DEFAULT_BRAND_NAME).trim();
+        if (!document.title) return;
+        if (!document.documentElement.dataset.origTitle) {
+          document.documentElement.dataset.origTitle = document.title;
+        }
+        const baseTitle = document.documentElement.dataset.origTitle;
+        if (cleanName.toUpperCase() === DEFAULT_BRAND_NAME) {
+          document.title = baseTitle;
+        } else {
+          document.title = baseTitle.replace(/Aurelia/gi, cleanName);
+        }
+      } catch (e) {}
+    }
+
+    function applyStyles() {
+      if (document.getElementById('aurelia-brand-customizer-styles')) return;
+      const style = document.createElement('style');
+      style.id = 'aurelia-brand-customizer-styles';
+      style.textContent = `
+        #brand-display-mode {
+          display: flex;
+          align-items: center;
+          gap: 4px;
+        }
+        #btn-edit-brand-name {
+          opacity: 0.7;
+          transition: opacity 0.2s ease, color 0.2s ease, transform 0.2s ease;
+        }
+        #btn-edit-brand-name:hover {
+          opacity: 1;
+          color: #FCA311 !important;
+          transform: scale(1.1);
+        }
+        #input-brand-name {
+          outline: none;
+          min-width: 0;
+          font-family: 'Cormorant Garamond', Georgia, serif;
+          transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+        #app-sidebar:not(.sidebar-light-mode) #input-brand-name {
+          background-color: #0b1329 !important;
+          color: #FFFFFF !important;
+          border-color: #FCA311 !important;
+        }
+        #app-sidebar.sidebar-light-mode #input-brand-name {
+          background-color: #FFFFFF !important;
+          color: #14213D !important;
+          border-color: #FCA311 !important;
+        }
+        #app-sidebar:not(.sidebar-light-mode) #btn-cancel-brand-name {
+          background-color: #1e293b !important;
+          color: #94a3b8 !important;
+        }
+        #app-sidebar:not(.sidebar-light-mode) #btn-cancel-brand-name:hover {
+          background-color: #334155 !important;
+          color: #f1f5f9 !important;
+        }
+      `;
+      document.head.appendChild(style);
+    }
+
+    function setupBrandingUI() {
+      applyStyles();
+
+      const currentName = getSavedBrandName();
+      renderBrandLogo(currentName);
+      updateDocumentTitle(currentName);
+
+      const brandTitleElements = document.querySelectorAll('#sidebar-brand-title');
+      if (!brandTitleElements || !brandTitleElements.length) return;
+
+      brandTitleElements.forEach(function (brandTitle) {
+        if (brandTitle.getAttribute('data-brand-customizer-init') === 'true') {
+          const nameText = brandTitle.querySelector('#sidebar-brand-name-text');
+          if (nameText) nameText.textContent = currentName;
+          const input = brandTitle.querySelector('#input-brand-name');
+          if (input && document.activeElement !== input) input.value = currentName;
+          return;
+        }
+
+        brandTitle.setAttribute('data-brand-customizer-init', 'true');
+        brandTitle.innerHTML = `
+          <div id="brand-display-mode" class="flex items-center space-x-1 min-w-0">
+            <h2 id="sidebar-brand-name-text" class="text-xl font-bold tracking-[0.22em] leading-none uppercase truncate" style="font-family: 'Cormorant Garamond', Georgia, serif;">${escapeAttr(currentName)}</h2>
+            <button type="button" id="btn-edit-brand-name" class="p-0.5 rounded text-slate-400 hover:text-[#FCA311] transition-colors cursor-pointer flex-shrink-0" title="Edit Website Name" aria-label="Edit Website Name">
+              <svg class="w-3.5 h-3.5 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125"/>
+              </svg>
+            </button>
+          </div>
+          <div id="brand-edit-mode" class="hidden flex items-center space-x-1 mb-1">
+            <input type="text" id="input-brand-name" maxlength="24" value="${escapeAttr(currentName)}" class="text-xs font-bold px-1.5 py-0.5 bg-white text-[#14213D] border border-[#FCA311] rounded shadow-xs focus:outline-none focus:ring-1 focus:ring-[#FCA311] w-28 uppercase tracking-wider" style="font-family: 'Cormorant Garamond', Georgia, serif;">
+            <button type="button" id="btn-save-brand-name" class="p-1 bg-[#14213D] hover:bg-[#FCA311] text-[#FCA311] hover:text-[#14213D] rounded transition-colors shadow-2xs cursor-pointer flex-shrink-0" title="Save" aria-label="Save">
+              <svg class="w-3.5 h-3.5 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg>
+            </button>
+            <button type="button" id="btn-cancel-brand-name" class="p-1 bg-slate-100 hover:bg-slate-200 text-slate-500 rounded transition-colors cursor-pointer flex-shrink-0" title="Cancel" aria-label="Cancel">
+              <svg class="w-3.5 h-3.5 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+            </button>
+          </div>
+          <div class="w-8 h-[1.5px] bg-[#FCA311] my-1 shadow-xs"></div>
+          <span class="text-[9px] font-semibold text-[#5C677D] tracking-[0.22em] uppercase leading-tight truncate">Hotel &amp; Restaurant</span>
+        `;
+      });
+    }
+
+    function applyBrandName(name, showFeedback = true) {
+      const cleanName = (name || DEFAULT_BRAND_NAME).trim();
+      const isDefault = cleanName.toUpperCase() === DEFAULT_BRAND_NAME;
+
+      // Update all sidebar brand text elements
+      document.querySelectorAll('#sidebar-brand-name-text').forEach(function (el) {
+        el.textContent = cleanName;
+      });
+
+      // Update all inputs
+      document.querySelectorAll('#input-brand-name').forEach(function (inp) {
+        inp.value = cleanName;
+      });
+
+      // Update logo
+      renderBrandLogo(cleanName);
+
+      // Update document title
+      updateDocumentTitle(cleanName);
+
+      if (showFeedback && typeof window.showToast === 'function') {
+        if (isDefault) {
+          window.showToast('Restored default branding: AURELIA', 'info');
+        } else {
+          window.showToast(`Website name updated to "${cleanName}"`, 'success');
+        }
+      }
+    }
+
+    function saveBrandNameFromInput() {
+      const input = document.getElementById('input-brand-name');
+      const rawVal = input ? input.value : '';
+      const trimmedVal = (rawVal || '').trim();
+
+      if (!trimmedVal) {
+        // Validation: Do not allow empty names or names containing only spaces.
+        // Default Reset: If the customer clears the saved name, restore the default branding "AURELIA" with the letter "A" in the logo.
+        try {
+          localStorage.removeItem(BRAND_STORAGE_KEY);
+        } catch (e) {}
+        applyBrandName(DEFAULT_BRAND_NAME, true);
+      } else {
+        const finalName = trimmedVal.toUpperCase();
+        try {
+          localStorage.setItem(BRAND_STORAGE_KEY, finalName);
+        } catch (e) {}
+        applyBrandName(finalName, true);
+      }
+
+      // Exit edit mode
+      document.querySelectorAll('#brand-edit-mode').forEach(function (em) {
+        em.classList.add('hidden');
+      });
+      document.querySelectorAll('#brand-display-mode').forEach(function (dm) {
+        dm.classList.remove('hidden');
+      });
+    }
+
+    function cancelBrandNameEdit() {
+      const current = getSavedBrandName();
+      document.querySelectorAll('#input-brand-name').forEach(function (inp) {
+        inp.value = current;
+      });
+      document.querySelectorAll('#brand-edit-mode').forEach(function (em) {
+        em.classList.add('hidden');
+      });
+      document.querySelectorAll('#brand-display-mode').forEach(function (dm) {
+        dm.classList.remove('hidden');
+      });
+    }
+
+    // Event delegation
+    document.addEventListener('click', function (e) {
+      const editBtn = e.target.closest('#btn-edit-brand-name');
+      if (editBtn) {
+        e.preventDefault();
+        e.stopPropagation();
+        const current = getSavedBrandName();
+        document.querySelectorAll('#input-brand-name').forEach(function (inp) {
+          inp.value = current;
+        });
+        document.querySelectorAll('#brand-display-mode').forEach(function (dm) {
+          dm.classList.add('hidden');
+        });
+        document.querySelectorAll('#brand-edit-mode').forEach(function (em) {
+          em.classList.remove('hidden');
+        });
+        const activeInput = document.getElementById('input-brand-name');
+        if (activeInput) {
+          setTimeout(function () {
+            activeInput.focus();
+            activeInput.select();
+          }, 30);
+        }
+        return;
+      }
+
+      const saveBtn = e.target.closest('#btn-save-brand-name');
+      if (saveBtn) {
+        e.preventDefault();
+        e.stopPropagation();
+        saveBrandNameFromInput();
+        return;
+      }
+
+      const cancelBtn = e.target.closest('#btn-cancel-brand-name');
+      if (cancelBtn) {
+        e.preventDefault();
+        e.stopPropagation();
+        cancelBrandNameEdit();
+        return;
+      }
+
+      const brandInput = e.target.closest('#input-brand-name');
+      if (brandInput) {
+        e.stopPropagation();
+      }
+    }, true);
+
+    document.addEventListener('keydown', function (e) {
+      const brandInput = e.target.closest ? e.target.closest('#input-brand-name') : null;
+      if (brandInput) {
+        e.stopPropagation();
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          saveBrandNameFromInput();
+        } else if (e.key === 'Escape') {
+          e.preventDefault();
+          cancelBrandNameEdit();
+        }
+      }
+    }, true);
+
+    // Cross-tab synchronization via storage event
+    window.addEventListener('storage', function (e) {
+      if (e.key === BRAND_STORAGE_KEY) {
+        applyBrandName(getSavedBrandName(), false);
+      }
+    });
+
+    // Run setup immediately and on DOM events
+    setupBrandingUI();
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', setupBrandingUI);
+    } else {
+      setTimeout(setupBrandingUI, 50);
+    }
+  })();
