@@ -6,8 +6,9 @@
     const raw = localStorage.getItem('aurelia_theme_settings');
     if (raw) {
       const theme = JSON.parse(raw);
-      const sidebarBg = theme.sidebarBg || '#494D5F';
-      const cardBorder = theme.cardBorder || 'rgba(255, 255, 255, 0.82)';
+      const ALLOWED_THEME_COLORS = ['#0284C7', '#FFFFFF', '#130481', '#494D5F'];
+      const sidebarBg = (theme.sidebarBg && ALLOWED_THEME_COLORS.includes(theme.sidebarBg.toUpperCase())) ? theme.sidebarBg.toUpperCase() : '#130481';
+      const cardBorder = (theme.cardBorder && ALLOWED_THEME_COLORS.includes(theme.cardBorder.toUpperCase())) ? theme.cardBorder.toUpperCase() : '#494D5F';
       const isDefaultBorder = !theme.cardBorder || theme.cardBorder.includes('rgba');
       const rimBgValue = isDefaultBorder
         ? 'linear-gradient(135deg, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0.5) 30%, rgba(255, 255, 255, 0.1) 65%, rgba(255, 255, 255, 0.75) 100%)'
@@ -9185,9 +9186,10 @@ $(document).ready(function () {
   // =========================================================================
   // APPEARANCE & THEME CUSTOMIZATION CONTROLLER (Sidebar & Card Border)
   // =========================================================================
+  const FIXED_THEME_COLORS = ['#0284C7', '#FFFFFF', '#130481', '#494D5F'];
   const DEFAULT_THEME = {
-    sidebarBg: '#494D5F',
-    cardBorder: 'rgba(255, 255, 255, 0.82)'
+    sidebarBg: '#130481',
+    cardBorder: '#494D5F'
   };
 
   function getSavedTheme() {
@@ -9195,9 +9197,11 @@ $(document).ready(function () {
       const raw = localStorage.getItem('aurelia_theme_settings');
       if (raw) {
         const parsed = JSON.parse(raw);
+        const sb = (parsed.sidebarBg || '').toUpperCase();
+        const cb = (parsed.cardBorder || '').toUpperCase();
         return {
-          sidebarBg: parsed.sidebarBg || DEFAULT_THEME.sidebarBg,
-          cardBorder: parsed.cardBorder || DEFAULT_THEME.cardBorder
+          sidebarBg: FIXED_THEME_COLORS.includes(sb) ? sb : DEFAULT_THEME.sidebarBg,
+          cardBorder: FIXED_THEME_COLORS.includes(cb) ? cb : DEFAULT_THEME.cardBorder
         };
       }
     } catch (e) {
@@ -9448,15 +9452,12 @@ $(document).ready(function () {
     const { sidebarBg, cardBorder } = theme;
 
     // 1. Update Sidebar Theme UI
-    $('#preview-sidebar-dot').css('background-color', sidebarBg);
-    $('#preview-sidebar-hex').text(sidebarBg.toUpperCase());
-    if (sidebarBg.startsWith('#')) {
-      $('#sidebar-custom-color-input').val(sidebarBg);
-    }
+    const normSidebar = (sidebarBg || DEFAULT_THEME.sidebarBg).toUpperCase();
+    $('#preview-sidebar-dot').css('background-color', normSidebar);
+    $('#preview-sidebar-hex').text(normSidebar);
 
     // Update active swatch in sidebar tray
     $('#tray-sidebar-colors .aurelia-theme-swatch').removeClass('active-swatch');
-    const normSidebar = sidebarBg.toUpperCase();
     $('#tray-sidebar-colors .aurelia-theme-swatch').each(function () {
       const c = ($(this).attr('data-color') || $(this).data('color') || '').toString().toUpperCase();
       if (c === normSidebar) {
@@ -9465,21 +9466,15 @@ $(document).ready(function () {
     });
 
     // 2. Update Card Border Theme UI
-    $('#preview-card-border-dot').css('background-color', cardBorder);
-    const borderDisplay = cardBorder.includes('rgba') ? '#FFFFFF (82%)' : cardBorder.toUpperCase();
-    $('#preview-card-border-hex').text(borderDisplay);
-    if (cardBorder.startsWith('#')) {
-      $('#card-border-custom-color-input').val(cardBorder);
-    }
+    const normCard = (cardBorder || DEFAULT_THEME.cardBorder).toUpperCase();
+    $('#preview-card-border-dot').css('background-color', normCard);
+    $('#preview-card-border-hex').text(normCard);
 
     // Update active swatch in card border tray
     $('#tray-card-border-colors .aurelia-theme-swatch').removeClass('active-swatch');
-    const isDefaultBorder = cardBorder.includes('rgba');
     $('#tray-card-border-colors .aurelia-theme-swatch').each(function () {
-      const c = ($(this).attr('data-color') || $(this).data('color') || '').toString();
-      if (isDefaultBorder && c.includes('rgba')) {
-        $(this).addClass('active-swatch');
-      } else if (!isDefaultBorder && c.toUpperCase() === cardBorder.toUpperCase()) {
+      const c = ($(this).attr('data-color') || $(this).data('color') || '').toString().toUpperCase();
+      if (c === normCard) {
         $(this).addClass('active-swatch');
       }
     });
@@ -9508,13 +9503,13 @@ $(document).ready(function () {
     updateThemeUI(currentTheme);
     updateSaveButtonState(false);
 
-    // Click on circular preset swatch (with direct data/attr reading)
+    // Click on circular preset swatch (instant real-time live preview)
     $(document).on('click', '.aurelia-theme-swatch', function (e) {
       e.preventDefault();
       e.stopPropagation();
       const target = $(this).attr('data-target') || $(this).data('target');
-      const color = $(this).attr('data-color') || $(this).data('color');
-      if (!target || !color) return;
+      const color = ($(this).attr('data-color') || $(this).data('color') || '').toString().toUpperCase();
+      if (!target || !color || !FIXED_THEME_COLORS.includes(color)) return;
 
       const theme = getSavedTheme();
       if (target === 'sidebar') {
@@ -9527,60 +9522,6 @@ $(document).ready(function () {
       saveTheme(theme);
       updateThemeUI(theme);
       updateSaveButtonState(false);
-    });
-
-    // Custom Color Picker input & change events (instant real-time live preview)
-    $(document).on('input change', '#sidebar-custom-color-input', function () {
-      const color = $(this).val();
-      if (!color) return;
-      const theme = getSavedTheme();
-      theme.sidebarBg = color;
-      applyThemeColors(theme.sidebarBg, theme.cardBorder);
-      saveTheme(theme);
-      updateThemeUI(theme);
-      updateSaveButtonState(false);
-    });
-
-    $(document).on('input change', '#card-border-custom-color-input', function () {
-      const color = $(this).val();
-      if (!color) return;
-      const theme = getSavedTheme();
-      theme.cardBorder = color;
-      applyThemeColors(theme.sidebarBg, theme.cardBorder);
-      saveTheme(theme);
-      updateThemeUI(theme);
-      updateSaveButtonState(false);
-    });
-
-    // Eyedropper API Tool
-    $(document).on('click', '.theme-eyedropper-btn', async function (e) {
-      e.preventDefault();
-      e.stopPropagation();
-      const target = $(this).attr('data-target') || $(this).data('target');
-      if (window.EyeDropper) {
-        try {
-          const eyeDropper = new window.EyeDropper();
-          const result = await eyeDropper.open();
-          if (result && result.sRGBHex) {
-            const hex = result.sRGBHex;
-            const theme = getSavedTheme();
-            if (target === 'sidebar') {
-              theme.sidebarBg = hex;
-            } else {
-              theme.cardBorder = hex;
-            }
-            applyThemeColors(theme.sidebarBg, theme.cardBorder);
-            saveTheme(theme);
-            updateThemeUI(theme);
-            updateSaveButtonState(false);
-          }
-        } catch (err) {
-          // User cancelled / dismissed the eyedropper
-        }
-      } else {
-        const inputId = target === 'sidebar' ? '#sidebar-custom-color-input' : '#card-border-custom-color-input';
-        $(inputId).trigger('click');
-      }
     });
 
     // Save Changes Button (Confirmation feedback)

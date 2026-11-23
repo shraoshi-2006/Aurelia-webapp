@@ -8,8 +8,8 @@
           var s = localStorage.getItem('aurelia_theme_settings');
           if (s) {
             var t = JSON.parse(s);
-            var sb = t.sidebarBg || '#494D5F';
-            var cb = t.cardBorder || 'rgba(255, 255, 255, 0.82)';
+            var sb = t.sidebarBg || '#130481';
+            var cb = t.cardBorder || '#494D5F';
             var isDef = !t.cardBorder || t.cardBorder.includes('rgba');
             var rim = isDef ? 'linear-gradient(135deg, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0.5) 30%, rgba(255, 255, 255, 0.1) 65%, rgba(255, 255, 255, 0.75) 100%)' : cb;
             var btnBg = isDef ? '#FCA311' : cb;
