@@ -48,6 +48,20 @@
           background: ${sidebarBg} !important;
           background-color: ${sidebarBg} !important;
         }
+        #btn-sidebar-collapse,
+        #btn-sidebar-collapse svg,
+        #app-sidebar.is-collapsed #btn-sidebar-collapse,
+        #app-sidebar.is-collapsed #btn-sidebar-collapse svg {
+          color: ${isLight ? '#000000' : '#FFFFFF'} !important;
+          stroke: ${isLight ? '#000000' : '#FFFFFF'} !important;
+        }
+        #btn-sidebar-collapse:hover,
+        #btn-sidebar-collapse:hover svg,
+        #app-sidebar.is-collapsed #btn-sidebar-collapse:hover,
+        #app-sidebar.is-collapsed #btn-sidebar-collapse:hover svg {
+          color: #000000 !important;
+          stroke: #000000 !important;
+        }
         ${isDefaultBorder ? `
         .Aurelia-card,
         .aurelia-card,
@@ -9267,6 +9281,20 @@ $(document).ready(function () {
         background: ${sidebarBg} !important;
         background-color: ${sidebarBg} !important;
       }
+      #btn-sidebar-collapse,
+      #btn-sidebar-collapse svg,
+      #app-sidebar.is-collapsed #btn-sidebar-collapse,
+      #app-sidebar.is-collapsed #btn-sidebar-collapse svg {
+        color: ${isColorLight(sidebarBg) ? '#000000' : '#FFFFFF'} !important;
+        stroke: ${isColorLight(sidebarBg) ? '#000000' : '#FFFFFF'} !important;
+      }
+      #btn-sidebar-collapse:hover,
+      #btn-sidebar-collapse:hover svg,
+      #app-sidebar.is-collapsed #btn-sidebar-collapse:hover,
+      #app-sidebar.is-collapsed #btn-sidebar-collapse:hover svg {
+        color: #000000 !important;
+        stroke: #000000 !important;
+      }
       ${isDefaultBorder ? `
       .Aurelia-card,
       .aurelia-card,
@@ -9374,6 +9402,14 @@ $(document).ready(function () {
     $sidebarTargets.each(function() {
       this.style.setProperty('background', sidebarBg, 'important');
       this.style.setProperty('background-color', sidebarBg, 'important');
+    });
+
+    const isSbLightMode = isColorLight(sidebarBg);
+    const arrowCol = isSbLightMode ? '#000000' : '#FFFFFF';
+    $('#btn-sidebar-collapse').css('color', arrowCol);
+    $('#btn-sidebar-collapse svg').css({
+      'color': arrowCol,
+      'stroke': arrowCol
     });
 
     if (isColorLight(sidebarBg)) {
