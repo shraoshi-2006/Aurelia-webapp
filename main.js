@@ -7035,7 +7035,6 @@ $(document).ready(function () {
               <div>
                 <div class="flex items-center space-x-2">
                   <h3 class="text-base font-bold text-slate-900 dark:text-white">User Profile & Account</h3>
-                  <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800/40">Active Session</span>
                 </div>
                 <p class="text-xs text-slate-400">View and update your personal credentials, contact info, and profile photo</p>
               </div>
@@ -10372,7 +10371,7 @@ if (typeof window !== 'undefined' && window.MutationObserver) {
       authBox.querySelectorAll('p, span').forEach(function (el) {
         if (el.textContent.includes('Hotel Management') || el.getAttribute('data-terms-disclaimer') === 'true') {
           el.setAttribute('data-terms-disclaimer', 'true');
-          el.innerHTML = `By clicking Sign In, Google, or LinkedIn, you agree to ${escapeAttr(cleanName)} Hotel Management <span class="underline">Terms &amp; Conditions</span> and <span class="underline">Privacy Policy</span>.`;
+          el.innerHTML = `By clicking Sign In or Google, you agree to ${escapeAttr(cleanName)} Hotel Management <span class="underline">Terms &amp; Conditions</span> and <span class="underline">Privacy Policy</span>.`;
         } else if (el.textContent.includes('Terms of Service & privacy') || el.getAttribute('data-reg-terms') === 'true') {
           el.setAttribute('data-reg-terms', 'true');
           el.textContent = `I agree to the ${cleanName} Terms of Service & privacy confidentiality policy.`;

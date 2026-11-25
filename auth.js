@@ -1575,15 +1575,13 @@
       handleLogin(e);
     });
 
-    // Social buttons demo login
-    $('btn-social-linkedin')?.addEventListener('click', (e) => {
+    // Google sign-in buttons (Login and Register)
+    $('btn-social-google')?.addEventListener('click', (e) => {
       e.preventDefault();
-      if (emailField) emailField.value = 'adalinea@gmail.com';
-      if (passField) passField.value = 'password123';
-      handleLogin(e);
+      triggerGoogleLogin();
     });
 
-    $('btn-social-google')?.addEventListener('click', (e) => {
+    $('btn-reg-social-google')?.addEventListener('click', (e) => {
       e.preventDefault();
       triggerGoogleLogin();
     });
