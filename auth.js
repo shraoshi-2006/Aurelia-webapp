@@ -586,6 +586,15 @@
 
     showView(targetView);
 
+    // Keep URL hash in sync with unauthenticated view (#login, #register, #forgot) instead of lingering #dashboard
+    if (!['#login', '#register', '#forgot'].includes(window.location.hash)) {
+      try {
+        window.history.replaceState(null, document.title, window.location.pathname + '#' + targetView);
+      } catch (e) {
+        window.location.hash = '#' + targetView;
+      }
+    }
+
     if (typeof window.syncAuthBrandingUI === 'function') {
       window.syncAuthBrandingUI();
     }
@@ -1054,6 +1063,12 @@
     sessionStorage.removeItem(STORAGE_KEY_TOKEN);
     sessionStorage.removeItem(STORAGE_KEY_USER);
     AuthState.token = null;
+
+    try {
+      window.history.replaceState(null, document.title, window.location.pathname + '#login');
+    } catch (e) {
+      window.location.hash = '#login';
+    }
 
     DOM.loginForm?.reset();
     renderUnauthenticatedState('login');
@@ -1637,10 +1652,20 @@
       showLogoutConfirmation();
     });
 
-    // Listen for #login hash
+    // Listen for hash changes & route guarding
     window.addEventListener('hashchange', () => {
-      if (window.location.hash === '#login' && !AuthState.isAuthenticated) {
-        renderUnauthenticatedState('login');
+      if (!AuthState.isAuthenticated) {
+        if (['#login', '#register', '#forgot'].includes(window.location.hash)) {
+          showView(window.location.hash.replace('#', ''));
+        } else {
+          // If trying to access #dashboard or other protected routes while logged out:
+          try {
+            window.history.replaceState(null, document.title, window.location.pathname + '#login');
+          } catch (e) {
+            window.location.hash = '#login';
+          }
+          renderUnauthenticatedState('login');
+        }
       }
     });
 
