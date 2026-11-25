@@ -1391,6 +1391,119 @@
     });
   }
 
+  /* ==========================================================================
+     GOOGLE OAUTH 2.0 INTEGRATION (Google Identity Services - GIS)
+     ========================================================================== */
+
+  const GOOGLE_CLIENT_ID = '776665880497-c5n59hlrbdeeaif48u5p3i36qflg5m25.apps.googleusercontent.com';
+
+  let googleTokenClient = null;
+
+  function initGoogleOAuth() {
+    if (window.google?.accounts?.oauth2 && !googleTokenClient) {
+      try {
+        googleTokenClient = window.google.accounts.oauth2.initTokenClient({
+          client_id: GOOGLE_CLIENT_ID,
+          scope: 'email profile openid',
+          callback: async (tokenResponse) => {
+            if (tokenResponse && tokenResponse.access_token) {
+              try {
+                const res = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+                  headers: { Authorization: `Bearer ${tokenResponse.access_token}` }
+                });
+                if (!res.ok) throw new Error('UserInfo response not ok');
+                const profile = await res.json();
+                handleGoogleLoginSuccess(profile, tokenResponse.access_token);
+              } catch (err) {
+                console.error('[Google OAuth] Error fetching user profile:', err);
+                showAlert('alert-login', 'Failed to retrieve Google profile. Please try again.');
+              }
+            } else if (tokenResponse && tokenResponse.error) {
+              console.warn('[Google OAuth] Token error:', tokenResponse.error);
+            }
+          }
+        });
+      } catch (err) {
+        console.error('[Google OAuth] Failed to initialize token client:', err);
+      }
+    }
+  }
+
+  function handleGoogleLoginSuccess(profile, token) {
+    if (!profile || !profile.email) {
+      showAlert('alert-login', 'Failed to retrieve Google account info. Please try again.');
+      return;
+    }
+
+    const cleanEmail = profile.email.trim().toLowerCase();
+    const cleanName = (profile.name || cleanEmail.split('@')[0] || 'Google User').trim();
+    const avatar = profile.picture || null;
+
+    // Check active login tab for role (Front Desk Staff vs Hotel Manager)
+    const adminRoleBtn = $('tab-login-admin');
+    const isAdminActive = adminRoleBtn && (
+      adminRoleBtn.classList.contains('bg-[#14213d]') ||
+      adminRoleBtn.classList.contains('active')
+    );
+    const assignedRole = isAdminActive ? 'General Manager' : 'Front Desk Supervisor';
+    const assignedDept = isAdminActive ? 'Hotel Administration' : 'Front Office';
+
+    const localUsers = getLocalUsers();
+    let existing = localUsers.find(u => u.email && u.email.toLowerCase() === cleanEmail);
+
+    let userObj;
+    if (existing) {
+      userObj = {
+        ...existing,
+        name: existing.name || cleanName,
+        avatar: existing.avatar || avatar,
+        authProvider: 'google'
+      };
+    } else {
+      userObj = {
+        id: 'usr-g-' + Date.now().toString(36),
+        name: cleanName,
+        email: cleanEmail,
+        password: 'google_oauth_session',
+        role: assignedRole,
+        department: assignedDept,
+        empId: 'EMP-G-' + Math.floor(1000 + Math.random() * 9000),
+        avatar: avatar,
+        authProvider: 'google'
+      };
+      saveLocalUser(userObj);
+    }
+
+    const sessionToken = token || ('g_oauth_' + btoa(cleanEmail) + '_' + Date.now());
+    AuthState.token = sessionToken;
+
+    try {
+      localStorage.setItem(STORAGE_KEY_TOKEN, sessionToken);
+      localStorage.setItem(STORAGE_KEY_USER, JSON.stringify(userObj));
+    } catch (e) { }
+
+    if (typeof window.showToast === 'function') {
+      window.showToast(`Signed in as ${cleanName} with Google`, 'success');
+    }
+
+    renderAuthenticatedState(userObj);
+  }
+
+  function triggerGoogleLogin() {
+    if (!window.google?.accounts?.oauth2) {
+      showAlert('alert-login', 'Connecting to Google Services... Please try again in a moment.');
+      return;
+    }
+
+    if (!googleTokenClient) {
+      initGoogleOAuth();
+    }
+
+    if (googleTokenClient) {
+      googleTokenClient.requestAccessToken({ prompt: 'select_account' });
+    }
+  }
+
   /**
    * Bind event listeners
    */
@@ -1472,9 +1585,7 @@
 
     $('btn-social-google')?.addEventListener('click', (e) => {
       e.preventDefault();
-      if (emailField) emailField.value = 'adalinea@gmail.com';
-      if (passField) passField.value = 'password123';
-      handleLogin(e);
+      triggerGoogleLogin();
     });
 
     // View toggle links and side welcome buttons (Instagram Reel sliding toggle)
@@ -1550,6 +1661,8 @@
     showLogoutConfirmation,
     hideLogoutConfirmation,
     syncUserProfile,
+    triggerGoogleLogin,
+    initGoogleOAuth,
     isAuthenticated: () => AuthState.isAuthenticated
   };
 
@@ -1564,12 +1677,19 @@
       bindEvents();
       checkSession();
       syncLocalUsersToDatabase();
+      initGoogleOAuth();
     });
   } else {
     initDOM();
     bindEvents();
     checkSession();
     syncLocalUsersToDatabase();
+    initGoogleOAuth();
   }
+
+  // Also hook into window load so GIS script is ready
+  window.addEventListener('load', () => {
+    initGoogleOAuth();
+  });
 
 })();
