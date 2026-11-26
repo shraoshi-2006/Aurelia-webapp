@@ -3615,9 +3615,9 @@
         </div>
       </header>
 
-      <!-- SUB-ACTION BAR: Date Filter Pill & Widgets Action Buttons -->
+      <!-- SUB-ACTION BAR: Date Filter Pill -->
       <div
-        class="px-6 sm:px-8 pt-3 sm:pt-4 pb-2 sm:pb-3 flex flex-row items-center justify-between gap-3 relative z-10">
+        class="px-6 sm:px-8 pt-3 sm:pt-4 pb-2 sm:pb-3 flex items-center justify-between gap-3 relative z-10">
 
         <!-- Left: Date Range Calendar ("From" this "To" this) -->
         <div class="flex flex-wrap items-center gap-2.5">
@@ -3655,17 +3655,6 @@
             </div>
           </div>
         </div>
-
-        <!-- Right: Action Link to Billing Details -->
-        <div class="flex items-center justify-end">
-          <a href="billing-details.html"
-            class="inline-flex items-center space-x-2 px-3 sm:px-4 py-2 rounded-full border border-[#E5E5E5] bg-white text-xs font-bold text-[#14213D] hover:border-[#FCA311] hover:text-[#FCA311] transition-all shadow-xs cursor-pointer flex-shrink-0">
-            <svg class="w-4 h-4 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 12h16.5m-6-6l6 6-6 6" />
-            </svg>
-            <span>Billing Details</span>
-          </a>
-        </div>
       </div>
 
       <!-- MAIN SCROLLABLE DASHBOARD VIEW CONTAINER -->
@@ -3676,15 +3665,19 @@
         <!-- ============================================================= -->
         <section id="section-billing" class="space-y-4">
 
-          <!-- POS Engine Subtitle -->
+          <!-- POS Engine Subtitle with Billing Details Link -->
           <div class="flex items-center justify-between pb-1">
             <div>
               <h1 class="text-base sm:text-lg font-bold text-[#14213D] dark:text-white">Add New Bill</h1>
               <span class="text-xs text-slate-400 font-medium">Hotel Aurelia POS &amp; Live GST Billing Engine</span>
             </div>
-            <button type="button" class="quick-nav-bill btn-Aurelia-primary py-1.5 px-3.5 text-xs font-bold shadow-xs">
-              + New Bill
-            </button>
+            <a href="billing-details.html"
+              class="inline-flex items-center space-x-2 px-3 sm:px-4 py-1.5 rounded-full border border-[#E5E5E5] bg-white text-xs font-bold text-[#14213D] hover:border-[#FCA311] hover:text-[#FCA311] transition-all shadow-xs cursor-pointer flex-shrink-0">
+              <svg class="w-3.5 h-3.5 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 12h16.5m-6-6l6 6-6 6" />
+              </svg>
+              <span>Billing Details</span>
+            </a>
           </div>
 
           <!-- SUBTAB 1: CREATE BILL FORM -->
@@ -3704,10 +3697,18 @@
                         class="font-mono text-sm font-bold text-[#14213D] bg-[#FFF5E6] border border-[#FCA311]/40 px-2.5 py-0.5 rounded-full">INV-2026-0001</span>
                       <input type="hidden" id="input-bill-number" value="">
                     </div>
-                    <div class="text-xs text-slate-400 font-medium">
-                      <span>Date: </span>
-                      <span id="bill-date-display" class="font-semibold text-slate-700 dark:text-slate-200">27 Oct 2026,
-                        10:15 AM</span>
+                    <div class="flex items-center justify-between sm:justify-end space-x-3">
+                      <div class="text-xs text-slate-400 font-medium">
+                        <span>Date: </span>
+                        <span id="bill-date-display" class="font-semibold text-slate-700 dark:text-slate-200">27 Oct 2026,
+                          10:15 AM</span>
+                      </div>
+                      <button type="button" class="quick-nav-bill btn-Aurelia-primary py-1 px-2.5 text-[11px] font-bold rounded-full shadow-xs flex items-center space-x-1" title="Initialize a new blank invoice">
+                        <svg class="w-3 h-3 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2.5">
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                        </svg>
+                        <span>New Bill</span>
+                      </button>
                     </div>
                   </div>
 
@@ -5446,7 +5447,7 @@
   <!-- Authentication Controller -->
   <script src="../auth.js?v=20261126_01"></script>
   <!-- Main JavaScript Logic -->
-<script src="../main.js?v=20261126_02"></script>
+<script src="../main.js?v=20261126_03"></script>
 </body>
 
 </html>
