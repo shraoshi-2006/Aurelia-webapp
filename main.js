@@ -1146,6 +1146,20 @@ $(document).ready(function () {
   }));
 
   function initializeSampleData(force = false) {
+    // Automatic migration to enforce Shraoshi's 2-record standard (Shraoshi Basak & Piyush Barua)
+    if (localStorage.getItem('aurelia_force_sync_two_records_v3') !== 'true') {
+      try {
+        localStorage.setItem('aurelia_hr_templates_v10', JSON.stringify(DEFAULT_HR_TEMPLATES));
+        localStorage.removeItem('aurelia_hr_templates_v9');
+        localStorage.removeItem('aurelia_hr_templates_v8');
+      } catch (e) { }
+      Storage.set(STORAGE_KEYS.STAFF, DEFAULT_STAFF);
+      Storage.set(STORAGE_KEYS.CUSTOMERS, DEFAULT_CUSTOMERS);
+      Storage.set(STORAGE_KEYS.ORDERS, DEFAULT_ORDERS);
+      Storage.set(STORAGE_KEYS.BILLS, DEFAULT_BILLS);
+      localStorage.setItem('aurelia_force_sync_two_records_v3', 'true');
+    }
+
     const needsTwoRecordsMigration = !localStorage.getItem('aurelia_two_records_v1');
     const existingBills = Storage.get(STORAGE_KEYS.BILLS, []);
     const existingTotal = (existingBills || []).reduce((sum, b) => sum + (Number(b.grandTotal) || 0), 0);
@@ -7139,13 +7153,12 @@ $(document).ready(function () {
 
   let HR_TEMPLATES = [];
   try {
-    let storedHrTpls = localStorage.getItem('aurelia_hr_templates_v9');
+    let storedHrTpls = localStorage.getItem('aurelia_hr_templates_v10');
     if (storedHrTpls) {
       HR_TEMPLATES = JSON.parse(storedHrTpls);
-      localStorage.setItem('aurelia_hr_templates_v9', JSON.stringify(HR_TEMPLATES));
     } else {
       HR_TEMPLATES = [...DEFAULT_HR_TEMPLATES];
-      localStorage.setItem('aurelia_hr_templates_v9', JSON.stringify(HR_TEMPLATES));
+      localStorage.setItem('aurelia_hr_templates_v10', JSON.stringify(HR_TEMPLATES));
     }
   } catch (err) {
     HR_TEMPLATES = [...DEFAULT_HR_TEMPLATES];
@@ -7347,7 +7360,7 @@ $(document).ready(function () {
     }
     tpl.empName = trimmed;
     try {
-      localStorage.setItem('aurelia_hr_templates_v8', JSON.stringify(HR_TEMPLATES));
+      localStorage.setItem('aurelia_hr_templates_v10', JSON.stringify(HR_TEMPLATES));
     } catch (e) { }
     renderHrDocumentsSection();
     showToast(`Updated record for ${tpl.empId}`, 'success');
@@ -7363,7 +7376,7 @@ $(document).ready(function () {
     if (confirm(`Are you sure you want to delete employee record ${item.empName} (${item.empId})?`)) {
       HR_TEMPLATES.splice(idx, 1);
       try {
-        localStorage.setItem('aurelia_hr_templates_v8', JSON.stringify(HR_TEMPLATES));
+        localStorage.setItem('aurelia_hr_templates_v10', JSON.stringify(HR_TEMPLATES));
       } catch (e) { }
       renderHrDocumentsSection();
       showToast(`Record ${item.empId} deleted successfully.`, 'info');
@@ -7449,7 +7462,7 @@ $(document).ready(function () {
 
     HR_TEMPLATES.unshift(newDoc);
     try {
-      localStorage.setItem('aurelia_hr_templates_v8', JSON.stringify(HR_TEMPLATES));
+      localStorage.setItem('aurelia_hr_templates_v10', JSON.stringify(HR_TEMPLATES));
     } catch (e) {
       console.warn('Failed to save HR templates to localStorage', e);
     }
@@ -8578,7 +8591,7 @@ $(document).ready(function () {
         const ids = selectedTrs.map(extractRowId).filter(Boolean);
         HR_TEMPLATES = HR_TEMPLATES.filter(t => !ids.includes(String(t.id)));
         try {
-          localStorage.setItem('aurelia_hr_templates_v8', JSON.stringify(HR_TEMPLATES));
+          localStorage.setItem('aurelia_hr_templates_v10', JSON.stringify(HR_TEMPLATES));
         } catch (e) { }
         renderHrDocumentsSection();
         showToast(`Deleted ${count} HR record${count > 1 ? 's' : ''} successfully.`, 'info');
