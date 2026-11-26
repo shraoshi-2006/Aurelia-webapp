@@ -1145,6 +1145,35 @@ $(document).ready(function () {
     email
   }));
 
+  const DEFAULT_HR_TEMPLATES = [
+    {
+      id: 'doc-emp-01',
+      empId: 'EMP-2026-01',
+      empName: 'Shraoshi Basak',
+      avatar: 'images/avatar-female.png',
+      initials: 'SB',
+      department: 'Front Desk',
+      deptCode: 'FD',
+      format: 'PDF',
+      isVerified: true,
+      title: 'Executive & Staff Employment Agreement',
+      body: '<div class="space-y-3"><p class="font-bold text-slate-800 uppercase tracking-wide">1. Front Desk Management</p><p>Permanent employment agreement outlining supervisory terms for Shraoshi Basak.</p></div>'
+    },
+    {
+      id: 'doc-emp-02',
+      empId: 'EMP-2026-02',
+      empName: 'Piyush Barua',
+      avatar: 'images/emp-piyush.jpg',
+      initials: 'PB',
+      department: 'Front Desk',
+      deptCode: 'FD',
+      format: 'CSV',
+      isVerified: true,
+      title: 'Employment Contract & Onboarding Form',
+      body: '<div class="space-y-3"><p class="font-bold text-slate-800 uppercase tracking-wide">1. Front Desk Operations</p><p>Official employment contract for Piyush Barua assigned to Luxury Front Desk Concierge.</p></div>'
+    }
+  ];
+
   function initializeSampleData(force = false) {
     // Automatic migration to enforce Shraoshi's 2-record standard (Shraoshi Basak & Piyush Barua)
     if (localStorage.getItem('aurelia_force_sync_two_records_v3') !== 'true') {
@@ -7122,35 +7151,6 @@ $(document).ready(function () {
   // =========================================================================
   // 10. HR DOCUMENT TEMPLATES STANDALONE PAGE CONTROLLER
   // =========================================================================
-  const DEFAULT_HR_TEMPLATES = [
-    {
-      id: 'doc-emp-01',
-      empId: 'EMP-2026-01',
-      empName: 'Shraoshi Basak',
-      avatar: 'images/avatar-female.png',
-      initials: 'SB',
-      department: 'Front Desk',
-      deptCode: 'FD',
-      format: 'PDF',
-      isVerified: true,
-      title: 'Executive & Staff Employment Agreement',
-      body: '<div class="space-y-3"><p class="font-bold text-slate-800 uppercase tracking-wide">1. Front Desk Management</p><p>Permanent employment agreement outlining supervisory terms for Shraoshi Basak.</p></div>'
-    },
-    {
-      id: 'doc-emp-02',
-      empId: 'EMP-2026-02',
-      empName: 'Piyush Barua',
-      avatar: 'images/emp-piyush.jpg',
-      initials: 'PB',
-      department: 'Front Desk',
-      deptCode: 'FD',
-      format: 'CSV',
-      isVerified: true,
-      title: 'Employment Contract & Onboarding Form',
-      body: '<div class="space-y-3"><p class="font-bold text-slate-800 uppercase tracking-wide">1. Front Desk Operations</p><p>Official employment contract for Piyush Barua assigned to Luxury Front Desk Concierge.</p></div>'
-    }
-  ];
-
   let HR_TEMPLATES = [];
   try {
     let storedHrTpls = localStorage.getItem('aurelia_hr_templates_v10');
