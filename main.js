@@ -8097,7 +8097,7 @@ $(document).ready(function () {
     }
   }
 
-  $('#btn-submit-add-emp, #btn-submit-add-emp-top').on('click', function (e) {
+  $('#btn-submit-add-emp, #btn-submit-add-emp-top, .btn-submit-add-emp-trigger').on('click', function (e) {
     e.preventDefault();
     handleAddEmployeeSubmit();
   });

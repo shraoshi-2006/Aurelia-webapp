@@ -3651,7 +3651,7 @@
               <p class="text-xs text-slate-400">Register hotel team members, assign operational departments, shifts &
                 payroll profiles</p>
             </div>
-            <div class="flex items-center space-x-2.5">
+            <div class="hidden sm:flex items-center space-x-2.5">
               <button type="button" class="btn-back-to-employees btn-Aurelia-secondary text-xs py-2 px-4">
                 Cancel
               </button>
@@ -3738,6 +3738,19 @@
                   <textarea id="add-emp-address" rows="2" class="Aurelia-input w-full font-medium"
                     placeholder="Permanent residential address, city, and pincode"></textarea>
                 </div>
+              </div>
+
+              <!-- Mobile Responsive Action Bar (At bottom of Personal Information Card) -->
+              <div class="flex sm:hidden items-center justify-end space-x-2.5 pt-3 mt-1 border-t border-slate-100 dark:border-slate-800">
+                <button type="button" class="btn-back-to-employees btn-Aurelia-secondary text-xs py-2 px-4">
+                  Cancel
+                </button>
+                <button type="button" class="btn-submit-add-emp-trigger btn-Aurelia-primary text-xs py-2 px-4 flex items-center space-x-1.5 shadow-sm">
+                  <svg class="w-4 h-4 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                  </svg>
+                  <span>Save & Onboard</span>
+                </button>
               </div>
             </div>
 
@@ -3956,6 +3969,19 @@
                 </div>
               </div>
             </div>
+
+            <!-- Mobile Responsive Bottom Action Bar (End of Form) -->
+            <div class="col-span-1 lg:col-span-3 flex sm:hidden items-center justify-end space-x-2.5 pt-2">
+              <button type="button" class="btn-back-to-employees btn-Aurelia-secondary text-xs py-2.5 px-5 flex-1 text-center">
+                Cancel
+              </button>
+              <button type="button" class="btn-submit-add-emp-trigger btn-Aurelia-primary text-xs py-2.5 px-5 flex items-center justify-center space-x-1.5 shadow-sm flex-1">
+                <svg class="w-4 h-4 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                </svg>
+                <span>Save & Onboard</span>
+              </button>
+            </div>
           </form>
         </section>
 
@@ -3979,9 +4005,9 @@
   <div id="print-invoice-area" class="hidden"></div>
 
   <!-- Authentication Controller -->
-  <script src="../auth.js?v=20261125_03"></script>
+  <script src="../auth.js?v=20261126_01"></script>
   <!-- Main JavaScript Logic -->
-<script src="../main.js?v=20261125_03"></script>
+<script src="../main.js?v=20261126_01"></script>
 </body>
 
 </html>
