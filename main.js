@@ -2750,10 +2750,22 @@ $(document).ready(function () {
   });
 
   // Quick action navigation
-  $('.quick-nav-bill').on('click', function () {
-    window.location.hash = 'billing';
-    switchSection('billing');
-    switchBillingSubtab('create');
+  $(document).on('click', '.quick-nav-bill', function (e) {
+    e.preventDefault();
+    const isBillingPage = window.location.pathname.includes('add-bill') || window.location.pathname.includes('billing');
+    if (isBillingPage && typeof clearBillForm === 'function') {
+      clearBillForm();
+      switchBillingSubtab('create');
+      showToast('New blank bill initialized.', 'info');
+      const $form = $('#form-create-bill');
+      if ($form.length) {
+        $('html, body').animate({ scrollTop: $form.offset().top - 80 }, 250);
+      }
+    } else {
+      window.location.hash = 'billing';
+      switchSection('billing');
+      switchBillingSubtab('create');
+    }
   });
 
   $('.nav-to-billing-history').on('click', function () {
