@@ -473,6 +473,79 @@
       .calendar-range-capsule input[type="date"] {
         max-width: 95px !important;
       }
+
+      /* Universal Mobile-First Fluid Containment & Anti-Scramble Engine */
+      * {
+        box-sizing: border-box !important;
+      }
+
+      /* Force all section headers, subbars, and button strips to flex-wrap cleanly */
+      header,
+      .app-sticky-header,
+      #top-desktop-header,
+      section > div.flex,
+      section > div > div.flex {
+        flex-wrap: wrap !important;
+        max-width: 100% !important;
+      }
+
+      /* Protect typography from blowing out containers on 320px - 430px screens */
+      h1, h2, h3, h4, h5, h6 {
+        word-break: break-word !important;
+        overflow-wrap: break-word !important;
+        max-width: 100% !important;
+      }
+
+      h1 {
+        font-size: clamp(1rem, 4vw, 1.35rem) !important;
+        line-height: 1.25 !important;
+      }
+
+      h2 {
+        font-size: clamp(0.95rem, 3.8vw, 1.25rem) !important;
+        line-height: 1.25 !important;
+      }
+
+      h3 {
+        font-size: clamp(0.85rem, 3.2vw, 1.1rem) !important;
+        line-height: 1.25 !important;
+      }
+
+      /* Prevent buttons, action pills and tags from colliding or squishing */
+      .btn-Aurelia-primary,
+      .btn-aurelia-primary,
+      .btn-Aurelia-secondary,
+      .btn-aurelia-secondary,
+      .quick-nav-bill,
+      button,
+      a[class*="rounded-full"],
+      a[class*="btn-"] {
+        flex-shrink: 0 !important;
+      }
+
+      /* Fluid form inputs and selects */
+      input, select, textarea, .Aurelia-input {
+        max-width: 100% !important;
+        font-size: 12px !important;
+      }
+
+      /* Equalize and protect metric grids */
+      .grid.grid-cols-2 {
+        gap: 0.5rem !important;
+      }
+
+      /* Universal modal dialog containment on small screens */
+      .fixed > .Aurelia-card,
+      .fixed > div[class*="Aurelia-card"],
+      div[id^="modal-"] > .Aurelia-card,
+      div[id^="modal-"] > div {
+        max-width: calc(100vw - 1rem) !important;
+        width: 100% !important;
+        max-height: 94vh !important;
+        overflow-y: auto !important;
+        margin: auto !important;
+      }
+
     }
     #mobile-user-menu-backdrop {
       z-index: 9998 !important;
@@ -3372,28 +3445,28 @@
   </div>
 
   <!-- PRINTABLE FORMAL PAY SLIP CARD -->
-  <div id="printable-pay-slip" class="p-8 sm:p-10 bg-white shadow-xl max-w-4xl mx-auto rounded-2xl border border-slate-200 space-y-6" style="background-color: #ffffff !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important;">
+  <div id="printable-pay-slip" class="p-4 sm:p-8 md:p-10 bg-white shadow-xl max-w-4xl mx-auto rounded-2xl border border-slate-200 space-y-5 sm:space-y-6 w-full overflow-hidden" style="background-color: #ffffff !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important;">
     <!-- Hotel Letterhead Header -->
-    <div class="flex flex-row items-center justify-between pb-6 border-b-2 border-[#14213D] gap-4">
-      <div class="flex items-center space-x-3.5 min-w-0">
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between pb-4 sm:pb-5 border-b-2 border-[#14213D] gap-3">
+      <div class="flex items-center space-x-2.5 sm:space-x-3.5 min-w-0 flex-1">
         <!-- Aurelia Vector Gold Emblem Logo (Direct Inline SVG for 100% PDF & Canvas Fidelity) -->
-        <svg viewBox="0 0 200 200" class="w-12 h-12 rounded-full shrink-0 shadow-md" style="width: 48px; height: 48px; min-width: 48px; min-height: 48px; display: inline-block;" role="img" aria-label="Aurelia Emblem">
+        <svg viewBox="0 0 200 200" class="w-9 h-9 sm:w-12 sm:h-12 rounded-full shrink-0 shadow-md" style="min-width: 36px; min-height: 36px; display: inline-block;" role="img" aria-label="Aurelia Emblem">
           <circle cx="100" cy="100" r="95" fill="#FCA311"/>
           <circle cx="100" cy="100" r="86" fill="none" stroke="#14213D" stroke-width="2.2"/>
           <path d="M58 162 L100 46 L142 162" fill="none" stroke="#14213D" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
           <line x1="71" y1="126" x2="129" y2="126" stroke="#14213D" stroke-width="6" stroke-linecap="round"/>
           <circle cx="100" cy="104" r="8.5" fill="#FFFFFF"/>
         </svg>
-        <div class="min-w-0">
-          <h1 class="text-lg sm:text-xl font-extrabold text-[#14213D] tracking-wide uppercase leading-tight whitespace-nowrap" style="font-family: 'Plus Jakarta Sans', Inter, system-ui, -apple-system, sans-serif; font-weight: 800; color: #14213D !important; letter-spacing: 0.05em; -webkit-font-smoothing: antialiased;">AURELIA LUXURY HOTEL &amp; RESTAURANT</h1>
-          <p class="text-[11.5px] text-slate-600 font-medium mt-1 whitespace-nowrap" style="color: #475569 !important;">5-Star Heritage Wing, Financial District, New Delhi - 110001 | GSTIN: 07AAACA1234F1Z5</p>
+        <div class="min-w-0 flex-1">
+          <h1 class="text-xs sm:text-base md:text-lg font-extrabold text-[#14213D] tracking-wide uppercase leading-tight break-words" style="font-family: 'Plus Jakarta Sans', Inter, system-ui, -apple-system, sans-serif; font-weight: 800; color: #14213D !important; letter-spacing: 0.02em; -webkit-font-smoothing: antialiased;">AURELIA LUXURY HOTEL &amp; RESTAURANT</h1>
+          <p class="text-[9.5px] sm:text-[11px] text-slate-600 font-medium mt-0.5 leading-snug break-words" style="color: #475569 !important;">5-Star Heritage Wing, Financial District, New Delhi - 110001 | GSTIN: 07AAACA1234F1Z5</p>
         </div>
       </div>
-      <div class="text-right shrink-0">
-        <div class="whitespace-nowrap bg-[#14213D] text-[#FCA311] rounded-full text-xs font-black uppercase tracking-wider shadow-xs" style="background-color: #14213D !important; color: #FCA311 !important; display: inline-block; padding-top: 2.5px; padding-bottom: 5.5px; padding-left: 16px; padding-right: 16px; line-height: 1; vertical-align: middle; border-radius: 9999px;">
-          <span style="font-weight: 900; letter-spacing: 0.06em; display: inline-block; line-height: 1; vertical-align: top; margin-top: -1.5px;">SALARY STATEMENT</span>
+      <div class="flex items-center justify-between sm:flex-col sm:items-end sm:justify-center shrink-0 pt-2 sm:pt-0 border-t border-slate-100 sm:border-t-0">
+        <div class="whitespace-nowrap bg-[#14213D] text-[#FCA311] rounded-full text-[10px] sm:text-xs font-black uppercase tracking-wider shadow-xs" style="background-color: #14213D !important; color: #FCA311 !important; display: inline-block; padding: 4px 12px; line-height: 1; border-radius: 9999px;">
+          <span style="font-weight: 900; letter-spacing: 0.05em; display: inline-block; line-height: 1;">SALARY STATEMENT</span>
         </div>
-        <div id="slip-month" class="text-xs text-slate-600 mt-1.5 font-bold whitespace-nowrap" style="color: #475569 !important;">Month: October 2026</div>
+        <div id="slip-month" class="text-[10px] sm:text-xs text-slate-600 sm:mt-1.5 font-bold whitespace-nowrap" style="color: #475569 !important;">Month: October 2026</div>
       </div>
     </div>
 
@@ -4108,7 +4181,7 @@
   <!-- Authentication Controller -->
   <script src="../auth.js?v=20261126_01"></script>
   <!-- Main JavaScript Logic -->
-  <script src="../main.js?v=20261126_03"></script>
+  <script src="../main.js?v=20261126_05"></script>
 </body>
 
 </html>

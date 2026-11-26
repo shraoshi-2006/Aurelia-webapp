@@ -473,6 +473,79 @@
       .calendar-range-capsule input[type="date"] {
         max-width: 95px !important;
       }
+
+      /* Universal Mobile-First Fluid Containment & Anti-Scramble Engine */
+      * {
+        box-sizing: border-box !important;
+      }
+
+      /* Force all section headers, subbars, and button strips to flex-wrap cleanly */
+      header,
+      .app-sticky-header,
+      #top-desktop-header,
+      section > div.flex,
+      section > div > div.flex {
+        flex-wrap: wrap !important;
+        max-width: 100% !important;
+      }
+
+      /* Protect typography from blowing out containers on 320px - 430px screens */
+      h1, h2, h3, h4, h5, h6 {
+        word-break: break-word !important;
+        overflow-wrap: break-word !important;
+        max-width: 100% !important;
+      }
+
+      h1 {
+        font-size: clamp(1rem, 4vw, 1.35rem) !important;
+        line-height: 1.25 !important;
+      }
+
+      h2 {
+        font-size: clamp(0.95rem, 3.8vw, 1.25rem) !important;
+        line-height: 1.25 !important;
+      }
+
+      h3 {
+        font-size: clamp(0.85rem, 3.2vw, 1.1rem) !important;
+        line-height: 1.25 !important;
+      }
+
+      /* Prevent buttons, action pills and tags from colliding or squishing */
+      .btn-Aurelia-primary,
+      .btn-aurelia-primary,
+      .btn-Aurelia-secondary,
+      .btn-aurelia-secondary,
+      .quick-nav-bill,
+      button,
+      a[class*="rounded-full"],
+      a[class*="btn-"] {
+        flex-shrink: 0 !important;
+      }
+
+      /* Fluid form inputs and selects */
+      input, select, textarea, .Aurelia-input {
+        max-width: 100% !important;
+        font-size: 12px !important;
+      }
+
+      /* Equalize and protect metric grids */
+      .grid.grid-cols-2 {
+        gap: 0.5rem !important;
+      }
+
+      /* Universal modal dialog containment on small screens */
+      .fixed > .Aurelia-card,
+      .fixed > div[class*="Aurelia-card"],
+      div[id^="modal-"] > .Aurelia-card,
+      div[id^="modal-"] > div {
+        max-width: calc(100vw - 1rem) !important;
+        width: 100% !important;
+        max-height: 94vh !important;
+        overflow-y: auto !important;
+        margin: auto !important;
+      }
+
     }
     #mobile-user-menu-backdrop {
       z-index: 9998 !important;
@@ -4007,7 +4080,7 @@
   <!-- Authentication Controller -->
   <script src="../auth.js?v=20261126_01"></script>
   <!-- Main JavaScript Logic -->
-<script src="../main.js?v=20261126_03"></script>
+<script src="../main.js?v=20261126_05"></script>
 </body>
 
 </html>

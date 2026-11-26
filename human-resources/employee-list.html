@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!-- BUILD_TIMESTAMP_20261126_1340 -->
 <html lang="en" class="scroll-smooth light">
 
 <head>
@@ -491,6 +492,79 @@
       .calendar-range-capsule input[type="date"] {
         max-width: 95px !important;
       }
+
+      /* Universal Mobile-First Fluid Containment & Anti-Scramble Engine */
+      * {
+        box-sizing: border-box !important;
+      }
+
+      /* Force all section headers, subbars, and button strips to flex-wrap cleanly */
+      header,
+      .app-sticky-header,
+      #top-desktop-header,
+      section > div.flex,
+      section > div > div.flex {
+        flex-wrap: wrap !important;
+        max-width: 100% !important;
+      }
+
+      /* Protect typography from blowing out containers on 320px - 430px screens */
+      h1, h2, h3, h4, h5, h6 {
+        word-break: break-word !important;
+        overflow-wrap: break-word !important;
+        max-width: 100% !important;
+      }
+
+      h1 {
+        font-size: clamp(1rem, 4vw, 1.35rem) !important;
+        line-height: 1.25 !important;
+      }
+
+      h2 {
+        font-size: clamp(0.95rem, 3.8vw, 1.25rem) !important;
+        line-height: 1.25 !important;
+      }
+
+      h3 {
+        font-size: clamp(0.85rem, 3.2vw, 1.1rem) !important;
+        line-height: 1.25 !important;
+      }
+
+      /* Prevent buttons, action pills and tags from colliding or squishing */
+      .btn-Aurelia-primary,
+      .btn-aurelia-primary,
+      .btn-Aurelia-secondary,
+      .btn-aurelia-secondary,
+      .quick-nav-bill,
+      button,
+      a[class*="rounded-full"],
+      a[class*="btn-"] {
+        flex-shrink: 0 !important;
+      }
+
+      /* Fluid form inputs and selects */
+      input, select, textarea, .Aurelia-input {
+        max-width: 100% !important;
+        font-size: 12px !important;
+      }
+
+      /* Equalize and protect metric grids */
+      .grid.grid-cols-2 {
+        gap: 0.5rem !important;
+      }
+
+      /* Universal modal dialog containment on small screens */
+      .fixed > .Aurelia-card,
+      .fixed > div[class*="Aurelia-card"],
+      div[id^="modal-"] > .Aurelia-card,
+      div[id^="modal-"] > div {
+        max-width: calc(100vw - 1rem) !important;
+        width: 100% !important;
+        max-height: 94vh !important;
+        overflow-y: auto !important;
+        margin: auto !important;
+      }
+
     }
     #mobile-user-menu-backdrop {
       z-index: 9998 !important;
@@ -3690,13 +3764,13 @@
         <!-- ============================================================= -->
         <section id="section-employees" class="space-y-6">
           <!-- Page Header -->
-          <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between pb-3 gap-3 border-b border-slate-200 dark:border-slate-800">
-            <div>
-              <h2 class="text-xl md:text-2xl font-bold text-slate-900 dark:text-white">Staff & Employee Directory</h2>
-              <p class="text-xs md:text-sm text-slate-400 mt-1">Hotel staffing roster, shift assignments, and live departmental attendance</p>
+          <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between pb-3 gap-2 sm:gap-3 border-b border-slate-200 dark:border-slate-800">
+            <div class="min-w-0 flex-1">
+              <h2 class="text-base sm:text-lg md:text-xl font-bold text-slate-900 dark:text-white leading-tight break-words">Staff & Employee Directory</h2>
+              <p class="text-[11px] sm:text-xs md:text-sm text-slate-400 mt-0.5 leading-snug break-words">Hotel staffing roster, shift assignments, and live departmental attendance</p>
             </div>
-            <div class="flex items-center space-x-2.5">
-              <button type="button" id="btn-page-add-employee" class="btn-Aurelia-primary text-xs md:text-sm py-2 px-4 flex items-center space-x-1.5 shadow-sm">
+            <div class="hidden sm:flex items-center space-x-2.5 shrink-0">
+              <button type="button" class="btn-page-add-employee-trigger btn-Aurelia-primary text-xs md:text-sm py-2 px-4 flex items-center space-x-1.5 shadow-sm">
                 <svg class="w-4 h-4 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
                 </svg>
@@ -3705,46 +3779,59 @@
             </div>
           </div>
 
-          <!-- Staff Status Metrics Strip -->
-          <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-4">
-            <div class="Aurelia-card p-2.5 sm:p-4 flex flex-col justify-between">
+          <!-- Staff Status Metrics Strip (4 equal-sized cards) -->
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-4 items-stretch">
+            <div class="Aurelia-card p-3 sm:p-4 flex flex-col justify-between h-full min-h-[92px] sm:min-h-[110px]">
               <span class="text-[9px] sm:text-[10px] md:text-xs font-bold uppercase tracking-wider text-slate-400 whitespace-nowrap truncate">Total Headcount</span>
-              <div class="text-sm sm:text-2xl font-black text-slate-900 dark:text-white mt-1 whitespace-nowrap truncate">48 Staff</div>
-              <span class="text-[10px] md:text-xs text-slate-400 font-medium mt-1 whitespace-nowrap truncate">6 Departments Active</span>
+              <div class="text-sm sm:text-2xl font-black text-slate-900 dark:text-white my-1 whitespace-nowrap truncate">48 Staff</div>
+              <span class="text-[10px] md:text-xs text-slate-400 font-medium whitespace-nowrap truncate flex items-center gap-1.5">
+                <span class="w-1.5 h-1.5 rounded-full bg-slate-400 flex-shrink-0"></span>
+                <span>6 Departments</span>
+              </span>
             </div>
-            <div class="Aurelia-card p-2.5 sm:p-4 flex flex-col justify-between">
+            <div class="Aurelia-card p-3 sm:p-4 flex flex-col justify-between h-full min-h-[92px] sm:min-h-[110px]">
               <span class="text-[9px] sm:text-[10px] md:text-xs font-bold uppercase tracking-wider text-emerald-700 dark:text-emerald-400 whitespace-nowrap truncate">Active On Duty</span>
-              <div class="text-sm sm:text-2xl font-black text-emerald-600 dark:text-emerald-400 mt-1 whitespace-nowrap truncate">42 Staff</div>
-              <span class="text-[10px] md:text-xs text-slate-400 font-medium mt-1 flex items-center gap-1.5 whitespace-nowrap truncate">
+              <div class="text-sm sm:text-2xl font-black text-emerald-600 dark:text-emerald-400 my-1 whitespace-nowrap truncate">42 Staff</div>
+              <span class="text-[10px] md:text-xs text-slate-400 font-medium flex items-center gap-1.5 whitespace-nowrap truncate">
                 <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 flex-shrink-0"></span>
                 <span>87.5% Duty Rate</span>
               </span>
             </div>
-            <div class="Aurelia-card p-2.5 sm:p-4 flex flex-col justify-between">
+            <div class="Aurelia-card p-3 sm:p-4 flex flex-col justify-between h-full min-h-[92px] sm:min-h-[110px]">
               <span class="text-[9px] sm:text-[10px] md:text-xs font-bold uppercase tracking-wider text-amber-700 dark:text-amber-400 whitespace-nowrap truncate">On Leave Today</span>
-              <div class="text-sm sm:text-2xl font-black text-amber-600 dark:text-amber-400 mt-1 whitespace-nowrap truncate">6 Staff</div>
-              <span class="text-[10px] md:text-xs text-slate-400 font-medium mt-1 flex items-center gap-1.5 whitespace-nowrap truncate">
+              <div class="text-sm sm:text-2xl font-black text-amber-600 dark:text-amber-400 my-1 whitespace-nowrap truncate">6 Staff</div>
+              <span class="text-[10px] md:text-xs text-slate-400 font-medium flex items-center gap-1.5 whitespace-nowrap truncate">
                 <span class="w-1.5 h-1.5 rounded-full bg-amber-500 flex-shrink-0"></span>
                 <span>12.5% Approved Leave</span>
               </span>
             </div>
-            <div class="Aurelia-card p-2.5 sm:p-4 flex flex-col justify-between">
+            <div class="Aurelia-card p-3 sm:p-4 flex flex-col justify-between h-full min-h-[92px] sm:min-h-[110px]">
               <span class="text-[9px] sm:text-[10px] md:text-xs font-bold uppercase tracking-wider text-slate-400 whitespace-nowrap truncate">Active Shifts</span>
-              <div class="text-sm sm:text-2xl font-black text-[#14213D] dark:text-white mt-1 whitespace-nowrap truncate">3 Rotations</div>
-              <span class="text-[10px] md:text-xs text-slate-400 font-medium mt-1 whitespace-nowrap truncate">Morning • Day • Night</span>
+              <div class="text-sm sm:text-2xl font-black text-[#14213D] dark:text-white my-1 whitespace-nowrap truncate">3 Rotations</div>
+              <span class="text-[10px] md:text-xs text-slate-400 font-medium whitespace-nowrap truncate flex items-center gap-1.5">
+                <span class="w-1.5 h-1.5 rounded-full bg-blue-500 flex-shrink-0"></span>
+                <span>Morning • Day • Night</span>
+              </span>
             </div>
           </div>
 
-          <!-- Filter Controls -->
-          <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
-            <div class="flex items-center space-x-2">
-              <button type="button" class="btn-staff-filter active py-1.5 px-3.5 rounded-full text-xs md:text-sm font-semibold bg-[#14213D] text-white shadow-xs cursor-pointer" data-filter="all">
+          <!-- Filter Controls & Add Employee Action Row -->
+          <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+            <div class="flex items-center justify-between sm:justify-start gap-2.5">
+              <button type="button" class="btn-staff-filter active py-1.5 px-3.5 rounded-full text-xs md:text-sm font-semibold bg-[#14213D] text-white shadow-xs cursor-pointer flex-shrink-0" data-filter="all">
                 All (48)
+              </button>
+              <!-- Responsive Add Employee Button (shown beside filter on mobile, hidden on desktop where it is in header) -->
+              <button type="button" id="btn-page-add-employee" class="btn-page-add-employee-trigger btn-Aurelia-primary text-xs py-1.5 px-3 sm:hidden flex items-center space-x-1.5 shadow-sm rounded-full flex-shrink-0 font-bold">
+                <svg class="w-3.5 h-3.5 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                </svg>
+                <span>+ Add Employee</span>
               </button>
             </div>
 
-            <div class="flex items-center space-x-3 w-full md:w-auto">
-              <select id="select-page-staff-dept" class="Aurelia-input text-xs md:text-sm py-2 pl-4 pr-10 font-semibold cursor-pointer">
+            <div class="flex items-center space-x-2.5 sm:space-x-3 w-full sm:w-auto">
+              <select id="select-page-staff-dept" class="Aurelia-input text-xs md:text-sm py-2 pl-3 pr-8 sm:pl-4 sm:pr-10 font-semibold cursor-pointer flex-1 sm:flex-initial">
                 <option value="all">All Departments (6)</option>
                 <option value="Front Office">Front Office (8)</option>
                 <option value="Culinary & Kitchen">Culinary & Kitchen (12)</option>
@@ -3754,7 +3841,7 @@
                 <option value="Security & Operations">Security & Operations (2)</option>
               </select>
 
-              <div class="relative flex-1 md:w-64">
+              <div class="relative flex-1 sm:w-64">
                 <input type="text" id="input-page-staff-search" class="Aurelia-input w-full text-xs md:text-sm pl-9 font-medium"
                   placeholder="Search staff by name, role...">
                 <svg style="display:none !important;" class="w-4 h-4 stroke-current text-slate-400 absolute left-3 top-2.5" fill="none" viewBox="0 0 24 24" stroke-width="2">
@@ -3816,7 +3903,7 @@
   <!-- Authentication Controller -->
   <script src="../auth.js?v=20261126_01"></script>
   <!-- Main JavaScript Logic -->
-<script src="../main.js?v=20261126_03"></script>
+<script src="../main.js?v=20261126_05"></script>
 </body>
 
 </html>
