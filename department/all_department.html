@@ -3686,7 +3686,7 @@
           <div id="modal-all-departments" class="w-full space-y-6 flex flex-col">
 
             <!-- Page Header -->
-            <div class="flex items-center justify-between pb-2 flex-shrink-0">
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between pb-3 gap-3 flex-shrink-0 border-b border-slate-200/80 dark:border-slate-800">
               <div class="flex items-center space-x-3">
                 <div
                   class="w-10 h-10 min-w-10 min-h-10 rounded-full flex-shrink-0 aspect-square bg-gradient-to-tr from-[#14213D] to-[#FCA311] flex items-center justify-center text-white shadow-md">
@@ -3696,19 +3696,19 @@
                   </svg>
                 </div>
                 <div>
-                  <div class="flex items-center space-x-2">
+                  <div class="flex flex-wrap items-center gap-2">
                     <h3 class="text-base sm:text-lg font-bold text-slate-900 dark:text-white">Hotel Departments</h3>
                     <span id="modal-dept-count-badge"
-                      class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#14213D] text-[#FCA311]">6
+                      class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#14213D] text-[#FCA311] whitespace-nowrap">6
                       Departments</span>
                   </div>
-                  <p class="text-xs text-slate-400">Operational wings, departmental hierarchy, staff allocations & shift
+                  <p class="text-xs text-slate-400 mt-0.5">Operational wings, departmental hierarchy, staff allocations & shift
                     management</p>
                 </div>
               </div>
-              <div class="flex items-center space-x-2">
+              <div class="flex items-center space-x-2 self-start sm:self-auto">
                 <a href="add_department.html" id="btn-open-add-dept-from-list"
-                  class="btn-Aurelia-primary text-xs py-2 px-3.5 flex items-center space-x-1.5 shadow-sm">
+                  class="btn-Aurelia-primary text-xs py-2 px-3.5 flex items-center space-x-1.5 shadow-sm whitespace-nowrap">
                   <span>+</span>
                   <span>Add New Department</span>
                 </a>
@@ -3829,7 +3829,7 @@
   <!-- Authentication Controller -->
   <script src="../auth.js?v=20261126_01"></script>
   <!-- Main JavaScript Logic -->
-  <script src="../main.js?v=20261126_02"></script>
+  <script src="../main.js?v=20261126_03"></script>
 </body>
 
 </html>
