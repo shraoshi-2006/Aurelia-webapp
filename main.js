@@ -8013,7 +8013,8 @@ $(document).ready(function () {
     renderEmployeesSection();
   });
 
-  $('#btn-page-add-employee').on('click', function () {
+  $(document).on('click', '#btn-page-add-employee, .btn-page-add-employee-trigger', function (e) {
+    e.preventDefault();
     window.location.hash = 'add-employee';
     switchSection('add-employee');
   });
@@ -8124,7 +8125,7 @@ $(document).ready(function () {
     }
   });
 
-  $('#btn-page-add-employee').on('click', function (e) {
+  $(document).on('click', '#btn-page-add-employee, .btn-page-add-employee-trigger', function (e) {
     e.preventDefault();
     if ($('#section-add-employee').length > 0) {
       window.location.hash = 'add-employee';
