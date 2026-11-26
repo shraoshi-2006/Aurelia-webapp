@@ -3341,12 +3341,8 @@
         <div class="relative inline-block">
           <select id="select-slip-employee" class="Aurelia-input text-xs font-bold py-1.5 pl-3.5 pr-8 font-semibold cursor-pointer bg-white dark:bg-slate-800 text-slate-800 dark:text-white rounded-full border border-[#E5E5E5] dark:border-slate-700 shadow-xs focus:outline-none"
             style="-webkit-appearance: none !important; -moz-appearance: none !important; appearance: none !important;">
-            <option value="priya" selected>EMP-2026-03 - Priya Sharma (Executive Chef)</option>
-            <option value="vikram">EMP-2026-02 - Vikram Malhotra (General Manager)</option>
-            <option value="rajesh">EMP-2026-04 - Rajesh Verma (Front Desk Manager)</option>
-            <option value="sunita">EMP-2026-06 - Sunita Patel (Front Desk Associate)</option>
-            <option value="ananya">EMP-2026-08 - Ananya Roy (Head Sommelier)</option>
-            <option value="amit">EMP-2026-12 - Amit Sengupta (Night Auditor)</option>
+            <option value="shraoshi" selected>EMP-2026-01 - Shraoshi Basak (Front Desk Supervisor)</option>
+            <option value="piyush">EMP-2026-02 - Piyush Barua (Senior Concierge)</option>
           </select>
           <div class="pointer-events-none absolute inset-y-0 right-3 flex items-center text-slate-500 dark:text-slate-400">
             <svg class="w-3.5 h-3.5 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2">
@@ -3403,10 +3399,10 @@
 
     <!-- Employee Information Grid -->
     <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 p-4 rounded-xl bg-slate-50 border border-slate-200 text-xs">
-      <div><span class="text-[10px] text-slate-400 font-bold uppercase">Employee Name</span><div id="slip-name" class="font-bold text-slate-900 text-sm mt-0.5">Priya Sharma</div></div>
-      <div><span class="text-[10px] text-slate-400 font-bold uppercase">Employee ID</span><div id="slip-id" class="font-bold text-slate-900 font-mono mt-0.5">EMP-2026-03</div></div>
-      <div><span class="text-[10px] text-slate-400 font-bold uppercase">Designation</span><div id="slip-role" class="font-bold text-slate-900 mt-0.5">Executive Chef</div></div>
-      <div><span class="text-[10px] text-slate-400 font-bold uppercase">Department</span><div id="slip-dept" class="font-bold text-slate-900 mt-0.5">Culinary Division</div></div>
+      <div><span class="text-[10px] text-slate-400 font-bold uppercase">Employee Name</span><div id="slip-name" class="font-bold text-slate-900 text-sm mt-0.5">Shraoshi Basak</div></div>
+      <div><span class="text-[10px] text-slate-400 font-bold uppercase">Employee ID</span><div id="slip-id" class="font-bold text-slate-900 font-mono mt-0.5">EMP-2026-01</div></div>
+      <div><span class="text-[10px] text-slate-400 font-bold uppercase">Designation</span><div id="slip-role" class="font-bold text-slate-900 mt-0.5">Front Desk Supervisor</div></div>
+      <div><span class="text-[10px] text-slate-400 font-bold uppercase">Department</span><div id="slip-dept" class="font-bold text-slate-900 mt-0.5">Front Office</div></div>
 
       <div><span class="text-[10px] text-slate-400 font-bold uppercase">Bank Account</span><div id="slip-bank" class="font-mono text-slate-700 mt-0.5">HDFC Bank ••••4812</div></div>
       <div><span class="text-[10px] text-slate-400 font-bold uppercase">IFSC Code</span><div id="slip-ifsc" class="font-mono text-slate-700 mt-0.5">HDFC0000240</div></div>
@@ -3606,154 +3602,58 @@
 
   <script>
     const staffSlips = {
-      'priya': {
-        name: 'Priya Sharma',
-        id: 'EMP-2026-03',
-        role: 'Executive Chef',
-        dept: 'Culinary Division',
-        bank: 'HDFC Bank ••••4812',
+      'shraoshi': {
+        name: 'Shraoshi Basak',
+        id: 'EMP-2026-01',
+        role: 'Front Desk Supervisor',
+        dept: 'Front Office',
+        bank: 'HDFC Bank ••••8814',
         ifsc: 'HDFC0000240',
         uan: '100928419283',
         days: '31 / 31 Days',
-        basic: '₹1,10,000.00',
-        hra: '₹44,000.00',
-        bonus: '₹15,000.00',
-        conveyance: '₹5,000.00',
-        medical: '₹5,000.00',
-        gross: '₹1,79,000.00',
-        epf: '₹13,200.00',
-        pt: '₹200.00',
-        tds: '₹10,000.00',
-        welfare: '₹0.00',
-        advances: '₹0.00',
-        deductions: '₹23,400.00',
-        words: 'Rupees One Lakh Fifty-Five Thousand Six Hundred Only',
-        net: '₹1,55,600.00'
-      },
-      'vikram': {
-        name: 'Vikram Malhotra',
-        id: 'EMP-2026-02',
-        role: 'General Manager',
-        dept: 'Executive Management',
-        bank: 'HDFC Bank ••••4812',
-        ifsc: 'HDFC0000240',
-        uan: '100928419283',
-        days: '31 / 31 Days',
-        basic: '₹1,40,000.00',
-        hra: '₹56,000.00',
-        bonus: '₹25,000.00',
-        conveyance: '₹8,000.00',
-        medical: '₹5,000.00',
-        gross: '₹2,34,000.00',
-        epf: '₹16,800.00',
-        pt: '₹200.00',
-        tds: '₹22,000.00',
-        welfare: '₹0.00',
-        advances: '₹0.00',
-        deductions: '₹39,000.00',
-        words: 'Rupees One Lakh Ninety-Five Thousand Only',
-        net: '₹1,95,000.00'
-      },
-      'rajesh': {
-        name: 'Rajesh Verma',
-        id: 'EMP-2026-04',
-        role: 'Front Desk Manager',
-        dept: 'Front Office',
-        bank: 'SBI ••••8821',
-        ifsc: 'SBIN0004122',
-        uan: '100874109218',
-        days: '30 / 31 Days',
-        basic: '₹68,000.00',
-        hra: '₹27,200.00',
-        bonus: '₹8,000.00',
-        conveyance: '₹3,000.00',
-        medical: '₹3,000.00',
-        gross: '₹1,09,200.00',
-        epf: '₹8,160.00',
-        pt: '₹200.00',
-        tds: '₹4,490.00',
-        welfare: '₹0.00',
-        advances: '₹0.00',
-        deductions: '₹12,850.00',
-        words: 'Rupees Ninety-Six Thousand Three Hundred Fifty Only',
-        net: '₹96,350.00'
-      },
-      'sunita': {
-        name: 'Sunita Patel',
-        id: 'EMP-2026-06',
-        role: 'Front Desk Associate',
-        dept: 'Front Office',
-        bank: 'Axis Bank ••••7109',
-        ifsc: 'UTIB0001092',
-        uan: '100761298410',
-        days: '31 / 31 Days',
-        basic: '₹26,000.00',
-        hra: '₹10,400.00',
-        bonus: '₹1,000.00',
+        basic: '₹48,000.00',
+        hra: '₹19,200.00',
+        bonus: '₹3,300.00',
         conveyance: '₹1,000.00',
-        medical: '₹800.00',
-        gross: '₹39,200.00',
-        epf: '₹3,120.00',
+        medical: '₹1,000.00',
+        gross: '₹72,500.00',
+        epf: '₹5,760.00',
         pt: '₹200.00',
-        tds: '₹520.00',
+        tds: '₹2,015.00',
         welfare: '₹0.00',
         advances: '₹0.00',
-        deductions: '₹3,840.00',
-        words: 'Rupees Thirty-Five Thousand Three Hundred Sixty Only',
-        net: '₹35,360.00'
+        deductions: '₹7,975.00',
+        words: 'Rupees Sixty-Four Thousand Five Hundred Twenty-Five Only',
+        net: '₹64,525.00'
       },
-      'ananya': {
-        name: 'Ananya Roy',
-        id: 'EMP-2026-08',
-        role: 'Head Sommelier',
-        dept: 'Food & Beverage',
-        bank: 'Kotak Bank ••••3419',
-        ifsc: 'KKBK0000129',
+      'piyush': {
+        name: 'Piyush Barua',
+        id: 'EMP-2026-02',
+        role: 'Senior Concierge',
+        dept: 'Front Office',
+        bank: 'HDFC Bank ••••4812',
+        ifsc: 'HDFC0000240',
         uan: '100912487192',
         days: '31 / 31 Days',
-        basic: '₹52,000.00',
-        hra: '₹20,800.00',
-        bonus: '₹5,000.00',
-        conveyance: '₹2,500.00',
-        medical: '₹2,500.00',
-        gross: '₹82,800.00',
-        epf: '₹6,240.00',
+        basic: '₹38,000.00',
+        hra: '₹15,200.00',
+        bonus: '₹2,500.00',
+        conveyance: '₹1,500.00',
+        medical: '₹1,500.00',
+        gross: '₹58,700.00',
+        epf: '₹4,560.00',
         pt: '₹200.00',
-        tds: '₹2,860.00',
+        tds: '₹1,690.00',
         welfare: '₹0.00',
         advances: '₹0.00',
-        deductions: '₹9,300.00',
-        words: 'Rupees Seventy-Three Thousand Five Hundred Only',
-        net: '₹73,500.00'
-      },
-      'amit': {
-        name: 'Amit Sengupta',
-        id: 'EMP-2026-12',
-        role: 'Night Auditor',
-        dept: 'Finance & Accounts',
-        bank: 'Punjab National Bank ••••9912',
-        ifsc: 'PUNB0182700',
-        uan: '100651294871',
-        days: '31 / 31 Days',
-        basic: '₹45,000.00',
-        hra: '₹18,000.00',
-        bonus: '₹4,000.00',
-        conveyance: '₹2,000.00',
-        medical: '₹2,000.00',
-        gross: '₹71,000.00',
-        epf: '₹5,400.00',
-        pt: '₹200.00',
-        tds: '₹1,900.00',
-        welfare: '₹0.00',
-        advances: '₹0.00',
-        deductions: '₹7,500.00',
-        words: 'Rupees Sixty-Three Thousand Five Hundred Only',
-        net: '₹63,500.00'
+        deductions: '₹6,450.00',
+        words: 'Rupees Fifty-Two Thousand Two Hundred Fifty Only',
+        net: '₹52,250.00'
       }
     };
 
     function updatePaySlipUI(key) {
-      const data = staffSlips[key] || staffSlips['priya'];
+      const data = staffSlips[key] || staffSlips['shraoshi'];
       if (!data) return;
 
       $('#slip-name').text(data.name);
@@ -4194,8 +4094,7 @@
           }
         }
       } else {
-        // Default to Priya Sharma matching the user's uploaded reference
-        updatePaySlipUI('priya');
+        updatePaySlipUI('shraoshi');
       }
     });
   </script>
@@ -4209,7 +4108,7 @@
   <!-- Authentication Controller -->
   <script src="../auth.js?v=20261126_01"></script>
   <!-- Main JavaScript Logic -->
-  <script src="../main.js?v=20261126_02"></script>
+  <script src="../main.js?v=20261126_03"></script>
 </body>
 
 </html>

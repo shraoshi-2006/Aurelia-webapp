@@ -1097,12 +1097,8 @@ $(document).ready(function () {
   ].map(([id, name, category, price, available, description]) => ({ id, name, category, price, available, description }));
 
   const DEFAULT_CUSTOMERS = [
-    ['cust-1', 'Rajesh Sharma', '9845012345', 'rajesh.sharma@gmail.com', 'Koramangala 4th Block, Bengaluru', 12, 840.00],
-    ['cust-2', 'Priya Sundaram', '9886167890', 'priya.sundaram@outlook.com', 'Indiranagar 100ft Road, Bengaluru', 8, 520.00],
-    ['cust-3', 'Vikramaditya Reddy', '9741234567', 'vikram.reddy@techcorp.in', 'Whitefield EPIP Zone, Bengaluru', 15, 1140.00],
-    ['cust-4', 'Ananya Deshmukh', '9900298765', 'ananya.d@gmail.com', 'HSR Layout Sector 2, Bengaluru', 6, 390.00],
-    ['cust-5', 'Amit Patel', '9823045678', 'amit.patel@zenith.com', 'Jayanagar 4th T Block, Bengaluru', 9, 680.00],
-    ['cust-6', 'Sunita Kulkarni', '9448123409', 'sunita.k@gmail.com', 'Malleshwaram 15th Cross, Bengaluru', 5, 310.00]
+    ['cust-1', 'Shraoshi Basak', '9874563210', 'shraoshibasak.9090@gmail.com', 'Koramangala 4th Block, Bengaluru', 12, 840.00],
+    ['cust-2', 'Piyush Barua', '7894561230', 'piyushbarua9@gmail.com', 'Indiranagar 100ft Road, Bengaluru', 8, 520.00]
   ].map(([id, name, phone, email, address, visits, totalSpend]) => ({ id, name, phone, email, address, visits, totalSpend }));
 
   const makeOrder = (id, customerName, customerPhone, tableRoom, status, timestamp, notes, items, billNumber = null) => ({
@@ -1110,52 +1106,16 @@ $(document).ready(function () {
   });
 
   const DEFAULT_ORDERS = [
-    makeOrder('ORD-0089', 'Rohan Mehta', '9845123490', 'Table 2', 'Pending', '2026-10-27T11:20:00', 'Serve starters first, medium spice level', [
+    makeOrder('ORD-0089', 'Shraoshi Basak', '9874563210', 'Table 2', 'Pending', '2026-10-27T11:20:00', 'Serve starters first, medium spice level', [
       { id: 'item-7', name: 'Paneer Tikka Angara', price: 14.00, qty: 2 },
       { id: 'item-13', name: 'Garlic Naan', price: 4.50, qty: 3 },
       { id: 'item-25', name: 'Fresh Lime Soda', price: 4.50, qty: 2 }
     ]),
-    makeOrder('ORD-0088', 'Meera Nair', '9886234510', 'Suite 402', 'Preparing', '2026-10-27T11:05:00', 'Extra raita on the side for room service', [
+    makeOrder('ORD-0088', 'Piyush Barua', '7894561230', 'Suite 402', 'Completed', '2026-10-27T11:05:00', 'Extra raita on the side for room service', [
       { id: 'item-18', name: 'Mutton Gosht Biryani', price: 23.50, qty: 1 },
       { id: 'item-9', name: 'Hara Bhara Kabab', price: 11.50, qty: 1 },
       { id: 'item-24', name: 'Masala Chai Pot', price: 3.50, qty: 2 }
-    ]),
-    makeOrder('ORD-0087', 'Karan Malhotra', '9741998877', 'Table 9', 'Served', '2026-10-27T10:50:00', 'No onions in Kadai Paneer', [
-      { id: 'item-5', name: 'Kadai Paneer', price: 15.00, qty: 2 },
-      { id: 'item-15', name: 'Lachha Paratha', price: 4.00, qty: 4 },
-      { id: 'item-20', name: 'Gulab Jamun with Rabri', price: 7.50, qty: 2 }
-    ]),
-    makeOrder('ORD-0086', 'Priya Sundaram', '9886167890', 'Room 204', 'Pending', '2026-10-27T10:35:00', 'Deliver hot to Deluxe Room 204', [
-      { id: 'item-27', name: 'Executive Club Sandwich', price: 13.50, qty: 2 },
-      { id: 'item-23', name: 'South Indian Filter Coffee', price: 4.00, qty: 2 }
-    ]),
-    makeOrder('ORD-0085', 'Siddharth Rao', '9900445566', 'Table 11', 'Cancelled', '2026-10-27T10:20:00', 'Guest rescheduled dinner reservation to evening', [
-      { id: 'item-3', name: 'Chicken Tikka Masala', price: 18.50, qty: 1 },
-      { id: 'item-12', name: 'Butter Naan', price: 3.50, qty: 3 }
-    ]),
-    makeOrder('ORD-0084', 'Amit Patel', '9823045678', 'Table 5', 'Served', '2026-10-27T10:15:00', 'Extra chutney with starters', [
-      { id: 'item-10', name: 'Crispy Corn Pepper Salt', price: 10.50, qty: 2 },
-      { id: 'item-17', name: 'Royal Veg Dum Biryani', price: 14.50, qty: 2 },
-      { id: 'item-21', name: 'Kesar Rasmalai (2 Pcs)', price: 8.00, qty: 2 }
-    ]),
-    makeOrder('ORD-0083', 'Sunita Kulkarni', '9448123409', 'Suite 301', 'Completed', '2026-10-27T10:10:00', 'Settled to room folio invoice', [
-      { id: 'item-6', name: 'Butter Chicken Grand Style', price: 19.50, qty: 1 },
-      { id: 'item-19', name: 'Jeera Basmati Rice', price: 8.50, qty: 1 },
-      { id: 'item-22', name: 'Shahi Matka Kulfi', price: 6.50, qty: 2 }
-    ], 'INV-2026-0141'),
-    makeOrder('ORD-0082', 'Vikramaditya Reddy', '9741234567', 'Room 304', 'Preparing', '2026-10-27T10:05:00', 'Serve warm with lime wedges and onion rings', [
-      { id: 'item-16', name: 'Hyderabadi Chicken Dum Biryani', price: 19.00, qty: 2 },
-      { id: 'item-26', name: 'Mango Lassi', price: 6.00, qty: 2 }
-    ]),
-    makeOrder('ORD-0081', 'Rajesh Sharma', '9845012345', 'Table 4', 'Pending', '2026-10-27T09:45:00', 'Less oil in Dal Makhani, extra butter on naan', [
-      { id: 'item-2', name: 'Dal Makhani', price: 12.00, qty: 1 },
-      { id: 'item-1', name: 'Paneer Butter Masala', price: 16.50, qty: 1 },
-      { id: 'item-12', name: 'Butter Naan', price: 3.50, qty: 4 }
-    ]),
-    makeOrder('ORD-0080', 'Ananya Deshmukh', '9900298765', 'Table 7', 'Completed', '2026-10-27T08:20:00', 'Table cleared, invoice settled via UPI', [
-      { id: 'item-28', name: 'Continental Breakfast Tray', price: 18.00, qty: 2 },
-      { id: 'item-23', name: 'South Indian Filter Coffee', price: 4.00, qty: 2 }
-    ], 'INV-2026-0140')
+    ], 'INV-2026-0141')
   ];
 
   const makeBill = (id, billNumber, date, customerName, customerPhone, customerEmail, customerAddress, tableRoom, paymentMethod, subtotal, taxAmount, grandTotal, items, linkedOrderId = null) => ({
@@ -1165,106 +1125,47 @@ $(document).ready(function () {
   });
 
   const DEFAULT_BILLS = [
-    makeBill('bill-142', 'INV-2026-0142', '2026-10-27T10:10:00', 'Vikramaditya Reddy', '+91 97412 34567', 'vikram.reddy@gmail.com', 'Whitefield EPIP Zone, Bengaluru', 'Presidential Suite 501', 'UPI', 34000.00, 1700.00, 35700.00, [
+    makeBill('bill-142', 'INV-2026-0142', '2026-10-27T10:10:00', 'Shraoshi Basak', '9874563210', 'shraoshibasak.9090@gmail.com', 'Koramangala 4th Block, Bengaluru', 'Presidential Suite 501', 'UPI', 34000.00, 1700.00, 35700.00, [
       { name: 'Presidential Suite Luxury Stay (2 Nights)', category: 'Room Service', price: 15000.00, qty: 2, subtotal: 30000.00 },
       { name: 'In-Suite Candlelight Dining Experience', category: 'Main Course', price: 4000.00, qty: 1, subtotal: 4000.00 }
     ]),
-    makeBill('bill-141', 'INV-2026-0141', '2026-10-27T09:15:00', 'Priya Sundaram', '+91 98861 67890', 'priya.sundaram@infosys.com', 'Indiranagar 100ft Road, Bengaluru', 'Deluxe Room 204', 'Card', 27095.24, 1354.76, 28450.00, [
+    makeBill('bill-141', 'INV-2026-0141', '2026-10-27T09:15:00', 'Piyush Barua', '7894561230', 'piyushbarua9@gmail.com', 'Indiranagar 100ft Road, Bengaluru', 'Deluxe Room 204', 'Card', 27095.24, 1354.76, 28450.00, [
       { name: 'Deluxe Garden View Room (3 Nights)', category: 'Room Service', price: 7500.00, qty: 3, subtotal: 22500.00 },
       { name: 'Aurelia Ayurvedic Spa Therapy & Hydro', category: 'Beverages', price: 4595.24, qty: 1, subtotal: 4595.24 }
-    ]),
-    makeBill('bill-140', 'INV-2026-0140', '2026-10-26T21:45:00', 'Tech Mahindra Corporate', '+91 99002 98765', 'events@techmahindra.com', 'Electronic City Phase 1, Bengaluru', 'Imperial Banquet Hall', 'Card', 40571.43, 2028.57, 42600.00, [
-      { name: 'Corporate Dinner Banquet Buffet (25 Pax)', category: 'Main Course', price: 1400.00, qty: 25, subtotal: 35000.00 },
-      { name: 'Audio-Visual Rigging & Live Mocktail Bar', category: 'Beverages', price: 5571.43, qty: 1, subtotal: 5571.43 }
-    ]),
-    makeBill('bill-139', 'INV-2026-0139', '2026-10-26T14:30:00', 'Rajesh Sharma', '+91 98450 12345', 'rajesh.sharma@tcs.com', 'Koramangala 4th Block, Bengaluru', 'Executive Suite 302', 'UPI', 18000.00, 900.00, 18900.00, [
-      { name: 'Executive Club Suite (1 Night)', category: 'Room Service', price: 14500.00, qty: 1, subtotal: 14500.00 },
-      { name: 'Aurelia Lounge Bar & Signature Drinks', category: 'Beverages', price: 3500.00, qty: 1, subtotal: 3500.00 }
-    ]),
-    makeBill('bill-138', 'INV-2026-0138', '2026-10-25T20:15:00', 'Ananya Deshmukh', '+91 98201 54321', 'ananya.d@gmail.com', 'HSR Layout Sector 2, Bengaluru', 'Table 8 (Fine Dining)', 'UPI', 8047.62, 402.38, 8450.00, [
-      { name: 'Royal Nawabi Dinner Thali (4 Pax)', category: 'Main Course', price: 1300.00, qty: 4, subtotal: 5200.00 },
-      { name: 'Grilled Tiger Prawns Angara', category: 'Starters', price: 923.81, qty: 2, subtotal: 1847.62 },
-      { name: 'Kesar Rasmalai & Pistachio Kulfi Platter', category: 'Desserts', price: 500.00, qty: 2, subtotal: 1000.00 }
-    ], 'ORD-0080'),
-    makeBill('bill-137', 'INV-2026-0137', '2026-10-25T11:20:00', 'Arjun Kapoor', '+91 97110 88234', 'arjun.k@outlook.com', 'Lavelle Road, Bengaluru', 'Premium King 410', 'Card', 12619.05, 630.95, 13250.00, [
-      { name: 'Premium King Room (1 Night)', category: 'Room Service', price: 10500.00, qty: 1, subtotal: 10500.00 },
-      { name: 'Airport Luxury Chauffeur Transfer & Mini Bar', category: 'Beverages', price: 2119.05, qty: 1, subtotal: 2119.05 }
-    ]),
-    makeBill('bill-136', 'INV-2026-0136', '2026-10-24T18:00:00', 'Dr. Meera Nambiar', '+91 94481 22901', 'meera.nambiar@manipal.edu', 'Sadashivanagar, Bengaluru', 'Wellness Suite 108', 'Cash', 9263.99, 463.20, 9727.19, [
-      { name: 'Wellness Rejuvenation Session & Aroma Therapy', category: 'Starters', price: 6500.00, qty: 1, subtotal: 6500.00 },
-      { name: 'Organic Cold-Pressed Juices & Healthy Dining', category: 'Beverages', price: 2763.99, qty: 1, subtotal: 2763.99 }
-    ])
+    ], 'ORD-0088')
   ];
 
   const DEFAULT_STAFF = [
-    ["Adaline Lively", "Front Desk Supervisor", "Front Office", "Main Reception Desk 01", "Morning (07:00 - 15:30)", "On Duty", null, "adaline.l@aureliahotel.com"],
-    ["Vikram Malhotra", "Senior Concierge", "Front Office", "Concierge Lounge", "Morning (08:00 - 16:30)", "On Duty", null, "vikram.m@aureliahotel.com"],
-    ["Priyanka Sharma", "Guest Relations Officer", "Front Office", "Executive Club Lounge", "Day (09:00 - 17:30)", "On Duty", null, "priyanka.s@aureliahotel.com"],
-    ["Rohan Desai", "Night Auditor", "Front Office", "Front Office Back-Desk", "Night (23:00 - 07:30)", "On Duty", null, "rohan.d@aureliahotel.com"],
-    ["Ananya Sen", "Front Desk Agent", "Front Office", "Reception Desk 02", "Afternoon (14:00 - 22:30)", "On Duty", null, "ananya.s@aureliahotel.com"],
-    ["Sameer Joshi", "Bell Captain & Porter", "Front Office", "Main Portico / Lobby", "Morning (07:00 - 15:30)", "On Duty", null, "sameer.j@aureliahotel.com"],
-    ["Neha Pillai", "VIP Reservations Executive", "Front Office", "Front Office Suite", "Day (09:30 - 18:00)", "On Duty", null, "neha.p@aureliahotel.com"],
-    ["Tanvi Agarwal", "Front Desk Agent", "Front Office", "Reception Desk 03", "Off-duty", "On Leave", "Casual Leave", "tanvi.a@aureliahotel.com"],
-    ["Chef Rajesh Kulkarni", "Executive Chef", "Culinary & Kitchen", "Master Kitchen Central", "Day (09:00 - 18:00)", "On Duty", null, "chef.rajesh@aureliahotel.com"],
-    ["Tariq Mansoor", "Sous Chef", "Culinary & Kitchen", "Hot Line & Saute", "Morning (06:30 - 15:00)", "On Duty", null, "tariq.m@aureliahotel.com"],
-    ["Meenakshi Sundaram", "Head Pastry Chef", "Culinary & Kitchen", "Bakery & Confectionery", "Morning (06:00 - 14:30)", "On Duty", null, "meenakshi.s@aureliahotel.com"],
-    ["Amitava Roy", "Tandoor Master Chef", "Culinary & Kitchen", "Live Charcoal Tandoor", "Evening (15:00 - 23:30)", "On Duty", null, "amitava.r@aureliahotel.com"],
-    ["Gurpreet Singh", "Continental Line Cook", "Culinary & Kitchen", "Continental Range 02", "Morning (07:00 - 15:30)", "On Duty", null, "gurpreet.s@aureliahotel.com"],
-    ["Farhan Qureshi", "Dum & Biryani Specialist", "Culinary & Kitchen", "Dum Biryani Hearth", "Afternoon (12:00 - 20:30)", "On Duty", null, "farhan.q@aureliahotel.com"],
-    ["David D'Souza", "Kitchen Pantry Lead", "Culinary & Kitchen", "Cold Kitchen & Larder", "Morning (07:00 - 15:30)", "On Duty", null, "david.d@aureliahotel.com"],
-    ["Ramesh Goud", "Prep Chef & Butchery", "Culinary & Kitchen", "Meat & Seafood Prep", "Morning (06:00 - 14:30)", "On Duty", null, "ramesh.g@aureliahotel.com"],
-    ["Sumanth Rao", "Commis Chef III", "Culinary & Kitchen", "Banquet Prep Station", "Afternoon (13:00 - 21:30)", "On Duty", null, "sumanth.r@aureliahotel.com"],
-    ["Prakash Shenoy", "Chief Kitchen Steward", "Culinary & Kitchen", "Dishwashing & Sanitation", "Day (08:00 - 17:00)", "On Duty", null, "prakash.s@aureliahotel.com"],
-    ["Joseph Kurian", "South Indian Cuisine Lead", "Culinary & Kitchen", "Breakfast Live Counter", "Off-duty", "On Leave", "Annual Leave", "joseph.k@aureliahotel.com"],
-    ["Baldev Yadav", "Grill Line Cook", "Culinary & Kitchen", "Robata & Skewers", "Off-duty", "On Leave", "Sick Leave", "baldev.y@aureliahotel.com"],
-    ["Kevin Peterson", "F&B Service Manager", "Food & Beverage", "Main Dining Hall", "Day (10:00 - 19:00)", "On Duty", null, "kevin.p@aureliahotel.com"],
-    ["Suresh Nair", "Head Bartender & Mixologist", "Food & Beverage", "Aurelia Bar & Lounge", "Evening (16:00 - 00:30)", "On Duty", null, "suresh.n@aureliahotel.com"],
-    ["Aarti Menon", "Senior Restaurant Captain", "Food & Beverage", "Fine Dining Section A", "Afternoon (13:00 - 21:30)", "On Duty", null, "aarti.m@aureliahotel.com"],
-    ["Karthik Reddy", "Senior Banquet Steward", "Food & Beverage", "Ballroom Banquet Hall", "Morning (07:00 - 15:30)", "On Duty", null, "karthik.r@aureliahotel.com"],
-    ["Pooja Hegde", "Restaurant Hostess", "Food & Beverage", "Restaurant Welcome Desk", "Morning (08:00 - 16:30)", "On Duty", null, "pooja.h@aureliahotel.com"],
-    ["Nikhil Varma", "In-Room Dining Lead", "Food & Beverage", "Room Service Dispatch", "Evening (15:00 - 23:30)", "On Duty", null, "nikhil.v@aureliahotel.com"],
-    ["Deepa Swaminathan", "Sommelier & Wine Steward", "Food & Beverage", "Wine Cellar & Bar", "Evening (17:00 - 01:00)", "On Duty", null, "deepa.s@aureliahotel.com"],
-    ["Imran Baig", "Lead Barista", "Food & Beverage", "Cafe & Bakery Counter", "Morning (06:30 - 15:00)", "On Duty", null, "imran.b@aureliahotel.com"],
-    ["Abhishek Das", "Banquet Captain", "Food & Beverage", "Conference Center", "Day (09:00 - 18:00)", "On Duty", null, "abhishek.d@aureliahotel.com"],
-    ["Simran Kaur", "Senior Table Server", "Food & Beverage", "Terrace Garden Dining", "Afternoon (14:00 - 22:30)", "On Duty", null, "simran.k@aureliahotel.com"],
-    ["Rahul Chauhan", "Food Expeditor", "Food & Beverage", "Kitchen Pass & Service", "Morning (07:00 - 15:30)", "On Duty", null, "rahul.c@aureliahotel.com"],
-    ["Manoj Tiwari", "Dining Room Steward", "Food & Beverage", "Poolside Deck Dining", "Off-duty", "On Leave", "Weekly Off", "manoj.t@aureliahotel.com"],
-    ["Shanti Bai", "Executive Housekeeper", "Housekeeping", "Housekeeping Control Desk", "Day (08:00 - 17:00)", "On Duty", null, "shanti.b@aureliahotel.com"],
-    ["Lakshmi Devi", "Floor Supervisor (Floors 2 & 3)", "Housekeeping", "2nd Floor Linen Hub", "Morning (07:30 - 16:00)", "On Duty", null, "lakshmi.d@aureliahotel.com"],
-    ["Mohanlal Gujjar", "Laundry & Dry-Clean Master", "Housekeeping", "Industrial Laundry Plant", "Day (08:00 - 16:30)", "On Duty", null, "mohanlal.g@aureliahotel.com"],
-    ["Rekha Das", "Senior Room Attendant", "Housekeeping", "Executive Suites Floor 4", "Morning (08:00 - 16:30)", "On Duty", null, "rekha.d@aureliahotel.com"],
-    ["Sunil Paswan", "Public Area Lead", "Housekeeping", "Main Lobby & Atrium", "Morning (07:00 - 15:30)", "On Duty", null, "sunil.p@aureliahotel.com"],
-    ["Geeta Soren", "Room Amenities Attendant", "Housekeeping", "Linen & Amenity Stock", "Day (09:00 - 17:30)", "On Duty", null, "geeta.s@aureliahotel.com"],
-    ["Harish Chandra", "Linen Runner", "Housekeeping", "Service Elevators & Hubs", "Afternoon (13:00 - 21:30)", "On Duty", null, "harish.c@aureliahotel.com"],
-    ["Mary Fernandez", "Deluxe Rooms Attendant", "Housekeeping", "Deluxe Wing Floor 1", "Morning (08:00 - 16:30)", "On Duty", null, "mary.f@aureliahotel.com"],
-    ["Basavaraj Patil", "Deep Cleaning Specialist", "Housekeeping", "Banquet & Spa Floors", "Day (08:30 - 17:00)", "On Duty", null, "basavaraj.p@aureliahotel.com"],
-    ["Savita More", "Room Attendant", "Housekeeping", "Standard Wing Floor 1", "Off-duty", "On Leave", "Medical Leave", "savita.m@aureliahotel.com"],
-    ["Girish Sharma", "Chief Facility Engineer", "Engineering & Maintenance", "Engineering Control Room", "Day (08:30 - 17:30)", "On Duty", null, "girish.s@aureliahotel.com"],
-    ["Jagdish Mhatre", "HVAC & Chiller Specialist", "Engineering & Maintenance", "Central Plant Room", "Morning (07:00 - 15:30)", "On Duty", null, "jagdish.m@aureliahotel.com"],
-    ["Venkat Raman", "Duty Electrician & DG Set", "Engineering & Maintenance", "Electrical Substation", "Evening (15:00 - 23:30)", "On Duty", null, "venkat.r@aureliahotel.com"],
-    ["Santosh Kumar", "Lead Plumber & RO Systems", "Engineering & Maintenance", "Water Treatment Facility", "Off-duty", "On Leave", "Emergency Leave", "santosh.k@aureliahotel.com"],
-    ["Capt. R. S. Rathore", "Head of Hotel Security", "Security & Operations", "Security Command Center", "Day (08:00 - 17:00)", "On Duty", null, "security.head@aureliahotel.com"],
-    ["Dharmender Singh", "CCTV Surveillance Lead", "Security & Operations", "CCTV Monitoring Room", "Rotation (07:00 - 19:00)", "On Duty", null, "dharmender.s@aureliahotel.com"]
-  ].map(([name, role, department, station, shift, status, leaveReason, email], i) => ({
+    ["Shraoshi Basak", "Front Desk Supervisor", "Front Office", "Main Reception Desk 01", "Morning (07:00 - 15:30)", "On Duty", null, "shraoshibasak.9090@gmail.com", "9874563210"],
+    ["Piyush Barua", "Senior Concierge", "Front Office", "Concierge Lounge", "Morning (08:00 - 16:30)", "On Duty", null, "piyushbarua9@gmail.com", "7894561230"]
+  ].map(([name, role, department, station, shift, status, leaveReason, email, phone], i) => ({
     id: `EMP-2026-${String(i + 1).padStart(2, "0")}`,
     name, role, department, station, shift, status, leaveReason,
-    phone: `+91 98450 112${String(i + 1).padStart(2, "0")}`,
+    phone,
     email
   }));
 
   function initializeSampleData(force = false) {
+    const needsTwoRecordsMigration = !localStorage.getItem('aurelia_two_records_v1');
     const existingBills = Storage.get(STORAGE_KEYS.BILLS, []);
     const existingTotal = (existingBills || []).reduce((sum, b) => sum + (Number(b.grandTotal) || 0), 0);
     const needsBillsUpgrade = !existingBills.length || existingTotal < 1000;
 
-    if (force || !localStorage.getItem(STORAGE_KEYS.INITIALIZED)) {
-      Storage.set(STORAGE_KEYS.MENU, DEFAULT_MENU_ITEMS);
-      Storage.set(STORAGE_KEYS.CATEGORIES, DEFAULT_CATEGORIES);
+    if (force || needsTwoRecordsMigration || !localStorage.getItem(STORAGE_KEYS.INITIALIZED)) {
+      if (force || !localStorage.getItem(STORAGE_KEYS.INITIALIZED)) {
+        Storage.set(STORAGE_KEYS.MENU, DEFAULT_MENU_ITEMS);
+        Storage.set(STORAGE_KEYS.CATEGORIES, DEFAULT_CATEGORIES);
+      } else {
+        if (!Storage.get(STORAGE_KEYS.MENU, []).length) Storage.set(STORAGE_KEYS.MENU, DEFAULT_MENU_ITEMS);
+        if (!Storage.get(STORAGE_KEYS.CATEGORIES, []).length) Storage.set(STORAGE_KEYS.CATEGORIES, DEFAULT_CATEGORIES);
+      }
       Storage.set(STORAGE_KEYS.CUSTOMERS, DEFAULT_CUSTOMERS);
       Storage.set(STORAGE_KEYS.ORDERS, DEFAULT_ORDERS);
       Storage.set(STORAGE_KEYS.BILLS, DEFAULT_BILLS);
       Storage.set(STORAGE_KEYS.STAFF, DEFAULT_STAFF);
+      try { localStorage.removeItem('aurelia_deleted_device_sessions'); } catch (e) { }
       localStorage.setItem(STORAGE_KEYS.INITIALIZED, 'true');
+      localStorage.setItem('aurelia_two_records_v1', 'true');
     } else {
       if (needsBillsUpgrade) {
         Storage.set(STORAGE_KEYS.BILLS, DEFAULT_BILLS);
@@ -1272,52 +1173,12 @@ $(document).ready(function () {
       if (!localStorage.getItem(STORAGE_KEYS.STAFF)) {
         Storage.set(STORAGE_KEYS.STAFF, DEFAULT_STAFF);
       }
-      if (!localStorage.getItem('aurelia_bills_draft_seed_v1')) {
-        const storedBills = Storage.get(STORAGE_KEYS.BILLS, []);
-        const hasDraft = storedBills.some(b => (b.status || '').toLowerCase() === 'draft');
-        if (!hasDraft && storedBills.length > 0) {
-          storedBills.push({
-            id: 'bill-draft-sample',
-            billNumber: 'INV-2026-0135',
-            date: '2026-10-24T14:15:00',
-            customerName: 'Siddharth Rao',
-            customerPhone: '+91 98800 11223',
-            customerEmail: 'siddharth.r@techcorp.in',
-            customerAddress: 'Indiranagar, Bengaluru',
-            tableRoom: 'Table 12',
-            paymentMethod: 'Unpaid',
-            status: 'Draft',
-            emailSent: false,
-            linkedOrderId: null,
-            taxRate: 5,
-            discountType: 'flat',
-            discountVal: 0,
-            discountAmount: 0.00,
-            subtotal: 4200.00,
-            taxAmount: 210.00,
-            grandTotal: 4410.00,
-            items: [
-              { name: 'Tandoori Murgh Platter', category: 'Starters', price: 1800.00, qty: 1, subtotal: 1800.00 },
-              { name: 'Dal Bukhara & Garlic Naan (2 Pax)', category: 'Main Course', price: 2400.00, qty: 1, subtotal: 2400.00 }
-            ]
-          });
-          Storage.set(STORAGE_KEYS.BILLS, storedBills);
-        }
-        localStorage.setItem('aurelia_bills_draft_seed_v1', 'true');
-      }
       if (!Storage.get(STORAGE_KEYS.MENU, []).length) {
         Storage.set(STORAGE_KEYS.MENU, DEFAULT_MENU_ITEMS);
       }
       const storedOrders = Storage.get(STORAGE_KEYS.ORDERS, []);
       if (!storedOrders.length) {
         Storage.set(STORAGE_KEYS.ORDERS, DEFAULT_ORDERS);
-      } else if (!localStorage.getItem('finset_orders_seed_v31')) {
-        const existingIds = new Set(storedOrders.map(o => o.id));
-        const missingDefaults = DEFAULT_ORDERS.filter(o => !existingIds.has(o.id));
-        if (missingDefaults.length) {
-          Storage.set(STORAGE_KEYS.ORDERS, [...storedOrders, ...missingDefaults]);
-        }
-        localStorage.setItem('finset_orders_seed_v31', 'true');
       }
       if (!Storage.get(STORAGE_KEYS.CUSTOMERS, []).length) {
         Storage.set(STORAGE_KEYS.CUSTOMERS, DEFAULT_CUSTOMERS);
@@ -2102,8 +1963,8 @@ $(document).ready(function () {
       id: 'DEPT-FO',
       name: 'Front Office & Concierge',
       code: 'DEPT-FO',
-      head: 'Adaline Lively',
-      staffCount: 8,
+      head: 'Shraoshi Basak',
+      staffCount: 1,
       location: 'Ground Floor Main Lobby',
       shift: '24/7 Continuous (3 Shifts)',
       desc: 'Guest check-in/out, concierge, VIP arrivals, baggage handling, and reservations.'
@@ -2112,8 +1973,8 @@ $(document).ready(function () {
       id: 'DEPT-KIT',
       name: 'Culinary & Kitchen',
       code: 'DEPT-KIT',
-      head: 'Sous Chef Marco Rossi',
-      staffCount: 12,
+      head: 'Piyush Barua',
+      staffCount: 0,
       location: 'Main Kitchen Level -1',
       shift: 'Morning & Evening (2 Shifts)',
       desc: 'Fine dining preparation, banquets, buffet management, and culinary inventory.'
@@ -2122,8 +1983,8 @@ $(document).ready(function () {
       id: 'DEPT-FNB',
       name: 'Food & Beverage / Restaurant',
       code: 'DEPT-FNB',
-      head: 'Roberto Rossi',
-      staffCount: 12,
+      head: 'Shraoshi Basak',
+      staffCount: 0,
       location: 'Ground & Terrace Bar',
       shift: 'Morning & Evening (2 Shifts)',
       desc: 'Table service, Aurelia Bar & Lounge, in-room dining, and banqueting.'
@@ -2132,8 +1993,8 @@ $(document).ready(function () {
       id: 'DEPT-HK',
       name: 'Housekeeping & Laundry',
       code: 'DEPT-HK',
-      head: 'Maria Santos',
-      staffCount: 10,
+      head: 'Piyush Barua',
+      staffCount: 0,
       location: 'Floors 1-5 & Service Wing',
       shift: 'Morning & Evening (2 Shifts)',
       desc: 'Guest room sanitization, linen management, floor maintenance, and laundry operations.'
@@ -2142,8 +2003,8 @@ $(document).ready(function () {
       id: 'DEPT-ENG',
       name: 'Engineering & Maintenance',
       code: 'DEPT-ENG',
-      head: 'Rajesh Nair',
-      staffCount: 4,
+      head: 'Piyush Barua',
+      staffCount: 0,
       location: 'Basements & Tech Core',
       shift: '24/7 Continuous (3 Shifts)',
       desc: 'HVAC systems, electricals, plumbing, elevator maintenance, and safety compliance.'
@@ -2152,15 +2013,25 @@ $(document).ready(function () {
       id: 'DEPT-SEC',
       name: 'Security & Operations',
       code: 'DEPT-SEC',
-      head: 'Vikram Rathore',
-      staffCount: 2,
+      head: 'Shraoshi Basak',
+      staffCount: 0,
       location: 'Surveillance Hub & Gates',
       shift: '24/7 Continuous (3 Shifts)',
       desc: 'Perimeter surveillance, CCTV monitoring, access control, and fire safety systems.'
     }
   ];
 
-  let hotelDepartments = JSON.parse(localStorage.getItem('aurelia_departments')) || defaultDepartments;
+  let hotelDepartments = defaultDepartments;
+  try {
+    if (!localStorage.getItem('aurelia_departments_two_v1')) {
+      localStorage.setItem('aurelia_departments', JSON.stringify(defaultDepartments));
+      localStorage.setItem('aurelia_departments_two_v1', 'true');
+    } else {
+      hotelDepartments = JSON.parse(localStorage.getItem('aurelia_departments')) || defaultDepartments;
+    }
+  } catch (e) {
+    hotelDepartments = defaultDepartments;
+  }
 
   function saveDepartments() {
     localStorage.setItem('aurelia_departments', JSON.stringify(hotelDepartments));
@@ -3925,7 +3796,7 @@ $(document).ready(function () {
         const femaleNames = [
           'tanvi', 'priya', 'priyanka', 'ananya', 'neha', 'sunita', 'meenakshi',
           'aarti', 'pooja', 'deepa', 'simran', 'shanti', 'lakshmi', 'rekha',
-          'geeta', 'mary', 'savita', 'kavita', 'shreya', 'trisha', 'adaline', 'elena', 'sophia'
+          'geeta', 'mary', 'savita', 'kavita', 'shreya', 'trisha', 'adaline', 'elena', 'sophia', 'shraoshi'
         ];
         const isFemale = femaleNames.some(fn => (s.name || '').toLowerCase().includes(fn));
         const avatarSrc = pfx + (isFemale ? 'avatar-female.png' : 'avatar-male.png');
@@ -4001,12 +3872,6 @@ $(document).ready(function () {
 
   // Shared Live Device & Login Session Registry
   function getAllDeviceSessions() {
-    const activeUser = getActiveUserData();
-    const displayName = (activeUser && activeUser.name) ? String(activeUser.name).trim() : 'Aurelia Staff';
-    const userEmail = (activeUser && activeUser.email) ? String(activeUser.email).trim() : 'staff@aureliahotel.com';
-    const userRole = (activeUser && activeUser.role) ? String(activeUser.role).trim() : 'Front Desk Supervisor';
-    const initials = displayName.split(' ').filter(Boolean).map(n => n[0]).join('').substring(0, 2).toUpperCase() || 'AU';
-
     try { sessionStorage.removeItem('aurelia_active_session_seconds'); } catch (e) { }
     const currentActiveTimeStr = 'Active now';
 
@@ -4029,12 +3894,12 @@ $(document).ready(function () {
       {
         terminalId: 'DEV08',
         id: 'EMP-2026-01',
-        name: displayName,
-        role: userRole,
+        name: 'Shraoshi Basak',
+        role: 'Front Desk Supervisor',
         avatarBg: 'bg-[#14213D] dark:bg-[#FCA311] text-white dark:text-[#14213D]',
-        initials: initials,
-        email: userEmail,
-        phone: '+91 98450 11201',
+        initials: 'SB',
+        email: 'shraoshibasak.9090@gmail.com',
+        phone: '9874563210',
         deviceName: currentDeviceName,
         deviceType: currentDeviceType,
         timeSpent: currentActiveTimeStr,
@@ -4043,168 +3908,18 @@ $(document).ready(function () {
       },
       {
         terminalId: 'DEV01',
-        id: 'EMP-2026-04',
-        name: 'Vikramaditya Reddy',
-        role: 'General Manager',
+        id: 'EMP-2026-02',
+        name: 'Piyush Barua',
+        role: 'Senior Concierge',
         avatarBg: 'bg-blue-600 text-white',
-        initials: 'VR',
-        email: 'vikram.reddy@aureliahotel.com',
-        phone: '+91 97412 34567',
-        deviceName: 'Executive iMac 27" (macOS / Safari)',
+        initials: 'PB',
+        email: 'piyushbarua9@gmail.com',
+        phone: '7894561230',
+        deviceName: 'Concierge Lounge PC (Win 11 / Chrome)',
         deviceType: 'Desktop',
         timeSpent: '2 hrs 15 mins',
         status: 'Active Now',
         isLive: true
-      },
-      {
-        terminalId: 'DEV03',
-        id: 'EMP-2026-07',
-        name: 'Priya Sundaram',
-        role: 'Guest Relations Officer',
-        avatarBg: 'bg-purple-600 text-white',
-        initials: 'PS',
-        email: 'priya.s@aureliahotel.com',
-        phone: '+91 98112 45678',
-        deviceName: 'Reception iPad Pro (iPadOS / Safari)',
-        deviceType: 'Tablet',
-        timeSpent: '1 hr 45 mins',
-        status: 'Active Now',
-        isLive: true
-      },
-      {
-        terminalId: 'DEV04',
-        id: 'EMP-2026-12',
-        name: 'Rohan Desai',
-        role: 'Night Auditor',
-        avatarBg: 'bg-slate-700 text-white dark:bg-slate-300 dark:text-slate-900',
-        initials: 'RD',
-        email: 'rohan.d@aureliahotel.com',
-        phone: '+91 98200 55189',
-        deviceName: 'Back Office PC #04 (Win 11 / Edge)',
-        deviceType: 'Desktop',
-        timeSpent: '58 mins',
-        status: 'Idle (5m)',
-        isLive: false
-      },
-      {
-        terminalId: 'DEV02',
-        id: 'EMP-2026-19',
-        name: 'Kevin Peterson',
-        role: 'F&B Service Captain',
-        avatarBg: 'bg-emerald-600 text-white',
-        initials: 'KP',
-        email: 'kevin.p@aureliahotel.com',
-        phone: '+91 99012 33456',
-        deviceName: 'POS Handheld Dev #02 (Android 14)',
-        deviceType: 'Mobile',
-        timeSpent: '24 mins',
-        status: 'Active Now',
-        isLive: true
-      },
-      {
-        terminalId: 'DEV05',
-        id: 'EMP-2026-22',
-        name: 'Arjun Nair',
-        role: 'Executive Head Chef',
-        avatarBg: 'bg-amber-600 text-white',
-        initials: 'AN',
-        email: 'arjun.n@aureliahotel.com',
-        phone: '+91 98331 77420',
-        deviceName: 'Main Kitchen KDS iPad (iPadOS / Chrome)',
-        deviceType: 'Tablet',
-        timeSpent: '4 hrs 10 mins',
-        status: 'Active Now',
-        isLive: true
-      },
-      {
-        terminalId: 'DEV06',
-        id: 'EMP-2026-25',
-        name: 'Meera Kapoor',
-        role: 'Spa & Wellness Lead',
-        avatarBg: 'bg-rose-600 text-white',
-        initials: 'MK',
-        email: 'meera.k@aureliahotel.com',
-        phone: '+91 98224 61908',
-        deviceName: 'Spa Reception iPad Mini (iPadOS / Safari)',
-        deviceType: 'Tablet',
-        timeSpent: '1 hr 18 mins',
-        status: 'Idle (12m)',
-        isLive: false
-      },
-      {
-        terminalId: 'DEV07',
-        id: 'EMP-2026-31',
-        name: 'Siddharth Malhotra',
-        role: 'Banquet Operations',
-        avatarBg: 'bg-indigo-600 text-white',
-        initials: 'SM',
-        email: 'siddharth.m@aureliahotel.com',
-        phone: '+91 97654 22190',
-        deviceName: 'Banquet Hall PC #02 (Win 11 / Chrome)',
-        deviceType: 'Desktop',
-        timeSpent: '3 hrs 05 mins',
-        status: 'Active Now',
-        isLive: true
-      },
-      {
-        terminalId: 'DEV09',
-        id: 'EMP-2026-34',
-        name: 'Ananya Roy',
-        role: 'Room Service Supervisor',
-        avatarBg: 'bg-teal-600 text-white',
-        initials: 'AR',
-        email: 'ananya.r@aureliahotel.com',
-        phone: '+91 98109 88721',
-        deviceName: 'Room Service Handheld #03 (Android 14)',
-        deviceType: 'Mobile',
-        timeSpent: '42 mins',
-        status: 'Active Now',
-        isLive: true
-      },
-      {
-        terminalId: 'DEV10',
-        id: 'EMP-2026-38',
-        name: 'Kabir Verma',
-        role: 'Concierge & Valet Lead',
-        avatarBg: 'bg-cyan-600 text-white',
-        initials: 'KV',
-        email: 'kabir.v@aureliahotel.com',
-        phone: '+91 99105 44312',
-        deviceName: 'Valet Desk Mobile POS (iOS 18 / Safari)',
-        deviceType: 'Mobile',
-        timeSpent: '1 hr 12 mins',
-        status: 'Signed Out',
-        isLive: false
-      },
-      {
-        terminalId: 'DEV11',
-        id: 'EMP-2026-41',
-        name: 'Neha Sharma',
-        role: 'Accounts & Finance',
-        avatarBg: 'bg-violet-600 text-white',
-        initials: 'NS',
-        email: 'neha.s@aureliahotel.com',
-        phone: '+91 98765 10293',
-        deviceName: 'Finance Workstation #01 (Win 11 / Chrome)',
-        deviceType: 'Desktop',
-        timeSpent: '2 hrs 50 mins',
-        status: 'Active Now',
-        isLive: true
-      },
-      {
-        terminalId: 'DEV12',
-        id: 'EMP-2026-45',
-        name: 'Devendra Kulkarni',
-        role: 'Bar & Lounge Manager',
-        avatarBg: 'bg-orange-600 text-white',
-        initials: 'DK',
-        email: 'devendra.k@aureliahotel.com',
-        phone: '+91 98211 90345',
-        deviceName: 'Sky Lounge POS Tablet (Android Tab S9)',
-        deviceType: 'Tablet',
-        timeSpent: '1 hr 30 mins',
-        status: 'Idle (8m)',
-        isLive: false
       }
     ].filter(s => {
       try {
@@ -4615,7 +4330,6 @@ $(document).ready(function () {
 
   function populateCustomerDropdown() {
     const customers = (Storage.get(STORAGE_KEYS.CUSTOMERS) || []).slice();
-    customers.sort((a, b) => (a.name || '').localeCompare(b.name || '', undefined, { sensitivity: 'base' }));
     const $select = $('#select-customer-dropdown');
     $select.find('option:not(:first)').remove();
     customers.forEach(c => {
@@ -7397,7 +7111,20 @@ $(document).ready(function () {
   const DEFAULT_HR_TEMPLATES = [
     {
       id: 'doc-emp-01',
-      empId: 'FD-26-DY01',
+      empId: 'EMP-2026-01',
+      empName: 'Shraoshi Basak',
+      avatar: 'images/avatar-female.png',
+      initials: 'SB',
+      department: 'Front Desk',
+      deptCode: 'FD',
+      format: 'PDF',
+      isVerified: true,
+      title: 'Executive & Staff Employment Agreement',
+      body: '<div class="space-y-3"><p class="font-bold text-slate-800 uppercase tracking-wide">1. Front Desk Management</p><p>Permanent employment agreement outlining supervisory terms for Shraoshi Basak.</p></div>'
+    },
+    {
+      id: 'doc-emp-02',
+      empId: 'EMP-2026-02',
       empName: 'Piyush Barua',
       avatar: 'images/emp-piyush.jpg',
       initials: 'PB',
@@ -7407,188 +7134,18 @@ $(document).ready(function () {
       isVerified: true,
       title: 'Employment Contract & Onboarding Form',
       body: '<div class="space-y-3"><p class="font-bold text-slate-800 uppercase tracking-wide">1. Front Desk Operations</p><p>Official employment contract for Piyush Barua assigned to Luxury Front Desk Concierge.</p></div>'
-    },
-    {
-      id: 'doc-emp-02',
-      empId: 'FD-26-DY02',
-      empName: 'Adaline Lively',
-      avatar: 'images/avatar-female.png',
-      initials: 'AL',
-      department: 'Front Desk',
-      deptCode: 'FD',
-      format: 'PDF',
-      isVerified: true,
-      title: 'Executive & Staff Employment Agreement',
-      body: '<div class="space-y-3"><p class="font-bold text-slate-800 uppercase tracking-wide">1. Front Desk Management</p><p>Permanent employment agreement outlining supervisory terms for Adaline Lively.</p></div>'
-    },
-    {
-      id: 'doc-emp-03',
-      empId: 'HK-26-DY03',
-      empName: 'Marcus Vance',
-      avatar: 'images/emp-marcus.jpg',
-      initials: 'HK',
-      department: 'Housekeeping',
-      deptCode: 'HK',
-      format: 'DOCX',
-      isVerified: true,
-      title: 'Hotel Non-Disclosure & Guest Data Privacy Agreement',
-      body: '<div class="space-y-3"><p class="font-bold text-slate-800 uppercase tracking-wide">1. Confidentiality & Guest Data</p><p>Strict guest privacy undertaking executed for Housekeeping Supervisor Marcus Vance.</p></div>'
-    },
-    {
-      id: 'doc-emp-04',
-      empId: 'HK-26-DY04',
-      empName: 'Elena Rostova',
-      avatar: 'images/avatar-female.png',
-      initials: 'ER',
-      department: 'Housekeeping',
-      deptCode: 'HK',
-      format: 'PDF',
-      isVerified: true,
-      title: 'Formal Job Offer & Appointment Letter',
-      body: '<div class="space-y-3"><p class="font-bold text-slate-800 uppercase tracking-wide">1. Appointment Details</p><p>Appointment letter with CTC breakdown and shift assignment for Elena Rostova.</p></div>'
-    },
-    {
-      id: 'doc-emp-05',
-      empId: 'FB-26-DY05',
-      empName: 'Chef Jean-Marc',
-      avatar: 'images/avatar-male.png',
-      initials: 'JM',
-      department: 'Food & Beverage',
-      deptCode: 'FB',
-      format: 'PDF',
-      isVerified: true,
-      title: 'Culinary Recipes & Food Formula Protection Agreement',
-      body: '<div class="space-y-3"><p class="font-bold text-slate-800 uppercase tracking-wide">1. Kitchen & Recipe IP</p><p>Protection of signature dining recipes and culinary protocols for Executive Chef Jean-Marc.</p></div>'
-    },
-    {
-      id: 'doc-emp-06',
-      empId: 'FB-26-DY06',
-      empName: 'Sophia Chen',
-      avatar: 'images/avatar-female.png',
-      initials: 'SC',
-      department: 'Food & Beverage',
-      deptCode: 'FB',
-      format: 'DOCX',
-      isVerified: 'Pending',
-      title: 'POS Terminal & Cashier Handover Policy',
-      body: '<div class="space-y-3"><p class="font-bold text-slate-800 uppercase tracking-wide">1. Cash Desk & Terminal Handover</p><p>Daily EDC terminal settlement agreement for Cafe Barista Sophia Chen.</p></div>'
-    },
-    {
-      id: 'doc-emp-07',
-      empId: 'HR-26-DY07',
-      empName: 'Rajesh Sharma',
-      avatar: 'images/emp-rajesh.jpg',
-      initials: 'HR',
-      department: 'Human Resources',
-      deptCode: 'HR',
-      format: 'PDF',
-      isVerified: 'Verified',
-      title: 'Hospitality Internship & Industrial Trainee Agreement',
-      body: '<div class="space-y-3"><p class="font-bold text-slate-800 uppercase tracking-wide">1. HR Talent Onboarding</p><p>Accredited trainee rotation agreement for HR Coordinator Rajesh Sharma.</p></div>'
-    },
-    {
-      id: 'doc-emp-08',
-      empId: 'HR-26-DY08',
-      empName: 'Sunita Rao',
-      avatar: 'images/avatar-female.png',
-      initials: 'SR',
-      department: 'Human Resources',
-      deptCode: 'HR',
-      format: 'CSV',
-      isVerified: 'Verified',
-      title: 'Banquet & Event On-Call Casual Staff Agreement',
-      body: '<div class="space-y-3"><p class="font-bold text-slate-800 uppercase tracking-wide">1. Duty & Call Sheet</p><p>Staff roster and emergency shift agreement for Sunita Rao.</p></div>'
-    },
-    {
-      id: 'doc-emp-09',
-      empId: 'AC-26-DY09',
-      empName: 'Ananya Deshmukh',
-      avatar: 'images/avatar-female.png',
-      initials: 'AC',
-      department: 'Accounts & Finance',
-      deptCode: 'AC',
-      format: 'XLSX',
-      isVerified: 'Verified',
-      title: 'Anti-Harassment, POSH & Code of Ethics Undertaking',
-      body: '<div class="space-y-3"><p class="font-bold text-slate-800 uppercase tracking-wide">1. Ethics & Compliance</p><p>Financial compliance and hotel code of conduct signed by Accounts Officer Ananya Deshmukh.</p></div>'
-    },
-    {
-      id: 'doc-emp-10',
-      empId: 'AC-26-DY10',
-      empName: 'Vikramaditya Roy',
-      avatar: 'images/avatar-male.png',
-      initials: 'VR',
-      department: 'Accounts & Finance',
-      deptCode: 'AC',
-      format: 'PDF',
-      isVerified: 'Pending',
-      title: 'HACCP & Commercial Kitchen Food Safety Protocol',
-      body: '<div class="space-y-3"><p class="font-bold text-slate-800 uppercase tracking-wide">1. Financial Audits</p><p>Quarterly audit and inventory compliance record for Vikramaditya Roy.</p></div>'
-    },
-    {
-      id: 'doc-emp-11',
-      empId: 'FB-26-DY11',
-      empName: 'Kavita Nair',
-      avatar: 'images/avatar-female.png',
-      initials: 'KN',
-      department: 'Food & Beverage',
-      deptCode: 'FB',
-      format: 'DOCX',
-      isVerified: 'Rejected',
-      title: 'Official Performance Advisory & Warning Letter Template',
-      body: '<div class="space-y-3"><p class="font-bold text-slate-800 uppercase tracking-wide">1. Performance Appraisal</p><p>Standard performance documentation for Banquet Captain Kavita Nair.</p></div>'
-    },
-    {
-      id: 'doc-emp-12',
-      empId: 'MG-26-DY12',
-      empName: 'David Miller',
-      avatar: 'images/avatar-male.png',
-      initials: 'MG',
-      department: 'Management',
-      deptCode: 'MG',
-      format: 'PDF',
-      isVerified: 'Verified',
-      title: 'Employee Experience Certificate & Relieving Letter',
-      body: '<div class="space-y-3"><p class="font-bold text-slate-800 uppercase tracking-wide">1. Relieving Undertaking</p><p>General management service certificate for Operations Lead David Miller.</p></div>'
     }
   ];
 
   let HR_TEMPLATES = [];
   try {
-    let storedHrTpls = localStorage.getItem('aurelia_hr_templates_v8');
-    if (!storedHrTpls) {
-      const v6 = localStorage.getItem('aurelia_hr_templates_v6') || localStorage.getItem('aurelia_hr_templates_v5');
-      if (v6) {
-        try {
-          const parsed = JSON.parse(v6);
-          parsed.forEach(p => {
-            if (p.avatar && typeof p.avatar === 'string' && p.avatar.startsWith('employees/')) {
-              p.avatar = p.avatar.replace('employees/', 'images/');
-            }
-            if (p.id === 'doc-emp-11' && (p.isVerified === false || p.isVerified === 'Pending')) {
-              p.isVerified = 'Rejected';
-            }
-          });
-          storedHrTpls = JSON.stringify(parsed);
-          localStorage.setItem('aurelia_hr_templates_v8', storedHrTpls);
-        } catch (e) { }
-      }
-    }
+    let storedHrTpls = localStorage.getItem('aurelia_hr_templates_v9');
     if (storedHrTpls) {
       HR_TEMPLATES = JSON.parse(storedHrTpls);
-      // Migrate any lingering 'employees/' avatar paths to 'images/'
-      HR_TEMPLATES.forEach(p => {
-        if (p.avatar && typeof p.avatar === 'string' && p.avatar.startsWith('employees/')) {
-          p.avatar = p.avatar.replace('employees/', 'images/');
-        }
-        if (p.id === 'doc-emp-11' && (p.isVerified === false || p.isVerified === 'Pending')) {
-          p.isVerified = 'Rejected';
-        }
-      });
-      localStorage.setItem('aurelia_hr_templates_v8', JSON.stringify(HR_TEMPLATES));
+      localStorage.setItem('aurelia_hr_templates_v9', JSON.stringify(HR_TEMPLATES));
     } else {
       HR_TEMPLATES = [...DEFAULT_HR_TEMPLATES];
-      localStorage.setItem('aurelia_hr_templates_v8', JSON.stringify(HR_TEMPLATES));
+      localStorage.setItem('aurelia_hr_templates_v9', JSON.stringify(HR_TEMPLATES));
     }
   } catch (err) {
     HR_TEMPLATES = [...DEFAULT_HR_TEMPLATES];
@@ -7663,7 +7220,7 @@ $(document).ready(function () {
       const femaleNames = [
         'tanvi', 'priya', 'priyanka', 'ananya', 'neha', 'sunita', 'meenakshi',
         'aarti', 'pooja', 'deepa', 'simran', 'shanti', 'lakshmi', 'rekha',
-        'geeta', 'mary', 'savita', 'kavita', 'shreya', 'trisha', 'adaline', 'elena', 'sophia'
+        'geeta', 'mary', 'savita', 'kavita', 'shreya', 'trisha', 'adaline', 'elena', 'sophia', 'shraoshi'
       ];
       const isFemale = femaleNames.some(fn => (tpl.empName || '').toLowerCase().includes(fn));
       const defaultAvatarFile = isFemale ? 'avatar-female.png' : 'avatar-male.png';
@@ -7948,7 +7505,7 @@ $(document).ready(function () {
         const femaleNames = [
           'tanvi', 'priya', 'priyanka', 'ananya', 'neha', 'sunita', 'meenakshi',
           'aarti', 'pooja', 'deepa', 'simran', 'shanti', 'lakshmi', 'rekha',
-          'geeta', 'mary', 'savita', 'kavita', 'shreya', 'trisha', 'adaline', 'elena', 'sophia'
+          'geeta', 'mary', 'savita', 'kavita', 'shreya', 'trisha', 'adaline', 'elena', 'sophia', 'shraoshi'
         ];
         const isFemale = femaleNames.some(fn => (s.name || '').toLowerCase().includes(fn));
         const avatarSrc = pfx + (isFemale ? 'avatar-female.png' : 'avatar-male.png');
@@ -8029,13 +7586,13 @@ $(document).ready(function () {
     $('#preview-emp-id-display').text(nextId);
 
     function syncEmpPreview() {
-      const name = $.trim($('#add-emp-name').val()) || 'Vikramaditya Roy';
+      const name = $.trim($('#add-emp-name').val()) || 'Shraoshi Basak';
       const role = $.trim($('#add-emp-role').val()) || 'Guest Relations Executive';
       const dept = $('#add-emp-dept').val() || 'Front Office';
       const status = $('#add-emp-status').val() || 'On Duty';
       const shift = $('#add-emp-shift').val() || '07:00 - 15:30 (Morning)';
 
-      const initials = name.split(' ').filter(Boolean).map(n => n[0]).join('').substring(0, 2).toUpperCase() || 'VR';
+      const initials = name.split(' ').filter(Boolean).map(n => n[0]).join('').substring(0, 2).toUpperCase() || 'SB';
       $('#preview-emp-avatar').text(initials);
       $('#preview-emp-name-display').text(name);
       $('#preview-emp-role-display').text(role);
