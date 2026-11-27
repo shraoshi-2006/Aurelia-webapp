@@ -3687,13 +3687,12 @@
             <th class="py-3 px-4">Batch Ref</th>
             <th class="py-3 px-4">Employee</th>
             <th class="py-3 px-4">Bank & Account</th>
-            <th class="py-3 px-4">IFSC Code</th>
-            <th class="py-3 px-4 font-bold text-slate-900">Gross (₹)</th>
-            <th class="py-3 px-4 text-rose-600">Deductions (₹)</th>
-            <th class="py-3 px-4 font-bold text-emerald-600">Net Disbursed (₹)</th>
-            <th class="py-3 px-4">Transfer Date</th>
-            <th class="py-3 px-4 text-center">Status</th>
-            <th class="py-3 px-4 text-center">Receipt</th>
+            <th class="py-3 px-4 whitespace-nowrap text-center">IFSC Code</th>
+            <th class="py-3 px-4 font-bold text-slate-900 whitespace-nowrap text-center">Gross (₹)</th>
+            <th class="py-3 px-4 font-bold text-emerald-600 whitespace-nowrap text-center">Net Disbursed (₹)</th>
+            <th class="py-3 px-4 whitespace-nowrap text-center">Transfer Date</th>
+            <th class="py-3 px-4 text-center whitespace-nowrap">Status</th>
+            <th class="py-3 px-4 text-center whitespace-nowrap">Receipt</th>
           </tr>
         </thead>
         <tbody id="page-ds-tbody" class="divide-y divide-slate-100">
@@ -3710,8 +3709,10 @@
             </td>
             <td class="py-3.5 px-4 font-medium text-slate-900">HDFC Bank ••••8814</td>
             <td class="py-3.5 px-4 font-mono text-slate-500">HDFC0000240</td>
-            <td class="py-3.5 px-4 font-mono font-medium">₹72,500</td>
-            <td class="py-3.5 px-4 font-mono text-rose-600">-₹7,975</td>
+            <td class="py-3.5 px-4 font-mono whitespace-nowrap text-center">
+              <div class="font-bold text-slate-900 ds-gross-val">₹72,500</div>
+              <div class="text-[10.5px] text-rose-500 font-semibold mt-0.5 tracking-tight ds-deduct-val">-₹7,975</div>
+            </td>
             <td class="py-3.5 px-4 font-mono font-bold text-emerald-600 text-sm">₹64,525</td>
             <td class="py-3.5 px-4 text-slate-600 font-mono">01 Nov 2026</td>
             <td class="py-3.5 px-4 text-center"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800">Disbursed</span></td>
@@ -3730,8 +3731,10 @@
             </td>
             <td class="py-3.5 px-4 font-medium text-slate-900">HDFC Bank ••••4812</td>
             <td class="py-3.5 px-4 font-mono text-slate-500">HDFC0000240</td>
-            <td class="py-3.5 px-4 font-mono font-medium">₹58,700</td>
-            <td class="py-3.5 px-4 font-mono text-rose-600">-₹6,450</td>
+            <td class="py-3.5 px-4 font-mono whitespace-nowrap text-center">
+              <div class="font-bold text-slate-900 ds-gross-val">₹58,700</div>
+              <div class="text-[10.5px] text-rose-500 font-semibold mt-0.5 tracking-tight ds-deduct-val">-₹6,450</div>
+            </td>
             <td class="py-3.5 px-4 font-mono font-bold text-amber-600 text-sm">₹52,250</td>
             <td class="py-3.5 px-4 text-slate-400 font-mono">Queued</td>
             <td class="py-3.5 px-4 text-center"><span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800">Pending Auth</span></td>
@@ -3802,11 +3805,11 @@
 
         const bankAcc = $tr.find('td:nth-child(3)').text().trim();
         const ifsc = $tr.find('td:nth-child(4)').text().trim();
-        const gross = $tr.find('td:nth-child(5)').text().trim();
-        const deductions = $tr.find('td:nth-child(6)').text().trim();
-        const netDisbursed = $tr.find('td:nth-child(7)').text().trim();
-        const transferDate = $tr.find('td:nth-child(8)').text().trim();
-        const status = $tr.find('td:nth-child(9)').text().trim();
+        const gross = $tr.find('.ds-gross-val').text().trim() || $tr.find('td:nth-child(5)').text().trim();
+        const deductions = $tr.find('.ds-deduct-val').text().trim() || '';
+        const netDisbursed = $tr.find('td:nth-child(6)').text().trim();
+        const transferDate = $tr.find('td:nth-child(7)').text().trim();
+        const status = $tr.find('td:nth-child(8)').text().trim();
 
         if (batchRef && empName) {
           rows.push([
@@ -3866,11 +3869,11 @@
         const empSub = $tr.find('td:nth-child(2) .text-\\[11px\\]').text().trim();
         const bankAcc = $tr.find('td:nth-child(3)').text().trim();
         const ifsc = $tr.find('td:nth-child(4)').text().trim();
-        const gross = $tr.find('td:nth-child(5)').text().trim();
-        const deductions = $tr.find('td:nth-child(6)').text().trim();
-        const netDisbursed = $tr.find('td:nth-child(7)').text().trim();
-        const transferDate = $tr.find('td:nth-child(8)').text().trim();
-        const status = $tr.find('td:nth-child(9)').text().trim();
+        const gross = $tr.find('.ds-gross-val').text().trim() || $tr.find('td:nth-child(5)').text().trim();
+        const deductions = $tr.find('.ds-deduct-val').text().trim() || '';
+        const netDisbursed = $tr.find('td:nth-child(6)').text().trim();
+        const transferDate = $tr.find('td:nth-child(7)').text().trim();
+        const status = $tr.find('td:nth-child(8)').text().trim();
 
         rowsHtml += `
           <tr style="border-bottom: 1px solid #e2e8f0; font-size: 10px;">
@@ -4307,7 +4310,7 @@
   <!-- Authentication Controller -->
   <script src="../auth.js?v=20261126_01"></script>
   <!-- Main JavaScript Logic -->
-  <script src="../main.js?v=20261127_04"></script>
+  <script src="../main.js?v=20261127_05"></script>
 </body>
 
 </html>
