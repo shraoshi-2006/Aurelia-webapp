@@ -3537,9 +3537,6 @@
       </div>
       <div class="p-3.5 space-y-2.5 text-xs">
         <div class="flex justify-between py-1 border-b border-slate-100"><span class="text-slate-600">Basic Salary</span><span id="slip-basic" class="font-mono font-bold">₹48,000.00</span></div>
-        <div class="flex justify-between py-1 border-b border-slate-100"><span class="text-slate-600">House Rent Allowance (HRA)</span><span id="slip-hra" class="font-mono font-bold">₹19,200.00</span></div>
-        <div class="flex justify-between py-1 border-b border-slate-100"><span class="text-slate-600">Special Hospitality Bonus</span><span id="slip-bonus" class="font-mono font-bold">₹3,300.00</span></div>
-        <div class="flex justify-between py-1 border-b border-slate-100"><span class="text-slate-600">Conveyance Allowance</span><span id="slip-conveyance" class="font-mono font-bold">₹1,000.00</span></div>
         <div class="flex justify-between py-1 border-b border-slate-100"><span class="text-slate-600">Medical Allowance</span><span id="slip-medical" class="font-mono font-bold">₹1,000.00</span></div>
         <!-- EPF Deduction directly under Medical Allowance -->
         <div class="flex justify-between py-1"><span class="text-slate-600">Employee Provident Fund (EPF 12%)</span><span id="slip-epf" class="font-mono font-bold text-rose-600">-₹5,760.00</span></div>
@@ -3755,9 +3752,6 @@
       $('#slip-days').text(data.days);
 
       $('#slip-basic').text(data.basic);
-      $('#slip-hra').text(data.hra);
-      $('#slip-bonus').text(data.bonus);
-      $('#slip-conveyance').text(data.conveyance);
       $('#slip-medical').text(data.medical);
       $('#slip-epf').text(data.epf);
       $('#slip-gross').text(data.gross);
@@ -4191,7 +4185,7 @@
   <!-- Authentication Controller -->
   <script src="../auth.js?v=20261126_01"></script>
   <!-- Main JavaScript Logic -->
-  <script src="../main.js?v=20261127_10"></script>
+  <script src="../main.js?v=20261127_11"></script>
 </body>
 
 </html>
