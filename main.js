@@ -782,6 +782,11 @@ $(document).ready(function () {
   .table-bulk-action-bar.hidden {
     display: none !important;
   }
+  .table-bulk-action-bar .bulk-count-wrap,
+  .table-bulk-action-bar .bulk-count-text,
+  .table-bulk-action-bar .btn-bulk-cancel {
+    display: none !important;
+  }
 
   /* CRITICAL: Mobile drawer stacking context fix.
      Ensures the backdrop sits strictly above the sticky header (z-50) and below the mobile sidebar drawer (z-100),
@@ -8372,7 +8377,7 @@ $(document).ready(function () {
       const toolbarHtml = `
         <div class="table-bulk-action-bar ${barPadClass} flex flex-wrap items-center justify-end gap-3 text-xs transition-all hidden" data-for-table="${bulkId}">
           <div class="flex items-center gap-2 flex-wrap justify-end ml-auto">
-            <button type="button" class="btn-bulk-select-all inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-xl bg-[#14213D] text-white hover:bg-[#1f325d] dark:bg-[#FCA311] dark:text-[#14213D] dark:hover:bg-[#e5940f] shadow-2xs transition-all cursor-pointer" title="Select or deselect all rows">
+            <button type="button" class="btn-bulk-select-all inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-xl bg-[#14213D] text-white hover:bg-[#1f325d] dark:bg-[#FCA311] dark:text-[#14213D] dark:hover:bg-[#e5940f] shadow-2xs transition-all cursor-pointer" title="Select all rows">
               <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.4">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
               </svg>
@@ -8386,9 +8391,7 @@ $(document).ready(function () {
               <span class="btn-bulk-delete-label">Delete</span>
             </button>
 
-            <button type="button" class="btn-bulk-cancel inline-flex items-center px-2.5 py-1.5 text-xs font-semibold rounded-xl text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-100 hover:bg-slate-200/70 dark:hover:bg-slate-700/60 transition-all cursor-pointer" title="Deselect all rows">
-              <span>Deselect</span>
-            </button>
+
           </div>
         </div>
       `;
@@ -8409,7 +8412,7 @@ $(document).ready(function () {
           }
           $tr.prepend(`
             <th class="bulk-cb-cell w-11 text-center py-3 px-2 rounded-l-xl">
-              <input type="checkbox" class="bulk-master-cb" title="Select / Deselect all rows" aria-label="Select all rows">
+              <input type="checkbox" class="bulk-master-cb" title="Select all rows" aria-label="Select all rows">
             </th>
           `);
         }
@@ -8465,11 +8468,7 @@ $(document).ready(function () {
       }
 
       const $selectAllLabel = $toolbar.find('.btn-bulk-select-all-label');
-      if (total > 0 && checked === total) {
-        $selectAllLabel.text('Deselect All');
-      } else {
-        $selectAllLabel.text('Select All');
-      }
+      $selectAllLabel.text('Select All');
 
       const $masterCb = $table.find('thead .bulk-master-cb');
       if ($masterCb.length) {
