@@ -8377,11 +8377,11 @@ $(document).ready(function () {
       const toolbarHtml = `
         <div class="table-bulk-action-bar ${barPadClass} flex flex-wrap items-center justify-end gap-3 text-xs transition-all hidden" data-for-table="${bulkId}">
           <div class="flex items-center gap-2 flex-wrap justify-end ml-auto">
-            <button type="button" class="btn-bulk-select-all inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-xl bg-[#14213D] text-white hover:bg-[#1f325d] dark:bg-[#FCA311] dark:text-[#14213D] dark:hover:bg-[#e5940f] shadow-2xs transition-all cursor-pointer" title="Select all rows">
+            <button type="button" class="btn-bulk-select-all inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-xl bg-[#14213D] text-white hover:bg-[#1f325d] dark:bg-[#FCA311] dark:text-[#14213D] dark:hover:bg-[#e5940f] shadow-2xs transition-all cursor-pointer" title="Deselect all rows">
               <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.4">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
               </svg>
-              <span class="btn-bulk-select-all-label">Select All</span>
+              <span class="btn-bulk-select-all-label">Deselect All</span>
             </button>
 
             <button type="button" class="btn-table-bulk-delete inline-flex items-center justify-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-xl bg-rose-50 text-rose-600 hover:bg-rose-600 hover:text-white dark:bg-rose-950/40 dark:text-rose-400 dark:hover:bg-rose-600 dark:hover:text-white border border-rose-200 dark:border-rose-900 shadow-2xs transition-all cursor-pointer opacity-50 cursor-not-allowed" title="Delete selected rows" aria-label="Delete selected rows" disabled>
@@ -8468,7 +8468,8 @@ $(document).ready(function () {
       }
 
       const $selectAllLabel = $toolbar.find('.btn-bulk-select-all-label');
-      $selectAllLabel.text('Select All');
+      $selectAllLabel.text('Deselect All');
+      $toolbar.find('.btn-bulk-select-all').attr('title', 'Deselect all rows');
 
       const $masterCb = $table.find('thead .bulk-master-cb');
       if ($masterCb.length) {
@@ -8667,10 +8668,8 @@ $(document).ready(function () {
       if (!$table.length) return;
       const $rows = getSelectableRows($table);
       const $cbs = $rows.find('td.bulk-cb-cell .bulk-row-cb');
-      const allChecked = $cbs.length > 0 && $cbs.filter(':checked').length === $cbs.length;
-      const nextState = !allChecked;
-      $cbs.prop('checked', nextState);
-      $rows.toggleClass('is-row-selected', nextState);
+      $cbs.prop('checked', false);
+      $rows.removeClass('is-row-selected');
       updateToolbarCount($toolbar, $table);
     });
 
