@@ -5291,12 +5291,8 @@ $(document).ready(function () {
             </div>
           ` : ''}
           <div style="display: flex; justify-content: space-between; color: #555;">
-            <span>CGST (2.5%):</span>
-            <span>${formatMoney(bill.taxAmount / 2)}</span>
-          </div>
-          <div style="display: flex; justify-content: space-between; color: #555;">
-            <span>SGST (2.5%):</span>
-            <span>${formatMoney(bill.taxAmount / 2)}</span>
+            <span>GST (5%):</span>
+            <span>${formatMoney(bill.taxAmount)}</span>
           </div>
           <div style="display: flex; justify-content: space-between; font-size: 15px; font-weight: 800; border-top: 2px solid #000; padding-top: 6px; margin-top: 4px;">
             <span>GRAND TOTAL:</span>
