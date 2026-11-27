@@ -774,16 +774,13 @@ $(document).ready(function () {
     display: flex !important;
     flex-wrap: wrap !important;
     align-items: center !important;
-    justify-content: space-between !important;
+    justify-content: flex-end !important;
     gap: 0.625rem 0.75rem !important;
     box-sizing: border-box !important;
     width: 100% !important;
   }
   .table-bulk-action-bar.hidden {
     display: none !important;
-  }
-  .table-bulk-action-bar .bulk-count-wrap {
-    flex-shrink: 0 !important;
   }
 
   /* CRITICAL: Mobile drawer stacking context fix.
@@ -8373,13 +8370,7 @@ $(document).ready(function () {
         : 'pb-2.5 pt-1 mb-2 border-b border-slate-100/80 dark:border-slate-800/60';
 
       const toolbarHtml = `
-        <div class="table-bulk-action-bar ${barPadClass} flex flex-wrap items-center justify-between gap-3 text-xs transition-all hidden" data-for-table="${bulkId}">
-          <div class="flex items-center gap-2 min-w-0 flex-shrink-0">
-            <div class="bulk-count-wrap inline-flex items-center gap-2 px-2.5 py-1 rounded-lg bg-amber-50 dark:bg-amber-950/40 border border-amber-200/80 dark:border-amber-800/60">
-              <span class="inline-block w-2 h-2 rounded-full bg-[#FCA311]"></span>
-              <span class="bulk-count-text font-bold text-[#14213D] dark:text-amber-300 text-xs whitespace-nowrap">Selected row count: 0</span>
-            </div>
-          </div>
+        <div class="table-bulk-action-bar ${barPadClass} flex flex-wrap items-center justify-end gap-3 text-xs transition-all hidden" data-for-table="${bulkId}">
           <div class="flex items-center gap-2 flex-wrap justify-end ml-auto">
             <button type="button" class="btn-bulk-select-all inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-xl bg-[#14213D] text-white hover:bg-[#1f325d] dark:bg-[#FCA311] dark:text-[#14213D] dark:hover:bg-[#e5940f] shadow-2xs transition-all cursor-pointer" title="Select or deselect all rows">
               <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.4">
@@ -8465,12 +8456,10 @@ $(document).ready(function () {
 
       if (checked > 0) {
         $toolbar.removeClass('hidden');
-        $toolbar.find('.bulk-count-text').text(`Selected row count: ${checked}`);
         $toolbar.find('.btn-table-bulk-delete').removeClass('opacity-50 cursor-not-allowed').prop('disabled', false);
         $toolbar.find('.btn-bulk-delete-label').text(`Delete (${checked})`);
       } else {
         $toolbar.addClass('hidden');
-        $toolbar.find('.bulk-count-text').text('Selected row count: 0');
         $toolbar.find('.btn-table-bulk-delete').addClass('opacity-50 cursor-not-allowed').prop('disabled', true);
         $toolbar.find('.btn-bulk-delete-label').text('Delete');
       }
