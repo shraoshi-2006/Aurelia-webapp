@@ -4432,7 +4432,7 @@
               <div class="flex items-center justify-between pb-1 border-b border-slate-100 dark:border-slate-800/80">
                 <div>
                   <h3 class="text-base font-bold text-slate-900 dark:text-white">Unpaid Salaries</h3>
-                  <p class="text-[11px] text-slate-500 dark:text-slate-400">9 Employees Pending • Oct 2026 Batch</p>
+                  <p id="unpaid-pending-subtitle" class="text-[11px] text-slate-500 dark:text-slate-400">2 Employees Pending • Oct 2026 Batch</p>
                 </div>
                 <a href="human-resources/disburse-salary-update.html"
                   class="btn-circle-arrow flex items-center justify-center" title="Open Salary Disbursement Batch">
@@ -4449,78 +4449,77 @@
                   <span class="text-[10px] font-bold uppercase tracking-wider text-amber-800 dark:text-amber-300">Total
                     Unpaid Salary</span>
                   <div class="text-2xl font-black text-amber-600 dark:text-amber-400 mt-0.5 tracking-tight">
-                    <span id="stat-total-unpaid-salary">₹3,42,228</span>
+                    <span id="stat-total-unpaid-salary">₹83,860</span>
                   </div>
                 </div>
                 <div class="text-right flex flex-col items-end">
                   <span
                     class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold bg-amber-500 text-slate-950 shadow-xs">
                     <span class="w-1.5 h-1.5 rounded-full bg-slate-950 animate-pulse"></span>
-                    9 Pending
+                    <span id="unpaid-pending-badge-text">2 Pending</span>
                   </span>
-                  <span class="text-[10px] text-slate-500 dark:text-slate-400 mt-1 font-semibold">15.6% of ₹21.87L
-                    Pool</span>
+                  <span id="unpaid-pool-summary" class="text-[10px] text-slate-500 dark:text-slate-400 mt-1 font-semibold">100% of ₹83,860 Batch</span>
                 </div>
               </div>
 
               <!-- Department Unpaid Breakdown Tracks -->
               <div class="space-y-3.5">
-                <!-- Group 1: Culinary & Kitchen (43%) -->
+                <!-- Group 1: Culinary & Kitchen (0%) -->
                 <div>
                   <div class="flex items-center justify-between text-xs mb-1">
                     <span class="font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
                       <span>Culinary &amp; Kitchen</span>
-                      <span class="text-[10px] font-medium text-slate-400">(4 Staff)</span>
+                      <span id="goal-count-culinary" class="text-[10px] font-medium text-slate-400">(0 Staff)</span>
                     </span>
                     <span class="font-mono font-bold text-slate-800 dark:text-slate-200"
-                      id="goal-val-culinary">₹1,48,240</span>
+                      id="goal-val-culinary">₹0</span>
                   </div>
                   <div
                     class="spatial-progress-track w-full h-5 rounded-full p-0.5 relative overflow-hidden bg-slate-100 dark:bg-slate-800/80">
                     <div id="goal-bar-culinary"
-                      class="spatial-progress-bar h-full bg-[#14213D] dark:bg-slate-700 rounded-full flex items-center justify-center text-[10px] font-bold text-white transition-all duration-700 shadow-xs"
-                      style="width: 43%;">
-                      43%
+                      class="spatial-progress-bar h-full bg-slate-200 dark:bg-slate-700 rounded-full flex items-center justify-center text-[10px] font-bold text-slate-500 dark:text-slate-300 transition-all duration-700 shadow-xs"
+                      style="width: 0%; min-width: 28px;">
+                      0%
                     </div>
                   </div>
                 </div>
 
-                <!-- Group 2: Front Office (31%) -->
+                <!-- Group 2: Front Office (100%) -->
                 <div>
                   <div class="flex items-center justify-between text-xs mb-1">
                     <span class="font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
                       <span>Front Office</span>
-                      <span class="text-[10px] font-medium text-slate-400">(3 Staff)</span>
+                      <span id="goal-count-frontoffice" class="text-[10px] font-medium text-slate-400">(2 Staff)</span>
                     </span>
                     <span class="font-mono font-bold text-slate-800 dark:text-slate-200"
-                      id="goal-val-frontoffice">₹1,06,080</span>
+                      id="goal-val-frontoffice">₹83,860</span>
                   </div>
                   <div
                     class="spatial-progress-track w-full h-5 rounded-full p-0.5 relative overflow-hidden bg-slate-100 dark:bg-slate-800/80">
                     <div id="goal-bar-frontoffice"
                       class="spatial-progress-bar h-full bg-[#FCA311] rounded-full flex items-center justify-center text-[10px] font-bold text-slate-950 transition-all duration-700 shadow-xs"
-                      style="width: 31%;">
-                      31%
+                      style="width: 100%;">
+                      100%
                     </div>
                   </div>
                 </div>
 
-                <!-- Group 3: Food & Beverage (26%) -->
+                <!-- Group 3: Food & Beverage (0%) -->
                 <div>
                   <div class="flex items-center justify-between text-xs mb-1">
                     <span class="font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
                       <span>Food &amp; Beverage</span>
-                      <span class="text-[10px] font-medium text-slate-400">(2 Staff)</span>
+                      <span id="goal-count-fnb" class="text-[10px] font-medium text-slate-400">(0 Staff)</span>
                     </span>
                     <span class="font-mono font-bold text-slate-800 dark:text-slate-200"
-                      id="goal-val-fnb">₹87,908</span>
+                      id="goal-val-fnb">₹0</span>
                   </div>
                   <div
                     class="spatial-progress-track w-full h-5 rounded-full p-0.5 relative overflow-hidden bg-slate-100 dark:bg-slate-800/80">
                     <div id="goal-bar-fnb"
-                      class="spatial-progress-bar h-full bg-slate-900 dark:bg-white text-white dark:text-slate-950 rounded-full flex items-center justify-center text-[10px] font-bold transition-all duration-700 shadow-xs"
-                      style="width: 26%;">
-                      26%
+                      class="spatial-progress-bar h-full bg-slate-200 dark:bg-slate-700 text-slate-500 dark:text-slate-300 rounded-full flex items-center justify-center text-[10px] font-bold transition-all duration-700 shadow-xs"
+                      style="width: 0%; min-width: 28px;">
+                      0%
                     </div>
                   </div>
                 </div>
@@ -4554,7 +4553,7 @@
 
                 <a href="human-resources/disburse-salary-update.html"
                   class="mt-3 w-full py-2 px-3 rounded-xl bg-slate-900 hover:bg-[#FCA311] dark:bg-slate-800 dark:hover:bg-[#FCA311] text-white hover:text-slate-950 text-xs font-bold transition-all duration-200 flex items-center justify-center space-x-1.5 shadow-sm">
-                  <span>Disburse All Pending Salaries (9)</span>
+                  <span id="btn-disburse-all-label">Disburse All Pending Salaries (2)</span>
                   <span>&rarr;</span>
                 </a>
               </div>
@@ -6256,7 +6255,7 @@
   <!-- Authentication Controller -->
   <script src="auth.js?v=20261126_01"></script>
   <!-- Main JavaScript Logic -->
-  <script src="main.js?v=20261128_01"></script>
+  <script src="main.js?v=20261128_02"></script>
 </body>
 
 </html>

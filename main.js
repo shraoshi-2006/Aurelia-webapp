@@ -2885,22 +2885,64 @@ $(document).ready(function () {
   // =========================================================================
 
   function renderSavingGoals() {
-    // 1. Animate Total Unpaid Salary KPI (₹3,42,228 for 9 unpaid staff)
+    const unpaidRows = [
+      { id: 'EMP-2026-01', name: 'Shraoshi Basak', department: 'Front Office', salary: 35360 },
+      { id: 'EMP-2026-02', name: 'Piyush Barua', department: 'Front Office', salary: 48500 }
+    ];
+    const storedStaff = Storage.get(STORAGE_KEYS.STAFF, []);
+    const staffList = (Array.isArray(storedStaff) && storedStaff.length)
+      ? storedStaff
+      : unpaidRows;
+    const pendingCount = staffList.length;
+    const totalUnpaid = staffList.reduce((sum, emp) => {
+      const preset = unpaidRows.find(r => r.id === emp.id || r.name === emp.name);
+      return sum + (preset ? preset.salary : (Number(emp.salary) || 35000));
+    }, 0);
+
+    const bucketMap = {
+      culinary: { count: 0, val: 0 },
+      frontoffice: { count: 0, val: 0 },
+      fnb: { count: 0, val: 0 }
+    };
+    staffList.forEach(emp => {
+      const preset = unpaidRows.find(r => r.id === emp.id || r.name === emp.name);
+      const amt = preset ? preset.salary : (Number(emp.salary) || 35000);
+      const dept = (emp.department || '').toLowerCase();
+      if (dept.includes('culinary') || dept.includes('kitchen')) {
+        bucketMap.culinary.count += 1;
+        bucketMap.culinary.val += amt;
+      } else if (dept.includes('food') || dept.includes('beverage') || dept.includes('f&b')) {
+        bucketMap.fnb.count += 1;
+        bucketMap.fnb.val += amt;
+      } else {
+        bucketMap.frontoffice.count += 1;
+        bucketMap.frontoffice.val += amt;
+      }
+    });
+
+    $('#unpaid-pending-subtitle').text(`${pendingCount} Employee${pendingCount === 1 ? '' : 's'} Pending • Oct 2026 Batch`);
+    $('#unpaid-pending-badge-text').text(`${pendingCount} Pending`);
+    $('#unpaid-pool-summary').text(`100% of ₹${totalUnpaid.toLocaleString('en-IN')} Batch`);
+    $('#btn-disburse-all-label').text(`Disburse All Pending Salaries (${pendingCount})`);
+
+    // 1. Animate Total Unpaid Salary KPI
     if ($('#stat-total-unpaid-salary').length) {
-      animateNumber('#stat-total-unpaid-salary', 342228, {
+      animateNumber('#stat-total-unpaid-salary', totalUnpaid, {
         duration: 900,
         delay: 350,
         prefix: '₹'
       });
     }
 
-    const groups = [
-      { id: 'culinary', val: 148240, pct: 43, width: 43 },
-      { id: 'frontoffice', val: 106080, pct: 31, width: 31 },
-      { id: 'fnb', val: 87908, pct: 26, width: 26 }
-    ];
+    const groups = ['culinary', 'frontoffice', 'fnb'].map(id => {
+      const b = bucketMap[id];
+      const pct = totalUnpaid > 0 ? Math.round((b.val / totalUnpaid) * 100) : 0;
+      return { id, count: b.count, val: b.val, pct, width: pct };
+    });
 
     groups.forEach((g, idx) => {
+      $(`#goal-count-${g.id}`).text(`(${g.count} Staff)`);
+
       // 1. Animate department unpaid amount in top-to-bottom order
       if ($(`#goal-val-${g.id}`).length) {
         animateNumber(`#goal-val-${g.id}`, g.val, {
@@ -2913,9 +2955,9 @@ $(document).ready(function () {
       // 2. Animate progress bar width and internal percentage
       const $bar = $(`#goal-bar-${g.id}`);
       if ($bar.length) {
-        $bar.css({ width: '0%', transition: 'none' });
+        $bar.css({ width: g.width === 0 ? '28px' : '0%', minWidth: g.width === 0 ? '28px' : '0px', transition: 'none' });
         setTimeout(() => {
-          $bar.css({ width: g.width + '%', transition: 'width 1s cubic-bezier(0.16, 1, 0.3, 1)' });
+          $bar.css({ width: g.width + '%', minWidth: g.width === 0 ? '28px' : '0px', transition: 'width 1s cubic-bezier(0.16, 1, 0.3, 1)' });
           animateNumber($bar, g.pct, {
             duration: 900,
             delay: 0,
