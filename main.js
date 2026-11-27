@@ -769,6 +769,11 @@ $(document).ready(function () {
     }
   }
 
+  /* Prevent browser scroll-anchoring from shifting sidebar when toggling submenus */
+  #sidebar-quicklinks-scroll {
+    overflow-anchor: none !important;
+  }
+
   /* Universal Table Bulk Action Bar Layout & Spacing */
   .table-bulk-action-bar {
     display: flex !important;
@@ -1885,23 +1890,23 @@ $(document).ready(function () {
     }
   });
 
-  function ensureSubmenuVisibleOnExpand($trigger, $submenu) {
+  function toggleSidebarNestedDropdown(menuSelector, chevronSelector) {
     const $scrollContainer = $('#sidebar-quicklinks-scroll');
-    if (!$scrollContainer.length || !$trigger.length || !$submenu.length) return;
+    const prevScroll = $scrollContainer.length ? $scrollContainer[0].scrollTop : null;
+    const $nestedMenu = $(menuSelector);
+    const $chevron = $(chevronSelector);
+    const isExpanded = !$nestedMenu.hasClass('hidden');
 
-    const container = $scrollContainer[0];
-    const containerRect = container.getBoundingClientRect();
-    const trigRect = $trigger[0].getBoundingClientRect();
-    const subRect = $submenu[0].getBoundingClientRect();
+    if (isExpanded) {
+      $nestedMenu.addClass('hidden');
+      $chevron.removeClass('rotate-90');
+    } else {
+      $nestedMenu.removeClass('hidden');
+      $chevron.addClass('rotate-90');
+    }
 
-    // Only scroll down if the expanded submenu extends past the bottom; never scroll up
-    const overflowBottom = subRect.bottom - containerRect.bottom;
-    if (overflowBottom > 0) {
-      const maxDown = Math.max(0, trigRect.top - containerRect.top - 12);
-      const scrollDown = Math.min(overflowBottom + 12, maxDown);
-      if (scrollDown > 0) {
-        container.scrollTo({ top: container.scrollTop + scrollDown, behavior: 'smooth' });
-      }
+    if (prevScroll !== null) {
+      $scrollContainer[0].scrollTop = prevScroll;
     }
   }
 
@@ -1909,40 +1914,14 @@ $(document).ready(function () {
   $(document).on('click', '#btn-sub-leave-mgmt', function (e) {
     e.preventDefault();
     e.stopPropagation();
-
-    const $trigger = $(this);
-    const $nestedMenu = $('#nested-leave-mgmt-menu');
-    const $chevron = $('#chevron-sub-leave');
-    const isExpanded = !$nestedMenu.hasClass('hidden');
-
-    if (isExpanded) {
-      $nestedMenu.addClass('hidden');
-      $chevron.removeClass('rotate-90');
-    } else {
-      $nestedMenu.removeClass('hidden');
-      $chevron.addClass('rotate-90');
-      setTimeout(() => ensureSubmenuVisibleOnExpand($trigger, $nestedMenu), 60);
-    }
+    toggleSidebarNestedDropdown('#nested-leave-mgmt-menu', '#chevron-sub-leave');
   });
 
   // Nested: Payroll Dropdown Toggle
   $(document).on('click', '#btn-sub-payroll', function (e) {
     e.preventDefault();
     e.stopPropagation();
-
-    const $trigger = $(this);
-    const $nestedMenu = $('#nested-payroll-menu');
-    const $chevron = $('#chevron-sub-payroll');
-    const isExpanded = !$nestedMenu.hasClass('hidden');
-
-    if (isExpanded) {
-      $nestedMenu.addClass('hidden');
-      $chevron.removeClass('rotate-90');
-    } else {
-      $nestedMenu.removeClass('hidden');
-      $chevron.addClass('rotate-90');
-      setTimeout(() => ensureSubmenuVisibleOnExpand($trigger, $nestedMenu), 60);
-    }
+    toggleSidebarNestedDropdown('#nested-payroll-menu', '#chevron-sub-payroll');
   });
 
   // Human Resource Sub-Items Actions
