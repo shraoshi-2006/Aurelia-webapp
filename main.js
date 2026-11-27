@@ -1747,8 +1747,11 @@ $(document).ready(function () {
     const $scrollContainer = $('#sidebar-quicklinks-scroll');
     if (!$scrollContainer.length) return;
 
-    // Search for currently active sub-item or nav item
-    const $active = $('.hr-sub-item.active, .dept-sub-item.active, .Aurelia-nav-item.active:not([data-target="dashboard"])').first();
+    // Prefer active leaf link over collapsible parent dropdown buttons
+    let $active = $('.hr-sub-item.active, .dept-sub-item.active, .billing-sub-item.active').first();
+    if (!$active.length) {
+      $active = $('.Aurelia-nav-item.active:not([data-target="dashboard"]):not(#btn-nav-hr):not(#btn-nav-dept):not(#btn-nav-billing)').first();
+    }
     if (!$active.length) return;
 
     const container = $scrollContainer[0];
@@ -1877,11 +1880,32 @@ $(document).ready(function () {
     }
   });
 
+  function ensureSubmenuVisibleOnExpand($trigger, $submenu) {
+    const $scrollContainer = $('#sidebar-quicklinks-scroll');
+    if (!$scrollContainer.length || !$trigger.length || !$submenu.length) return;
+
+    const container = $scrollContainer[0];
+    const containerRect = container.getBoundingClientRect();
+    const trigRect = $trigger[0].getBoundingClientRect();
+    const subRect = $submenu[0].getBoundingClientRect();
+
+    // Only scroll down if the expanded submenu extends past the bottom; never scroll up
+    const overflowBottom = subRect.bottom - containerRect.bottom;
+    if (overflowBottom > 0) {
+      const maxDown = Math.max(0, trigRect.top - containerRect.top - 12);
+      const scrollDown = Math.min(overflowBottom + 12, maxDown);
+      if (scrollDown > 0) {
+        container.scrollTo({ top: container.scrollTop + scrollDown, behavior: 'smooth' });
+      }
+    }
+  }
+
   // Nested: Leave Management Dropdown Toggle
   $(document).on('click', '#btn-sub-leave-mgmt', function (e) {
     e.preventDefault();
     e.stopPropagation();
 
+    const $trigger = $(this);
     const $nestedMenu = $('#nested-leave-mgmt-menu');
     const $chevron = $('#chevron-sub-leave');
     const isExpanded = !$nestedMenu.hasClass('hidden');
@@ -1892,7 +1916,7 @@ $(document).ready(function () {
     } else {
       $nestedMenu.removeClass('hidden');
       $chevron.addClass('rotate-90');
-      setTimeout(() => keepActiveSidebarItemVisible(true), 60);
+      setTimeout(() => ensureSubmenuVisibleOnExpand($trigger, $nestedMenu), 60);
     }
   });
 
@@ -1901,6 +1925,7 @@ $(document).ready(function () {
     e.preventDefault();
     e.stopPropagation();
 
+    const $trigger = $(this);
     const $nestedMenu = $('#nested-payroll-menu');
     const $chevron = $('#chevron-sub-payroll');
     const isExpanded = !$nestedMenu.hasClass('hidden');
@@ -1911,7 +1936,7 @@ $(document).ready(function () {
     } else {
       $nestedMenu.removeClass('hidden');
       $chevron.addClass('rotate-90');
-      setTimeout(() => keepActiveSidebarItemVisible(true), 60);
+      setTimeout(() => ensureSubmenuVisibleOnExpand($trigger, $nestedMenu), 60);
     }
   });
 
