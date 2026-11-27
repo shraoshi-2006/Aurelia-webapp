@@ -774,6 +774,19 @@ $(document).ready(function () {
     overflow-anchor: none !important;
   }
 
+  /* Remove rounded corners from every table heading row */
+  table thead tr,
+  table thead th,
+  .Aurelia-table-header,
+  .aurelia-table-header,
+  .finset-table-header,
+  .Aurelia-table-header th,
+  .aurelia-table-header th,
+  .finset-table-header th,
+  th.bulk-cb-cell {
+    border-radius: 0 !important;
+  }
+
   /* Universal Table Bulk Action Bar Layout & Spacing */
   .table-bulk-action-bar {
     display: flex !important;
@@ -8410,12 +8423,9 @@ $(document).ready(function () {
       $table.find('thead > tr').each(function () {
         const $tr = $(this);
         if (!$tr.children('th.bulk-cb-cell').length) {
-          const $firstTh = $tr.children('th').first();
-          if ($firstTh.hasClass('rounded-l-xl')) {
-            $firstTh.removeClass('rounded-l-xl');
-          }
+          $tr.children('th').removeClass('rounded-l-xl rounded-r-xl');
           $tr.prepend(`
-            <th class="bulk-cb-cell w-11 text-center py-3 px-2 rounded-l-xl">
+            <th class="bulk-cb-cell w-11 text-center py-3 px-2">
               <input type="checkbox" class="bulk-master-cb" title="Select all rows" aria-label="Select all rows">
             </th>
           `);
