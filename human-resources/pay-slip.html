@@ -3530,40 +3530,16 @@
       <div><span class="text-[10px] text-slate-400 font-bold uppercase">Days Worked</span><div id="slip-days" class="font-bold text-emerald-600 mt-0.5">31 / 31 Days</div></div>
     </div>
 
-    <!-- Earnings & Deductions Tables (Two Columns) -->
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-      <!-- Earnings -->
-      <div class="border border-slate-200 rounded-xl overflow-hidden">
-        <div class="bg-emerald-50 px-4 py-2 border-b border-emerald-100 font-bold text-xs text-emerald-900 flex justify-between">
-          <span>EARNINGS (₹)</span><span>AMOUNT</span>
-        </div>
-        <div class="p-3 space-y-2 text-xs">
-          <div class="flex justify-between py-1 border-b border-slate-100"><span class="text-slate-600">Basic Salary</span><span id="slip-basic" class="font-mono font-bold">₹1,10,000.00</span></div>
-          <div class="flex justify-between py-1 border-b border-slate-100"><span class="text-slate-600">House Rent Allowance (HRA)</span><span id="slip-hra" class="font-mono font-bold">₹44,000.00</span></div>
-          <div class="flex justify-between py-1 border-b border-slate-100"><span class="text-slate-600">Special Hospitality Bonus</span><span id="slip-bonus" class="font-mono font-bold">₹15,000.00</span></div>
-          <div class="flex justify-between py-1 border-b border-slate-100"><span class="text-slate-600">Conveyance Allowance</span><span id="slip-conveyance" class="font-mono font-bold">₹5,000.00</span></div>
-          <div class="flex justify-between py-1"><span class="text-slate-600">Medical Allowance</span><span id="slip-medical" class="font-mono font-bold">₹5,000.00</span></div>
-        </div>
-        <div class="bg-slate-50 px-4 py-2.5 border-t border-slate-200 flex justify-between text-xs font-bold text-slate-900">
-          <span>TOTAL GROSS EARNINGS</span><span id="slip-gross" class="font-mono text-emerald-600">₹1,79,000.00</span>
-        </div>
+    <!-- Earnings & EPF Deduction Box -->
+    <div class="border border-slate-200 rounded-xl overflow-hidden w-full">
+      <div class="bg-emerald-50 px-4 py-2 border-b border-emerald-100 font-bold text-xs text-emerald-900 flex justify-between">
+        <span>SALARY &amp; STATUTORY ALLOWANCES</span><span>AMOUNT (₹)</span>
       </div>
-
-      <!-- Deductions -->
-      <div class="border border-slate-200 rounded-xl overflow-hidden">
-        <div class="bg-rose-50 px-4 py-2 border-b border-rose-100 font-bold text-xs text-rose-900 flex justify-between">
-          <span>DEDUCTIONS (₹)</span><span>AMOUNT</span>
-        </div>
-        <div class="p-3 space-y-2 text-xs">
-          <div class="flex justify-between py-1 border-b border-slate-100"><span class="text-slate-600">Employee Provident Fund (EPF 12%)</span><span id="slip-epf" class="font-mono font-bold text-rose-600">₹13,200.00</span></div>
-          <div class="flex justify-between py-1 border-b border-slate-100"><span class="text-slate-600">Professional Tax (PT)</span><span id="slip-pt" class="font-mono font-bold text-rose-600">₹200.00</span></div>
-          <div class="flex justify-between py-1 border-b border-slate-100"><span class="text-slate-600">Income Tax (TDS / Withholding)</span><span id="slip-tds" class="font-mono font-bold text-rose-600">₹10,000.00</span></div>
-          <div class="flex justify-between py-1 border-b border-slate-100"><span class="text-slate-600">Staff Welfare / Mess</span><span id="slip-welfare" class="font-mono font-bold text-slate-400">₹0.00</span></div>
-          <div class="flex justify-between py-1"><span class="text-slate-600">Salary Advances</span><span id="slip-advances" class="font-mono font-bold text-slate-400">₹0.00</span></div>
-        </div>
-        <div class="bg-slate-50 px-4 py-2.5 border-t border-slate-200 flex justify-between text-xs font-bold text-slate-900">
-          <span>TOTAL DEDUCTIONS</span><span id="slip-deductions" class="font-mono text-rose-600">₹23,400.00</span>
-        </div>
+      <div class="p-3.5 space-y-2.5 text-xs">
+        <div class="flex justify-between py-1 border-b border-slate-100"><span class="text-slate-600">Basic Salary</span><span id="slip-basic" class="font-mono font-bold">₹48,000.00</span></div>
+        <div class="flex justify-between py-1 border-b border-slate-100"><span class="text-slate-600">Medical Allowance</span><span id="slip-medical" class="font-mono font-bold">₹1,000.00</span></div>
+        <!-- EPF Deduction directly under Medical Allowance -->
+        <div class="flex justify-between py-1"><span class="text-slate-600">Employee Provident Fund (EPF 12%)</span><span id="slip-epf" class="font-mono font-bold text-rose-600">-₹5,760.00</span></div>
       </div>
     </div>
 
@@ -3571,10 +3547,10 @@
     <div class="p-5 rounded-2xl bg-[#14213D] text-white flex flex-col sm:flex-row items-center justify-between gap-4">
       <div>
         <div class="text-[11px] font-bold tracking-widest uppercase text-[#FCA311]">NET TAKE-HOME PAYABLE</div>
-        <div id="slip-words" class="text-xs text-slate-300 italic mt-0.5">Amount in words: Rupees One Lakh Fifty-Five Thousand Six Hundred Only</div>
+        <div id="slip-words" class="text-xs text-slate-300 italic mt-0.5">Amount in words: Rupees Sixty-Six Thousand Seven Hundred Forty Only</div>
       </div>
       <div id="slip-net" class="text-3xl font-black text-[#FCA311] font-mono">
-        ₹1,55,600.00
+        ₹66,740.00
       </div>
     </div>
 
@@ -3737,14 +3713,9 @@
         conveyance: '₹1,000.00',
         medical: '₹1,000.00',
         gross: '₹72,500.00',
-        epf: '₹5,760.00',
-        pt: '₹200.00',
-        tds: '₹2,015.00',
-        welfare: '₹0.00',
-        advances: '₹0.00',
-        deductions: '₹7,975.00',
-        words: 'Rupees Sixty-Four Thousand Five Hundred Twenty-Five Only',
-        net: '₹64,525.00'
+        epf: '-₹5,760.00',
+        words: 'Rupees Sixty-Six Thousand Seven Hundred Forty Only',
+        net: '₹66,740.00'
       },
       'piyush': {
         name: 'Piyush Barua',
@@ -3761,14 +3732,9 @@
         conveyance: '₹1,500.00',
         medical: '₹1,500.00',
         gross: '₹58,700.00',
-        epf: '₹4,560.00',
-        pt: '₹200.00',
-        tds: '₹1,690.00',
-        welfare: '₹0.00',
-        advances: '₹0.00',
-        deductions: '₹6,450.00',
-        words: 'Rupees Fifty-Two Thousand Two Hundred Fifty Only',
-        net: '₹52,250.00'
+        epf: '-₹4,560.00',
+        words: 'Rupees Fifty-Four Thousand One Hundred Forty Only',
+        net: '₹54,140.00'
       }
     };
 
@@ -3786,18 +3752,9 @@
       $('#slip-days').text(data.days);
 
       $('#slip-basic').text(data.basic);
-      $('#slip-hra').text(data.hra);
-      $('#slip-bonus').text(data.bonus);
-      $('#slip-conveyance').text(data.conveyance);
       $('#slip-medical').text(data.medical);
-      $('#slip-gross').text(data.gross);
-
       $('#slip-epf').text(data.epf);
-      $('#slip-pt').text(data.pt);
-      $('#slip-tds').text(data.tds);
-      $('#slip-welfare').text(data.welfare);
-      $('#slip-advances').text(data.advances);
-      $('#slip-deductions').text(data.deductions);
+      $('#slip-gross').text(data.gross);
 
       $('#slip-words').text('Amount in words: ' + data.words);
       $('#slip-net').text(data.net);
@@ -4228,7 +4185,7 @@
   <!-- Authentication Controller -->
   <script src="../auth.js?v=20261126_01"></script>
   <!-- Main JavaScript Logic -->
-  <script src="../main.js?v=20261126_08"></script>
+  <script src="../main.js?v=20261127_11"></script>
 </body>
 
 </html>
