@@ -9551,6 +9551,407 @@ $(document).ready(function () {
     initHash = 'billing';
   }
   // Immediately render sidebar badges on startup
+  // =========================================================================
+  // APPEARANCE & THEME CUSTOMIZATION CONTROLLER (Sidebar & Card Border)
+  // =========================================================================
+  const FIXED_THEME_COLORS = ['#0284C7', '#FFFFFF', '#130481', '#494D5F', '#FCA311'];
+  const DEFAULT_THEME = {
+    sidebarBg: '#494D5F',
+    cardBorder: '#FCA311'
+  };
+
+  function getSavedTheme() {
+    try {
+      const raw = localStorage.getItem('aurelia_theme_settings');
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        const sb = (parsed.sidebarBg || '').toUpperCase();
+        const cb = (parsed.cardBorder || '').toUpperCase();
+        return {
+          sidebarBg: FIXED_THEME_COLORS.includes(sb) ? sb : DEFAULT_THEME.sidebarBg,
+          cardBorder: FIXED_THEME_COLORS.includes(cb) ? cb : DEFAULT_THEME.cardBorder
+        };
+      }
+    } catch (e) {
+      console.error('Error loading theme preferences:', e);
+    }
+    return { ...DEFAULT_THEME };
+  }
+
+  function saveTheme(theme) {
+    try {
+      localStorage.setItem('aurelia_theme_settings', JSON.stringify(theme));
+    } catch (e) {
+      console.error('Error saving theme preferences:', e);
+    }
+  }
+
+  function isColorLight(color) {
+    try {
+      let r = 0, g = 0, b = 0;
+      if (!color) return false;
+      if (color.startsWith('#')) {
+        let hex = color.replace('#', '');
+        if (hex.length === 3) hex = hex.split('').map(c => c + c).join('');
+        r = parseInt(hex.substring(0, 2), 16);
+        g = parseInt(hex.substring(2, 4), 16);
+        b = parseInt(hex.substring(4, 6), 16);
+      } else if (color.startsWith('rgb')) {
+        const match = color.match(/\d+/g);
+        if (match && match.length >= 3) {
+          r = parseInt(match[0]);
+          g = parseInt(match[1]);
+          b = parseInt(match[2]);
+        }
+      }
+      const luma = 0.2126 * r + 0.7152 * g + 0.0722 * b;
+      return luma > 165;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  function applyThemeColors(sidebarBg, cardBorder) {
+    const root = document.documentElement;
+    const isDefaultBorder = !cardBorder || cardBorder.includes('rgba');
+    const rimBgValue = isDefaultBorder
+      ? 'linear-gradient(135deg, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0.5) 30%, rgba(255, 255, 255, 0.1) 65%, rgba(255, 255, 255, 0.75) 100%)'
+      : cardBorder;
+
+    // Match primary button color (e.g. "Click here to see ->", "+ New Bill", "Save") to Card Border Color
+    const btnBg = isDefaultBorder ? '#FCA311' : cardBorder;
+    const btnIsLight = isColorLight(btnBg);
+    const btnText = btnIsLight ? '#000000' : '#FFFFFF';
+    const btnBorder = btnIsLight ? 'rgba(0, 0, 0, 0.15)' : 'rgba(255, 255, 255, 0.25)';
+
+    if (sidebarBg) {
+      root.style.setProperty('--aurelia-sidebar-bg', sidebarBg);
+    }
+    if (cardBorder) {
+      root.style.setProperty('--aurelia-card-border', cardBorder);
+      root.style.setProperty('--aurelia-card-border-hover', cardBorder);
+      root.style.setProperty('--aurelia-card-rim-bg', rimBgValue);
+      root.style.setProperty('--aurelia-btn-primary-bg', btnBg);
+      root.style.setProperty('--aurelia-btn-primary-text', btnText);
+    }
+
+    // Dynamic style tag override to guarantee instant application across all elements
+    let dynamicStyle = document.getElementById('aurelia-dynamic-theme-override');
+    if (!dynamicStyle) {
+      dynamicStyle = document.createElement('style');
+      dynamicStyle.id = 'aurelia-dynamic-theme-override';
+      document.head.appendChild(dynamicStyle);
+    }
+
+    dynamicStyle.textContent = `
+      :root {
+        --aurelia-sidebar-bg: ${sidebarBg} !important;
+        --aurelia-card-border: ${cardBorder} !important;
+        --aurelia-card-border-hover: ${cardBorder} !important;
+        --aurelia-card-rim-bg: ${rimBgValue} !important;
+        --aurelia-btn-primary-bg: ${btnBg} !important;
+        --aurelia-btn-primary-text: ${btnText} !important;
+      }
+      #app-sidebar,
+      #mobile-user-menu-drawer,
+      #mobile-drawer,
+      .mobile-sidebar-drawer,
+      #app-mobile-header,
+      #btn-sidebar-collapse,
+      #app-sidebar.is-collapsed #btn-sidebar-collapse {
+        background: ${sidebarBg} !important;
+        background-color: ${sidebarBg} !important;
+      }
+      #btn-sidebar-collapse,
+      #btn-sidebar-collapse svg,
+      #app-sidebar.is-collapsed #btn-sidebar-collapse,
+      #app-sidebar.is-collapsed #btn-sidebar-collapse svg {
+        color: ${isColorLight(sidebarBg) ? '#000000' : '#FFFFFF'} !important;
+        stroke: ${isColorLight(sidebarBg) ? '#000000' : '#FFFFFF'} !important;
+      }
+      #btn-sidebar-collapse:hover svg,
+      #btn-sidebar-collapse:hover svg path,
+      #app-sidebar.is-collapsed #btn-sidebar-collapse:hover svg,
+      #app-sidebar.is-collapsed #btn-sidebar-collapse:hover svg path {
+        color: ${isColorLight(sidebarBg) ? '#000000' : '#FFFFFF'} !important;
+        stroke: ${isColorLight(sidebarBg) ? '#000000' : '#FFFFFF'} !important;
+      }
+      #btn-sidebar-collapse:hover,
+      #app-sidebar.is-collapsed #btn-sidebar-collapse:hover {
+        filter: brightness(1.15);
+      }
+      ${isDefaultBorder ? `
+      .Aurelia-card,
+      .aurelia-card,
+      .finset-card,
+      .spatial-card,
+      #section-dashboard .Aurelia-card,
+      #main-app-content .Aurelia-card,
+      .glass-money-flow {
+        border: 0.1px solid rgba(255, 255, 255, 0.82) !important;
+        outline: 0px !important;
+        outline-width: 0px !important;
+      }
+      .Aurelia-card::before,
+      .aurelia-card::before,
+      .finset-card::before,
+      .spatial-card::before,
+      #section-dashboard .Aurelia-card::before,
+      #main-app-content .Aurelia-card::before,
+      .glass-money-flow::before {
+        background: ${rimBgValue} !important;
+      }
+      ` : `
+      .Aurelia-card,
+      .aurelia-card,
+      .finset-card,
+      .spatial-card,
+      #section-dashboard .Aurelia-card,
+      #main-app-content .Aurelia-card,
+      .glass-money-flow {
+        border: 0.1px solid ${cardBorder} !important;
+        border-color: ${cardBorder} !important;
+        outline: 0px !important;
+        outline-width: 0px !important;
+        outline-color: transparent !important;
+      }
+      .Aurelia-card:hover,
+      .aurelia-card:hover,
+      .finset-card:hover,
+      .spatial-card:hover,
+      #section-dashboard .Aurelia-card:hover,
+      #main-app-content .Aurelia-card:hover,
+      .glass-money-flow:hover {
+        border: 0.1px solid ${cardBorder} !important;
+        border-color: ${cardBorder} !important;
+        outline: 0px !important;
+        outline-width: 0px !important;
+        outline-color: transparent !important;
+      }
+      .Aurelia-card::before,
+      .aurelia-card::before,
+      .finset-card::before,
+      .spatial-card::before,
+      #section-dashboard .Aurelia-card::before,
+      #main-app-content .Aurelia-card::before,
+      .glass-money-flow::before {
+        display: none !important;
+        content: none !important;
+      }
+      `}
+      .btn-Aurelia-primary,
+      .btn-aurelia-primary,
+      .btn-finset-primary,
+      .btn-view-order-items,
+      .btn-order-to-bill,
+      .quick-nav-bill,
+      #btn-theme-save,
+      #btn-save-profile,
+      #btn-confirm-reset-action,
+      button.btn-finset-primary,
+      button.btn-Aurelia-primary {
+        background: ${btnBg} !important;
+        background-color: ${btnBg} !important;
+        color: ${btnText} !important;
+        border-color: ${btnBorder} !important;
+        box-shadow: none !important;
+      }
+      .btn-Aurelia-primary *,
+      .btn-aurelia-primary *,
+      .btn-finset-primary *,
+      .btn-view-order-items *,
+      .btn-order-to-bill *,
+      .quick-nav-bill * {
+        color: ${btnText} !important;
+      }
+      .btn-Aurelia-primary:hover,
+      .btn-aurelia-primary:hover,
+      .btn-finset-primary:hover,
+      .btn-view-order-items:hover,
+      .btn-order-to-bill:hover,
+      .quick-nav-bill:hover,
+      #btn-theme-save:hover {
+        filter: brightness(0.92) !important;
+        color: ${btnText} !important;
+        box-shadow: none !important;
+      }
+      .btn-Aurelia-primary:active,
+      .btn-aurelia-primary:active,
+      .btn-finset-primary:active {
+        box-shadow: none !important;
+      }
+    `;
+
+    // Apply inline style directly to ensure no specificity clashes
+    const $sidebarTargets = $('#app-sidebar, #mobile-user-menu-drawer, #mobile-drawer, #app-mobile-header, #btn-sidebar-collapse');
+    $sidebarTargets.each(function () {
+      this.style.setProperty('background', sidebarBg, 'important');
+      this.style.setProperty('background-color', sidebarBg, 'important');
+    });
+
+    const isSbLightMode = isColorLight(sidebarBg);
+    const arrowCol = isSbLightMode ? '#000000' : '#FFFFFF';
+    $('#btn-sidebar-collapse').css('color', arrowCol);
+    $('#btn-sidebar-collapse svg, #btn-sidebar-collapse svg path, #btn-sidebar-collapse path').css({
+      'color': arrowCol,
+      'stroke': arrowCol
+    }).attr('stroke', arrowCol);
+
+    if (isColorLight(sidebarBg)) {
+      $('#app-sidebar, #mobile-user-menu-drawer').addClass('sidebar-light-mode');
+    } else {
+      $('#app-sidebar, #mobile-user-menu-drawer').removeClass('sidebar-light-mode');
+    }
+
+    $('.Aurelia-card, .aurelia-card, .finset-card, .spatial-card, #section-dashboard .Aurelia-card, #main-app-content .Aurelia-card, .glass-money-flow').each(function () {
+      this.style.setProperty('border-color', cardBorder, 'important');
+      this.style.setProperty('border-width', '0.1px', 'important');
+    });
+
+    $('.btn-Aurelia-primary, .btn-aurelia-primary, .btn-finset-primary, .btn-view-order-items, .btn-order-to-bill, .quick-nav-bill, #btn-theme-save').each(function () {
+      this.style.setProperty('background', btnBg, 'important');
+      this.style.setProperty('background-color', btnBg, 'important');
+      this.style.setProperty('color', btnText, 'important');
+      this.style.setProperty('box-shadow', 'none', 'important');
+    });
+
+    if (typeof window.renderBrandLogo === 'function') {
+      window.renderBrandLogo(null, cardBorder);
+    }
+  }
+
+  function updateThemeUI(theme) {
+    const { sidebarBg, cardBorder } = theme;
+
+    // 1. Update Sidebar Theme UI
+    const normSidebar = (sidebarBg || DEFAULT_THEME.sidebarBg).toUpperCase();
+    $('#preview-sidebar-dot').css('background-color', normSidebar);
+    $('#preview-sidebar-hex').text(normSidebar);
+
+    // Update active swatch in sidebar tray
+    $('#tray-sidebar-colors .aurelia-theme-swatch').removeClass('active-swatch');
+    $('#tray-sidebar-colors .aurelia-theme-swatch').each(function () {
+      const c = ($(this).attr('data-color') || $(this).data('color') || '').toString().toUpperCase();
+      if (c === normSidebar) {
+        $(this).addClass('active-swatch');
+      }
+    });
+
+    // 2. Update Card Border Theme UI
+    const normCard = (cardBorder || DEFAULT_THEME.cardBorder).toUpperCase();
+    $('#preview-card-border-dot').css('background-color', normCard);
+    $('#preview-card-border-hex').text(normCard);
+
+    // Update active swatch in card border tray
+    $('#tray-card-border-colors .aurelia-theme-swatch').removeClass('active-swatch');
+    $('#tray-card-border-colors .aurelia-theme-swatch').each(function () {
+      const c = ($(this).attr('data-color') || $(this).data('color') || '').toString().toUpperCase();
+      if (c === normCard) {
+        $(this).addClass('active-swatch');
+      }
+    });
+  }
+
+  function renderSettingsSection() {
+    const theme = getSavedTheme();
+    applyThemeColors(theme.sidebarBg, theme.cardBorder);
+    updateThemeUI(theme);
+  }
+
+  function updateSaveButtonState(isSaved) {
+    const $btn = $('#btn-theme-save');
+    if (!$btn.length) return;
+    const $span = $btn.find('span');
+    if ($span.length) {
+      $span.text(isSaved ? 'Saved' : 'Save Changes');
+    } else {
+      $btn.text(isSaved ? 'Saved' : 'Save Changes');
+    }
+  }
+
+  function initThemeSettings() {
+    const currentTheme = getSavedTheme();
+    applyThemeColors(currentTheme.sidebarBg, currentTheme.cardBorder);
+    updateThemeUI(currentTheme);
+    updateSaveButtonState(false);
+
+    // Click on circular preset swatch (instant real-time live preview)
+    $(document).on('click', '.aurelia-theme-swatch', function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      const target = $(this).attr('data-target') || $(this).data('target');
+      const color = ($(this).attr('data-color') || $(this).data('color') || '').toString().toUpperCase();
+      if (!target || !color || !FIXED_THEME_COLORS.includes(color)) return;
+
+      const theme = getSavedTheme();
+      if (target === 'sidebar') {
+        theme.sidebarBg = color;
+      } else if (target === 'cardBorder') {
+        theme.cardBorder = color;
+      }
+
+      applyThemeColors(theme.sidebarBg, theme.cardBorder);
+      saveTheme(theme);
+      updateThemeUI(theme);
+      updateSaveButtonState(false);
+    });
+
+    // Save Changes Button (Confirmation feedback)
+    $(document).on('click', '#btn-theme-save', function (e) {
+      e.preventDefault();
+      const theme = getSavedTheme();
+      saveTheme(theme);
+      applyThemeColors(theme.sidebarBg, theme.cardBorder);
+      updateThemeUI(theme);
+      updateSaveButtonState(true);
+      if (window.AureliaNotifications) {
+        window.AureliaNotifications.push({
+          title: 'Appearance Settings Saved',
+          description: `Updated sidebar (${theme.sidebarBg}) and card border (${theme.cardBorder}) theme colors.`,
+          category: 'System',
+          module: 'Appearance & Theme',
+          recordId: 'THEME',
+          actionLabel: 'View Settings',
+          actionUrl: 'index.html#settings',
+          important: false,
+          dedupeKey: `theme-save-${theme.sidebarBg}-${theme.cardBorder}`
+        });
+      }
+      if (typeof showToast === 'function') {
+        showToast('Appearance & theme preferences saved successfully!', 'info');
+      }
+    });
+
+    // Reset to Default Button
+    $(document).on('click', '#btn-theme-reset', function (e) {
+      e.preventDefault();
+      const theme = { ...DEFAULT_THEME };
+      saveTheme(theme);
+      applyThemeColors(theme.sidebarBg, theme.cardBorder);
+      updateThemeUI(theme);
+      updateSaveButtonState(false);
+      if (typeof window.AureliaNotifications !== 'undefined') {
+        window.AureliaNotifications.push({
+          title: 'Theme Reset to Default',
+          description: 'Sidebar and accent colors restored to Aurelia baseline defaults.',
+          category: 'System',
+          module: 'Appearance Settings',
+          recordId: 'THEME-RESET',
+          actionLabel: 'View Dashboard',
+          actionUrl: 'index.html#dashboard',
+          important: false,
+          dedupeKey: 'theme-reset'
+        });
+      }
+      if (typeof showToast === 'function') {
+        showToast('Theme preferences reset to baseline defaults.', 'info');
+      }
+    });
+  }
+
+  // Initialize theme on ready
+  initThemeSettings();
+
   renderSidebarBadges();
 
   if (!window.Auth || window.Auth.isAuthenticated()) {
@@ -10063,406 +10464,7 @@ $(document).ready(function () {
     }
   })();
 
-  // =========================================================================
-  // APPEARANCE & THEME CUSTOMIZATION CONTROLLER (Sidebar & Card Border)
-  // =========================================================================
-  const FIXED_THEME_COLORS = ['#0284C7', '#FFFFFF', '#130481', '#494D5F', '#FCA311'];
-  const DEFAULT_THEME = {
-    sidebarBg: '#494D5F',
-    cardBorder: '#FCA311'
-  };
 
-  function getSavedTheme() {
-    try {
-      const raw = localStorage.getItem('aurelia_theme_settings');
-      if (raw) {
-        const parsed = JSON.parse(raw);
-        const sb = (parsed.sidebarBg || '').toUpperCase();
-        const cb = (parsed.cardBorder || '').toUpperCase();
-        return {
-          sidebarBg: FIXED_THEME_COLORS.includes(sb) ? sb : DEFAULT_THEME.sidebarBg,
-          cardBorder: FIXED_THEME_COLORS.includes(cb) ? cb : DEFAULT_THEME.cardBorder
-        };
-      }
-    } catch (e) {
-      console.error('Error loading theme preferences:', e);
-    }
-    return { ...DEFAULT_THEME };
-  }
-
-  function saveTheme(theme) {
-    try {
-      localStorage.setItem('aurelia_theme_settings', JSON.stringify(theme));
-    } catch (e) {
-      console.error('Error saving theme preferences:', e);
-    }
-  }
-
-  function isColorLight(color) {
-    try {
-      let r = 0, g = 0, b = 0;
-      if (!color) return false;
-      if (color.startsWith('#')) {
-        let hex = color.replace('#', '');
-        if (hex.length === 3) hex = hex.split('').map(c => c + c).join('');
-        r = parseInt(hex.substring(0, 2), 16);
-        g = parseInt(hex.substring(2, 4), 16);
-        b = parseInt(hex.substring(4, 6), 16);
-      } else if (color.startsWith('rgb')) {
-        const match = color.match(/\d+/g);
-        if (match && match.length >= 3) {
-          r = parseInt(match[0]);
-          g = parseInt(match[1]);
-          b = parseInt(match[2]);
-        }
-      }
-      const luma = 0.2126 * r + 0.7152 * g + 0.0722 * b;
-      return luma > 165;
-    } catch (e) {
-      return false;
-    }
-  }
-
-  function applyThemeColors(sidebarBg, cardBorder) {
-    const root = document.documentElement;
-    const isDefaultBorder = !cardBorder || cardBorder.includes('rgba');
-    const rimBgValue = isDefaultBorder
-      ? 'linear-gradient(135deg, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0.5) 30%, rgba(255, 255, 255, 0.1) 65%, rgba(255, 255, 255, 0.75) 100%)'
-      : cardBorder;
-
-    // Match primary button color (e.g. "Click here to see ->", "+ New Bill", "Save") to Card Border Color
-    const btnBg = isDefaultBorder ? '#FCA311' : cardBorder;
-    const btnIsLight = isColorLight(btnBg);
-    const btnText = btnIsLight ? '#000000' : '#FFFFFF';
-    const btnBorder = btnIsLight ? 'rgba(0, 0, 0, 0.15)' : 'rgba(255, 255, 255, 0.25)';
-
-    if (sidebarBg) {
-      root.style.setProperty('--aurelia-sidebar-bg', sidebarBg);
-    }
-    if (cardBorder) {
-      root.style.setProperty('--aurelia-card-border', cardBorder);
-      root.style.setProperty('--aurelia-card-border-hover', cardBorder);
-      root.style.setProperty('--aurelia-card-rim-bg', rimBgValue);
-      root.style.setProperty('--aurelia-btn-primary-bg', btnBg);
-      root.style.setProperty('--aurelia-btn-primary-text', btnText);
-    }
-
-    // Dynamic style tag override to guarantee instant application across all elements
-    let dynamicStyle = document.getElementById('aurelia-dynamic-theme-override');
-    if (!dynamicStyle) {
-      dynamicStyle = document.createElement('style');
-      dynamicStyle.id = 'aurelia-dynamic-theme-override';
-      document.head.appendChild(dynamicStyle);
-    }
-
-    dynamicStyle.textContent = `
-      :root {
-        --aurelia-sidebar-bg: ${sidebarBg} !important;
-        --aurelia-card-border: ${cardBorder} !important;
-        --aurelia-card-border-hover: ${cardBorder} !important;
-        --aurelia-card-rim-bg: ${rimBgValue} !important;
-        --aurelia-btn-primary-bg: ${btnBg} !important;
-        --aurelia-btn-primary-text: ${btnText} !important;
-      }
-      #app-sidebar,
-      #mobile-user-menu-drawer,
-      #mobile-drawer,
-      .mobile-sidebar-drawer,
-      #app-mobile-header,
-      #btn-sidebar-collapse,
-      #app-sidebar.is-collapsed #btn-sidebar-collapse {
-        background: ${sidebarBg} !important;
-        background-color: ${sidebarBg} !important;
-      }
-      #btn-sidebar-collapse,
-      #btn-sidebar-collapse svg,
-      #app-sidebar.is-collapsed #btn-sidebar-collapse,
-      #app-sidebar.is-collapsed #btn-sidebar-collapse svg {
-        color: ${isColorLight(sidebarBg) ? '#000000' : '#FFFFFF'} !important;
-        stroke: ${isColorLight(sidebarBg) ? '#000000' : '#FFFFFF'} !important;
-      }
-      #btn-sidebar-collapse:hover svg,
-      #btn-sidebar-collapse:hover svg path,
-      #app-sidebar.is-collapsed #btn-sidebar-collapse:hover svg,
-      #app-sidebar.is-collapsed #btn-sidebar-collapse:hover svg path {
-        color: ${isColorLight(sidebarBg) ? '#000000' : '#FFFFFF'} !important;
-        stroke: ${isColorLight(sidebarBg) ? '#000000' : '#FFFFFF'} !important;
-      }
-      #btn-sidebar-collapse:hover,
-      #app-sidebar.is-collapsed #btn-sidebar-collapse:hover {
-        filter: brightness(1.15);
-      }
-      ${isDefaultBorder ? `
-      .Aurelia-card,
-      .aurelia-card,
-      .finset-card,
-      .spatial-card,
-      #section-dashboard .Aurelia-card,
-      #main-app-content .Aurelia-card,
-      .glass-money-flow {
-        border: 0.1px solid rgba(255, 255, 255, 0.82) !important;
-        outline: 0px !important;
-        outline-width: 0px !important;
-      }
-      .Aurelia-card::before,
-      .aurelia-card::before,
-      .finset-card::before,
-      .spatial-card::before,
-      #section-dashboard .Aurelia-card::before,
-      #main-app-content .Aurelia-card::before,
-      .glass-money-flow::before {
-        background: ${rimBgValue} !important;
-      }
-      ` : `
-      .Aurelia-card,
-      .aurelia-card,
-      .finset-card,
-      .spatial-card,
-      #section-dashboard .Aurelia-card,
-      #main-app-content .Aurelia-card,
-      .glass-money-flow {
-        border: 0.1px solid ${cardBorder} !important;
-        border-color: ${cardBorder} !important;
-        outline: 0px !important;
-        outline-width: 0px !important;
-        outline-color: transparent !important;
-      }
-      .Aurelia-card:hover,
-      .aurelia-card:hover,
-      .finset-card:hover,
-      .spatial-card:hover,
-      #section-dashboard .Aurelia-card:hover,
-      #main-app-content .Aurelia-card:hover,
-      .glass-money-flow:hover {
-        border: 0.1px solid ${cardBorder} !important;
-        border-color: ${cardBorder} !important;
-        outline: 0px !important;
-        outline-width: 0px !important;
-        outline-color: transparent !important;
-      }
-      .Aurelia-card::before,
-      .aurelia-card::before,
-      .finset-card::before,
-      .spatial-card::before,
-      #section-dashboard .Aurelia-card::before,
-      #main-app-content .Aurelia-card::before,
-      .glass-money-flow::before {
-        display: none !important;
-        content: none !important;
-      }
-      `}
-      .btn-Aurelia-primary,
-      .btn-aurelia-primary,
-      .btn-finset-primary,
-      .btn-view-order-items,
-      .btn-order-to-bill,
-      .quick-nav-bill,
-      #btn-theme-save,
-      #btn-save-profile,
-      #btn-confirm-reset-action,
-      button.btn-finset-primary,
-      button.btn-Aurelia-primary {
-        background: ${btnBg} !important;
-        background-color: ${btnBg} !important;
-        color: ${btnText} !important;
-        border-color: ${btnBorder} !important;
-        box-shadow: none !important;
-      }
-      .btn-Aurelia-primary *,
-      .btn-aurelia-primary *,
-      .btn-finset-primary *,
-      .btn-view-order-items *,
-      .btn-order-to-bill *,
-      .quick-nav-bill * {
-        color: ${btnText} !important;
-      }
-      .btn-Aurelia-primary:hover,
-      .btn-aurelia-primary:hover,
-      .btn-finset-primary:hover,
-      .btn-view-order-items:hover,
-      .btn-order-to-bill:hover,
-      .quick-nav-bill:hover,
-      #btn-theme-save:hover {
-        filter: brightness(0.92) !important;
-        color: ${btnText} !important;
-        box-shadow: none !important;
-      }
-      .btn-Aurelia-primary:active,
-      .btn-aurelia-primary:active,
-      .btn-finset-primary:active {
-        box-shadow: none !important;
-      }
-    `;
-
-    // Apply inline style directly to ensure no specificity clashes
-    const $sidebarTargets = $('#app-sidebar, #mobile-user-menu-drawer, #mobile-drawer, #app-mobile-header, #btn-sidebar-collapse');
-    $sidebarTargets.each(function () {
-      this.style.setProperty('background', sidebarBg, 'important');
-      this.style.setProperty('background-color', sidebarBg, 'important');
-    });
-
-    const isSbLightMode = isColorLight(sidebarBg);
-    const arrowCol = isSbLightMode ? '#000000' : '#FFFFFF';
-    $('#btn-sidebar-collapse').css('color', arrowCol);
-    $('#btn-sidebar-collapse svg, #btn-sidebar-collapse svg path, #btn-sidebar-collapse path').css({
-      'color': arrowCol,
-      'stroke': arrowCol
-    }).attr('stroke', arrowCol);
-
-    if (isColorLight(sidebarBg)) {
-      $('#app-sidebar, #mobile-user-menu-drawer').addClass('sidebar-light-mode');
-    } else {
-      $('#app-sidebar, #mobile-user-menu-drawer').removeClass('sidebar-light-mode');
-    }
-
-    $('.Aurelia-card, .aurelia-card, .finset-card, .spatial-card, #section-dashboard .Aurelia-card, #main-app-content .Aurelia-card, .glass-money-flow').each(function () {
-      this.style.setProperty('border-color', cardBorder, 'important');
-      this.style.setProperty('border-width', '0.1px', 'important');
-    });
-
-    $('.btn-Aurelia-primary, .btn-aurelia-primary, .btn-finset-primary, .btn-view-order-items, .btn-order-to-bill, .quick-nav-bill, #btn-theme-save').each(function () {
-      this.style.setProperty('background', btnBg, 'important');
-      this.style.setProperty('background-color', btnBg, 'important');
-      this.style.setProperty('color', btnText, 'important');
-      this.style.setProperty('box-shadow', 'none', 'important');
-    });
-
-    if (typeof window.renderBrandLogo === 'function') {
-      window.renderBrandLogo(null, cardBorder);
-    }
-  }
-
-  function updateThemeUI(theme) {
-    const { sidebarBg, cardBorder } = theme;
-
-    // 1. Update Sidebar Theme UI
-    const normSidebar = (sidebarBg || DEFAULT_THEME.sidebarBg).toUpperCase();
-    $('#preview-sidebar-dot').css('background-color', normSidebar);
-    $('#preview-sidebar-hex').text(normSidebar);
-
-    // Update active swatch in sidebar tray
-    $('#tray-sidebar-colors .aurelia-theme-swatch').removeClass('active-swatch');
-    $('#tray-sidebar-colors .aurelia-theme-swatch').each(function () {
-      const c = ($(this).attr('data-color') || $(this).data('color') || '').toString().toUpperCase();
-      if (c === normSidebar) {
-        $(this).addClass('active-swatch');
-      }
-    });
-
-    // 2. Update Card Border Theme UI
-    const normCard = (cardBorder || DEFAULT_THEME.cardBorder).toUpperCase();
-    $('#preview-card-border-dot').css('background-color', normCard);
-    $('#preview-card-border-hex').text(normCard);
-
-    // Update active swatch in card border tray
-    $('#tray-card-border-colors .aurelia-theme-swatch').removeClass('active-swatch');
-    $('#tray-card-border-colors .aurelia-theme-swatch').each(function () {
-      const c = ($(this).attr('data-color') || $(this).data('color') || '').toString().toUpperCase();
-      if (c === normCard) {
-        $(this).addClass('active-swatch');
-      }
-    });
-  }
-
-  function renderSettingsSection() {
-    const theme = getSavedTheme();
-    applyThemeColors(theme.sidebarBg, theme.cardBorder);
-    updateThemeUI(theme);
-  }
-
-  function updateSaveButtonState(isSaved) {
-    const $btn = $('#btn-theme-save');
-    if (!$btn.length) return;
-    const $span = $btn.find('span');
-    if ($span.length) {
-      $span.text(isSaved ? 'Saved' : 'Save Changes');
-    } else {
-      $btn.text(isSaved ? 'Saved' : 'Save Changes');
-    }
-  }
-
-  function initThemeSettings() {
-    const currentTheme = getSavedTheme();
-    applyThemeColors(currentTheme.sidebarBg, currentTheme.cardBorder);
-    updateThemeUI(currentTheme);
-    updateSaveButtonState(false);
-
-    // Click on circular preset swatch (instant real-time live preview)
-    $(document).on('click', '.aurelia-theme-swatch', function (e) {
-      e.preventDefault();
-      e.stopPropagation();
-      const target = $(this).attr('data-target') || $(this).data('target');
-      const color = ($(this).attr('data-color') || $(this).data('color') || '').toString().toUpperCase();
-      if (!target || !color || !FIXED_THEME_COLORS.includes(color)) return;
-
-      const theme = getSavedTheme();
-      if (target === 'sidebar') {
-        theme.sidebarBg = color;
-      } else if (target === 'cardBorder') {
-        theme.cardBorder = color;
-      }
-
-      applyThemeColors(theme.sidebarBg, theme.cardBorder);
-      saveTheme(theme);
-      updateThemeUI(theme);
-      updateSaveButtonState(false);
-    });
-
-    // Save Changes Button (Confirmation feedback)
-    $(document).on('click', '#btn-theme-save', function (e) {
-      e.preventDefault();
-      const theme = getSavedTheme();
-      saveTheme(theme);
-      applyThemeColors(theme.sidebarBg, theme.cardBorder);
-      updateThemeUI(theme);
-      updateSaveButtonState(true);
-      if (window.AureliaNotifications) {
-        window.AureliaNotifications.push({
-          title: 'Appearance Settings Saved',
-          description: `Updated sidebar (${theme.sidebarBg}) and card border (${theme.cardBorder}) theme colors.`,
-          category: 'System',
-          module: 'Appearance & Theme',
-          recordId: 'THEME',
-          actionLabel: 'View Settings',
-          actionUrl: 'index.html#settings',
-          important: false,
-          dedupeKey: `theme-save-${theme.sidebarBg}-${theme.cardBorder}`
-        });
-      }
-      if (typeof showToast === 'function') {
-        showToast('Appearance & theme preferences saved successfully!', 'info');
-      }
-    });
-
-    // Reset to Default Button
-    $(document).on('click', '#btn-theme-reset', function (e) {
-      e.preventDefault();
-      const theme = { ...DEFAULT_THEME };
-      saveTheme(theme);
-      applyThemeColors(theme.sidebarBg, theme.cardBorder);
-      updateThemeUI(theme);
-      updateSaveButtonState(false);
-      if (typeof window.AureliaNotifications !== 'undefined') {
-        window.AureliaNotifications.push({
-          title: 'Theme Reset to Default',
-          description: 'Sidebar and accent colors restored to Aurelia baseline defaults.',
-          category: 'System',
-          module: 'Appearance Settings',
-          recordId: 'THEME-RESET',
-          actionLabel: 'View Dashboard',
-          actionUrl: 'index.html#dashboard',
-          important: false,
-          dedupeKey: 'theme-reset'
-        });
-      }
-      if (typeof showToast === 'function') {
-        showToast('Theme preferences reset to baseline defaults.', 'info');
-      }
-    });
-  }
-
-  // Initialize theme on ready
-  initThemeSettings();
 
 });
 
