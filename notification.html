@@ -3983,71 +3983,73 @@
         </div>
 
         <!-- Filters, Categories & Search Controls -->
-        <div class="Aurelia-card p-4 sm:p-5 space-y-4">
-          <div class="flex flex-col xl:flex-row xl:items-center justify-between gap-3">
-            <!-- Category Pills -->
-            <div class="flex flex-wrap items-center gap-2">
-              <button type="button" data-category="All"
-                class="notif-cat-btn inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-[#14213D] text-white shadow-xs transition-all cursor-pointer">
-                <span>All</span>
-                <span class="notif-cat-count px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-white/20">0</span>
-              </button>
-              <button type="button" data-category="Orders"
-                class="notif-cat-btn inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-white/70 text-slate-600 dark:bg-slate-800/70 dark:text-slate-300 border border-slate-200/70 dark:border-slate-700 transition-all cursor-pointer">
-                <span>Orders</span>
-                <span class="notif-cat-count px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-slate-200/70 dark:bg-slate-700">0</span>
-              </button>
-              <button type="button" data-category="Leave Requests"
-                class="notif-cat-btn inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-white/70 text-slate-600 dark:bg-slate-800/70 dark:text-slate-300 border border-slate-200/70 dark:border-slate-700 transition-all cursor-pointer">
-                <span>Leave Requests</span>
-                <span class="notif-cat-count px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-slate-200/70 dark:bg-slate-700">0</span>
-              </button>
-              <button type="button" data-category="Billing &amp; Payments"
-                class="notif-cat-btn inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-white/70 text-slate-600 dark:bg-slate-800/70 dark:text-slate-300 border border-slate-200/70 dark:border-slate-700 transition-all cursor-pointer">
-                <span>Billing &amp; Payments</span>
-                <span class="notif-cat-count px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-slate-200/70 dark:bg-slate-700">0</span>
-              </button>
-              <button type="button" data-category="Customers"
-                class="notif-cat-btn inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-white/70 text-slate-600 dark:bg-slate-800/70 dark:text-slate-300 border border-slate-200/70 dark:border-slate-700 transition-all cursor-pointer">
-                <span>Customers</span>
-                <span class="notif-cat-count px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-slate-200/70 dark:bg-slate-700">0</span>
-              </button>
-              <button type="button" data-category="Menu"
-                class="notif-cat-btn inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-white/70 text-slate-600 dark:bg-slate-800/70 dark:text-slate-300 border border-slate-200/70 dark:border-slate-700 transition-all cursor-pointer">
-                <span>Menu</span>
-                <span class="notif-cat-count px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-slate-200/70 dark:bg-slate-700">0</span>
-              </button>
-              <button type="button" data-category="System"
-                class="notif-cat-btn inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-white/70 text-slate-600 dark:bg-slate-800/70 dark:text-slate-300 border border-slate-200/70 dark:border-slate-700 transition-all cursor-pointer">
-                <span>System</span>
-                <span class="notif-cat-count px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-slate-200/70 dark:bg-slate-700">0</span>
-              </button>
-            </div>
+        <div class="Aurelia-card p-4 sm:p-5 space-y-3.5">
+          <!-- Row 1: Category Pills -->
+          <div class="flex flex-wrap items-center gap-2">
+            <button type="button" data-category="All"
+              class="notif-cat-btn whitespace-nowrap inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-[#14213D] text-white shadow-xs transition-all cursor-pointer">
+              <span>All</span>
+              <span class="notif-cat-count px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-white/20">0</span>
+            </button>
+            <button type="button" data-category="Orders"
+              class="notif-cat-btn whitespace-nowrap inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-white/70 text-slate-600 dark:bg-slate-800/70 dark:text-slate-300 border border-slate-200/70 dark:border-slate-700 transition-all cursor-pointer">
+              <span>Orders</span>
+              <span class="notif-cat-count px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-slate-200/70 dark:bg-slate-700">0</span>
+            </button>
+            <button type="button" data-category="Leave Requests"
+              class="notif-cat-btn whitespace-nowrap inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-white/70 text-slate-600 dark:bg-slate-800/70 dark:text-slate-300 border border-slate-200/70 dark:border-slate-700 transition-all cursor-pointer">
+              <span>Leave Requests</span>
+              <span class="notif-cat-count px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-slate-200/70 dark:bg-slate-700">0</span>
+            </button>
+            <button type="button" data-category="Billing &amp; Payments"
+              class="notif-cat-btn whitespace-nowrap inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-white/70 text-slate-600 dark:bg-slate-800/70 dark:text-slate-300 border border-slate-200/70 dark:border-slate-700 transition-all cursor-pointer">
+              <span>Billing &amp; Payments</span>
+              <span class="notif-cat-count px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-slate-200/70 dark:bg-slate-700">0</span>
+            </button>
+            <button type="button" data-category="Customers"
+              class="notif-cat-btn whitespace-nowrap inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-white/70 text-slate-600 dark:bg-slate-800/70 dark:text-slate-300 border border-slate-200/70 dark:border-slate-700 transition-all cursor-pointer">
+              <span>Customers</span>
+              <span class="notif-cat-count px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-slate-200/70 dark:bg-slate-700">0</span>
+            </button>
+            <button type="button" data-category="Menu"
+              class="notif-cat-btn whitespace-nowrap inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-white/70 text-slate-600 dark:bg-slate-800/70 dark:text-slate-300 border border-slate-200/70 dark:border-slate-700 transition-all cursor-pointer">
+              <span>Menu</span>
+              <span class="notif-cat-count px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-slate-200/70 dark:bg-slate-700">0</span>
+            </button>
+            <button type="button" data-category="System"
+              class="notif-cat-btn whitespace-nowrap inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-white/70 text-slate-600 dark:bg-slate-800/70 dark:text-slate-300 border border-slate-200/70 dark:border-slate-700 transition-all cursor-pointer">
+              <span>System</span>
+              <span class="notif-cat-count px-1.5 py-0.5 rounded-full text-[10px] font-bold bg-slate-200/70 dark:bg-slate-700">0</span>
+            </button>
+          </div>
 
-            <!-- Read/Important/Date/Sort Controls -->
+          <!-- Row 2: Read / Priority / Date / Sort Controls -->
+          <div class="flex flex-wrap items-center justify-between gap-2.5 pt-2.5 border-t border-slate-200/50 dark:border-slate-700/50">
             <div class="flex flex-wrap items-center gap-2">
               <div class="inline-flex rounded-full p-0.5 bg-slate-100/80 dark:bg-slate-800 border border-slate-200/70 dark:border-slate-700">
                 <button type="button" data-mode="all"
-                  class="notif-read-toggle px-3 py-1 rounded-full text-xs font-semibold bg-[#14213D] text-white transition-all cursor-pointer">All</button>
+                  class="notif-read-toggle whitespace-nowrap px-3.5 py-1 rounded-full text-xs font-semibold bg-[#14213D] text-white transition-all cursor-pointer">All</button>
                 <button type="button" data-mode="unread"
-                  class="notif-read-toggle px-3 py-1 rounded-full text-xs font-semibold text-slate-600 dark:text-slate-300 transition-all cursor-pointer">Unread</button>
+                  class="notif-read-toggle whitespace-nowrap px-3.5 py-1 rounded-full text-xs font-semibold text-slate-600 dark:text-slate-300 transition-all cursor-pointer">Unread</button>
               </div>
 
               <button type="button" id="notif-toggle-important"
-                class="px-3 py-1.5 rounded-full text-xs font-semibold bg-white/70 dark:bg-slate-800 border border-slate-200/70 dark:border-slate-700 text-slate-700 dark:text-slate-200 transition-all cursor-pointer flex items-center gap-1">
+                class="whitespace-nowrap px-3.5 py-1.5 rounded-full text-xs font-semibold bg-white/70 dark:bg-slate-800 border border-slate-200/70 dark:border-slate-700 text-slate-700 dark:text-slate-200 transition-all cursor-pointer inline-flex items-center gap-1">
                 <span>&#9733;</span>
                 <span>Important Only</span>
               </button>
+            </div>
 
+            <div class="flex flex-wrap items-center gap-2">
               <div class="flex items-center gap-1">
                 <input type="date" id="notif-filter-date" aria-label="Filter by date"
-                  class="Aurelia-input text-xs py-1.5 px-2.5">
+                  class="Aurelia-input text-xs py-1.5 px-3">
                 <button type="button" id="btn-notif-clear-date"
-                  class="hidden text-[11px] font-semibold px-2 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-600 cursor-pointer">Clear</button>
+                  class="hidden text-[11px] font-semibold px-2.5 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-600 cursor-pointer">Clear</button>
               </div>
 
               <select id="notif-sort-order" aria-label="Sort notifications"
-                class="Aurelia-input text-xs py-1.5 px-3 font-semibold">
+                class="Aurelia-input text-xs py-1.5 px-3 font-semibold min-w-[130px]">
                 <option value="newest">Newest First</option>
                 <option value="oldest">Oldest First</option>
               </select>
