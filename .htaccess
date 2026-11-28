@@ -1,0 +1,20 @@
+# Prevent stale browser caching on InfinityFree Apache hosting
+<IfModule mod_headers.c>
+  # Always revalidate HTML pages so latest markup and script ?v= versions load immediately
+  <FilesMatch "\.(html|htm)$">
+    Header set Cache-Control "no-cache, no-store, must-revalidate"
+    Header set Pragma "no-cache"
+    Header set Expires "0"
+  </FilesMatch>
+
+  # Revalidate JS & CSS assets (cache-busted via ?v= query strings)
+  <FilesMatch "\.(js|css)$">
+    Header set Cache-Control "no-cache, must-revalidate"
+  </FilesMatch>
+</IfModule>
+
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType text/html "access plus 0 seconds"
+</IfModule>
+
