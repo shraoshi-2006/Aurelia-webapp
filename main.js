@@ -594,13 +594,7 @@
       </div>
 
       <!-- Footer -->
-      <div class="px-4 py-2 border-t border-slate-100 dark:border-zinc-800/80 bg-slate-50/80 dark:bg-zinc-800/50 flex items-center justify-between text-xs">
-        <button type="button" id="btn-dropdown-mark-all-read" class="text-slate-500 hover:text-[#14213D] dark:text-zinc-400 dark:hover:text-white transition-colors font-semibold cursor-pointer flex items-center gap-1">
-          <svg class="w-3.5 h-3.5 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2.2">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-          </svg>
-          <span>Mark all read</span>
-        </button>
+      <div class="px-4 py-2 border-t border-slate-100 dark:border-zinc-800/80 bg-slate-50/80 dark:bg-zinc-800/50 flex items-center justify-end text-xs">
         <button type="button" id="btn-dropdown-clear-all" class="text-slate-400 hover:text-rose-500 dark:text-zinc-400 dark:hover:text-rose-400 transition-colors font-medium cursor-pointer">
           Clear all
         </button>
