@@ -509,6 +509,7 @@
     else if (currentPath.includes('menu.html') || currentPath.endsWith('menu')) pageDefaultSec = 'menu';
     else if (currentPath.includes('customer.html') || currentPath.endsWith('customer')) pageDefaultSec = 'customers';
     else if (currentPath.includes('analytics.html') || currentPath.endsWith('analytics')) pageDefaultSec = 'analytics';
+    else if (currentPath.includes('notification.html') || currentPath.endsWith('notification')) pageDefaultSec = 'notifications';
     else if (currentPath.includes('all_department')) pageDefaultSec = 'all-departments';
     else if (currentPath.includes('add_department')) pageDefaultSec = 'add-department';
 
@@ -553,8 +554,8 @@
       window.updateTopbarAvatarUI(enrichedUser);
     }
 
-    // Clean any query string from URL if form submission polluted it
-    if (window.location.search) {
+    // Clean any query string from URL if form submission polluted it (preserve ?highlight= deep links)
+    if (window.location.search && !window.location.search.includes('highlight=')) {
       const cleanUrl = window.location.pathname + (window.location.hash || '#dashboard');
       window.history.replaceState({}, document.title, cleanUrl);
     }
