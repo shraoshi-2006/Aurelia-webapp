@@ -23,7 +23,7 @@
             }
             var btnText = (0.2126 * r + 0.7152 * g + 0.0722 * b > 165) ? '#000000' : '#FFFFFF';
             var btnBorder = btnText === '#000000' ? 'rgba(0,0,0,0.15)' : 'rgba(255,255,255,0.25)';
-            
+
             var st = document.createElement('style');
             st.id = 'aurelia-dynamic-theme-override';
             st.textContent = ':root{--aurelia-sidebar-bg:' + sb + ' !important;--aurelia-card-border:' + cb + ' !important;--aurelia-card-border-hover:' + cb + ' !important;--aurelia-card-rim-bg:' + rim + ' !important;--aurelia-btn-primary-bg:' + btnBg + ' !important;--aurelia-btn-primary-text:' + btnText + ' !important;}' +
@@ -1047,7 +1047,6 @@
     }
 
     #btn-sidebar-collapse:hover,
-    
 
     #app-sidebar.is-collapsed #btn-sidebar-collapse {
       position: absolute;
@@ -1075,8 +1074,6 @@
       color: #FFFFFF !important;
       cursor: pointer;
     }
-
-    
 
     #app-sidebar.is-collapsed #btn-sidebar-help,
     #app-sidebar.is-collapsed #btn-sidebar-logout {
@@ -2185,7 +2182,7 @@
       filter: blur(0);
       transition-delay: calc(var(--item-delay, 0) * 0.05s + 0.08s);
     }
-  
+
         /* Universal Smooth Scrolling */
     html {
       scroll-behavior: smooth !important;
@@ -2243,7 +2240,7 @@
       border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
       box-shadow: 0 4px 16px -2px rgba(0, 0, 0, 0.45) !important;
     }
-  
+
   /* Global Table Left Alignment: All Table Headings, Details and Content Left-aligned */
   table,
   table thead,
@@ -2397,7 +2394,6 @@
     vertical-align: middle !important;
   }
 
-
     /* ========================================================================= */
     /* APPEARANCE & THEME DYNAMIC SYSTEM                                         */
     /* ========================================================================= */
@@ -2438,7 +2434,6 @@
       border-color: rgba(0, 0, 0, 0.08) !important;
     }
 
-    
   /* ========================================================================= */
   /* UNIVERSAL 3D MAGNIFYING GLASS SEARCH ICON ACROSS ALL SEARCHBARS           */
   /* ========================================================================= */
@@ -2519,7 +2514,6 @@
     visibility: hidden !important;
     pointer-events: none !important;
   }
-
 
   /* ========================================================================= */
   /* UNIVERSAL TABLE ROW CHECKBOXES (AURELIA REFINED STYLE)                    */
@@ -2630,7 +2624,6 @@
 <body
   class="bg-[#F4F5F7] text-[#14213D] min-h-screen flex flex-col antialiased relative selection:bg-[#FCA311] selection:text-black">
 
-
   <!-- =================================================================== -->
   <!-- 1. AUTHENTICATION CONTAINER (Split 2-Column Light Themed System)     -->
   <!-- =================================================================== -->
@@ -2664,7 +2657,7 @@
                 POS</span>
             </div>
           </div>
-          
+
         </div>
 
         <!-- Animated Forms Viewport Stage (Sliding Animation as in Instagram Reel) -->
@@ -3143,7 +3136,7 @@
     class="fixed inset-y-0 right-0 w-80 max-w-[85vw] text-white transform translate-x-full transition-transform duration-300 ease-in-out shadow-2xl flex flex-col border-l border-white/10 lg:hidden"
     style="z-index: 9999 !important; background-color: #494D5F !important;"
     aria-label="User Mobile Menu">
-    
+
     <!-- Top Header (Logo + [X] Close Button) -->
     <div class="px-5 py-4 border-b border-white/10 flex items-center justify-between">
       <div class="flex items-center space-x-3">
@@ -3166,7 +3159,7 @@
 
     <!-- Menu Items: ONLY Notification, Settings, User Profile and Account -->
     <div class="flex-1 overflow-y-auto p-4 space-y-3">
-      
+
       <!-- 1. Notification Row -->
       <button type="button" id="menu-item-notifications"
         class="w-full flex items-center justify-between p-3.5 rounded-2xl bg-white/5 hover:bg-white/15 border border-white/10 transition-all text-left cursor-pointer group">
@@ -3737,7 +3730,6 @@
             </div>
           </button>
           </div>
-
 
         </div>
       </header>
@@ -5330,7 +5322,7 @@
           <div>
             <div class="flex items-center space-x-2">
               <h3 class="text-base font-bold text-slate-900 dark:text-white">User Profile & Account</h3>
-              
+
             </div>
             <p class="text-xs text-slate-400">View and update your personal credentials, contact info, and profile photo
             </p>
@@ -5565,7 +5557,7 @@
   <!-- Authentication Controller -->
   <script src="../auth.js?v=20261128_10"></script>
   <!-- Main JavaScript Logic -->
-<script src="../main.js?v=20261128_10"></script>
+<script src="../main.js?v=20261128_11"></script>
 </body>
 
 </html>

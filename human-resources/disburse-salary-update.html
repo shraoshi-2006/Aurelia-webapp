@@ -23,7 +23,7 @@
             }
             var btnText = (0.2126 * r + 0.7152 * g + 0.0722 * b > 165) ? '#000000' : '#FFFFFF';
             var btnBorder = btnText === '#000000' ? 'rgba(0,0,0,0.15)' : 'rgba(255,255,255,0.25)';
-            
+
             var st = document.createElement('style');
             st.id = 'aurelia-dynamic-theme-override';
             st.textContent = ':root{--aurelia-sidebar-bg:' + sb + ' !important;--aurelia-card-border:' + cb + ' !important;--aurelia-card-border-hover:' + cb + ' !important;--aurelia-card-rim-bg:' + rim + ' !important;--aurelia-btn-primary-bg:' + btnBg + ' !important;--aurelia-btn-primary-text:' + btnText + ' !important;}' +
@@ -997,7 +997,6 @@
     }
 
     #btn-sidebar-collapse:hover,
-    
 
     #app-sidebar.is-collapsed #btn-sidebar-collapse {
       position: absolute;
@@ -1025,8 +1024,6 @@
       color: #FFFFFF !important;
       cursor: pointer;
     }
-
-    
 
     #app-sidebar.is-collapsed #btn-sidebar-help,
     #app-sidebar.is-collapsed #btn-sidebar-logout {
@@ -2035,7 +2032,7 @@
       filter: blur(0);
       transition-delay: calc(var(--item-delay, 0) * 0.05s + 0.08s);
     }
-  
+
         /* Universal Smooth Scrolling */
     html {
       scroll-behavior: smooth !important;
@@ -2093,7 +2090,7 @@
       border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
       box-shadow: 0 4px 16px -2px rgba(0, 0, 0, 0.45) !important;
     }
-  
+
   /* Global Table Left Alignment: All Table Headings, Details and Content Left-aligned */
   table,
   table thead,
@@ -2251,7 +2248,6 @@
     vertical-align: middle !important;
   }
 
-
     /* ========================================================================= */
     /* APPEARANCE & THEME DYNAMIC SYSTEM                                         */
     /* ========================================================================= */
@@ -2292,7 +2288,6 @@
       border-color: rgba(0, 0, 0, 0.08) !important;
     }
 
-    
   /* ========================================================================= */
   /* UNIVERSAL 3D MAGNIFYING GLASS SEARCH ICON ACROSS ALL SEARCHBARS           */
   /* ========================================================================= */
@@ -2373,7 +2368,6 @@
     visibility: hidden !important;
     pointer-events: none !important;
   }
-
 
   /* ========================================================================= */
   /* UNIVERSAL TABLE ROW CHECKBOXES (AURELIA REFINED STYLE)                    */
@@ -2484,7 +2478,6 @@
 <body
   class="bg-[#F4F5F7] text-[#14213D] min-h-screen flex flex-col antialiased relative selection:bg-[#FCA311] selection:text-black">
 
-
   <!-- =================================================================== -->
   <!-- 1. AUTHENTICATION CONTAINER (Split 2-Column Light Themed System)     -->
   <!-- =================================================================== -->
@@ -2522,7 +2515,7 @@
                 POS</span>
             </div>
           </div>
-          
+
         </div>
 
         <!-- Animated Forms Viewport Stage (Sliding Animation as in Instagram Reel) -->
@@ -3002,7 +2995,7 @@
     class="fixed inset-y-0 right-0 w-80 max-w-[85vw] text-white transform translate-x-full transition-transform duration-300 ease-in-out shadow-2xl flex flex-col border-l border-white/10 lg:hidden"
     style="z-index: 9999 !important; background-color: #494D5F !important;"
     aria-label="User Mobile Menu">
-    
+
     <!-- Top Header (Logo + [X] Close Button) -->
     <div class="px-5 py-4 border-b border-white/10 flex items-center justify-between">
       <div class="flex items-center space-x-3">
@@ -3025,7 +3018,7 @@
 
     <!-- Menu Items: ONLY Notification, Settings, User Profile and Account -->
     <div class="flex-1 overflow-y-auto p-4 space-y-3">
-      
+
       <!-- 1. Notification Row -->
       <button type="button" id="menu-item-notifications"
         class="w-full flex items-center justify-between p-3.5 rounded-2xl bg-white/5 hover:bg-white/15 border border-white/10 transition-all text-left cursor-pointer group">
@@ -3575,7 +3568,6 @@
           </button>
           </div>
 
-
         </div>
       </header>
 
@@ -3621,7 +3613,7 @@
       <!-- MAIN VIEW CONTAINER -->
       <div class="px-6 sm:px-8 pb-5 flex-1">
         <section id="section-disburse-salary-update" class="space-y-6">
-          
+
   <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between pb-3 gap-3 border-b border-slate-200">
     <div>
       <h2 class="text-lg font-bold text-slate-900">Salary Disbursement & Payout Batches</h2>
@@ -3639,7 +3631,6 @@
     </div>
   </div>
 
-          
   <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-4">
     <div class="Aurelia-card p-2.5 sm:p-4 flex flex-col justify-between">
       <span class="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider text-slate-400 whitespace-nowrap truncate">Current Payout Cycle</span>
@@ -3663,7 +3654,6 @@
     </div>
   </div>
 
-          
   <div class="flex flex-col gap-3">
     <!-- Payout Status Filter Dropdown -->
     <div class="relative w-full sm:w-64">
@@ -3768,8 +3758,6 @@
     </main>
   </div>
 
-  
-  
   <script>
     // Download NEFT Settlement Payout Batch File (CSV)
     function downloadNEFTFile(e) {
@@ -4213,7 +4201,7 @@
   <!-- ========================================================================= -->
   <div id="modal-download-neft"
     class="fixed inset-0 z-[100] bg-[#323639] hidden flex flex-col md:flex-row overflow-hidden font-sans select-none animate-fadeIn">
-    
+
     <!-- LEFT: Document Canvas Viewport (White sheet on dark background) -->
     <div class="flex-1 h-full overflow-y-auto flex items-start sm:items-center justify-center p-4 sm:p-8 bg-[#323639] relative">
       <!-- White Paper Document Page -->
@@ -4226,7 +4214,7 @@
     <!-- RIGHT: Controls Sidebar (Matching Image 2, with Cancel & Download buttons) -->
     <div
       class="w-full md:w-[320px] lg:w-[340px] h-full bg-[#202124] text-[#e8eaed] border-l border-[#3c4043] flex flex-col justify-between p-6 flex-shrink-0 z-20 overflow-y-auto">
-      
+
       <!-- Top Settings Section -->
       <div class="space-y-5">
         <!-- Sidebar Header: Title + Page count -->
@@ -4329,7 +4317,7 @@
   <!-- Authentication Controller -->
   <script src="../auth.js?v=20261128_10"></script>
   <!-- Main JavaScript Logic -->
-  <script src="../main.js?v=20261128_10"></script>
+  <script src="../main.js?v=20261128_11"></script>
 </body>
 
 </html>

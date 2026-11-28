@@ -369,7 +369,7 @@
  * FinSet Hotel Financial & Billing Management System
  * Front Desk POS & Operational Financials Engine
  * Designed for Hotel Aurelia - Audit Session 27th October 2026
- * 
+ *
  * MODULES:
  * 1. LOCAL STORAGE & REALISTIC OCTOBER 2026 SAMPLE DATA
  * 2. CURRENCY & LOCALE FORMATTING (USD / INR SUPPORT)
@@ -1158,7 +1158,7 @@ $(document).ready(function () {
   #app-mobile-header button:last-child {
     margin-right: 6px !important;
   }
-      
+
   /* ========================================================================= */
   /* UNIVERSAL 3D MAGNIFYING GLASS SEARCH ICON ACROSS ALL SEARCHBARS           */
   /* ========================================================================= */
@@ -1938,41 +1938,39 @@ $(document).ready(function () {
       $targetSec = $('#section-billing');
     }
     if ($targetSec.length === 0) {
-      const isDeptSubdir = window.location.pathname.includes('/department');
-      const isHRSubdir = window.location.pathname.includes('/human-resources');
-      const isBillingSubdir = window.location.pathname.includes('/billing-management');
-      const isSubdir = isDeptSubdir || isHRSubdir || isBillingSubdir;
+      /** Resolve any root-relative target path cleanly regardless of current folder depth. */
+      const mapPage = window.AureliaNotifications ? window.AureliaNotifications.resolveUrl : (p) => p;
       const pageFileMap = {
-        'billing': isBillingSubdir ? 'add-bill.html' : (isSubdir ? '../billing-management/add-bill.html' : 'billing-management/add-bill.html'),
-        'add-bill': isBillingSubdir ? 'add-bill.html' : (isSubdir ? '../billing-management/add-bill.html' : 'billing-management/add-bill.html'),
-        'billing-details': isBillingSubdir ? 'billing-details.html' : (isSubdir ? '../billing-management/billing-details.html' : 'billing-management/billing-details.html'),
-        'orders': isSubdir ? '../order.html' : 'order.html',
-        'menu': isSubdir ? '../menu.html' : 'menu.html',
-        'customers': isSubdir ? '../customer.html' : 'customer.html',
-        'analytics': isSubdir ? '../analytics.html' : 'analytics.html',
-        'notifications': isSubdir ? '../notification.html' : 'notification.html',
-        'hr-documents': isHRSubdir ? 'hr-document-template.html' : (isSubdir ? '../human-resources/hr-document-template.html' : 'human-resources/hr-document-template.html'),
-        'hr-employee-list': isHRSubdir ? 'hr-employee-list.html' : (isSubdir ? '../human-resources/hr-employee-list.html' : 'human-resources/hr-employee-list.html'),
-        'add-employee': isHRSubdir ? 'add-employee.html' : (isSubdir ? '../human-resources/add-employee.html' : 'human-resources/add-employee.html'),
-        'employees': isHRSubdir ? 'employee-list.html' : (isSubdir ? '../human-resources/employee-list.html' : 'human-resources/employee-list.html'),
-        'holidays': isHRSubdir ? 'holiday-list.html' : (isSubdir ? '../human-resources/holiday-list.html' : 'human-resources/holiday-list.html'),
-        'leave-category': isHRSubdir ? 'leave-category.html' : (isSubdir ? '../human-resources/leave-category.html' : 'human-resources/leave-category.html'),
-        'leave-assign': isHRSubdir ? 'leave-assign.html' : (isSubdir ? '../human-resources/leave-assign.html' : 'human-resources/leave-assign.html'),
-        'leave-request': isHRSubdir ? 'leave-request.html' : (isSubdir ? '../human-resources/leave-request.html' : 'human-resources/leave-request.html'),
-        'attendance-list': isHRSubdir ? 'attendance-list.html' : (isSubdir ? '../human-resources/attendance-list.html' : 'human-resources/attendance-list.html'),
-        'attendance-report': isHRSubdir ? 'attendance-report.html' : (isSubdir ? '../human-resources/attendance-report.html' : 'human-resources/attendance-report.html'),
-        'salary-grade': isHRSubdir ? 'salary-grade.html' : (isSubdir ? '../human-resources/salary-grade.html' : 'human-resources/salary-grade.html'),
-        'manage-salary': isHRSubdir ? 'manage-salary.html' : (isSubdir ? '../human-resources/manage-salary.html' : 'human-resources/manage-salary.html'),
-        'disburse-salary-update': isHRSubdir ? 'disburse-salary-update.html' : (isSubdir ? '../human-resources/disburse-salary-update.html' : 'human-resources/disburse-salary-update.html'),
-        'pay-slip': isHRSubdir ? 'pay-slip.html' : (isSubdir ? '../human-resources/pay-slip.html' : 'human-resources/pay-slip.html'),
-        'all-departments': isDeptSubdir ? 'all_department.html' : (isSubdir ? '../department/all_department.html' : 'department/all_department.html'),
-        'all-department': isDeptSubdir ? 'all_department.html' : (isSubdir ? '../department/all_department.html' : 'department/all_department.html'),
-        'add-department': isDeptSubdir ? 'add_department.html' : (isSubdir ? '../department/add_department.html' : 'department/add_department.html')
+        'billing': mapPage('billing-management/add-bill.html'),
+        'add-bill': mapPage('billing-management/add-bill.html'),
+        'billing-details': mapPage('billing-management/billing-details.html'),
+        'orders': mapPage('order.html'),
+        'menu': mapPage('menu.html'),
+        'customers': mapPage('customer.html'),
+        'analytics': mapPage('analytics.html'),
+        'notifications': mapPage('notification.html'),
+        'hr-documents': mapPage('human-resources/hr-document-template.html'),
+        'hr-employee-list': mapPage('human-resources/hr-employee-list.html'),
+        'add-employee': mapPage('human-resources/add-employee.html'),
+        'employees': mapPage('human-resources/employee-list.html'),
+        'holidays': mapPage('human-resources/holiday-list.html'),
+        'leave-category': mapPage('human-resources/leave-category.html'),
+        'leave-assign': mapPage('human-resources/leave-assign.html'),
+        'leave-request': mapPage('human-resources/leave-request.html'),
+        'attendance-list': mapPage('human-resources/attendance-list.html'),
+        'attendance-report': mapPage('human-resources/attendance-report.html'),
+        'salary-grade': mapPage('human-resources/salary-grade.html'),
+        'manage-salary': mapPage('human-resources/manage-salary.html'),
+        'disburse-salary-update': mapPage('human-resources/disburse-salary-update.html'),
+        'pay-slip': mapPage('human-resources/pay-slip.html'),
+        'all-departments': mapPage('department/all_department.html'),
+        'all-department': mapPage('department/all_department.html'),
+        'add-department': mapPage('department/add_department.html')
       };
       if (pageFileMap[target]) {
         window.location.href = pageFileMap[target];
       } else {
-        window.location.href = (isSubdir ? '../index.html#' : 'index.html#') + target;
+        window.location.href = mapPage('index.html#' + target);
       }
       return;
     }
@@ -2207,26 +2205,23 @@ $(document).ready(function () {
     }
 
     const action = $(this).data('action');
-    const isDeptSubdir = window.location.pathname.includes('/department');
-    const isHRSubdir = window.location.pathname.includes('/human-resources');
-    const isBillingSubdir = window.location.pathname.includes('/billing-management');
-    const isOtherSubdir = isDeptSubdir || isBillingSubdir;
+    const resolveUrl = window.AureliaNotifications ? window.AureliaNotifications.resolveUrl : (p) => p;
 
     const hrPageMap = {
-      'hr-doc-templates': isOtherSubdir ? '../human-resources/hr-document-template.html' : (isHRSubdir ? 'hr-document-template.html' : 'human-resources/hr-document-template.html'),
-      'hr-employee-list': isHRSubdir ? 'hr-employee-list.html' : (isSubdir ? '../human-resources/hr-employee-list.html' : 'human-resources/hr-employee-list.html'),
-      'add-employee': isHRSubdir ? 'add-employee.html' : (isSubdir ? '../human-resources/add-employee.html' : 'human-resources/add-employee.html'),
-      'employee-list': isOtherSubdir ? '../human-resources/employee-list.html' : (isHRSubdir ? 'employee-list.html' : 'human-resources/employee-list.html'),
-      'holiday-list': isOtherSubdir ? '../human-resources/holiday-list.html' : (isHRSubdir ? 'holiday-list.html' : 'human-resources/holiday-list.html'),
-      'leave-category': isHRSubdir ? 'leave-category.html' : (isSubdir ? '../human-resources/leave-category.html' : 'human-resources/leave-category.html'),
-      'leave-assign': isHRSubdir ? 'leave-assign.html' : (isSubdir ? '../human-resources/leave-assign.html' : 'human-resources/leave-assign.html'),
-      'leave-request': isHRSubdir ? 'leave-request.html' : (isSubdir ? '../human-resources/leave-request.html' : 'human-resources/leave-request.html'),
-      'attendance-list': isHRSubdir ? 'attendance-list.html' : (isSubdir ? '../human-resources/attendance-list.html' : 'human-resources/attendance-list.html'),
-      'attendance-report': isHRSubdir ? 'attendance-report.html' : (isSubdir ? '../human-resources/attendance-report.html' : 'human-resources/attendance-report.html'),
-      'salary-grade': isHRSubdir ? 'salary-grade.html' : (isSubdir ? '../human-resources/salary-grade.html' : 'human-resources/salary-grade.html'),
-      'manage-salary': isHRSubdir ? 'manage-salary.html' : (isSubdir ? '../human-resources/manage-salary.html' : 'human-resources/manage-salary.html'),
-      'disburse-salary-update': isHRSubdir ? 'disburse-salary-update.html' : (isSubdir ? '../human-resources/disburse-salary-update.html' : 'human-resources/disburse-salary-update.html'),
-      'pay-slip': isOtherSubdir ? '../human-resources/pay-slip.html' : (isHRSubdir ? 'pay-slip.html' : 'human-resources/pay-slip.html')
+      'hr-doc-templates': resolveUrl('human-resources/hr-document-template.html'),
+      'hr-employee-list': resolveUrl('human-resources/hr-employee-list.html'),
+      'add-employee': resolveUrl('human-resources/add-employee.html'),
+      'employee-list': resolveUrl('human-resources/employee-list.html'),
+      'holiday-list': resolveUrl('human-resources/holiday-list.html'),
+      'leave-category': resolveUrl('human-resources/leave-category.html'),
+      'leave-assign': resolveUrl('human-resources/leave-assign.html'),
+      'leave-request': resolveUrl('human-resources/leave-request.html'),
+      'attendance-list': resolveUrl('human-resources/attendance-list.html'),
+      'attendance-report': resolveUrl('human-resources/attendance-report.html'),
+      'salary-grade': resolveUrl('human-resources/salary-grade.html'),
+      'manage-salary': resolveUrl('human-resources/manage-salary.html'),
+      'disburse-salary-update': resolveUrl('human-resources/disburse-salary-update.html'),
+      'pay-slip': resolveUrl('human-resources/pay-slip.html')
     };
 
     if (hrPageMap[action]) {
@@ -2380,11 +2375,7 @@ $(document).ready(function () {
     let html = '';
 
     const isTable = $grid.is('tbody') || $grid.closest('table').length > 0;
-    const isDeptSubdir = window.location.pathname.includes('/department');
-    const isHRSubdir = window.location.pathname.includes('/human-resources');
-    const isBillingSubdir = window.location.pathname.includes('/billing-management');
-    const isOtherSubdir = isDeptSubdir || isBillingSubdir;
-    const staffListUrl = isOtherSubdir ? '../human-resources/employee-list.html' : (isHRSubdir ? 'employee-list.html' : 'human-resources/employee-list.html');
+    const staffListUrl = window.AureliaNotifications ? window.AureliaNotifications.resolveUrl('human-resources/employee-list.html') : 'human-resources/employee-list.html';
 
     filtered.forEach(dept => {
       if (isTable) {
@@ -2561,38 +2552,29 @@ $(document).ready(function () {
   // Department Sub-items Click Handlers
   $('.dept-sub-item').on('click', function (e) {
     const action = $(this).data('action');
-    const isDeptSubdir = window.location.pathname.includes('/department');
-    const isHRSubdir = window.location.pathname.includes('/human-resources');
-    const isBillingSubdir = window.location.pathname.includes('/billing-management');
-    const isOtherSubdir = isDeptSubdir || isBillingSubdir;
+    const resolveUrl = window.AureliaNotifications ? window.AureliaNotifications.resolveUrl : (p) => p;
 
     if (action === 'all-department') {
-      const targetUrl = isDeptSubdir ? 'all_department.html' : (isHRSubdir ? '../department/all_department.html' : 'department/all_department.html');
       if (window.location.pathname.includes('all_department')) {
         e.preventDefault();
         renderDepartmentsGrid();
       } else {
-        window.location.href = targetUrl;
+        window.location.href = resolveUrl('department/all_department.html');
       }
     } else if (action === 'add-department') {
-      const targetUrl = isDeptSubdir ? 'add_department.html' : (isOtherSubdir ? '../department/add_department.html' : 'department/add_department.html');
       if (window.location.pathname.includes('add_department')) {
         e.preventDefault();
         $('#input-dept-name').focus();
       } else {
-        window.location.href = targetUrl;
+        window.location.href = resolveUrl('department/add_department.html');
       }
     }
   });
 
   // Open Add Department from inside All Department
   $('#btn-open-add-dept-from-list').on('click', function () {
-    const isDeptSubdir = window.location.pathname.includes('/department');
-    const isHRSubdir = window.location.pathname.includes('/human-resources');
-    const isBillingSubdir = window.location.pathname.includes('/billing-management');
-    const isOtherSubdir = isDeptSubdir || isBillingSubdir;
-    const targetUrl = isDeptSubdir ? 'add_department.html' : (isOtherSubdir ? '../department/add_department.html' : 'department/add_department.html');
-    window.location.href = targetUrl;
+    const resolveUrl = window.AureliaNotifications ? window.AureliaNotifications.resolveUrl : (p) => p;
+    window.location.href = resolveUrl('department/add_department.html');
   });
 
   // Toggle Billing Dropdown in Sidebar
@@ -2623,26 +2605,18 @@ $(document).ready(function () {
   // Billing Sub-items Click Handlers
   $(document).on('click', '.billing-sub-item', function (e) {
     const action = $(this).data('action');
-    const isDeptSubdir = window.location.pathname.includes('/department');
-    const isHRSubdir = window.location.pathname.includes('/human-resources');
-    const isBillingSubdir = window.location.pathname.includes('/billing-management');
-    const isSubdir = isDeptSubdir || isHRSubdir || isBillingSubdir;
+    const resolveUrl = window.AureliaNotifications ? window.AureliaNotifications.resolveUrl : (p) => p;
     if (action === 'add-bill') {
-      const targetUrl = isBillingSubdir ? 'add-bill.html' : (isSubdir ? '../billing-management/add-bill.html' : 'billing-management/add-bill.html');
-      if (window.location.pathname.includes('add-bill')) {
-        e.preventDefault();
-      } else {
-        e.preventDefault();
-        window.location.href = targetUrl;
+      e.preventDefault();
+      if (!window.location.pathname.includes('add-bill')) {
+        window.location.href = resolveUrl('billing-management/add-bill.html');
       }
     } else if (action === 'billing-details') {
-      const targetUrl = isBillingSubdir ? 'billing-details.html' : (isSubdir ? '../billing-management/billing-details.html' : 'billing-management/billing-details.html');
+      e.preventDefault();
       if (window.location.pathname.includes('billing-details')) {
-        e.preventDefault();
         renderBillingHistory();
       } else {
-        e.preventDefault();
-        window.location.href = targetUrl;
+        window.location.href = resolveUrl('billing-management/billing-details.html');
       }
     }
   });
@@ -2701,11 +2675,7 @@ $(document).ready(function () {
     this.reset();
     showToast(`Department "${name}" successfully created!`, 'success');
 
-    const isDeptSubdir = window.location.pathname.includes('/department');
-    const isHRSubdir = window.location.pathname.includes('/human-resources');
-    const isBillingSubdir = window.location.pathname.includes('/billing-management');
-    const isOtherSubdir = isDeptSubdir || isBillingSubdir;
-    const targetUrl = isDeptSubdir ? 'all_department.html' : (isHRSubdir ? '../department/all_department.html' : 'department/all_department.html');
+    const targetUrl = window.AureliaNotifications ? window.AureliaNotifications.resolveUrl('department/all_department.html') : 'department/all_department.html';
     setTimeout(() => {
       window.location.href = targetUrl;
     }, 500);
@@ -4119,15 +4089,6 @@ $(document).ready(function () {
 
   let currentStaffFilterStatus = 'all';
 
-  function openTotalStaffModal() {
-    currentStaffFilterStatus = 'all';
-    $('#modal-staff-search').val('');
-    $('#modal-staff-filter-dept').val('all');
-    updateStaffStatusTabButtons();
-    $('#modal-total-staff').removeClass('hidden').css('display', 'flex');
-    renderModalStaffList(true);
-  }
-
   function updateStaffStatusTabButtons() {
     $('.tab-staff-status').each(function () {
       const st = $(this).data('status');
@@ -4662,9 +4623,8 @@ $(document).ready(function () {
       try {
         localStorage.setItem(STORAGE_KEYS.PENDING_ORDER_BILL, ord.id);
       } catch (e) { /* ignore */ }
-      const isSubdir = window.location.pathname.includes('/department') || window.location.pathname.includes('/human-resources');
-      const isBillingSubdir = window.location.pathname.includes('/billing-management');
-      window.location.href = isBillingSubdir ? 'add-bill.html' : (isSubdir ? '../billing-management/add-bill.html' : 'billing-management/add-bill.html');
+      const targetUrl = window.AureliaNotifications ? window.AureliaNotifications.resolveUrl('billing-management/add-bill.html') : 'billing-management/add-bill.html';
+      window.location.href = targetUrl;
       return;
     }
 
@@ -5557,12 +5517,7 @@ $(document).ready(function () {
       sessionStorage.setItem('aurelia_bill_resume_draft', JSON.stringify(bill));
     } catch (e) { }
 
-    const isBillingSubdir = window.location.pathname.includes('/billing-management');
-    const isDeptSubdir = window.location.pathname.includes('/department');
-    const isHRSubdir = window.location.pathname.includes('/human-resources');
-    const isSubdir = isDeptSubdir || isHRSubdir;
-    const targetUrl = isBillingSubdir ? 'add-bill.html' : (isSubdir ? '../billing-management/add-bill.html' : 'billing-management/add-bill.html');
-
+    const targetUrl = window.AureliaNotifications ? window.AureliaNotifications.resolveUrl('billing-management/add-bill.html') : 'billing-management/add-bill.html';
     window.location.href = targetUrl;
   });
 
@@ -7984,8 +7939,7 @@ $(document).ready(function () {
   // Redirect to HR Employee Lists page when clicking 'See More'
   $(document).on('click', '#btn-see-more-hr-docs', function (e) {
     e.preventDefault();
-    const isHrFolder = window.location.pathname.includes('human-resources');
-    const targetUrl = isHrFolder ? 'hr-employee-list.html' : 'human-resources/hr-employee-list.html';
+    const targetUrl = window.AureliaNotifications ? window.AureliaNotifications.resolveUrl('human-resources/hr-employee-list.html') : 'human-resources/hr-employee-list.html';
     window.location.href = targetUrl;
   });
 
@@ -9007,7 +8961,6 @@ $(document).ready(function () {
               <span class="btn-bulk-delete-label">Delete</span>
             </button>
 
-
           </div>
         </div>
       `;
@@ -9093,17 +9046,6 @@ $(document).ready(function () {
         } else {
           $masterCb.prop('checked', false).prop('indeterminate', true);
         }
-      }
-    }
-
-    function toggleTableBulkSelection($table, enable) {
-      // Retained for backward-compat if invoked externally; simply clears if enable=false
-      if (!enable) {
-        const $rows = getSelectableRows($table);
-        $rows.find('td.bulk-cb-cell .bulk-row-cb').prop('checked', false);
-        $rows.removeClass('is-row-selected');
-        const $toolbar = getToolbarForTable($table);
-        if ($toolbar.length) updateToolbarCount($toolbar, $table);
       }
     }
 
@@ -9413,7 +9355,6 @@ $(document).ready(function () {
       bulkObserver.observe(document.body, { childList: true, subtree: true });
     }
   })();
-
 
   // =========================================================================
   // APPEARANCE & THEME CUSTOMIZATION CONTROLLER (Sidebar & Card Border)
