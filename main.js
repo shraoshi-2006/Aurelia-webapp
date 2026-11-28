@@ -7317,9 +7317,6 @@ $(document).ready(function () {
                 <span id="modal-order-items-total" class="text-base text-[#14213D] dark:text-white font-bold">₹0.00</span>
               </div>
             </div>
-            <div class="pt-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-end">
-              <button type="button" class="btn-close-modal btn-Aurelia-secondary text-xs py-1.5 px-4 cursor-pointer">Close</button>
-            </div>
           </div>
         </div>
       `);
