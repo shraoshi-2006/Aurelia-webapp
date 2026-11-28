@@ -5155,10 +5155,10 @@ $(document).ready(function () {
 
   $('#select-customer-dropdown').on('change', function () {
     const $opt = $(this).find('option:selected');
-    const phone = $opt.data('phone') || '';
+    const rawPhone = String($opt.data('phone') || '');
+    const numericPhone = rawPhone.replace(/[^0-9]/g, '');
     const email = $opt.data('email') || '';
-    const addr = $opt.data('addr') || '';
-    $('#input-customer-phone-preview').val(phone ? `${phone} | ${addr}` : '');
+    $('#input-customer-phone-preview').val(numericPhone || rawPhone);
     $('#input-customer-email').val(email || '');
     $('#err-customer-select').addClass('hidden');
     if (email && isValidEmail(email)) {
@@ -7940,7 +7940,7 @@ $(document).ready(function () {
               </div>
               <div>
                 <label class="block text-[11px] font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">Phone Number</label>
-                <input type="tel" id="input-profile-phone" class="Aurelia-input w-full text-xs py-2 px-3">
+                <input type="tel" id="input-profile-phone" inputmode="numeric" pattern="[0-9]*" data-numeric-only="digits" maxlength="15" placeholder="e.g. 9845011201" class="Aurelia-input w-full text-xs py-2 px-3">
               </div>
               <div>
                 <label class="block text-[11px] font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">Employee ID</label>
@@ -7996,7 +7996,8 @@ $(document).ready(function () {
 
     $('#input-profile-name').val(user.name || 'Aurelia Staff');
     $('#input-profile-email').val(user.email || '');
-    $('#input-profile-phone').val(user.phone || '+91 98450 11201');
+    const cleanUserPhone = String(user.phone || '').replace(/[^0-9]/g, '');
+    $('#input-profile-phone').val(cleanUserPhone || '9845011201');
     $('#input-profile-empid').val(user.empId || 'EMP-2026-01');
 
     if (user.role) {
@@ -8106,7 +8107,7 @@ $(document).ready(function () {
 
     const nameVal = $('#input-profile-name').val().trim();
     const emailVal = $('#input-profile-email').val().trim();
-    const phoneVal = $('#input-profile-phone').val().trim();
+    const phoneVal = $('#input-profile-phone').val().replace(/[^0-9]/g, '').trim();
     const empIdVal = $('#input-profile-empid').val().trim() || 'EMP-2026-01';
     const roleVal = $('#select-profile-role').val();
     const deptVal = $('#select-profile-dept').val();
@@ -10743,9 +10744,6 @@ $(document).ready(function () {
     }, true);
 
     document.addEventListener('mouseout', function (e) {
-      if (!activeTrigger) return;
-      const related = e.relatedTarget;
-      const nextTrigger = (related && related.closest) ? related.closest('[data-instant-tooltip], [title]:not(iframe)') : null;
       if (nextTrigger !== activeTrigger) {
         if (nextTrigger) {
           showTooltip(nextTrigger, e.clientX, e.clientY);
@@ -12217,3 +12215,119 @@ $(document).ready(function () {
   setTimeout(syncExpandChevrons, 100);
   setTimeout(syncExpandChevrons, 400);
 });
+
+// =========================================================================
+// GLOBAL STRICT NUMERIC FORMATTING ENGINE (Digits-only & Numeric Fields)
+// =========================================================================
+(function initStrictNumericFormatting() {
+  const CONTROL_KEYS = new Set([
+    'Backspace', 'Delete', 'Tab', 'Escape', 'Enter',
+    'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Home', 'End'
+  ]);
+
+  /**
+   * Determine numeric enforcement mode for an input element ('digits' | 'decimal' | null).
+   */
+  function getNumericMode(el) {
+    if (!el || el.tagName !== 'INPUT' || el.readOnly || el.disabled) return null;
+    const explicit = (el.getAttribute('data-numeric-only') || '').toLowerCase();
+    if (explicit === 'digits' || explicit === 'decimal') return explicit;
+    const t = (el.type || '').toLowerCase();
+    if (t === 'tel') return 'digits';
+    if (t === 'number') {
+      return (el.getAttribute('step') || '').toLowerCase() === 'any' ? 'decimal' : 'digits';
+    }
+    const im = (el.getAttribute('inputmode') || '').toLowerCase();
+    if (im === 'numeric') return 'digits';
+    if (im === 'decimal') return 'decimal';
+    return null;
+  }
+
+  /**
+   * Strip non-numeric characters according to the field mode.
+   */
+  function sanitizeNumericValue(raw, mode) {
+    const str = String(raw == null ? '' : raw);
+    if (mode !== 'decimal') {
+      return str.replace(/[^0-9]/g, '');
+    }
+    const cleaned = str.replace(/[^0-9.]/g, '');
+    const firstDot = cleaned.indexOf('.');
+    if (firstDot === -1) return cleaned;
+    return cleaned.slice(0, firstDot + 1) + cleaned.slice(firstDot + 1).replace(/\./g, '');
+  }
+
+  window.sanitizeAureliaNumeric = sanitizeNumericValue;
+
+  // 1. Block invalid key presses before browsers process them (stops 'e', '+', '-', '.', letters & symbols)
+  document.addEventListener('keydown', function (e) {
+    const el = e.target;
+    const mode = getNumericMode(el);
+    if (!mode) return;
+    if (e.ctrlKey || e.metaKey || e.altKey || CONTROL_KEYS.has(e.key)) return;
+    if (!e.key || e.key === 'Unidentified' || e.key === 'Process' || e.key.length > 1) return;
+
+    if (mode === 'decimal') {
+      if (/^[0-9]$/.test(e.key)) return;
+      if (e.key === '.' && !String(el.value || '').includes('.')) return;
+      e.preventDefault();
+      return;
+    }
+
+    if (!/^[0-9]$/.test(e.key)) {
+      e.preventDefault();
+    }
+  }, true);
+
+  // 2. Catch mobile virtual keyboards / IME text insertion
+  document.addEventListener('beforeinput', function (e) {
+    const el = e.target;
+    const mode = getNumericMode(el);
+    if (!mode || !e.data) return;
+    if (e.inputType && e.inputType.startsWith('delete')) return;
+
+    const validChunk = mode === 'decimal' ? /^[0-9.]+$/ : /^[0-9]+$/;
+    if (!validChunk.test(e.data)) {
+      e.preventDefault();
+      return;
+    }
+    if (mode === 'decimal' && e.data.includes('.') && String(el.value || '').includes('.')) {
+      e.preventDefault();
+    }
+  }, true);
+
+  // 3. Sanitize pasted text so only numbers (never letters/symbols) enter the box
+  document.addEventListener('paste', function (e) {
+    const el = e.target;
+    const mode = getNumericMode(el);
+    if (!mode || !e.clipboardData) return;
+
+    const rawText = e.clipboardData.getData('text') || '';
+    const cleaned = sanitizeNumericValue(rawText, mode);
+    e.preventDefault();
+    if (!cleaned) return;
+
+    if ((el.type || '').toLowerCase() !== 'number' && typeof el.selectionStart === 'number') {
+      const start = el.selectionStart;
+      const end = el.selectionEnd != null ? el.selectionEnd : start;
+      const combined = el.value.slice(0, start) + cleaned + el.value.slice(end);
+      el.value = sanitizeNumericValue(combined, mode);
+      const nextCaret = Math.min(el.value.length, start + cleaned.length);
+      try { el.setSelectionRange(nextCaret, nextCaret); } catch (err) { }
+    } else {
+      el.value = cleaned;
+    }
+    el.dispatchEvent(new Event('input', { bubbles: true }));
+  }, true);
+
+  // 4. Final input sanitization pass for autofill or edge browser changes
+  document.addEventListener('input', function (e) {
+    const el = e.target;
+    const mode = getNumericMode(el);
+    if (!mode) return;
+    const nextVal = sanitizeNumericValue(el.value, mode);
+    if (el.value !== nextVal) {
+      el.value = nextVal;
+    }
+  }, true);
+})();

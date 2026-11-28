@@ -3562,12 +3562,12 @@
       <form id="form-adjust-quota" class="space-y-4 pt-4">
         <div><label class="block text-xs font-bold text-slate-700 mb-1">Employee</label><input type="text" class="Aurelia-input w-full text-xs font-bold" value="Shraoshi Basak (EMP-2026-01)" readonly></div>
         <div class="grid grid-cols-2 gap-3">
-          <div><label class="block text-xs font-bold text-slate-700 mb-1">Casual Leave Quota</label><input type="number" class="Aurelia-input w-full text-xs" value="12"></div>
-          <div><label class="block text-xs font-bold text-slate-700 mb-1">Sick Leave Quota</label><input type="number" class="Aurelia-input w-full text-xs" value="8"></div>
+          <div><label class="block text-xs font-bold text-slate-700 mb-1">Casual Leave Quota</label><input type="number" class="Aurelia-input w-full text-xs" value="12" inputmode="numeric" pattern="[0-9]*" data-numeric-only="digits"></div>
+          <div><label class="block text-xs font-bold text-slate-700 mb-1">Sick Leave Quota</label><input type="number" class="Aurelia-input w-full text-xs" value="8" inputmode="numeric" pattern="[0-9]*" data-numeric-only="digits"></div>
         </div>
         <div class="grid grid-cols-2 gap-3">
-          <div><label class="block text-xs font-bold text-slate-700 mb-1">Earned Leave Quota</label><input type="number" class="Aurelia-input w-full text-xs" value="15"></div>
-          <div><label class="block text-xs font-bold text-slate-700 mb-1">Comp Off Balance</label><input type="number" class="Aurelia-input w-full text-xs" value="2"></div>
+          <div><label class="block text-xs font-bold text-slate-700 mb-1">Earned Leave Quota</label><input type="number" class="Aurelia-input w-full text-xs" value="15" inputmode="numeric" pattern="[0-9]*" data-numeric-only="digits"></div>
+          <div><label class="block text-xs font-bold text-slate-700 mb-1">Comp Off Balance</label><input type="number" class="Aurelia-input w-full text-xs" value="2" inputmode="numeric" pattern="[0-9]*" data-numeric-only="digits"></div>
         </div>
         <div class="flex items-center justify-end space-x-2.5 pt-3 border-t border-slate-100">
           <button type="button" class="btn-Aurelia-secondary text-xs py-2 px-4 btn-close-modal">Cancel</button>
@@ -3936,7 +3936,7 @@
   <!-- Authentication Controller -->
   <script src="../auth.js?v=20261128_10"></script>
   <!-- Main JavaScript Logic -->
-  <script src="../main.js?v=20261128_19"></script>
+  <script src="../main.js?v=20261128_20"></script>
 </body>
 
 </html>
