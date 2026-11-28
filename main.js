@@ -232,6 +232,7 @@
         badge.id = 'topbar-notification-badge';
         badge.textContent = label;
         badge.classList.toggle('hidden', unread === 0);
+        badge.style.display = unread === 0 ? 'none' : 'flex';
       }
       const p = (global.location && global.location.pathname) ? global.location.pathname.toLowerCase() : '';
       if (p.includes('notification')) {
@@ -245,6 +246,7 @@
         mBadge.id = 'mobile-notification-badge';
         mBadge.textContent = label;
         mBadge.classList.toggle('hidden', unread === 0);
+        mBadge.style.display = unread === 0 ? 'none' : 'flex';
       }
       const mSub = mobileBtn.querySelector('#mobile-notification-subtitle');
       if (mSub) {
@@ -254,6 +256,7 @@
       if (mPill) {
         mPill.textContent = `${label} New`;
         mPill.classList.toggle('hidden', unread === 0);
+        mPill.style.display = unread === 0 ? 'none' : 'inline-flex';
       }
     }
   }
