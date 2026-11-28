@@ -2105,10 +2105,11 @@ $(document).ready(function () {
   // Expose switchSection & syncSectionWithHash for Auth controller
   window.switchSection = switchSection;
   window.syncSectionWithHash = function () {
-    let hash = window.location.hash.replace('#', '') || 'dashboard';
+    const isNotifRoute = $('#section-notifications').length > 0 || window.location.pathname.toLowerCase().includes('notification');
+    let hash = window.location.hash.replace('#', '') || (isNotifRoute ? 'notifications' : 'dashboard');
     if (['login', 'register', 'forgot'].includes(hash)) {
-      hash = 'dashboard';
-      window.location.hash = '#dashboard';
+      hash = isNotifRoute ? 'notifications' : 'dashboard';
+      window.location.hash = '#' + hash;
     }
     switchSection(hash);
   };
@@ -2711,7 +2712,8 @@ $(document).ready(function () {
   });
 
   $(window).on('hashchange', function () {
-    const hash = window.location.hash.replace('#', '') || 'dashboard';
+    const isNotifRoute = $('#section-notifications').length > 0 || window.location.pathname.toLowerCase().includes('notification');
+    const hash = window.location.hash.replace('#', '') || (isNotifRoute ? 'notifications' : 'dashboard');
     switchSection(hash);
   });
 

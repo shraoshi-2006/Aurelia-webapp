@@ -29,13 +29,18 @@
         return `http://${host}:3000`;
       }
 
-      // 3. Static host without Node.js backend (e.g. GitHub Pages, Vercel, Netlify)
+      // 3. Static host without Node.js backend (e.g. GitHub Pages, Vercel, Netlify, InfinityFree)
       const isStaticHost = loc.hostname && (
         loc.hostname.includes('github.io') ||
         loc.hostname.includes('vercel.app') ||
         loc.hostname.includes('netlify.app') ||
         loc.hostname.includes('pages.dev') ||
-        loc.hostname.includes('surge.sh')
+        loc.hostname.includes('surge.sh') ||
+        loc.hostname.includes('gt.tc') ||
+        loc.hostname.includes('rf.gd') ||
+        loc.hostname.includes('epizy.com') ||
+        loc.hostname.includes('infinityfreeapp.com') ||
+        loc.hostname.includes('000webhostapp.com')
       );
       if (isStaticHost) {
         return null;
@@ -509,7 +514,7 @@
     else if (currentPath.includes('menu.html') || currentPath.endsWith('menu')) pageDefaultSec = 'menu';
     else if (currentPath.includes('customer.html') || currentPath.endsWith('customer')) pageDefaultSec = 'customers';
     else if (currentPath.includes('analytics.html') || currentPath.endsWith('analytics')) pageDefaultSec = 'analytics';
-    else if (currentPath.includes('notification.html') || currentPath.endsWith('notification')) pageDefaultSec = 'notifications';
+    else if (currentPath.includes('notification')) pageDefaultSec = 'notifications';
     else if (currentPath.includes('all_department')) pageDefaultSec = 'all-departments';
     else if (currentPath.includes('add_department')) pageDefaultSec = 'add-department';
 
@@ -556,7 +561,7 @@
 
     // Clean any query string from URL if form submission polluted it (preserve ?highlight= deep links)
     if (window.location.search && !window.location.search.includes('highlight=')) {
-      const cleanUrl = window.location.pathname + (window.location.hash || '#dashboard');
+      const cleanUrl = window.location.pathname + (window.location.hash || (pageDefaultSec ? '#' + pageDefaultSec : '#dashboard'));
       window.history.replaceState({}, document.title, cleanUrl);
     }
   }
