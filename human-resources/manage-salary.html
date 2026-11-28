@@ -3830,12 +3830,12 @@
       <form id="form-config-salary" class="space-y-4 pt-4">
         <div><label class="block text-xs font-bold text-slate-700 mb-1">Employee</label><input type="text" class="Aurelia-input w-full text-xs font-bold" value="Shraoshi Basak (EMP-2026-01)" readonly></div>
         <div class="grid grid-cols-2 gap-3">
-          <div><label class="block text-xs font-bold text-slate-700 mb-1">Basic Salary (₹)</label><input type="number" class="Aurelia-input w-full text-xs" value="110000" inputmode="numeric" pattern="[0-9]*" data-numeric-only="digits"></div>
-          <div><label class="block text-xs font-bold text-slate-700 mb-1">HRA Allowance (₹)</label><input type="number" class="Aurelia-input w-full text-xs" value="44000" inputmode="numeric" pattern="[0-9]*" data-numeric-only="digits"></div>
+          <div><label class="block text-xs font-bold text-slate-700 mb-1">Basic Salary (₹)</label><input type="text" class="Aurelia-input w-full text-xs" value="110000" inputmode="decimal" data-numeric-only="amount"></div>
+          <div><label class="block text-xs font-bold text-slate-700 mb-1">HRA Allowance (₹)</label><input type="text" class="Aurelia-input w-full text-xs" value="44000" inputmode="decimal" data-numeric-only="amount"></div>
         </div>
         <div class="grid grid-cols-2 gap-3">
-          <div><label class="block text-xs font-bold text-slate-700 mb-1">Special Allowance (₹)</label><input type="number" class="Aurelia-input w-full text-xs" value="25000" inputmode="numeric" pattern="[0-9]*" data-numeric-only="digits"></div>
-          <div><label class="block text-xs font-bold text-slate-700 mb-1">EPF Deduction (12%)</label><input type="number" class="Aurelia-input w-full text-xs" value="13200" inputmode="numeric" pattern="[0-9]*" data-numeric-only="digits"></div>
+          <div><label class="block text-xs font-bold text-slate-700 mb-1">Special Allowance (₹)</label><input type="text" class="Aurelia-input w-full text-xs" value="25000" inputmode="decimal" data-numeric-only="amount"></div>
+          <div><label class="block text-xs font-bold text-slate-700 mb-1">EPF Deduction (12%)</label><input type="text" class="Aurelia-input w-full text-xs" value="13200" inputmode="decimal" data-numeric-only="amount"></div>
         </div>
         <div class="flex items-center justify-end space-x-2.5 pt-3 border-t border-slate-100">
           <button type="button" class="btn-Aurelia-secondary text-xs py-2 px-4 btn-close-modal">Cancel</button>
@@ -3988,7 +3988,7 @@
   <!-- Authentication Controller -->
   <script src="../auth.js?v=20261128_10"></script>
   <!-- Main JavaScript Logic -->
-  <script src="../main.js?v=20261128_22"></script>
+  <script src="../main.js?v=20261128_23"></script>
 </body>
 
 </html>

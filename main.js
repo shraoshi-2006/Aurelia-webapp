@@ -5126,11 +5126,11 @@ $(document).ready(function () {
       $('#wrapper-existing-customer').addClass('hidden');
       $('#wrapper-walkin-customer').removeClass('hidden');
       $('#input-walkin-name').val(ord.customerName || '');
-      $('#input-walkin-phone').val(ord.customerPhone || '');
+      $('#input-walkin-phone').val(String(ord.customerPhone || '').replace(/[^0-9]/g, '').slice(0, 10));
       $('#input-walkin-email').val(ord.customerEmail || '');
     }
 
-    $('#input-bill-tableref').val(ord.tableRoom || '');
+    $('#input-bill-tableref').val(String(ord.tableRoom || '').replace(/[^0-9]/g, '').slice(0, 3));
     $('#linked-order-banner').removeClass('hidden');
     $('#linked-order-id-label').text(ord.orderNumber || ord.id);
     $('#input-linked-order-id').val(ord.id);
@@ -5280,9 +5280,9 @@ $(document).ready(function () {
   $('#select-customer-dropdown').on('change', function () {
     const $opt = $(this).find('option:selected');
     const rawPhone = String($opt.data('phone') || '');
-    const numericPhone = rawPhone.replace(/[^0-9]/g, '');
+    const numericPhone = rawPhone.replace(/[^0-9]/g, '').slice(0, 10);
     const email = $opt.data('email') || '';
-    $('#input-customer-phone-preview').val(numericPhone || rawPhone);
+    $('#input-customer-phone-preview').val(numericPhone || rawPhone.slice(0, 10));
     $('#input-customer-email').val(email || '');
     $('#err-customer-select').addClass('hidden');
     if (email && isValidEmail(email)) {
@@ -5292,10 +5292,10 @@ $(document).ready(function () {
 
   // Allow typing/editing numeric phone directly in Phone Number box & auto-match customer directory
   $('#input-customer-phone-preview').on('input', function () {
-    const typedDigits = String($(this).val() || '').replace(/[^0-9]/g, '');
+    const typedDigits = String($(this).val() || '').replace(/[^0-9]/g, '').slice(0, 10);
     if (typedDigits.length < 7) return;
     const customers = Storage.get(STORAGE_KEYS.CUSTOMERS) || [];
-    const matched = customers.find(c => String(c.phone || '').replace(/[^0-9]/g, '') === typedDigits);
+    const matched = customers.find(c => String(c.phone || '').replace(/[^0-9]/g, '').slice(0, 10) === typedDigits);
     if (matched && $('#select-customer-dropdown').val() !== String(matched.id)) {
       $('#select-customer-dropdown').val(matched.id);
       if (matched.email) $('#input-customer-email').val(matched.email);
@@ -5488,14 +5488,14 @@ $(document).ready(function () {
 
       $('#input-bill-number').val(bill.billNumber || generateNextBillNumber());
       $('#bill-number-display').text($('#input-bill-number').val());
-      $('#input-bill-tableref').val(bill.tableRoom || '');
+      $('#input-bill-tableref').val(String(bill.tableRoom || '').replace(/[^0-9]/g, '').slice(0, 3));
 
       if (bill.customerName && bill.customerName !== 'Draft Guest' && bill.customerName !== 'Walk-in Guest') {
         $('input[name="customer-type"][value="walkin"]').prop('checked', true);
         $('#wrapper-existing-customer').addClass('hidden');
         $('#wrapper-walkin-customer').removeClass('hidden');
         $('#input-walkin-name').val(bill.customerName);
-        $('#input-walkin-phone').val(bill.customerPhone && bill.customerPhone !== '-' ? bill.customerPhone : '');
+        $('#input-walkin-phone').val(bill.customerPhone && bill.customerPhone !== '-' ? String(bill.customerPhone).replace(/[^0-9]/g, '').slice(0, 10) : '');
         $('#input-walkin-email').val(bill.customerEmail || '');
       }
 
@@ -5671,7 +5671,13 @@ $(document).ready(function () {
         return null;
       }
       customerName = $opt.data('name');
-      customerPhone = $.trim($('#input-customer-phone-preview').val()).replace(/[^0-9]/g, '') || $opt.data('phone');
+      const typedPreviewPhone = $.trim($('#input-customer-phone-preview').val()).replace(/[^0-9]/g, '').slice(0, 10);
+      if (typedPreviewPhone && typedPreviewPhone.length !== 10) {
+        $('#input-customer-phone-preview').focus();
+        showToast('Customer phone number must be 10 digits.', 'error');
+        return null;
+      }
+      customerPhone = typedPreviewPhone || String($opt.data('phone') || '').replace(/[^0-9]/g, '').slice(0, 10);
       customerAddress = $opt.data('addr');
       customerEmail = $.trim($('#input-customer-email').val());
 
@@ -5685,7 +5691,7 @@ $(document).ready(function () {
       shouldSendEmail = $('#check-send-email-invoice').is(':checked');
     } else {
       customerName = $.trim($('#input-walkin-name').val());
-      customerPhone = $.trim($('#input-walkin-phone').val());
+      customerPhone = $.trim($('#input-walkin-phone').val()).replace(/[^0-9]/g, '').slice(0, 10);
       customerEmail = $.trim($('#input-walkin-email').val());
 
       if (!customerName) {
@@ -5693,9 +5699,10 @@ $(document).ready(function () {
         $('#input-walkin-name').focus();
         return null;
       }
-      if (!customerPhone || customerPhone.length < 8) {
+      if (!/^\d{10}$/.test(customerPhone)) {
         $('#err-walkin-phone').removeClass('hidden');
         $('#input-walkin-phone').focus();
+        showToast('Walk-in phone number must be exactly 10 digits.', 'error');
         return null;
       }
       if (!customerEmail || !isValidEmail(customerEmail)) {
@@ -6853,7 +6860,8 @@ $(document).ready(function () {
     const editId = $('#menu-item-edit-id').val();
     const name = $.trim($('#menu-input-name').val());
     const category = $('#menu-select-category').val();
-    const price = parseFloat($('#menu-input-price').val());
+    const rawPriceStr = $.trim($('#menu-input-price').val());
+    const price = parseFloat(rawPriceStr);
     const desc = $.trim($('#menu-input-desc').val());
     const isAvail = $('#menu-check-available').is(':checked');
 
@@ -6862,7 +6870,7 @@ $(document).ready(function () {
       $('#err-menu-name').removeClass('hidden');
       hasError = true;
     }
-    if (isNaN(price) || price <= 0) {
+    if (!/^\d+(\.\d{1,2})?$/.test(rawPriceStr) || isNaN(price) || price <= 0) {
       $('#err-menu-price').removeClass('hidden');
       hasError = true;
     }
@@ -7211,8 +7219,8 @@ $(document).ready(function () {
   $('#form-new-order').on('submit', function (e) {
     e.preventDefault();
     const customer = $.trim($('#order-input-customer').val());
-    const tableRoom = $.trim($('#order-input-location').val());
-    const phone = $.trim($('#order-input-phone').val());
+    const tableRoom = $.trim($('#order-input-location').val()).replace(/[^0-9]/g, '').slice(0, 3);
+    const phone = $.trim($('#order-input-phone').val()).replace(/[^0-9]/g, '').slice(0, 10);
     const notes = $.trim($('#order-input-notes').val());
 
     let hasError = false;
@@ -7220,8 +7228,13 @@ $(document).ready(function () {
       $('#err-order-customer').removeClass('hidden');
       hasError = true;
     }
-    if (!tableRoom) {
+    if (!/^\d{1,3}$/.test(tableRoom)) {
       $('#err-order-location').removeClass('hidden');
+      hasError = true;
+    }
+    if (phone && !/^\d{10}$/.test(phone)) {
+      showToast('Order phone number must be 10 digits.', 'error');
+      $('#order-input-phone').focus();
       hasError = true;
     }
     if (currentOrderItems.length === 0) {
@@ -7526,7 +7539,7 @@ $(document).ready(function () {
     e.preventDefault();
     const editId = $('#customer-edit-id').val();
     const name = $.trim($('#cust-input-name').val());
-    const phone = $.trim($('#cust-input-phone').val());
+    const phone = $.trim($('#cust-input-phone').val()).replace(/[^0-9]/g, '').slice(0, 10);
     const email = $.trim($('#cust-input-email').val());
     const addr = $.trim($('#cust-input-address').val());
 
@@ -7535,7 +7548,7 @@ $(document).ready(function () {
       $('#err-cust-name').removeClass('hidden');
       hasError = true;
     }
-    if (!phone || phone.length < 8) {
+    if (!/^\d{10}$/.test(phone)) {
       $('#err-cust-phone').removeClass('hidden');
       hasError = true;
     }
@@ -8095,7 +8108,7 @@ $(document).ready(function () {
               </div>
               <div>
                 <label class="block text-[11px] font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">Phone Number</label>
-                <input type="tel" id="input-profile-phone" inputmode="numeric" pattern="[0-9]*" data-numeric-only="digits" maxlength="15" placeholder="e.g. 9845011201" class="Aurelia-input w-full text-xs py-2 px-3">
+                <input type="tel" id="input-profile-phone" inputmode="numeric" pattern="[0-9]*" data-numeric-only="digits" data-max-digits="10" maxlength="10" placeholder="e.g. 9845011201" class="Aurelia-input w-full text-xs py-2 px-3">
               </div>
               <div>
                 <label class="block text-[11px] font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wider mb-1">Employee ID</label>
@@ -8262,7 +8275,7 @@ $(document).ready(function () {
 
     const nameVal = $('#input-profile-name').val().trim();
     const emailVal = $('#input-profile-email').val().trim();
-    const phoneVal = $('#input-profile-phone').val().replace(/[^0-9]/g, '').trim();
+    const phoneVal = $('#input-profile-phone').val().replace(/[^0-9]/g, '').slice(0, 10).trim();
     const empIdVal = $('#input-profile-empid').val().trim() || 'EMP-2026-01';
     const roleVal = $('#select-profile-role').val();
     const deptVal = $('#select-profile-dept').val();
@@ -8270,6 +8283,11 @@ $(document).ready(function () {
     if (!nameVal) {
       showToast('Please enter your full name.', 'warning');
       $('#input-profile-name').focus();
+      return;
+    }
+    if (phoneVal && !/^\d{10}$/.test(phoneVal)) {
+      showToast('Phone number must be 10 digits.', 'warning');
+      $('#input-profile-phone').focus();
       return;
     }
 
@@ -8881,7 +8899,9 @@ $(document).ready(function () {
     const dept = $('#add-emp-dept').val();
     const station = $.trim($('#add-emp-station').val());
     const shift = $('#add-emp-shift').val();
-    const phone = $.trim($('#add-emp-phone').val());
+    const phone = $.trim($('#add-emp-phone').val()).replace(/[^0-9]/g, '').slice(0, 10);
+    const emerPhone = $.trim($('#add-emp-emer-phone').val()).replace(/[^0-9]/g, '').slice(0, 10);
+    const rawSalary = $.trim($('#add-emp-salary').val());
     const email = $.trim($('#add-emp-email').val());
     const status = $('#add-emp-status').val() || 'On Duty';
     const id = $('#add-emp-id').val() || ('AUR-EMP-2026-' + Date.now().toString().slice(-3));
@@ -8889,6 +8909,21 @@ $(document).ready(function () {
     if (!name) {
       showToast('Please enter employee legal name', 'warning');
       $('#add-emp-name').focus();
+      return;
+    }
+    if (phone && !/^\d{10}$/.test(phone)) {
+      showToast('Employee phone number must be 10 digits.', 'warning');
+      $('#add-emp-phone').focus();
+      return;
+    }
+    if (emerPhone && !/^\d{10}$/.test(emerPhone)) {
+      showToast('Emergency phone number must be 10 digits.', 'warning');
+      $('#add-emp-emer-phone').focus();
+      return;
+    }
+    if (rawSalary && !/^\d+(\.\d{1,2})?$/.test(rawSalary)) {
+      showToast('Salary amount must have at most 2 decimal places.', 'warning');
+      $('#add-emp-salary').focus();
       return;
     }
     if (!role) {
@@ -8911,7 +8946,7 @@ $(document).ready(function () {
       station: station,
       shift: shift.split(' ')[0] + ' ' + (shift.split(' ')[1] || '-') + ' ' + (shift.split(' ')[2] || ''),
       status: status,
-      phone: phone || '+91 98000 00000',
+      phone: phone || '9800000000',
       email: email
     };
 
@@ -10642,52 +10677,6 @@ $(document).ready(function () {
       .dark select.order-status-inline-change[data-status="served"],
       .dark select.order-status-inline-change[data-status="served"]:focus {
         background-color: #FFFFFF !important;
-        border-color: #0284c7 !important;
-        color: #0284c7 !important;
-        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%230284c7' stroke-linecap='round' stroke-linejoin='round' stroke-width='2.2' d='M6 8l4 4 4-4'/%3e%3c/svg%3e") !important;
-      }
-      select.order-status-inline-change option {
-        background-color: #FFFFFF !important;
-        color: #1E293B !important;
-      }
-      .dark select.order-status-inline-change option {
-        background-color: #1E293B !important;
-        color: #F8FAFC !important;
-      }
-    `;
-
-    const hdr = document.getElementById('top-desktop-header') || document.querySelector('.app-sticky-header');
-    if (hdr) {
-      hdr.classList.add('app-sticky-header');
-    }
-    updateHeaderScrollState();
-  }
-
-  function updateHeaderScrollState() {
-    const hdr = document.getElementById('top-desktop-header') || document.querySelector('.app-sticky-header');
-    if (!hdr) return;
-    const mainEl = document.getElementById('main-app-content');
-    const scrollTop = Math.max(
-      window.scrollY || window.pageYOffset || 0,
-      document.documentElement ? document.documentElement.scrollTop : 0,
-      document.body ? document.body.scrollTop : 0,
-      mainEl ? mainEl.scrollTop : 0
-    );
-    hdr.classList.toggle('is-scrolled', scrollTop > 4);
-  }
-
-  if (!window.__aureliaStickyHeaderScrollBound) {
-    window.__aureliaStickyHeaderScrollBound = true;
-    window.addEventListener('scroll', updateHeaderScrollState, { passive: true });
-    window.addEventListener('resize', updateHeaderScrollState, { passive: true });
-    window.addEventListener('hashchange', () => setTimeout(updateHeaderScrollState, 30));
-    window.addEventListener('load', updateHeaderScrollState);
-  }
-
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => {
-      applyHeaderStyles();
-      const mainEl = document.getElementById('main-app-content');
       if (mainEl && !mainEl.__aureliaScrollBound) {
         mainEl.__aureliaScrollBound = true;
         mainEl.addEventListener('scroll', updateHeaderScrollState, { passive: true });
@@ -12373,7 +12362,7 @@ $(document).ready(function () {
 });
 
 // =========================================================================
-// GLOBAL STRICT NUMERIC FORMATTING ENGINE (Digits-only & Numeric Fields)
+// GLOBAL STRICT NUMERIC FORMATTING ENGINE (Phone, Room, Amount, Quantity)
 // =========================================================================
 (function initStrictNumericFormatting() {
   const CONTROL_KEYS = new Set([
@@ -12381,107 +12370,209 @@ $(document).ready(function () {
     'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Home', 'End'
   ]);
 
+  const hintTimers = new WeakMap();
+
   /**
-   * Determine numeric enforcement mode for an input element ('digits' | 'decimal' | null).
+   * Determine numeric enforcement config for an input element.
    */
-  function getNumericMode(el) {
+  function getNumericConfig(el) {
     if (!el || el.tagName !== 'INPUT' || el.readOnly || el.disabled) return null;
     const explicit = (el.getAttribute('data-numeric-only') || '').toLowerCase();
-    if (explicit === 'digits' || explicit === 'decimal') return explicit;
+    const rawMax = parseInt(el.getAttribute('data-max-digits') || el.getAttribute('maxlength') || '', 10);
+    const maxDigits = !isNaN(rawMax) && rawMax > 0 ? rawMax : null;
+
+    if (explicit === 'amount' || explicit === 'decimal') {
+      return { mode: 'amount', maxDigits: null };
+    }
+    if (explicit === 'digits') {
+      return { mode: 'digits', maxDigits };
+    }
     const t = (el.type || '').toLowerCase();
-    if (t === 'tel') return 'digits';
+    if (t === 'tel') return { mode: 'digits', maxDigits: maxDigits || 10 };
     if (t === 'number') {
-      return (el.getAttribute('step') || '').toLowerCase() === 'any' ? 'decimal' : 'digits';
+      const step = (el.getAttribute('step') || '').toLowerCase();
+      if (step === 'any' || step === '0.01') return { mode: 'amount', maxDigits: null };
+      return { mode: 'digits', maxDigits };
     }
     const im = (el.getAttribute('inputmode') || '').toLowerCase();
-    if (im === 'numeric') return 'digits';
-    if (im === 'decimal') return 'decimal';
+    if (im === 'numeric') return { mode: 'digits', maxDigits };
+    if (im === 'decimal') return { mode: 'amount', maxDigits: null };
     return null;
   }
 
   /**
-   * Strip non-numeric characters according to the field mode.
+   * Sanitize input strings cleanly according to digits-only (with optional max digits) or amount (max 2 decimals).
    */
-  function sanitizeNumericValue(raw, mode) {
+  function sanitizeNumericValue(raw, mode = 'digits', maxDigits = null) {
     const str = String(raw == null ? '' : raw);
-    if (mode !== 'decimal') {
-      return str.replace(/[^0-9]/g, '');
+    if (mode !== 'amount' && mode !== 'decimal') {
+      let digits = str.replace(/[^0-9]/g, '');
+      if (maxDigits && maxDigits > 0) {
+        digits = digits.slice(0, maxDigits);
+      }
+      return digits;
     }
-    const cleaned = str.replace(/[^0-9.]/g, '');
+
+    let cleaned = str.replace(/[^0-9.]/g, '');
     const firstDot = cleaned.indexOf('.');
     if (firstDot === -1) return cleaned;
-    return cleaned.slice(0, firstDot + 1) + cleaned.slice(firstDot + 1).replace(/\./g, '');
+
+    let intPart = cleaned.slice(0, firstDot);
+    if (!intPart) intPart = '0';
+    const fracPart = cleaned.slice(firstDot + 1).replace(/\./g, '').slice(0, 2);
+    return `${intPart}.${fracPart}`;
   }
 
   window.sanitizeAureliaNumeric = sanitizeNumericValue;
 
-  // 1. Block invalid key presses before browsers process them (stops 'e', '+', '-', '.', letters & symbols)
+  /**
+   * Show temporary non-intrusive inline validation message beneath an input field.
+   */
+  function showNumericHint(el, msg) {
+    if (!el || !el.parentElement || typeof document === 'undefined' || !document.createElement) return;
+    const host = el.parentElement;
+    let hint = host.querySelector ? host.querySelector('.aurelia-numeric-hint') : null;
+    if (!hint) {
+      hint = document.createElement('p');
+      hint.className = 'aurelia-numeric-hint text-[10px] font-semibold text-amber-600 dark:text-amber-400 mt-1';
+      host.appendChild(hint);
+    }
+    hint.textContent = msg;
+    hint.classList.remove('hidden');
+
+    const prevTimer = hintTimers.get(el);
+    if (prevTimer) clearTimeout(prevTimer);
+    hintTimers.set(el, setTimeout(() => {
+      hint.classList.add('hidden');
+    }, 2200));
+  }
+
+  /**
+   * Clear numeric hint immediately once valid input resumes.
+   */
+  function clearNumericHint(el) {
+    if (!el || !el.parentElement || !el.parentElement.querySelector) return;
+    const hint = el.parentElement.querySelector('.aurelia-numeric-hint');
+    if (hint) hint.classList.add('hidden');
+  }
+
+  /**
+   * Predict the resulting value when typing/inserting text into an input element.
+   */
+  function getPredictedValue(el, insertedText) {
+    const val = String(el.value || '');
+    if ((el.type || '').toLowerCase() !== 'number' && typeof el.selectionStart === 'number') {
+      const start = el.selectionStart;
+      const end = el.selectionEnd != null ? el.selectionEnd : start;
+      return val.slice(0, start) + insertedText + val.slice(end);
+    }
+    return val + insertedText;
+  }
+
+  // 1. Block invalid keys, overflow digits, and >2 decimals at keydown
   document.addEventListener('keydown', function (e) {
     const el = e.target;
-    const mode = getNumericMode(el);
-    if (!mode) return;
+    const cfg = getNumericConfig(el);
+    if (!cfg) return;
     if (e.ctrlKey || e.metaKey || e.altKey || CONTROL_KEYS.has(e.key)) return;
     if (!e.key || e.key === 'Unidentified' || e.key === 'Process' || e.key.length > 1) return;
 
-    if (mode === 'decimal') {
-      if (/^[0-9]$/.test(e.key)) return;
-      if (e.key === '.' && !String(el.value || '').includes('.')) return;
-      e.preventDefault();
+    if (cfg.mode === 'amount') {
+      if (!/^[0-9.]$/.test(e.key)) {
+        e.preventDefault();
+        showNumericHint(el, 'Numbers and max 2 decimal places only (e.g. 1250.50).');
+        return;
+      }
+      const next = getPredictedValue(el, e.key);
+      if (e.key === '.' && String(el.value || '').includes('.') && next.split('.').length > 2) {
+        e.preventDefault();
+        return;
+      }
+      if (!/^\d*(\.\d{0,2})?$/.test(next)) {
+        e.preventDefault();
+        showNumericHint(el, 'Maximum 2 digits allowed after decimal point.');
+        return;
+      }
+      clearNumericHint(el);
       return;
     }
 
+    // Strict digits-only mode (Phone max 10, Room max 3, Qty/Counts)
     if (!/^[0-9]$/.test(e.key)) {
       e.preventDefault();
+      showNumericHint(el, 'Only numeric digits (0-9) are allowed.');
+      return;
     }
+    const nextDigits = getPredictedValue(el, e.key);
+    if (cfg.maxDigits && nextDigits.replace(/[^0-9]/g, '').length > cfg.maxDigits) {
+      e.preventDefault();
+      showNumericHint(el, `Maximum ${cfg.maxDigits} digits allowed.`);
+      return;
+    }
+    clearNumericHint(el);
   }, true);
 
   // 2. Catch mobile virtual keyboards / IME text insertion
   document.addEventListener('beforeinput', function (e) {
     const el = e.target;
-    const mode = getNumericMode(el);
-    if (!mode || !e.data) return;
+    const cfg = getNumericConfig(el);
+    if (!cfg || !e.data) return;
     if (e.inputType && e.inputType.startsWith('delete')) return;
 
-    const validChunk = mode === 'decimal' ? /^[0-9.]+$/ : /^[0-9]+$/;
+    const validChunk = cfg.mode === 'amount' ? /^[0-9.]+$/ : /^[0-9]+$/;
     if (!validChunk.test(e.data)) {
       e.preventDefault();
+      showNumericHint(el, cfg.mode === 'amount' ? 'Numbers and max 2 decimal places only.' : 'Only numeric digits (0-9) are allowed.');
       return;
     }
-    if (mode === 'decimal' && e.data.includes('.') && String(el.value || '').includes('.')) {
+    const next = getPredictedValue(el, e.data);
+    if (cfg.mode === 'amount') {
+      if (!/^\d*(\.\d{0,2})?$/.test(next)) {
+        e.preventDefault();
+        showNumericHint(el, 'Maximum 2 digits allowed after decimal point.');
+      }
+    } else if (cfg.maxDigits && next.replace(/[^0-9]/g, '').length > cfg.maxDigits) {
       e.preventDefault();
+      showNumericHint(el, `Maximum ${cfg.maxDigits} digits allowed.`);
     }
   }, true);
 
-  // 3. Sanitize pasted text so only numbers (never letters/symbols) enter the box
+  // 3. Sanitize pasted text strictly per field rule (max digits / 2 decimals)
   document.addEventListener('paste', function (e) {
     const el = e.target;
-    const mode = getNumericMode(el);
-    if (!mode || !e.clipboardData) return;
+    const cfg = getNumericConfig(el);
+    if (!cfg || !e.clipboardData) return;
 
     const rawText = e.clipboardData.getData('text') || '';
-    const cleaned = sanitizeNumericValue(rawText, mode);
+    const cleaned = sanitizeNumericValue(rawText, cfg.mode, cfg.maxDigits);
     e.preventDefault();
-    if (!cleaned) return;
+    if (!cleaned) {
+      showNumericHint(el, 'Invalid paste blocked: numbers only.');
+      return;
+    }
 
     if ((el.type || '').toLowerCase() !== 'number' && typeof el.selectionStart === 'number') {
       const start = el.selectionStart;
       const end = el.selectionEnd != null ? el.selectionEnd : start;
       const combined = el.value.slice(0, start) + cleaned + el.value.slice(end);
-      el.value = sanitizeNumericValue(combined, mode);
+      el.value = sanitizeNumericValue(combined, cfg.mode, cfg.maxDigits);
       const nextCaret = Math.min(el.value.length, start + cleaned.length);
       try { el.setSelectionRange(nextCaret, nextCaret); } catch (err) { }
     } else {
       el.value = cleaned;
     }
+    clearNumericHint(el);
     el.dispatchEvent(new Event('input', { bubbles: true }));
   }, true);
 
-  // 4. Final input sanitization pass for autofill or edge browser changes
+  // 4. Final input sanitization pass for autofill / dynamic edits
   document.addEventListener('input', function (e) {
     const el = e.target;
-    const mode = getNumericMode(el);
-    if (!mode) return;
-    const nextVal = sanitizeNumericValue(el.value, mode);
+    const cfg = getNumericConfig(el);
+    if (!cfg) return;
+    let raw = String(el.value || '');
+    if (cfg.mode === 'amount' && raw === '.') raw = '0.';
+    const nextVal = sanitizeNumericValue(raw, cfg.mode, cfg.maxDigits);
     if (el.value !== nextVal) {
       el.value = nextVal;
     }
