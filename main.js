@@ -218,7 +218,7 @@
       recordId: 'EMP-2026-01',
       actionLabel: 'Review Request',
       actionUrl: 'human-resources/leave-request.html',
-      timestamp: new Date(Date.now() - 2 * 3600 * 1000).toISOString(),
+      timestamp: new Date(Date.now() - 26 * 3600 * 1000).toISOString(),
       read: false,
       important: true,
       dedupeKey: 'init-leave-emp-2026-01'
@@ -232,7 +232,7 @@
       recordId: 'CUST-002',
       actionLabel: 'View Profile',
       actionUrl: 'customer.html',
-      timestamp: new Date(Date.now() - 4 * 3600 * 1000).toISOString(),
+      timestamp: new Date(Date.now() - 3 * 24 * 3600 * 1000).toISOString(),
       read: true,
       important: false,
       dedupeKey: 'init-cust-cust-002'
@@ -246,7 +246,7 @@
       recordId: 'ITEM-25',
       actionLabel: 'Manage Menu',
       actionUrl: 'menu.html',
-      timestamp: new Date(Date.now() - 6 * 3600 * 1000).toISOString(),
+      timestamp: new Date(Date.now() - 5 * 24 * 3600 * 1000).toISOString(),
       read: true,
       important: false,
       dedupeKey: 'init-menu-item-25'
@@ -260,7 +260,7 @@
       recordId: 'PAY-2026-10',
       actionLabel: 'View Payslips',
       actionUrl: 'human-resources/pay-slip.html',
-      timestamp: new Date(Date.now() - 24 * 3600 * 1000).toISOString(),
+      timestamp: new Date(Date.now() - 14 * 24 * 3600 * 1000).toISOString(),
       read: true,
       important: false,
       dedupeKey: 'init-system-payroll'
@@ -336,12 +336,12 @@
   function readStore() {
     try {
       const raw = global.localStorage.getItem(NOTIF_STORAGE_KEY);
-      if (!raw || global.localStorage.getItem('aurelia_notif_seed_v2') !== 'true') {
+      if (!raw || global.localStorage.getItem('aurelia_notif_seed_v4') !== 'true') {
         const currentItems = raw ? JSON.parse(raw) : [];
-        if (!Array.isArray(currentItems) || currentItems.length === 0) {
+        if (!Array.isArray(currentItems) || currentItems.length === 0 || global.localStorage.getItem('aurelia_notif_seed_v4') !== 'true') {
           if (global.localStorage.getItem('aurelia_notif_cleared_by_user') !== 'true') {
             global.localStorage.setItem(NOTIF_STORAGE_KEY, JSON.stringify(DEFAULT_INITIAL_NOTIFICATIONS));
-            global.localStorage.setItem('aurelia_notif_seed_v2', 'true');
+            global.localStorage.setItem('aurelia_notif_seed_v4', 'true');
             return { items: DEFAULT_INITIAL_NOTIFICATIONS.slice(), error: null };
           }
         }
@@ -651,6 +651,32 @@
     `;
   }
 
+  function getDateGroup(timestamp) {
+    const d = new Date(timestamp);
+    if (isNaN(d.getTime())) return 'Earlier';
+
+    const now = new Date();
+    const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
+    const startOfYesterday = startOfToday - (24 * 60 * 60 * 1000);
+    const dayOfWeek = now.getDay() === 0 ? 6 : now.getDay() - 1;
+    const startOfThisWeek = startOfToday - (dayOfWeek * 24 * 60 * 60 * 1000);
+    const startOfThisMonth = new Date(now.getFullYear(), now.getMonth(), 1).getTime();
+
+    const t = d.getTime();
+
+    if (t >= startOfToday) {
+      return 'Today';
+    } else if (t >= startOfYesterday) {
+      return 'Yesterday';
+    } else if (t >= Math.min(startOfThisWeek, startOfToday - 6 * 24 * 60 * 60 * 1000)) {
+      return 'This week';
+    } else if (t >= Math.min(startOfThisMonth, startOfToday - 30 * 24 * 60 * 60 * 1000)) {
+      return 'This month';
+    } else {
+      return 'Earlier';
+    }
+  }
+
   function renderDropdownList() {
     ensureNotificationDropdown();
     const scrollArea = document.getElementById('dropdown-notif-scroll-area');
@@ -674,7 +700,34 @@
       return;
     }
 
-    scrollArea.innerHTML = items.map(renderDropdownItem).join('');
+    const ORDERED_GROUPS = ['Today', 'Yesterday', 'This week', 'This month', 'Earlier'];
+    const buckets = {};
+    ORDERED_GROUPS.forEach(g => { buckets[g] = []; });
+
+    items.forEach(n => {
+      const g = getDateGroup(n.timestamp);
+      if (!buckets[g]) buckets[g] = [];
+      buckets[g].push(n);
+    });
+
+    let html = '';
+    ORDERED_GROUPS.forEach(groupName => {
+      const groupItems = buckets[groupName];
+      if (groupItems && groupItems.length > 0) {
+        html += `
+          <div class="dropdown-notif-group">
+            <div class="px-4 pt-3.5 pb-1 text-sm font-bold text-slate-900 dark:text-white sticky top-0 bg-white/95 dark:bg-[#1a1c23]/95 backdrop-blur-xs z-10 select-none border-b border-slate-100/60 dark:border-zinc-800/50">
+              ${groupName}
+            </div>
+            <div class="divide-y divide-slate-100 dark:divide-zinc-800/70">
+              ${groupItems.map(renderDropdownItem).join('')}
+            </div>
+          </div>
+        `;
+      }
+    });
+
+    scrollArea.innerHTML = html;
   }
 
   function openDropdown() {
