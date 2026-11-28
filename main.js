@@ -180,6 +180,150 @@
   const MAX_NOTIFICATIONS = 200;
   const VALID_CATEGORIES = ['Orders', 'Leave Requests', 'Billing & Payments', 'Customers', 'Menu', 'System'];
 
+  const DEFAULT_INITIAL_NOTIFICATIONS = [
+    {
+      id: 'notif-init-1',
+      title: 'New Table Order Placed',
+      description: 'Table 2 placed Order #ORD-0089 with 2x Paneer Tikka Angara, Garlic Naan & Fresh Lime Soda.',
+      category: 'Orders',
+      module: 'Order Queue',
+      recordId: 'ORD-0089',
+      actionLabel: 'View Order',
+      actionUrl: 'order.html',
+      timestamp: new Date(Date.now() - 15 * 60 * 1000).toISOString(),
+      read: false,
+      important: true,
+      dedupeKey: 'init-order-ord-0089'
+    },
+    {
+      id: 'notif-init-2',
+      title: 'Invoice Payment Received',
+      description: 'Invoice #INV-2026-0141 paid ₹1,428.00 via UPI by Piyush Barua for Suite 402.',
+      category: 'Billing & Payments',
+      module: 'Billing & POS',
+      recordId: 'INV-2026-0141',
+      actionLabel: 'View Bill',
+      actionUrl: 'billing-management/billing-details.html?bill=INV-2026-0141',
+      timestamp: new Date(Date.now() - 48 * 60 * 1000).toISOString(),
+      read: false,
+      important: false,
+      dedupeKey: 'init-bill-inv-2026-0141'
+    },
+    {
+      id: 'notif-init-3',
+      title: 'Diwali Leave Request',
+      description: 'Shraoshi Basak (Front Desk Supervisor) requested 3 days Casual Leave for Diwali week.',
+      category: 'Leave Requests',
+      module: 'Leave Management',
+      recordId: 'EMP-2026-01',
+      actionLabel: 'Review Request',
+      actionUrl: 'human-resources/leave-request.html',
+      timestamp: new Date(Date.now() - 2 * 3600 * 1000).toISOString(),
+      read: false,
+      important: true,
+      dedupeKey: 'init-leave-emp-2026-01'
+    },
+    {
+      id: 'notif-init-4',
+      title: 'VIP Guest Checked-In',
+      description: 'Guest Piyush Barua registered in Luxury Suite 402. Loyalty Tier: Platinum Member.',
+      category: 'Customers',
+      module: 'Customer Registry',
+      recordId: 'CUST-002',
+      actionLabel: 'View Profile',
+      actionUrl: 'customer.html',
+      timestamp: new Date(Date.now() - 4 * 3600 * 1000).toISOString(),
+      read: true,
+      important: false,
+      dedupeKey: 'init-cust-cust-002'
+    },
+    {
+      id: 'notif-init-5',
+      title: 'Bar Stock Alert',
+      description: 'Fresh Lime Soda & Masala Chai inventory is below 10-unit minimum at Bar counter.',
+      category: 'Menu',
+      module: 'Menu Catalog',
+      recordId: 'ITEM-25',
+      actionLabel: 'Manage Menu',
+      actionUrl: 'menu.html',
+      timestamp: new Date(Date.now() - 6 * 3600 * 1000).toISOString(),
+      read: true,
+      important: false,
+      dedupeKey: 'init-menu-item-25'
+    },
+    {
+      id: 'notif-init-6',
+      title: 'October 2026 Salary Disbursed',
+      description: 'Staff payroll statements & statutory EPF allowances finalized for Front Office audit.',
+      category: 'System',
+      module: 'Human Resources',
+      recordId: 'PAY-2026-10',
+      actionLabel: 'View Payslips',
+      actionUrl: 'human-resources/pay-slip.html',
+      timestamp: new Date(Date.now() - 24 * 3600 * 1000).toISOString(),
+      read: true,
+      important: false,
+      dedupeKey: 'init-system-payroll'
+    }
+  ];
+
+  function escapeNotifHtml(str) {
+    return String(str == null ? '' : str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+
+  function getCategoryStyle(category) {
+    const map = {
+      'Orders': {
+        badgeCls: 'bg-sky-100 text-sky-800 dark:bg-sky-900/50 dark:text-sky-300',
+        iconBg: 'bg-sky-500/15 text-sky-600 dark:text-sky-400 border-sky-500/25',
+        svg: '<path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007z" />'
+      },
+      'Leave Requests': {
+        badgeCls: 'bg-purple-100 text-purple-800 dark:bg-purple-900/50 dark:text-purple-300',
+        iconBg: 'bg-purple-500/15 text-purple-600 dark:text-purple-400 border-purple-500/25',
+        svg: '<path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />'
+      },
+      'Billing & Payments': {
+        badgeCls: 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/50 dark:text-emerald-300',
+        iconBg: 'bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border-emerald-500/25',
+        svg: '<path stroke-linecap="round" stroke-linejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5z" />'
+      },
+      'Customers': {
+        badgeCls: 'bg-amber-100 text-amber-800 dark:bg-amber-900/50 dark:text-amber-300',
+        iconBg: 'bg-amber-500/15 text-amber-600 dark:text-amber-400 border-amber-500/25',
+        svg: '<path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z" />'
+      },
+      'Menu': {
+        badgeCls: 'bg-orange-100 text-orange-800 dark:bg-orange-900/50 dark:text-orange-300',
+        iconBg: 'bg-orange-500/15 text-orange-600 dark:text-orange-400 border-orange-500/25',
+        svg: '<path stroke-linecap="round" stroke-linejoin="round" d="M12 8.25v-1.5m0 1.5c-1.355 0-2.697.056-4.024.166C6.845 8.51 6 9.473 6 10.608v2.513m6-4.87c1.355 0 2.697.055 4.024.165C17.155 8.51 18 9.473 18 10.608v2.513m-3-4.87v-1.5m-6 1.5v-1.5m12 9.75l-1.5.75a3.354 3.354 0 01-3 0 3.354 3.354 0 00-3 0 3.354 3.354 0 01-3 0 3.354 3.354 0 00-3 0 3.354 3.354 0 01-3 0L3 16.5m15-3.38a48.474 48.474 0 00-6-.37c-2.032 0-4.034.125-6 .37m12 0c.39.049.777.102 1.163.16 1.07.16 1.837 1.094 1.837 2.175v5.17c0 .62-.504 1.124-1.125 1.124H4.125A1.125 1.125 0 013 20.625v-5.17c0-1.08.768-2.014 1.837-2.174A47.78 47.78 0 016 13.12M12.265 3.11a.375.375 0 11-.53 0L12 2.845l.265.265zm-3 0a.375.375 0 11-.53 0L9 2.845l.265.265zm6 0a.375.375 0 11-.53 0L15 2.845l.265.265z" />'
+      },
+      'System': {
+        badgeCls: 'bg-slate-200 text-slate-800 dark:bg-slate-700 dark:text-slate-200',
+        iconBg: 'bg-slate-500/15 text-[#14213D] dark:text-slate-300 border-slate-500/25',
+        svg: '<path stroke-linecap="round" stroke-linejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.324.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 011.37.49l1.296 2.247a1.125 1.125 0 01-.26 1.431l-1.003.827c-.293.24-.438.613-.431.992a6.759 6.759 0 010 .255c-.007.378.138.75.43.99l1.005.828c.424.35.534.954.26 1.43l-1.298 2.247a1.125 1.125 0 01-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.57 6.57 0 01-.22.128c-.331.183-.581.495-.644.869l-.213 1.28c-.09.543-.56.941-1.11.941h-2.594c-.55 0-1.02-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 01-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 01-1.369-.49l-1.297-2.247a1.125 1.125 0 01.26-1.431l1.004-.827c.292-.24.437-.613.43-.992a6.932 6.932 0 010-.255c.007-.378-.138-.75-.43-.99l-1.004-.828a1.125 1.125 0 01-.26-1.43l1.297-2.247a1.125 1.125 0 011.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.087.22-.128.332-.183.582-.495.644-.869l.214-1.281z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />'
+      }
+    };
+    return map[category] || map['System'];
+  }
+
+  function formatNotifTime(iso) {
+    const d = new Date(iso);
+    if (isNaN(d.getTime())) return { rel: 'Just now', full: '-' };
+    const diffSec = Math.max(0, Math.floor((Date.now() - d.getTime()) / 1000));
+    let rel = 'Just now';
+    if (diffSec >= 86400) rel = `${Math.floor(diffSec / 86400)}d ago`;
+    else if (diffSec >= 3600) rel = `${Math.floor(diffSec / 3600)}h ago`;
+    else if (diffSec >= 60) rel = `${Math.floor(diffSec / 60)}m ago`;
+    const full = d.toLocaleString('en-IN', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true });
+    return { rel, full };
+  }
+
   function resolveAppUrl(rootRelPath) {
     if (!rootRelPath) return '#';
     if (/^https?:\/\//i.test(rootRelPath)) return rootRelPath;
@@ -192,7 +336,16 @@
   function readStore() {
     try {
       const raw = global.localStorage.getItem(NOTIF_STORAGE_KEY);
-      if (!raw) return { items: [], error: null };
+      if (!raw || global.localStorage.getItem('aurelia_notif_seed_v2') !== 'true') {
+        const currentItems = raw ? JSON.parse(raw) : [];
+        if (!Array.isArray(currentItems) || currentItems.length === 0) {
+          if (global.localStorage.getItem('aurelia_notif_cleared_by_user') !== 'true') {
+            global.localStorage.setItem(NOTIF_STORAGE_KEY, JSON.stringify(DEFAULT_INITIAL_NOTIFICATIONS));
+            global.localStorage.setItem('aurelia_notif_seed_v2', 'true');
+            return { items: DEFAULT_INITIAL_NOTIFICATIONS.slice(), error: null };
+          }
+        }
+      }
       const parsed = JSON.parse(raw);
       if (!Array.isArray(parsed)) return { items: [], error: 'Corrupted notification store format.' };
       const clean = parsed.filter(n => n && typeof n === 'object' && n.id && n.title);
@@ -258,6 +411,12 @@
         mPill.classList.toggle('hidden', unread === 0);
         mPill.style.display = unread === 0 ? 'none' : 'inline-flex';
       }
+    }
+    const dropdownPill = global.document && global.document.getElementById('dropdown-notif-badge-pill');
+    if (dropdownPill) {
+      dropdownPill.textContent = `${label} New`;
+      dropdownPill.classList.toggle('hidden', unread === 0);
+      dropdownPill.style.display = unread === 0 ? 'none' : 'inline-flex';
     }
   }
 
@@ -335,6 +494,237 @@
     global.location.href = resolveAppUrl('notification.html');
   }
 
+  // =========================================================================
+  // YOUTUBE-STYLE TOPBAR FLOATING DROPDOWN FLYOUT CONTROLLER
+  // =========================================================================
+  function ensureDropdownStyles() {
+    if (document.getElementById('aurelia-notif-flyout-styles')) return;
+    const style = document.createElement('style');
+    style.id = 'aurelia-notif-flyout-styles';
+    style.textContent = `
+      #topbar-notifications-dropdown {
+        z-index: 1000 !important;
+        box-shadow: 0 20px 45px -10px rgba(15, 23, 42, 0.3), 0 0 0 1px rgba(0, 0, 0, 0.08) !important;
+        animation: notifFlyoutIn 0.16s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      }
+      @keyframes notifFlyoutIn {
+        from {
+          opacity: 0;
+          transform: translateY(-6px) scale(0.98);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0) scale(1);
+        }
+      }
+      .dark #topbar-notifications-dropdown {
+        background: #1e2029 !important;
+        border-color: rgba(255, 255, 255, 0.14) !important;
+        box-shadow: 0 25px 55px -12px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.08) !important;
+      }
+      .dropdown-notif-scroll {
+        scrollbar-width: thin;
+        scrollbar-color: rgba(148, 163, 184, 0.45) transparent;
+      }
+      .dropdown-notif-scroll::-webkit-scrollbar {
+        width: 5px;
+      }
+      .dropdown-notif-scroll::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      .dropdown-notif-scroll::-webkit-scrollbar-thumb {
+        background: rgba(148, 163, 184, 0.45);
+        border-radius: 9999px;
+      }
+      .dark .dropdown-notif-scroll {
+        scrollbar-color: rgba(255, 255, 255, 0.22) transparent;
+      }
+      .dark .dropdown-notif-scroll::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.22);
+      }
+      .dropdown-notif-item {
+        transition: background-color 0.15s ease;
+      }
+      .dropdown-notif-item:hover {
+        background-color: rgba(241, 245, 249, 0.85);
+      }
+      .dark .dropdown-notif-item:hover {
+        background-color: rgba(39, 43, 54, 0.8);
+      }
+    `;
+    document.head.appendChild(style);
+  }
+
+  function ensureNotificationDropdown() {
+    ensureDropdownStyles();
+    const btn = document.getElementById('btn-top-notifications');
+    if (!btn || !btn.parentElement) return null;
+    let dropdown = document.getElementById('topbar-notifications-dropdown');
+    if (dropdown) return dropdown;
+
+    const notifUrl = resolveAppUrl('notification.html');
+
+    const wrapper = document.createElement('div');
+    wrapper.id = 'topbar-notifications-dropdown';
+    wrapper.className = 'hidden absolute right-0 top-full mt-2.5 w-[360px] sm:w-[420px] max-w-[calc(100vw-24px)] bg-white dark:bg-[#1a1c23] border border-slate-200/90 dark:border-white/10 rounded-2xl shadow-2xl z-[100] overflow-hidden select-none text-left';
+    wrapper.innerHTML = `
+      <!-- Header (YouTube-style) -->
+      <div class="px-4 py-3.5 border-b border-slate-100 dark:border-zinc-800/80 flex items-center justify-between bg-slate-50/70 dark:bg-zinc-800/40">
+        <div class="flex items-center gap-2">
+          <h3 class="text-[15px] sm:text-base font-bold text-[#14213D] dark:text-zinc-100 tracking-tight">Notifications</h3>
+          <span id="dropdown-notif-badge-pill" class="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-[#14213D] text-[#FCA311] dark:bg-[#FCA311] dark:text-black hidden">0 New</span>
+        </div>
+        <div class="flex items-center gap-1">
+          <button type="button" id="btn-dropdown-mark-all-read" class="p-1.5 rounded-lg text-slate-500 hover:text-slate-800 dark:text-zinc-400 dark:hover:text-zinc-100 hover:bg-slate-200/60 dark:hover:bg-zinc-700/60 transition-colors cursor-pointer text-xs font-semibold flex items-center gap-1" title="Mark all as read">
+            <svg class="w-4 h-4 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+            </svg>
+            <span class="hidden sm:inline text-[11px]">Mark read</span>
+          </button>
+          <a href="${notifUrl}" id="btn-dropdown-goto-settings" class="p-1.5 rounded-lg text-slate-500 hover:text-slate-800 dark:text-zinc-400 dark:hover:text-zinc-100 hover:bg-slate-200/60 dark:hover:bg-zinc-700/60 transition-colors cursor-pointer" title="Notification Live Centre & Settings">
+            <svg class="w-4 h-4 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.324.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 011.37.49l1.296 2.247a1.125 1.125 0 01-.26 1.431l-1.003.827c-.293.24-.438.613-.431.992a6.759 6.759 0 010 .255c-.007.378.138.75.43.99l1.005.828c.424.35.534.954.26 1.43l-1.298 2.247a1.125 1.125 0 01-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.57 6.57 0 01-.22.128c-.331.183-.581.495-.644.869l-.213 1.28c-.09.543-.56.941-1.11.941h-2.594c-.55 0-1.02-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 01-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 01-1.369-.49l-1.297-2.247a1.125 1.125 0 01.26-1.431l1.004-.827c.292-.24.437-.613.43-.992a6.932 6.932 0 010-.255c.007-.378-.138-.75-.43-.99l-1.004-.828a1.125 1.125 0 01-.26-1.43l1.297-2.247a1.125 1.125 0 011.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.087.22-.128.332-.183.582-.495.644-.869l.214-1.281z" />
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+            </svg>
+          </a>
+        </div>
+      </div>
+
+      <!-- Scrollable List Container -->
+      <div id="dropdown-notif-scroll-area" class="dropdown-notif-scroll max-h-[420px] overflow-y-auto divide-y divide-slate-100 dark:divide-zinc-800/70 overscroll-contain">
+      </div>
+
+      <!-- Footer -->
+      <div class="px-4 py-2.5 border-t border-slate-100 dark:border-zinc-800/80 bg-slate-50/80 dark:bg-zinc-800/50 flex items-center justify-between text-xs">
+        <a href="${notifUrl}" id="btn-dropdown-view-all" class="font-bold text-[#14213D] dark:text-[#FCA311] hover:underline flex items-center gap-1 transition-colors">
+          <span>View All in Notification Centre</span>
+          <span class="text-sm font-bold">&rarr;</span>
+        </a>
+        <button type="button" id="btn-dropdown-clear-all" class="text-slate-400 hover:text-rose-500 dark:text-zinc-400 dark:hover:text-rose-400 transition-colors font-medium cursor-pointer">
+          Clear all
+        </button>
+      </div>
+    `;
+
+    btn.parentElement.appendChild(wrapper);
+    return wrapper;
+  }
+
+  function renderDropdownItem(n) {
+    const isUnread = !n.read;
+    const isImp = !!n.important;
+    const t = formatNotifTime(n.timestamp);
+    const st = getCategoryStyle(n.category);
+    const targetUrl = n.actionUrl ? resolveAppUrl(n.actionUrl) : '';
+
+    return `
+      <div class="dropdown-notif-item group relative flex items-start gap-3 p-3.5 hover:bg-slate-50/90 dark:hover:bg-zinc-800/60 transition-colors cursor-pointer ${isUnread ? 'bg-sky-50/30 dark:bg-sky-950/20' : ''}" data-id="${escapeNotifHtml(n.id)}" data-url="${escapeNotifHtml(targetUrl)}">
+        <!-- Unread Blue Dot Indicator (YouTube Style) -->
+        <div class="shrink-0 pt-2.5">
+          <span class="block w-2 h-2 rounded-full ${isUnread ? 'bg-sky-500 shadow-xs' : 'invisible'}"></span>
+        </div>
+
+        <!-- Left Avatar / Category Icon -->
+        <div class="w-10 h-10 rounded-full shrink-0 flex items-center justify-center border ${st.iconBg} shadow-2xs">
+          <svg class="w-4 h-4 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2">${st.svg}</svg>
+        </div>
+
+        <!-- Main Text Content (Title & Description) -->
+        <div class="flex-1 min-w-0 pr-1">
+          <p class="text-[13px] leading-snug text-slate-800 dark:text-zinc-100 line-clamp-2">
+            <span class="font-bold text-[#14213D] dark:text-white">${escapeNotifHtml(n.title)}:</span>
+            <span> ${escapeNotifHtml(n.description)}</span>
+          </p>
+          <div class="flex items-center gap-2 mt-1 text-[11px] text-slate-500 dark:text-zinc-400">
+            <span class="font-medium">${escapeNotifHtml(t.rel)}</span>
+            <span>&bull;</span>
+            <span class="px-1.5 py-0.2 rounded text-[10px] font-semibold ${st.badgeCls}">${escapeNotifHtml(n.category)}</span>
+            ${isImp ? '<span class="text-amber-500 font-bold text-[10px] flex items-center gap-0.5">★ Priority</span>' : ''}
+          </div>
+        </div>
+
+        <!-- Right 3-dots Kebab Button & Popover -->
+        <div class="shrink-0 relative notif-kebab-container">
+          <button type="button" class="btn-dropdown-kebab p-1.5 rounded-full text-slate-400 hover:text-slate-700 dark:text-zinc-400 dark:hover:text-white hover:bg-slate-200/50 dark:hover:bg-zinc-700/50 transition-colors" data-id="${escapeNotifHtml(n.id)}" title="More options" aria-label="More options">
+            <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+              <path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/>
+            </svg>
+          </button>
+          <div class="dropdown-kebab-menu hidden absolute right-0 top-full mt-1 w-40 bg-white dark:bg-[#252833] border border-slate-200 dark:border-zinc-700 rounded-xl shadow-xl z-30 py-1 text-xs">
+            <button type="button" class="btn-kebab-toggle-read w-full px-3 py-2 text-left hover:bg-slate-50 dark:hover:bg-zinc-700/60 flex items-center gap-2 text-slate-700 dark:text-zinc-200 font-medium cursor-pointer" data-id="${escapeNotifHtml(n.id)}">
+              <span>${isUnread ? 'Mark as read' : 'Mark as unread'}</span>
+            </button>
+            <button type="button" class="btn-kebab-delete w-full px-3 py-2 text-left hover:bg-rose-50 dark:hover:bg-rose-950/40 flex items-center gap-2 text-rose-600 dark:text-rose-400 font-medium cursor-pointer" data-id="${escapeNotifHtml(n.id)}">
+              <span>Delete notification</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  function renderDropdownList() {
+    ensureNotificationDropdown();
+    const scrollArea = document.getElementById('dropdown-notif-scroll-area');
+    if (!scrollArea) return;
+
+    const { items } = readStore();
+    syncBadges();
+
+    if (!items.length) {
+      scrollArea.innerHTML = `
+        <div class="py-12 px-6 text-center text-slate-400 dark:text-zinc-500">
+          <div class="w-12 h-12 mx-auto rounded-full bg-slate-100 dark:bg-zinc-800 flex items-center justify-center mb-3 text-slate-400 dark:text-zinc-400">
+            <svg class="w-6 h-6 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="1.8">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0" />
+            </svg>
+          </div>
+          <p class="font-bold text-sm text-slate-700 dark:text-zinc-200">No notifications right now</p>
+          <p class="text-xs text-slate-400 dark:text-zinc-400 mt-1">You're all caught up with hotel activities!</p>
+        </div>
+      `;
+      return;
+    }
+
+    scrollArea.innerHTML = items.map(renderDropdownItem).join('');
+  }
+
+  function openDropdown() {
+    const dropdown = ensureNotificationDropdown();
+    if (!dropdown) return;
+    renderDropdownList();
+    dropdown.classList.remove('hidden');
+    const btn = document.getElementById('btn-top-notifications');
+    if (btn) {
+      btn.classList.add('ring-2', 'ring-[#FCA311]', 'border-[#FCA311]');
+    }
+  }
+
+  function closeDropdown() {
+    const dropdown = document.getElementById('topbar-notifications-dropdown');
+    if (dropdown) {
+      dropdown.classList.add('hidden');
+      const openKebab = dropdown.querySelectorAll('.dropdown-kebab-menu');
+      openKebab.forEach(m => m.classList.add('hidden'));
+    }
+    const btn = document.getElementById('btn-top-notifications');
+    if (btn) {
+      const p = (global.location && global.location.pathname) ? global.location.pathname.toLowerCase() : '';
+      if (!p.includes('notification')) {
+        btn.classList.remove('ring-2', 'ring-[#FCA311]', 'border-[#FCA311]');
+      }
+    }
+  }
+
+  function toggleDropdown() {
+    const dropdown = document.getElementById('topbar-notifications-dropdown');
+    if (dropdown && !dropdown.classList.contains('hidden')) {
+      closeDropdown();
+    } else {
+      openDropdown();
+    }
+  }
+
   global.AureliaNotifications = {
     STORAGE_KEY: NOTIF_STORAGE_KEY,
     CATEGORIES: VALID_CATEGORIES,
@@ -348,7 +738,15 @@
     clearAll,
     syncBadges,
     resolveUrl: resolveAppUrl,
-    redirectToCenter
+    redirectToCenter,
+    escapeHtml: escapeNotifHtml,
+    getCategoryStyle,
+    formatTime: formatNotifTime,
+    ensureDropdown: ensureNotificationDropdown,
+    renderDropdownList,
+    openDropdown,
+    closeDropdown,
+    toggleDropdown
   };
 
   if (global.document) {
@@ -7214,18 +7612,127 @@ $(document).ready(function () {
     updateReportSummary(fromStr, toStr);
   });
 
-  // Keyboard Shortcuts: ESC to close modals
+  // Keyboard Shortcuts: ESC to close modals and flyout dropdowns
   $(document).on('keydown', function (e) {
     if (e.key === 'Escape') {
       $('.fixed:not(#toast-container)').addClass('hidden');
+      if (window.AureliaNotifications && typeof window.AureliaNotifications.closeDropdown === 'function') {
+        window.AureliaNotifications.closeDropdown();
+      }
     }
   });
 
-  // Notification button action -> Redirect to Notification Centre
+  // Notification button action -> Toggle YouTube-style Floating Notification Dropdown
   $(document).on('click', '#btn-top-notifications', function (e) {
     e.preventDefault();
+    e.stopPropagation();
+    if (window.AureliaNotifications && typeof window.AureliaNotifications.toggleDropdown === 'function') {
+      window.AureliaNotifications.toggleDropdown();
+    }
+  });
+
+  // Close notification dropdown when clicking outside
+  $(document).on('click', function (e) {
+    if (!$(e.target).closest('#btn-top-notifications, #topbar-notifications-dropdown').length) {
+      if (window.AureliaNotifications && typeof window.AureliaNotifications.closeDropdown === 'function') {
+        window.AureliaNotifications.closeDropdown();
+      }
+    }
+    if (!$(e.target).closest('.notif-kebab-container').length) {
+      $('.dropdown-kebab-menu').addClass('hidden');
+    }
+  });
+
+  // Notification Dropdown Item Click -> Mark as read, close dropdown, navigate to target URL
+  $(document).on('click', '.dropdown-notif-item', function (e) {
+    if ($(e.target).closest('button, a, .dropdown-kebab-menu').length) return;
+    const id = $(this).attr('data-id');
+    const url = $(this).attr('data-url');
+    if (id && window.AureliaNotifications) {
+      window.AureliaNotifications.markRead(id, true);
+    }
+    if (window.AureliaNotifications && typeof window.AureliaNotifications.closeDropdown === 'function') {
+      window.AureliaNotifications.closeDropdown();
+    }
+    if (url && url !== '#' && url !== 'javascript:void(0)') {
+      window.location.href = url;
+    }
+  });
+
+  // Dropdown Item Kebab Menu Toggle
+  $(document).on('click', '.btn-dropdown-kebab', function (e) {
+    e.preventDefault();
+    e.stopPropagation();
+    const $container = $(this).closest('.notif-kebab-container');
+    const $menu = $container.find('.dropdown-kebab-menu');
+    $('.dropdown-kebab-menu').not($menu).addClass('hidden');
+    $menu.toggleClass('hidden');
+  });
+
+  // Dropdown Item Kebab: Toggle Read/Unread
+  $(document).on('click', '.btn-kebab-toggle-read', function (e) {
+    e.preventDefault();
+    e.stopPropagation();
+    const id = $(this).attr('data-id');
+    if (!id || !window.AureliaNotifications) return;
+    const { items } = window.AureliaNotifications.getAll();
+    const target = items.find(n => n.id === id);
+    if (target) {
+      window.AureliaNotifications.markRead(id, !target.read);
+      window.AureliaNotifications.renderDropdownList();
+    }
+  });
+
+  // Dropdown Item Kebab: Delete Single Notification
+  $(document).on('click', '.btn-kebab-delete', function (e) {
+    e.preventDefault();
+    e.stopPropagation();
+    const id = $(this).attr('data-id');
+    if (!id || !window.AureliaNotifications) return;
+    window.AureliaNotifications.remove(id);
+    window.AureliaNotifications.renderDropdownList();
+    if (typeof window.showToast === 'function') {
+      window.showToast('Notification removed', 'info');
+    }
+  });
+
+  // Dropdown Header: Mark All as Read
+  $(document).on('click', '#btn-dropdown-mark-all-read', function (e) {
+    e.preventDefault();
+    e.stopPropagation();
     if (window.AureliaNotifications) {
-      window.AureliaNotifications.redirectToCenter();
+      window.AureliaNotifications.markAllRead();
+      window.AureliaNotifications.renderDropdownList();
+      if (typeof window.showToast === 'function') {
+        window.showToast('All notifications marked as read', 'success');
+      }
+    }
+  });
+
+  // Dropdown Footer: Clear All Notifications
+  $(document).on('click', '#btn-dropdown-clear-all', function (e) {
+    e.preventDefault();
+    e.stopPropagation();
+    if (window.AureliaNotifications) {
+      window.AureliaNotifications.clearAll();
+      try {
+        localStorage.setItem('aurelia_notif_cleared_by_user', 'true');
+      } catch (err) { }
+      window.AureliaNotifications.renderDropdownList();
+      if (typeof window.showToast === 'function') {
+        window.showToast('All notifications cleared', 'info');
+      }
+    }
+  });
+
+  // Live Auto-Refresh Dropdown when background events push notifications
+  window.addEventListener('aurelia:notifications-updated', function () {
+    if (window.AureliaNotifications) {
+      window.AureliaNotifications.syncBadges();
+      const dd = document.getElementById('topbar-notifications-dropdown');
+      if (dd && !dd.classList.contains('hidden') && typeof window.AureliaNotifications.renderDropdownList === 'function') {
+        window.AureliaNotifications.renderDropdownList();
+      }
     }
   });
 
