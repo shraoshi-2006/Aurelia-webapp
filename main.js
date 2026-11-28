@@ -587,11 +587,7 @@
       </div>
 
       <!-- Footer -->
-      <div class="px-4 py-2.5 border-t border-slate-100 dark:border-zinc-800/80 bg-slate-50/80 dark:bg-zinc-800/50 flex items-center justify-between text-xs">
-        <span class="text-slate-400 dark:text-zinc-400 font-medium text-[11px] flex items-center gap-1.5">
-          <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block"></span>
-          Live Activity Feed
-        </span>
+      <div class="px-4 py-2 border-t border-slate-100 dark:border-zinc-800/80 bg-slate-50/80 dark:bg-zinc-800/50 flex items-center justify-end text-xs">
         <button type="button" id="btn-dropdown-clear-all" class="text-slate-400 hover:text-rose-500 dark:text-zinc-400 dark:hover:text-rose-400 transition-colors font-medium cursor-pointer">
           Clear all
         </button>
