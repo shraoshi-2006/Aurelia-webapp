@@ -580,19 +580,40 @@ $(document).ready(function () {
   }
 
   /* ========================================================================= */
-  /* GLOBAL LIST TABLE ENGINE: Pure White default, Grey background + Grey shadow on hover */
+  /* GLOBAL LIST TABLE ENGINE: Matches 3D Glassmorphism Card Styling           */
   /* ========================================================================= */
   #main-app-content .Aurelia-card:has(table),
   #main-app-content .aurelia-card:has(table),
-  #main-app-content div:has(> .overflow-x-auto > table),
-  #main-app-content div:has(> table),
+  #main-app-content .finset-card:has(table),
   section .Aurelia-card:has(table),
   section .aurelia-card:has(table),
-  section div:has(> .overflow-x-auto > table),
-  section div:has(> table) {
-    background: #FFFFFF !important;
-    border: 1px solid rgba(226, 232, 240, 0.95) !important;
-    box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.06), 0 1px 3px rgba(15, 23, 42, 0.04) !important;
+  section .finset-card:has(table) {
+    background: linear-gradient(135deg,
+      rgba(255, 255, 255, 0.68) 0%,
+      rgba(255, 255, 255, 0.32) 45%,
+      rgba(235, 243, 252, 0.45) 100%) !important;
+    backdrop-filter: blur(28px) saturate(180%) !important;
+    -webkit-backdrop-filter: blur(28px) saturate(180%) !important;
+    border: 0.1px solid var(--aurelia-card-border, rgba(255, 255, 255, 0.82)) !important;
+    border-radius: 28px !important;
+    box-shadow:
+      inset 1.5px 1.5px 2px 0px rgba(255, 255, 255, 0.98),
+      inset 0.5px 0.5px 1px 0px rgba(255, 255, 255, 0.9),
+      inset -1.5px -1.5px 2.5px 0px rgba(15, 23, 42, 0.08),
+      inset 0 0 32px 0px rgba(255, 255, 255, 0.35),
+      0 24px 48px -12px rgba(15, 23, 42, 0.14),
+      0 8px 18px -4px rgba(15, 23, 42, 0.07),
+      0 0 0 1px rgba(255, 255, 255, 0.4) !important;
+  }
+
+  /* Keep non-card inner table wrappers transparent so glassmorphism shines through */
+  #main-app-content div:has(> .overflow-x-auto > table):not(.Aurelia-card):not(.aurelia-card):not(.finset-card),
+  #main-app-content div:has(> table):not(.Aurelia-card):not(.aurelia-card):not(.finset-card),
+  section div:has(> .overflow-x-auto > table):not(.Aurelia-card):not(.aurelia-card):not(.finset-card),
+  section div:has(> table):not(.Aurelia-card):not(.aurelia-card):not(.finset-card) {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;
   }
@@ -636,26 +657,22 @@ $(document).ready(function () {
     padding-right: 0.875rem !important;
   }
 
-  #main-app-content .Aurelia-card:has(table)::before,
-  #main-app-content .aurelia-card:has(table)::before,
-  #main-app-content div:has(> .overflow-x-auto > table)::before,
-  #main-app-content div:has(> table)::before,
-  section .Aurelia-card:has(table)::before,
-  section .aurelia-card:has(table)::before,
-  section div:has(> .overflow-x-auto > table)::before,
-  section div:has(> table)::before {
+  #main-app-content div:has(> .overflow-x-auto > table):not(.Aurelia-card):not(.aurelia-card):not(.finset-card)::before,
+  #main-app-content div:has(> table):not(.Aurelia-card):not(.aurelia-card):not(.finset-card)::before,
+  section div:has(> .overflow-x-auto > table):not(.Aurelia-card):not(.aurelia-card):not(.finset-card)::before,
+  section div:has(> table):not(.Aurelia-card):not(.aurelia-card):not(.finset-card)::before {
     display: none !important;
     content: none !important;
   }
 
   table:not(#print-invoice-area table) {
-    background-color: #FFFFFF !important;
+    background-color: transparent !important;
     border-collapse: separate !important;
     border-spacing: 0 !important;
   }
 
   table:not(#print-invoice-area table) thead tr {
-    background-color: #F8FAFC !important;
+    background-color: rgba(255, 255, 255, 0.52) !important;
   }
 
   table:not(#print-invoice-area table) tbody {
@@ -671,68 +688,76 @@ $(document).ready(function () {
     transition: background-color 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
   }
 
-  /* Alternating Zebra Striping: 1 row light grey, 1 row white */
+  /* Alternating Translucent Striping inside Glassmorphism Cards */
   table:not(#print-invoice-area table) tbody tr:nth-child(odd),
   table:not(#print-invoice-area table) tbody tr:nth-child(odd) td {
-    background-color: #F1F5F9 !important;
+    background-color: rgba(241, 245, 249, 0.45) !important;
   }
 
   table:not(#print-invoice-area table) tbody tr:nth-child(even),
   table:not(#print-invoice-area table) tbody tr:nth-child(even) td {
-    background-color: #FFFFFF !important;
+    background-color: rgba(255, 255, 255, 0.32) !important;
   }
 
   table:not(#print-invoice-area table) tbody tr:hover {
-    box-shadow: 0 8px 24px -4px rgba(15, 23, 42, 0.16), 0 3px 8px -2px rgba(15, 23, 42, 0.08) !important;
+    box-shadow: 0 8px 24px -4px rgba(15, 23, 42, 0.14), 0 3px 8px -2px rgba(15, 23, 42, 0.06) !important;
     transform: translateY(-1px);
     z-index: 20;
   }
 
   table:not(#print-invoice-area table) tbody tr:hover td {
-    background-color: #E2E8F0 !important;
+    background-color: rgba(226, 232, 240, 0.65) !important;
     border-color: #CBD5E1 !important;
   }
 
   /* Retain selection highlight for selected rows */
   table:not(#print-invoice-area table) tbody tr.is-row-selected,
   table:not(#print-invoice-area table) tbody tr.is-row-selected td {
-    background-color: rgba(252, 163, 17, 0.12) !important;
+    background-color: rgba(252, 163, 17, 0.14) !important;
   }
   table:not(#print-invoice-area table) tbody tr.is-row-selected:hover,
   table:not(#print-invoice-area table) tbody tr.is-row-selected:hover td {
-    background-color: rgba(252, 163, 17, 0.18) !important;
+    background-color: rgba(252, 163, 17, 0.22) !important;
   }
 
-  /* Dark mode overrides for all tables */
+  /* Dark mode overrides for all tables inside glassmorphism cards */
   .dark #main-app-content .Aurelia-card:has(table),
   .dark #main-app-content .aurelia-card:has(table),
-  .dark #main-app-content div:has(> .overflow-x-auto > table),
-  .dark #main-app-content div:has(> table),
+  .dark #main-app-content .finset-card:has(table),
   .dark section .Aurelia-card:has(table),
   .dark section .aurelia-card:has(table),
-  .dark section div:has(> .overflow-x-auto > table),
-  .dark section div:has(> table) {
-    background: #0F172A !important;
+  .dark section .finset-card:has(table) {
+    background: linear-gradient(135deg, rgba(15, 23, 42, 0.78) 0%, rgba(15, 23, 42, 0.62) 100%) !important;
     border-color: #334155 !important;
   }
+  .dark #main-app-content div:has(> .overflow-x-auto > table):not(.Aurelia-card):not(.aurelia-card):not(.finset-card),
+  .dark #main-app-content div:has(> table):not(.Aurelia-card):not(.aurelia-card):not(.finset-card),
+  .dark section div:has(> .overflow-x-auto > table):not(.Aurelia-card):not(.aurelia-card):not(.finset-card),
+  .dark section div:has(> table):not(.Aurelia-card):not(.aurelia-card):not(.finset-card) {
+    background: transparent !important;
+    border: none !important;
+  }
 
-  .dark table:not(#print-invoice-area table),
+  .dark table:not(#print-invoice-area table) {
+    background-color: transparent !important;
+  }
+
   .dark table:not(#print-invoice-area table) thead tr {
-    background-color: #1E293B !important;
+    background-color: rgba(30, 41, 59, 0.68) !important;
   }
 
   .dark table:not(#print-invoice-area table) tbody {
-    background-color: #0F172A !important;
+    background-color: transparent !important;
   }
 
   .dark table:not(#print-invoice-area table) tbody tr:nth-child(odd),
   .dark table:not(#print-invoice-area table) tbody tr:nth-child(odd) td {
-    background-color: #131E32 !important;
+    background-color: rgba(19, 30, 50, 0.55) !important;
   }
 
   .dark table:not(#print-invoice-area table) tbody tr:nth-child(even),
   .dark table:not(#print-invoice-area table) tbody tr:nth-child(even) td {
-    background-color: #0F172A !important;
+    background-color: rgba(15, 23, 42, 0.42) !important;
   }
 
   .dark table:not(#print-invoice-area table) tbody tr:hover td {
