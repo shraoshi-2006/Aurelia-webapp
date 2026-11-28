@@ -5290,6 +5290,19 @@ $(document).ready(function () {
     }
   });
 
+  // Allow typing/editing numeric phone directly in Phone Number box & auto-match customer directory
+  $('#input-customer-phone-preview').on('input', function () {
+    const typedDigits = String($(this).val() || '').replace(/[^0-9]/g, '');
+    if (typedDigits.length < 7) return;
+    const customers = Storage.get(STORAGE_KEYS.CUSTOMERS) || [];
+    const matched = customers.find(c => String(c.phone || '').replace(/[^0-9]/g, '') === typedDigits);
+    if (matched && $('#select-customer-dropdown').val() !== String(matched.id)) {
+      $('#select-customer-dropdown').val(matched.id);
+      if (matched.email) $('#input-customer-email').val(matched.email);
+      $('#err-customer-select, #err-customer-email').addClass('hidden');
+    }
+  });
+
   $('#input-customer-email').on('input', function () {
     const val = $.trim($(this).val());
     if (val && isValidEmail(val)) {
@@ -5513,6 +5526,7 @@ $(document).ready(function () {
     $('#btn-discount-flat').removeClass('bg-[#14213D] text-white').addClass('text-slate-500');
     $('#linked-order-banner').addClass('hidden');
     $('#input-linked-order-id').val('');
+    $('#input-customer-phone-preview').val('');
     $('#input-customer-email').val('');
     $('#input-walkin-email').val('');
     $('#err-customer-email, #err-walkin-email, #err-customer-select, #err-walkin-name, #err-walkin-phone').addClass('hidden');
@@ -5545,7 +5559,7 @@ $(document).ready(function () {
       customerId = $opt.val() || null;
       if (customerId) {
         customerName = $opt.data('name') || '';
-        customerPhone = $opt.data('phone') || '';
+        customerPhone = $.trim($('#input-customer-phone-preview').val()).replace(/[^0-9]/g, '') || ($opt.data('phone') || '');
         customerAddress = $opt.data('addr') || '';
       }
       customerEmail = $.trim($('#input-customer-email').val());
@@ -5657,7 +5671,7 @@ $(document).ready(function () {
         return null;
       }
       customerName = $opt.data('name');
-      customerPhone = $opt.data('phone');
+      customerPhone = $.trim($('#input-customer-phone-preview').val()).replace(/[^0-9]/g, '') || $opt.data('phone');
       customerAddress = $opt.data('addr');
       customerEmail = $.trim($('#input-customer-email').val());
 
