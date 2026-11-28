@@ -6566,7 +6566,7 @@ $(document).ready(function () {
     });
   });
 
-  // Customer Profile View
+  // Customer View Action -> Open Tax Invoice Receipt Modal Directly
   let currentViewingCustomerId = null;
   $(document).on('click', '.btn-view-customer-profile', function () {
     const id = $(this).data('id');
@@ -6575,43 +6575,37 @@ $(document).ready(function () {
     const c = customers.find(x => x.id === id);
     if (!c) return;
 
-    $('#view-cust-name').text(c.name);
-    $('#view-cust-phone').text(c.phone);
-    $('#view-cust-email').text(c.email || 'None on file');
-    $('#view-cust-address').text(c.address || 'Standard Guest');
+    const bills = Storage.get(STORAGE_KEYS.BILLS, DEFAULT_BILLS);
+    const custBills = bills
+      .filter(b =>
+        (c.phone && b.customerPhone === c.phone) ||
+        (b.customerName && c.name && b.customerName.toLowerCase() === c.name.toLowerCase())
+      )
+      .sort((a, b) => new Date(b.date) - new Date(a.date));
 
-    $('#view-cust-total-spend').text(formatMoney(c.totalSpend || 0));
-    $('#view-cust-visits').text(c.visits || 0);
-
-    const avgSpend = (c.visits && c.visits > 0) ? ((c.totalSpend || 0) / c.visits) : 0;
-    $('#view-cust-avg-spend').text(formatMoney(avgSpend));
-
-    // Customer past bills
-    const bills = Storage.get(STORAGE_KEYS.BILLS);
-    const custBills = bills.filter(b => (b.customerPhone === c.phone) || (b.customerName && b.customerName.toLowerCase() === c.name.toLowerCase()));
-
-    const $tbody = $('#view-cust-bills-tbody');
-    $tbody.empty();
-
-    if (custBills.length === 0) {
-      $tbody.append(`<tr><td colspan="5" class="py-3 text-center text-slate-400">No invoice history recorded yet.</td></tr>`);
-    } else {
-      custBills.forEach(b => {
-        $tbody.append(`
-          <tr>
-            <td class="py-2 px-3 font-mono font-bold text-[#14213D]">${escapeHtml(b.billNumber)}</td>
-            <td class="py-2 px-3 text-slate-500">${formatDateTime(b.date)}</td>
-            <td class="py-2 px-3 text-slate-600 dark:text-slate-300 font-medium">${getPaymentMethodBadge(b.paymentMethod)}</td>
-            <td class="py-2 px-3 text-center font-black text-slate-900 dark:text-white">${formatMoney(b.grandTotal)}</td>
-            <td class="py-2 px-3 text-center">
-              <button type="button" class="btn-view-bill btn-finset-secondary text-xs py-0.5 px-2" data-id="${b.id}">View</button>
-            </td>
-          </tr>
-        `);
-      });
+    if (custBills.length > 0) {
+      openInvoiceModal(custBills[0]);
+      return;
     }
 
-    $('#modal-view-customer').removeClass('hidden');
+    const totalSpend = Number(c.totalSpend) || 0;
+    const subtotal = totalSpend > 0 ? +(totalSpend / 1.05).toFixed(2) : 0;
+    const taxAmount = +(totalSpend - subtotal).toFixed(2);
+    openInvoiceModal({
+      id: 'inv-guest-' + c.id,
+      billNumber: 'No Invoice Yet',
+      date: new Date().toISOString(),
+      customerName: c.name || 'Guest',
+      customerPhone: c.phone || '-',
+      customerEmail: c.email || '',
+      tableRoom: c.address || 'Front Desk Registry',
+      paymentMethod: 'Cash',
+      subtotal,
+      discountAmount: 0,
+      taxAmount,
+      grandTotal: totalSpend,
+      items: []
+    });
   });
 
   // =========================================================================
