@@ -566,19 +566,26 @@
     wrapper.id = 'topbar-notifications-dropdown';
     wrapper.className = 'hidden absolute right-0 top-full mt-2.5 w-[360px] sm:w-[420px] max-w-[calc(100vw-24px)] bg-white dark:bg-[#1a1c23] border border-slate-200/90 dark:border-white/10 rounded-2xl shadow-2xl z-[100] overflow-hidden select-none text-left';
     wrapper.innerHTML = `
-      <!-- Header (YouTube-style) -->
-      <div class="px-4 py-3.5 border-b border-slate-100 dark:border-zinc-800/80 flex items-center justify-between bg-slate-50/70 dark:bg-zinc-800/40">
+      <!-- Header with Time Filter Dropdown -->
+      <div class="px-4 py-3 border-b border-slate-100 dark:border-zinc-800/80 flex items-center justify-between bg-slate-50/70 dark:bg-zinc-800/40">
         <div class="flex items-center gap-2">
           <h3 class="text-[15px] sm:text-base font-bold text-[#14213D] dark:text-zinc-100 tracking-tight">Notifications</h3>
           <span id="dropdown-notif-badge-pill" class="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-[#14213D] text-[#FCA311] dark:bg-[#FCA311] dark:text-black hidden">0 New</span>
         </div>
-        <div class="flex items-center gap-1">
-          <button type="button" id="btn-dropdown-mark-all-read" class="py-1 px-2.5 rounded-lg text-slate-600 hover:text-slate-900 dark:text-zinc-300 dark:hover:text-white hover:bg-slate-200/60 dark:hover:bg-zinc-700/60 transition-colors cursor-pointer text-xs font-semibold flex items-center gap-1" title="Mark all as read">
-            <svg class="w-3.5 h-3.5 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2.2">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-            </svg>
-            <span class="text-[11px]">Mark read</span>
-          </button>
+        <div class="flex items-center gap-2">
+          <!-- Time Filter Dropdown (All / Today / Yesterday / This Week / This Month) -->
+          <div class="relative">
+            <select id="dropdown-notif-time-filter" class="text-xs font-semibold py-1.5 pl-2.5 pr-7 rounded-lg border border-slate-200 dark:border-zinc-700 bg-white dark:bg-[#252833] text-slate-700 dark:text-zinc-200 focus:outline-none focus:ring-1 focus:ring-[#FCA311] cursor-pointer appearance-none shadow-2xs">
+              <option value="all">All</option>
+              <option value="today">Today</option>
+              <option value="yesterday">Yesterday</option>
+              <option value="week">This Week</option>
+              <option value="month">This Month</option>
+            </select>
+            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-1.5 text-slate-400 dark:text-zinc-400">
+              <svg class="w-3.5 h-3.5 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2.2"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5"/></svg>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -587,7 +594,13 @@
       </div>
 
       <!-- Footer -->
-      <div class="px-4 py-2 border-t border-slate-100 dark:border-zinc-800/80 bg-slate-50/80 dark:bg-zinc-800/50 flex items-center justify-end text-xs">
+      <div class="px-4 py-2 border-t border-slate-100 dark:border-zinc-800/80 bg-slate-50/80 dark:bg-zinc-800/50 flex items-center justify-between text-xs">
+        <button type="button" id="btn-dropdown-mark-all-read" class="text-slate-500 hover:text-[#14213D] dark:text-zinc-400 dark:hover:text-white transition-colors font-semibold cursor-pointer flex items-center gap-1">
+          <svg class="w-3.5 h-3.5 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2.2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+          </svg>
+          <span>Mark all read</span>
+        </button>
         <button type="button" id="btn-dropdown-clear-all" class="text-slate-400 hover:text-rose-500 dark:text-zinc-400 dark:hover:text-rose-400 transition-colors font-medium cursor-pointer">
           Clear all
         </button>
@@ -677,10 +690,17 @@
     }
   }
 
+  let currentDropdownFilter = 'all';
+
   function renderDropdownList() {
     ensureNotificationDropdown();
     const scrollArea = document.getElementById('dropdown-notif-scroll-area');
     if (!scrollArea) return;
+
+    const filterSelect = document.getElementById('dropdown-notif-time-filter');
+    if (filterSelect && filterSelect.value) {
+      currentDropdownFilter = filterSelect.value;
+    }
 
     const { items } = readStore();
     syncBadges();
@@ -700,11 +720,49 @@
       return;
     }
 
+    // Filter items based on selected time filter (today / yesterday / week / month / all)
+    const filteredItems = items.filter(n => {
+      const g = getDateGroup(n.timestamp);
+      if (currentDropdownFilter === 'today') {
+        return g === 'Today';
+      } else if (currentDropdownFilter === 'yesterday') {
+        return g === 'Yesterday';
+      } else if (currentDropdownFilter === 'week') {
+        return g === 'This week' || g === 'Today' || g === 'Yesterday';
+      } else if (currentDropdownFilter === 'month') {
+        return g === 'This month' || g === 'This week' || g === 'Today' || g === 'Yesterday';
+      }
+      return true; // 'all'
+    });
+
+    if (!filteredItems.length) {
+      const labelMap = {
+        today: 'Today',
+        yesterday: 'Yesterday',
+        week: 'This Week',
+        month: 'This Month'
+      };
+      const label = labelMap[currentDropdownFilter] || 'selected period';
+      scrollArea.innerHTML = `
+        <div class="py-12 px-6 text-center text-slate-400 dark:text-zinc-500">
+          <div class="w-10 h-10 mx-auto rounded-full bg-slate-100 dark:bg-zinc-800 flex items-center justify-center mb-2.5 text-slate-400 dark:text-zinc-400">
+            <svg class="w-5 h-5 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="1.8">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </div>
+          <p class="font-bold text-sm text-slate-700 dark:text-zinc-200">No notifications for ${label}</p>
+          <p class="text-xs text-slate-400 dark:text-zinc-400 mt-1">Switch filter to "All" to view all notifications.</p>
+        </div>
+      `;
+      if (filterSelect) filterSelect.value = currentDropdownFilter;
+      return;
+    }
+
     const ORDERED_GROUPS = ['Today', 'Yesterday', 'This week', 'This month', 'Earlier'];
     const buckets = {};
     ORDERED_GROUPS.forEach(g => { buckets[g] = []; });
 
-    items.forEach(n => {
+    filteredItems.forEach(n => {
       const g = getDateGroup(n.timestamp);
       if (!buckets[g]) buckets[g] = [];
       buckets[g].push(n);
@@ -728,6 +786,7 @@
     });
 
     scrollArea.innerHTML = html;
+    if (filterSelect) filterSelect.value = currentDropdownFilter;
   }
 
   function openDropdown() {
@@ -7737,7 +7796,15 @@ $(document).ready(function () {
     }
   });
 
-  // Dropdown Header: Mark All as Read
+  // Dropdown Time Filter Change (All / Today / Yesterday / This Week / This Month)
+  $(document).on('change', '#dropdown-notif-time-filter', function (e) {
+    e.stopPropagation();
+    if (window.AureliaNotifications && typeof window.AureliaNotifications.renderDropdownList === 'function') {
+      window.AureliaNotifications.renderDropdownList();
+    }
+  });
+
+  // Dropdown Footer: Mark All as Read
   $(document).on('click', '#btn-dropdown-mark-all-read', function (e) {
     e.preventDefault();
     e.stopPropagation();
