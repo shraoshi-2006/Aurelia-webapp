@@ -1816,6 +1816,7 @@ $(document).ready(function () {
     orders: 'Order Queue & Kitchen Tickets',
     customers: 'Guest Directory & Loyalty',
     analytics: 'Revenue & Sales Analytics',
+    notifications: 'Notification Centre',
     settings: 'Station & Terminal Settings',
     'hr-documents': 'HR Document Templates & Agreements',
     'all-departments': 'Hotel Departments',
@@ -1845,6 +1846,7 @@ $(document).ready(function () {
       if (window.location.pathname.includes('add-bill')) target = 'add-bill';
       else if (window.location.pathname.includes('billing-details')) target = 'billing-details';
       else if (window.location.pathname.includes('billing')) target = 'billing';
+      else if (window.location.pathname.toLowerCase().includes('notification')) target = 'notifications';
       else target = 'dashboard';
     }
 
