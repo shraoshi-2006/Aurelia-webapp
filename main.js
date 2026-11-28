@@ -503,7 +503,7 @@
     style.id = 'aurelia-notif-flyout-styles';
     style.textContent = `
       #topbar-notifications-dropdown {
-        z-index: 1000 !important;
+        z-index: 99999 !important;
         box-shadow: 0 20px 45px -10px rgba(15, 23, 42, 0.3), 0 0 0 1px rgba(0, 0, 0, 0.08) !important;
         animation: notifFlyoutIn 0.16s cubic-bezier(0.16, 1, 0.3, 1) forwards;
       }
@@ -516,6 +516,9 @@
           opacity: 1;
           transform: translateY(0) scale(1);
         }
+      }
+            #topbar-notifications-backdrop {
+        z-index: 99998 !important;
       }
       .dark #topbar-notifications-dropdown {
         background: #1e2029 !important;
@@ -555,18 +558,62 @@
     document.head.appendChild(style);
   }
 
+  function ensureMobileBackdrop() {
+    let backdrop = document.getElementById('topbar-notifications-backdrop');
+    if (!backdrop) {
+      backdrop = document.createElement('div');
+      backdrop.id = 'topbar-notifications-backdrop';
+      backdrop.className = 'hidden fixed inset-0 bg-[#14213D]/60 dark:bg-black/70 backdrop-blur-xs transition-opacity';
+      backdrop.style.zIndex = '99998';
+      document.body.appendChild(backdrop);
+      backdrop.addEventListener('click', function () {
+        closeDropdown();
+      });
+    }
+    return backdrop;
+  }
+
+  function updateDropdownPosition() {
+    const dropdown = document.getElementById('topbar-notifications-dropdown');
+    if (!dropdown || dropdown.classList.contains('hidden')) return;
+
+    const isMobile = window.innerWidth < 1024;
+    const btn = document.getElementById('btn-top-notifications');
+    const isDesktopBtnVisible = btn && btn.offsetParent !== null && !isMobile;
+
+    if (isDesktopBtnVisible) {
+      const rect = btn.getBoundingClientRect();
+      dropdown.style.position = 'fixed';
+      dropdown.style.top = `${Math.round(rect.bottom + 8)}px`;
+      dropdown.style.right = `${Math.max(12, Math.round(window.innerWidth - rect.right))}px`;
+      dropdown.style.left = 'auto';
+      dropdown.style.margin = '0';
+      dropdown.style.width = '420px';
+      dropdown.style.maxWidth = 'calc(100vw - 24px)';
+      dropdown.style.maxHeight = `calc(100vh - ${Math.round(rect.bottom + 24)}px)`;
+    } else {
+      dropdown.style.position = 'fixed';
+      dropdown.style.top = '68px';
+      dropdown.style.left = '12px';
+      dropdown.style.right = '12px';
+      dropdown.style.margin = '0 auto';
+      dropdown.style.width = 'auto';
+      dropdown.style.maxWidth = '420px';
+      dropdown.style.maxHeight = 'calc(100vh - 84px)';
+    }
+  }
+
   function ensureNotificationDropdown() {
     ensureDropdownStyles();
-    const btn = document.getElementById('btn-top-notifications');
-    if (!btn || !btn.parentElement) return null;
     let dropdown = document.getElementById('topbar-notifications-dropdown');
     if (dropdown) return dropdown;
 
     const wrapper = document.createElement('div');
     wrapper.id = 'topbar-notifications-dropdown';
-    wrapper.className = 'hidden absolute right-0 top-full mt-2.5 w-[360px] sm:w-[420px] max-w-[calc(100vw-24px)] bg-white dark:bg-[#1a1c23] border border-slate-200/90 dark:border-white/10 rounded-2xl shadow-2xl z-[100] overflow-hidden select-none text-left';
+    wrapper.className = 'hidden fixed bg-white dark:bg-[#1a1c23] border border-slate-200/90 dark:border-white/10 rounded-2xl shadow-2xl overflow-hidden select-none text-left';
+    wrapper.style.zIndex = '99999';
     wrapper.innerHTML = `
-      <!-- Header with Time Filter Dropdown -->
+      <!-- Header with Time Filter Dropdown & Close Button -->
       <div class="px-4 py-3 border-b border-slate-100 dark:border-zinc-800/80 flex items-center justify-between bg-slate-50/70 dark:bg-zinc-800/40">
         <div class="flex items-center gap-2">
           <h3 class="text-[15px] sm:text-base font-bold text-[#14213D] dark:text-zinc-100 tracking-tight">Notifications</h3>
@@ -586,6 +633,12 @@
               <svg class="w-3.5 h-3.5 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2.2"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5"/></svg>
             </div>
           </div>
+          <!-- Close button -->
+          <button type="button" id="btn-dropdown-close" class="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 dark:text-zinc-400 dark:hover:text-white hover:bg-slate-200/50 dark:hover:bg-zinc-700/50 transition-colors cursor-pointer" aria-label="Close notifications" title="Close">
+            <svg class="w-4 h-4 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2.2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
         </div>
       </div>
 
@@ -601,7 +654,8 @@
       </div>
     `;
 
-    btn.parentElement.appendChild(wrapper);
+    document.body.appendChild(wrapper);
+    ensureMobileBackdrop();
     return wrapper;
   }
 
@@ -788,6 +842,13 @@
     if (!dropdown) return;
     renderDropdownList();
     dropdown.classList.remove('hidden');
+    updateDropdownPosition();
+
+    if (window.innerWidth < 1024) {
+      const backdrop = ensureMobileBackdrop();
+      if (backdrop) backdrop.classList.remove('hidden');
+    }
+
     const btn = document.getElementById('btn-top-notifications');
     if (btn) {
       btn.classList.add('ring-2', 'ring-[#FCA311]', 'border-[#FCA311]');
@@ -801,6 +862,10 @@
       const openKebab = dropdown.querySelectorAll('.dropdown-kebab-menu');
       openKebab.forEach(m => m.classList.add('hidden'));
     }
+    const backdrop = document.getElementById('topbar-notifications-backdrop');
+    if (backdrop) {
+      backdrop.classList.add('hidden');
+    }
     const btn = document.getElementById('btn-top-notifications');
     if (btn) {
       const p = (global.location && global.location.pathname) ? global.location.pathname.toLowerCase() : '';
@@ -809,6 +874,9 @@
       }
     }
   }
+
+  window.addEventListener('resize', updateDropdownPosition);
+  window.addEventListener('scroll', updateDropdownPosition, true);
 
   function toggleDropdown() {
     const dropdown = document.getElementById('topbar-notifications-dropdown');
@@ -3238,10 +3306,13 @@ $(document).ready(function () {
 
   $(document).on('click', '#menu-item-notifications', function (e) {
     e.preventDefault();
+    e.stopPropagation();
     closeMobileUserMenu();
-    if (window.AureliaNotifications) {
-      window.AureliaNotifications.redirectToCenter();
-    }
+    setTimeout(() => {
+      if (window.AureliaNotifications && typeof window.AureliaNotifications.openDropdown === 'function') {
+        window.AureliaNotifications.openDropdown();
+      }
+    }, 150);
   });
 
   $(document).on('click', '#menu-item-settings', function (e) {
@@ -7725,9 +7796,18 @@ $(document).ready(function () {
     }
   });
 
+  // Dropdown close button
+  $(document).on('click', '#btn-dropdown-close', function (e) {
+    e.preventDefault();
+    e.stopPropagation();
+    if (window.AureliaNotifications && typeof window.AureliaNotifications.closeDropdown === 'function') {
+      window.AureliaNotifications.closeDropdown();
+    }
+  });
+
   // Close notification dropdown when clicking outside
   $(document).on('click', function (e) {
-    if (!$(e.target).closest('#btn-top-notifications, #topbar-notifications-dropdown').length) {
+    if (!$(e.target).closest('#btn-top-notifications, #menu-item-notifications, #topbar-notifications-dropdown, #topbar-notifications-backdrop, #mobile-user-menu-drawer, #btn-mobile-more').length) {
       if (window.AureliaNotifications && typeof window.AureliaNotifications.closeDropdown === 'function') {
         window.AureliaNotifications.closeDropdown();
       }
@@ -10805,6 +10885,7 @@ $(document).ready(function () {
     }, true);
 
     document.addEventListener('mouseout', function (e) {
+      const nextTrigger = e.relatedTarget && e.relatedTarget.closest ? e.relatedTarget.closest('[data-instant-tooltip], [title]:not(iframe)') : null;
       if (nextTrigger !== activeTrigger) {
         if (nextTrigger) {
           showTooltip(nextTrigger, e.clientX, e.clientY);
