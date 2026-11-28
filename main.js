@@ -1117,9 +1117,39 @@ $(document).ready(function () {
   ].map(([id, name, category, price, available, description]) => ({ id, name, category, price, available, description }));
 
   const DEFAULT_CUSTOMERS = [
-    ['cust-1', 'Shraoshi Basak', '9874563210', 'shraoshibasak.9090@gmail.com', 'Koramangala 4th Block, Bengaluru', 12, 840.00],
-    ['cust-2', 'Piyush Barua', '7894561230', 'piyushbarua9@gmail.com', 'Indiranagar 100ft Road, Bengaluru', 8, 520.00]
-  ].map(([id, name, phone, email, address, visits, totalSpend]) => ({ id, name, phone, email, address, visits, totalSpend }));
+    ['cust-1', 'CUST-2026-01', 'Shraoshi Basak', '9874563210', 'shraoshibasak.9090@gmail.com', 'Koramangala 4th Block, Bengaluru', 12, 840.00],
+    ['cust-2', 'CUST-2026-02', 'Piyush Barua', '7894561230', 'piyushbarua9@gmail.com', 'Indiranagar 100ft Road, Bengaluru', 8, 520.00]
+  ].map(([id, customerId, name, phone, email, address, visits, totalSpend]) => ({ id, customerId, name, phone, email, address, visits, totalSpend }));
+
+  function formatCustomerCode(seqNum) {
+    return `CUST-2026-${String(seqNum).padStart(2, '0')}`;
+  }
+
+  function getNextCustomerId(customersList) {
+    let maxNum = 0;
+    (customersList || []).forEach(c => {
+      const m = String(c && c.customerId || '').match(/(\d+)$/);
+      if (m) maxNum = Math.max(maxNum, parseInt(m[1], 10));
+    });
+    return formatCustomerCode(Math.max(maxNum, (customersList || []).length) + 1);
+  }
+
+  function ensureCustomerIds(customersList) {
+    let changed = false;
+    let maxNum = 0;
+    (customersList || []).forEach(c => {
+      const m = String(c && c.customerId || '').match(/(\d+)$/);
+      if (m) maxNum = Math.max(maxNum, parseInt(m[1], 10));
+    });
+    const normalized = (customersList || []).map((c, idx) => {
+      if (c && c.customerId) return c;
+      changed = true;
+      const preset = DEFAULT_CUSTOMERS.find(d => d.id === (c && c.id));
+      const code = preset ? preset.customerId : formatCustomerCode(++maxNum || (idx + 1));
+      return Object.assign({}, c, { customerId: code });
+    });
+    return { normalized, changed };
+  }
 
   const makeOrder = (id, customerName, customerPhone, tableRoom, status, timestamp, notes, items, billNumber = null) => ({
     id, orderNumber: id, customerName, customerPhone, tableRoom, status, timestamp, notes, billNumber, items
@@ -4865,9 +4895,10 @@ $(document).ready(function () {
 
       // Check if walk-in guest should be saved to directory
       if ($('#check-save-walkin').is(':checked')) {
-        const customers = Storage.get(STORAGE_KEYS.CUSTOMERS);
+        const customers = ensureCustomerIds(Storage.get(STORAGE_KEYS.CUSTOMERS)).normalized;
         const newCust = {
           id: 'cust-' + Date.now(),
+          customerId: getNextCustomerId(customers),
           name: customerName,
           phone: customerPhone,
           email: customerEmail,
@@ -4922,7 +4953,7 @@ $(document).ready(function () {
 
     // Update customer spend
     if (customerId) {
-      const customers = Storage.get(STORAGE_KEYS.CUSTOMERS);
+      const customers = ensureCustomerIds(Storage.get(STORAGE_KEYS.CUSTOMERS)).normalized;
       const c = customers.find(x => x.id === customerId);
       if (c) {
         c.visits = (c.visits || 0) + 1;
@@ -6402,11 +6433,16 @@ $(document).ready(function () {
   // =========================================================================
 
   function renderCustomersSection() {
-    const customers = Storage.get(STORAGE_KEYS.CUSTOMERS);
+    const rawCustomers = Storage.get(STORAGE_KEYS.CUSTOMERS);
+    const { normalized: customers, changed } = ensureCustomerIds(rawCustomers);
+    if (changed) {
+      Storage.set(STORAGE_KEYS.CUSTOMERS, customers);
+    }
     const search = $.trim($('#filter-customers-search').val()).toLowerCase();
 
     let filtered = customers.filter(c => {
       return !search ||
+        (c.customerId && c.customerId.toLowerCase().includes(search)) ||
         (c.name && c.name.toLowerCase().includes(search)) ||
         (c.phone && c.phone.includes(search)) ||
         (c.email && c.email.toLowerCase().includes(search));
@@ -6418,13 +6454,16 @@ $(document).ready(function () {
     if (filtered.length === 0) {
       $tbody.append(`
         <tr>
-          <td colspan="7" class="py-8 text-center text-slate-400">No guests match your search. Click "+ Add Customer" to create record.</td>
+          <td colspan="8" class="py-8 text-center text-slate-400">No guests match your search. Click "+ Add Customer" to create record.</td>
         </tr>
       `);
     } else {
       filtered.forEach(c => {
         $tbody.append(`
           <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors" data-id="${escapeHtml(c.id)}">
+            <td class="py-2.5 px-3 font-mono whitespace-nowrap">
+              <span class="px-2.5 py-1 rounded text-xs font-mono font-bold bg-[#FCA311] text-black inline-block shadow-2xs">${escapeHtml(c.customerId)}</span>
+            </td>
             <td class="py-2.5 px-3 font-bold text-slate-900 dark:text-white whitespace-nowrap">${escapeHtml(c.name)}</td>
             <td class="py-2.5 px-3 font-mono text-slate-500 whitespace-nowrap">${escapeHtml(c.phone)}</td>
             <td class="py-2.5 px-3 text-slate-500 whitespace-nowrap">${escapeHtml(c.email || '-')}</td>
@@ -6517,7 +6556,7 @@ $(document).ready(function () {
     }
     if (hasError) return;
 
-    const customers = Storage.get(STORAGE_KEYS.CUSTOMERS);
+    const customers = ensureCustomerIds(Storage.get(STORAGE_KEYS.CUSTOMERS)).normalized;
 
     if (editId) {
       const idx = customers.findIndex(x => x.id === editId);
@@ -6532,6 +6571,7 @@ $(document).ready(function () {
     } else {
       const newCust = {
         id: 'cust-' + Date.now(),
+        customerId: getNextCustomerId(customers),
         name,
         phone,
         email,
@@ -6552,7 +6592,7 @@ $(document).ready(function () {
 
   $(document).on('click', '.btn-delete-customer', function () {
     const id = $(this).data('id');
-    const customers = Storage.get(STORAGE_KEYS.CUSTOMERS);
+    const customers = ensureCustomerIds(Storage.get(STORAGE_KEYS.CUSTOMERS)).normalized;
     const c = customers.find(x => x.id === id);
     if (!c) return;
 
@@ -6571,7 +6611,7 @@ $(document).ready(function () {
   $(document).on('click', '.btn-view-customer-profile', function () {
     const id = $(this).data('id');
     currentViewingCustomerId = id;
-    const customers = Storage.get(STORAGE_KEYS.CUSTOMERS);
+    const customers = ensureCustomerIds(Storage.get(STORAGE_KEYS.CUSTOMERS)).normalized;
     const c = customers.find(x => x.id === id);
     if (!c) return;
 
