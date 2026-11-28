@@ -10174,8 +10174,13 @@ $(document).ready(function () {
       }
 
       const $selectAllLabel = $toolbar.find('.btn-bulk-select-all-label');
-      $selectAllLabel.text('Deselect All');
-      $toolbar.find('.btn-bulk-select-all').attr('title', 'Deselect all rows');
+      if (checked === 1) {
+        $selectAllLabel.text('Deselect');
+        $toolbar.find('.btn-bulk-select-all').attr('title', 'Deselect row');
+      } else {
+        $selectAllLabel.text('Deselect All');
+        $toolbar.find('.btn-bulk-select-all').attr('title', 'Deselect all rows');
+      }
 
       const $masterCb = $table.find('thead .bulk-master-cb');
       if ($masterCb.length) {
