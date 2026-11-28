@@ -3972,6 +3972,20 @@
       $('#form-config-salary').on('submit', function(e) {
         e.preventDefault();
         $('#modal-config-salary').addClass('hidden');
+        if (typeof window.AureliaNotifications !== 'undefined') {
+          const staffLabel = $('#form-config-salary select, #form-config-salary input').first().val() || 'Employee';
+          window.AureliaNotifications.push({
+            title: 'Salary Structure Updated',
+            description: `Payroll compensation configuration updated (${staffLabel}).`,
+            category: 'System',
+            module: 'Payroll Management',
+            recordId: 'SAL-CFG',
+            actionLabel: 'View Salary Setup',
+            actionUrl: 'human-resources/manage-salary.html',
+            important: false,
+            dedupeKey: `sal-cfg-${Date.now()}`
+          });
+        }
         if (typeof showToast === 'function') showToast('Staff salary structure updated successfully!', 'success');
       });
     });
@@ -3986,7 +4000,7 @@
   <!-- Authentication Controller -->
   <script src="../auth.js?v=20261128_07"></script>
   <!-- Main JavaScript Logic -->
-  <script src="../main.js?v=20261128_08"></script>
+  <script src="../main.js?v=20261128_09"></script>
 </body>
 
 </html>

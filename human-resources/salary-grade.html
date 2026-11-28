@@ -3778,6 +3778,20 @@
       $('#form-add-grade').on('submit', function(e) {
         e.preventDefault();
         $('#modal-add-grade').addClass('hidden');
+        if (typeof window.AureliaNotifications !== 'undefined') {
+          const gradeName = $('#form-add-grade input').first().val() || 'New Grade';
+          window.AureliaNotifications.push({
+            title: 'Salary Grade Created',
+            description: `Compensation band "${gradeName}" added to HR payroll grades.`,
+            category: 'System',
+            module: 'Payroll Management',
+            recordId: 'SAL-GRADE',
+            actionLabel: 'View Salary Grades',
+            actionUrl: 'human-resources/salary-grade.html',
+            important: false,
+            dedupeKey: `sal-grade-${gradeName}-${Date.now()}`
+          });
+        }
         if (typeof showToast === 'function') showToast('New salary grade created successfully!', 'success');
       });
     });
@@ -3792,7 +3806,7 @@
   <!-- Authentication Controller -->
   <script src="../auth.js?v=20261128_07"></script>
   <!-- Main JavaScript Logic -->
-  <script src="../main.js?v=20261128_08"></script>
+  <script src="../main.js?v=20261128_09"></script>
 </body>
 
 </html>

@@ -11300,9 +11300,10 @@ if (typeof window !== 'undefined' && window.MutationObserver) {
     const cardHighlight = isImp
       ? 'border-l-4 border-l-[#FCA311] bg-amber-50/40 dark:bg-amber-950/20 shadow-md'
       : (isUnread ? 'border-l-4 border-l-[#14213D] dark:border-l-[#FCA311]' : 'opacity-90');
+    const hasTargetUrl = Boolean(n.actionUrl && n.actionUrl !== '#');
 
     return `
-      <div class="Aurelia-card p-4 sm:p-5 transition-all duration-200 ${cardHighlight}" data-notif-id="${escapeNotifHtml(n.id)}">
+      <div class="Aurelia-card p-4 sm:p-5 transition-all duration-200 ${hasTargetUrl ? 'cursor-pointer hover:shadow-lg' : ''} ${cardHighlight}" data-notif-id="${escapeNotifHtml(n.id)}" data-url="${escapeNotifHtml(n.actionUrl || '')}">
         <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-3.5">
           <div class="flex items-start gap-3.5 min-w-0 flex-1">
             <div class="relative w-10 h-10 sm:w-11 sm:h-11 rounded-2xl border flex items-center justify-center flex-shrink-0 ${st.iconBg}">
@@ -11428,6 +11429,8 @@ if (typeof window !== 'undefined' && window.MutationObserver) {
       btn.classList.toggle('shadow-xs', isActive);
       btn.classList.toggle('bg-white/70', !isActive);
       btn.classList.toggle('text-slate-600', !isActive);
+      btn.classList.toggle('dark:bg-slate-800/70', !isActive);
+      btn.classList.toggle('dark:text-slate-300', !isActive);
     });
 
     // Apply filters & sorting
@@ -11581,13 +11584,21 @@ if (typeof window !== 'undefined' && window.MutationObserver) {
         }
       });
 
-      $(document).on('click', '.btn-notif-action', function () {
-        const id = $(this).attr('data-id');
-        const url = $(this).attr('data-url');
+      function openNotificationTarget(id, url) {
         if (id) window.AureliaNotifications.markRead(id, true);
         if (url && url !== '#') {
           window.location.href = window.AureliaNotifications.resolveUrl(url);
         }
+      }
+
+      $(document).on('click', '.btn-notif-action', function (e) {
+        e.stopPropagation();
+        openNotificationTarget($(this).attr('data-id'), $(this).attr('data-url'));
+      });
+
+      $(document).on('click', '.Aurelia-card[data-notif-id]', function (e) {
+        if ($(e.target).closest('button, a, input, select').length) return;
+        openNotificationTarget($(this).attr('data-notif-id'), $(this).attr('data-url'));
       });
 
       $(document).on('click', '.btn-notif-toggle-read', function () {
