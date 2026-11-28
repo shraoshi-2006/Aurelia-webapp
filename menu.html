@@ -4477,7 +4477,7 @@
       </div>
 
       <!-- Controls: Filter Tabs + Search -->
-      <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 flex-shrink-0">
+      <div class="flex flex-col gap-3 flex-shrink-0">
         <div
           class="flex items-center space-x-1 bg-slate-100 dark:bg-slate-800/80 p-1 rounded-xl text-xs font-semibold overflow-x-auto"
           id="food-budget-modal-tabs">
@@ -4508,7 +4508,7 @@
           </button>
         </div>
 
-        <div class="relative w-full sm:w-64">
+        <div class="relative w-full">
           <input type="text" id="food-budget-search-input" placeholder="Search food item..."
             class="w-full text-xs pl-8 pr-3 py-2 bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 rounded-xl text-slate-800 dark:text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#FCA311] focus:border-transparent transition-all">
           <svg style="display:none !important;"
@@ -4678,18 +4678,7 @@
       </div>
 
       <!-- Filter & Search Bar -->
-      <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5 flex-shrink-0 pt-1">
-        <div class="relative flex-1 max-w-md">
-          <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
-            <svg style="display:none !important;" class="w-3.5 h-3.5 stroke-current" fill="none" viewBox="0 0 24 24"
-              stroke-width="2">
-              <path stroke-linecap="round" stroke-linejoin="round"
-                d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
-            </svg>
-          </div>
-          <input type="text" id="modal-billings-search" class="Aurelia-input w-full text-xs pl-9 font-medium"
-            placeholder="Search invoice #, guest name, table/room...">
-        </div>
+      <div class="flex flex-col gap-2.5 flex-shrink-0 pt-1">
         <div class="flex items-center space-x-2">
           <select id="modal-billings-filter-payment" class="Aurelia-input text-xs py-1.5 px-3 font-semibold">
             <option value="all">All Payment Methods</option>
@@ -4703,6 +4692,17 @@
             <option value="amount-high">Amount (High to Low)</option>
             <option value="amount-low">Amount (Low to High)</option>
           </select>
+        </div>
+        <div class="relative w-full">
+          <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+            <svg style="display:none !important;" class="w-3.5 h-3.5 stroke-current" fill="none" viewBox="0 0 24 24"
+              stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+            </svg>
+          </div>
+          <input type="text" id="modal-billings-search" class="Aurelia-input w-full text-xs pl-9 font-medium"
+            placeholder="Search invoice #, guest name, table/room...">
         </div>
       </div>
 
@@ -4829,20 +4829,7 @@
       </div>
 
       <!-- Filter & Search Controls -->
-      <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5 flex-shrink-0 pt-1">
-        <!-- Search Input -->
-        <div class="relative flex-1 max-w-md">
-          <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
-            <svg style="display:none !important;" class="w-3.5 h-3.5 stroke-current" fill="none" viewBox="0 0 24 24"
-              stroke-width="2">
-              <path stroke-linecap="round" stroke-linejoin="round"
-                d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
-            </svg>
-          </div>
-          <input type="text" id="modal-staff-search" class="Aurelia-input w-full text-xs pl-9 font-medium"
-            placeholder="Search staff by name, role, department, EMP-ID...">
-        </div>
-
+      <div class="flex flex-col gap-2.5 flex-shrink-0 pt-1">
         <div class="flex flex-wrap items-center gap-2">
           <!-- Status Tabs: All, On Duty, On Leave -->
           <div
@@ -4874,6 +4861,18 @@
             <option value="Engineering & Maintenance">Engineering & Maintenance (4)</option>
             <option value="Security & Operations">Security & Operations (2)</option>
           </select>
+        </div>
+        <!-- Search Input -->
+        <div class="relative w-full">
+          <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+            <svg style="display:none !important;" class="w-3.5 h-3.5 stroke-current" fill="none" viewBox="0 0 24 24"
+              stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+            </svg>
+          </div>
+          <input type="text" id="modal-staff-search" class="Aurelia-input w-full text-xs pl-9 font-medium"
+            placeholder="Search staff by name, role, department, EMP-ID...">
         </div>
       </div>
 
