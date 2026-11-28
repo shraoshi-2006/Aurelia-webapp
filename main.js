@@ -164,13 +164,206 @@
         }
         .btn-Aurelia-primary:active,
         .btn-aurelia-primary:active,
-        .btn-finset-primary:active {
+        .quick-nav-bill:active {
           box-shadow: none !important;
         }
       `;
     }
   } catch (e) { }
 })();
+
+// =========================================================================
+// CENTRALIZED NOTIFICATION ENGINE (Dynamic Real-Time Event Bus & Store)
+// =========================================================================
+(function (global) {
+  const NOTIF_STORAGE_KEY = 'aurelia_notifications_v1';
+  const MAX_NOTIFICATIONS = 200;
+  const VALID_CATEGORIES = ['Orders', 'Leave Requests', 'Billing & Payments', 'Customers', 'Menu', 'System'];
+
+  function resolveAppUrl(rootRelPath) {
+    if (!rootRelPath) return '#';
+    if (/^https?:\/\//i.test(rootRelPath)) return rootRelPath;
+    const clean = String(rootRelPath).replace(/^\/+/, '');
+    const p = (global.location && global.location.pathname) ? global.location.pathname : '';
+    const isSub = p.includes('/department') || p.includes('/human-resources') || p.includes('/billing-management');
+    return isSub ? '../' + clean : clean;
+  }
+
+  function readStore() {
+    try {
+      const raw = global.localStorage.getItem(NOTIF_STORAGE_KEY);
+      if (!raw) return { items: [], error: null };
+      const parsed = JSON.parse(raw);
+      if (!Array.isArray(parsed)) return { items: [], error: 'Corrupted notification store format.' };
+      const clean = parsed.filter(n => n && typeof n === 'object' && n.id && n.title);
+      return { items: clean, error: null };
+    } catch (err) {
+      return { items: [], error: err && err.message ? err.message : 'Unable to read notifications from storage.' };
+    }
+  }
+
+  function writeStore(items) {
+    try {
+      const safe = Array.isArray(items) ? items.slice(0, MAX_NOTIFICATIONS) : [];
+      global.localStorage.setItem(NOTIF_STORAGE_KEY, JSON.stringify(safe));
+      syncBadges();
+      try {
+        global.dispatchEvent(new CustomEvent('aurelia:notifications-updated', { detail: { count: safe.length } }));
+      } catch (evErr) { }
+      return true;
+    } catch (err) {
+      console.error('[AureliaNotifications] Failed saving notifications:', err);
+      return false;
+    }
+  }
+
+  function getUnreadCount() {
+    const { items } = readStore();
+    return items.filter(n => !n.read).length;
+  }
+
+  function syncBadges() {
+    const unread = getUnreadCount();
+    const label = unread > 99 ? '99+' : String(unread);
+    const desktopBtn = global.document && global.document.getElementById('btn-top-notifications');
+    if (desktopBtn) {
+      let badge = desktopBtn.querySelector('.bg-rose-500, #topbar-notification-badge');
+      if (badge) {
+        badge.id = 'topbar-notification-badge';
+        badge.textContent = label;
+        badge.classList.toggle('hidden', unread === 0);
+      }
+      const p = (global.location && global.location.pathname) ? global.location.pathname.toLowerCase() : '';
+      if (p.includes('notification')) {
+        desktopBtn.classList.add('ring-2', 'ring-[#FCA311]');
+      }
+    }
+    const mobileBtn = global.document && global.document.getElementById('menu-item-notifications');
+    if (mobileBtn) {
+      let mBadge = mobileBtn.querySelector('#mobile-notification-badge, .bg-rose-500');
+      if (mBadge) {
+        mBadge.id = 'mobile-notification-badge';
+        mBadge.textContent = label;
+        mBadge.classList.toggle('hidden', unread === 0);
+      }
+      const mSub = mobileBtn.querySelector('#mobile-notification-subtitle');
+      if (mSub) {
+        mSub.textContent = unread === 0 ? 'No unread alerts' : `${unread} unread alert${unread === 1 ? '' : 's'}`;
+      }
+      const mPill = mobileBtn.querySelector('#mobile-notification-pill');
+      if (mPill) {
+        mPill.textContent = `${label} New`;
+        mPill.classList.toggle('hidden', unread === 0);
+      }
+    }
+  }
+
+  function push(payload) {
+    if (!payload || !payload.title || !payload.description) return null;
+    const { items } = readStore();
+    const now = Date.now();
+    const category = VALID_CATEGORIES.includes(payload.category) ? payload.category : 'System';
+    const recordId = payload.recordId ? String(payload.recordId) : '';
+    const dedupeKey = payload.dedupeKey ? String(payload.dedupeKey) : `${category}::${payload.title}::${recordId}::${payload.description}`;
+
+    // Prevent duplicate entries for the same rapid event
+    const duplicate = items.find(n => {
+      const ts = n.timestamp ? new Date(n.timestamp).getTime() : 0;
+      return n.dedupeKey === dedupeKey && (now - ts) < 4000;
+    });
+    if (duplicate) return duplicate;
+
+    const entry = {
+      id: 'notif-' + now + '-' + Math.random().toString(36).slice(2, 6),
+      title: String(payload.title).trim(),
+      description: String(payload.description).trim(),
+      category,
+      module: String(payload.module || category).trim(),
+      recordId,
+      actionLabel: String(payload.actionLabel || 'View Details').trim(),
+      actionUrl: String(payload.actionUrl || 'index.html#dashboard').replace(/^\.\.\//, ''),
+      timestamp: new Date(now).toISOString(),
+      read: false,
+      important: Boolean(payload.important),
+      critical: Boolean(payload.critical),
+      dedupeKey
+    };
+
+    items.unshift(entry);
+    writeStore(items);
+    return entry;
+  }
+
+  function markRead(id, isRead = true) {
+    const { items } = readStore();
+    const target = items.find(n => n.id === id);
+    if (!target) return false;
+    target.read = Boolean(isRead);
+    return writeStore(items);
+  }
+
+  function toggleImportant(id, forceVal) {
+    const { items } = readStore();
+    const target = items.find(n => n.id === id);
+    if (!target) return false;
+    target.important = (typeof forceVal === 'boolean') ? forceVal : !target.important;
+    if (!target.important) target.critical = false;
+    return writeStore(items);
+  }
+
+  function remove(id) {
+    const { items } = readStore();
+    const filtered = items.filter(n => n.id !== id);
+    return writeStore(filtered);
+  }
+
+  function markAllRead() {
+    const { items } = readStore();
+    if (!items.length) return true;
+    items.forEach(n => { n.read = true; });
+    return writeStore(items);
+  }
+
+  function clearAll() {
+    return writeStore([]);
+  }
+
+  function redirectToCenter() {
+    global.location.href = resolveAppUrl('notification.html');
+  }
+
+  global.AureliaNotifications = {
+    STORAGE_KEY: NOTIF_STORAGE_KEY,
+    CATEGORIES: VALID_CATEGORIES,
+    getAll: readStore,
+    getUnreadCount,
+    push,
+    markRead,
+    toggleImportant,
+    remove,
+    markAllRead,
+    clearAll,
+    syncBadges,
+    resolveUrl: resolveAppUrl,
+    redirectToCenter
+  };
+
+  if (global.document) {
+    if (global.document.readyState === 'loading') {
+      global.document.addEventListener('DOMContentLoaded', syncBadges);
+    } else {
+      syncBadges();
+    }
+  }
+  global.addEventListener('storage', function (e) {
+    if (e.key === NOTIF_STORAGE_KEY) {
+      syncBadges();
+      try {
+        global.dispatchEvent(new CustomEvent('aurelia:notifications-updated'));
+      } catch (err) { }
+    }
+  });
+})(window);
 
 /**
  * FinSet Hotel Financial & Billing Management System
@@ -1755,6 +1948,7 @@ $(document).ready(function () {
         'menu': isSubdir ? '../menu.html' : 'menu.html',
         'customers': isSubdir ? '../customer.html' : 'customer.html',
         'analytics': isSubdir ? '../analytics.html' : 'analytics.html',
+        'notifications': isSubdir ? '../notification.html' : 'notification.html',
         'hr-documents': isHRSubdir ? 'hr-document-template.html' : (isSubdir ? '../human-resources/hr-document-template.html' : 'human-resources/hr-document-template.html'),
         'hr-employee-list': isHRSubdir ? 'hr-employee-list.html' : (isSubdir ? '../human-resources/hr-employee-list.html' : 'human-resources/hr-employee-list.html'),
         'add-employee': isHRSubdir ? 'add-employee.html' : (isSubdir ? '../human-resources/add-employee.html' : 'human-resources/add-employee.html'),
@@ -1800,6 +1994,7 @@ $(document).ready(function () {
       orders: renderOrdersSection,
       customers: renderCustomersSection,
       analytics: renderAnalyticsSection,
+      notifications: () => { if (typeof renderNotificationCentre === 'function') renderNotificationCentre(); },
       'hr-documents': renderHrDocumentsSection,
       employees: renderEmployeesSection,
       'add-employee': renderAddEmployeeSection,
@@ -2318,6 +2513,19 @@ $(document).ready(function () {
       hotelDepartments = hotelDepartments.filter(d => d.code !== code);
       saveDepartments();
       renderDepartmentsGrid($('#modal-dept-search').val());
+      if (typeof window.AureliaNotifications !== 'undefined') {
+        window.AureliaNotifications.push({
+          title: 'Department Removed',
+          description: `Department "${name}" (${code}) was removed from operations.`,
+          category: 'System',
+          module: 'Departments',
+          recordId: code,
+          actionLabel: 'View Departments',
+          actionUrl: 'department/all_department.html',
+          important: true,
+          dedupeKey: `dept-del-${code}`
+        });
+      }
       showToast(`Department "${name}" removed.`, 'info');
     }
   });
@@ -2472,6 +2680,20 @@ $(document).ready(function () {
     hotelDepartments.unshift(newDept);
     saveDepartments();
 
+    if (typeof window.AureliaNotifications !== 'undefined') {
+      window.AureliaNotifications.push({
+        title: 'Department Created',
+        description: `New department "${name}" (${code}) headed by ${head}.`,
+        category: 'System',
+        module: 'Departments',
+        recordId: code,
+        actionLabel: 'View Departments',
+        actionUrl: 'department/all_department.html',
+        important: false,
+        dedupeKey: `dept-add-${code}`
+      });
+    }
+
     // Reset Form
     this.reset();
     showToast(`Department "${name}" successfully created!`, 'success');
@@ -2548,13 +2770,9 @@ $(document).ready(function () {
   $(document).on('click', '#menu-item-notifications', function (e) {
     e.preventDefault();
     closeMobileUserMenu();
-    setTimeout(() => {
-      if (typeof showToast === 'function') {
-        showToast('Kitchen Ticket ORD-0082 (Room 304) is preparing. Front desk audit session active.', 'info');
-      } else {
-        $('#btn-top-notifications').trigger('click');
-      }
-    }, 150);
+    if (window.AureliaNotifications) {
+      window.AureliaNotifications.redirectToCenter();
+    }
   });
 
   $(document).on('click', '#menu-item-settings', function (e) {
@@ -2781,6 +2999,19 @@ $(document).ready(function () {
   $('#btn-confirm-reset-action').on('click', function () {
     initializeSampleData(true);
     $('#modal-reset-data').addClass('hidden');
+    if (window.AureliaNotifications) {
+      window.AureliaNotifications.push({
+        title: 'System Sample Data Reset',
+        description: 'All hotel baseline sample records were restored to October 2026 defaults.',
+        category: 'System',
+        module: 'Data Management',
+        recordId: 'SYS-RESET',
+        actionLabel: 'View Dashboard',
+        actionUrl: 'index.html#dashboard',
+        important: true,
+        critical: true
+      });
+    }
     showToast('Sample data reset to baseline.', 'success');
     renderSidebarBadges();
     const currentHash = window.location.hash.replace('#', '') || 'dashboard';
@@ -4843,6 +5074,20 @@ $(document).ready(function () {
     }
     Storage.set(STORAGE_KEYS.BILLS, bills);
 
+    if (window.AureliaNotifications) {
+      window.AureliaNotifications.push({
+        title: 'Payment Pending (Draft Bill)',
+        description: `Invoice ${billNumber} (${formatMoney(totals.grandTotal)}) saved as Draft for ${customerName}.`,
+        category: 'Billing & Payments',
+        module: 'Billing & Payments',
+        recordId: billNumber,
+        actionLabel: 'View Bill',
+        actionUrl: `billing-management/billing-details.html?bill=${encodeURIComponent(draftBill.id)}`,
+        important: true,
+        dedupeKey: `bill-draft-${draftBill.id}`
+      });
+    }
+
     clearBillForm();
     renderBillingHistory();
     renderDashboard();
@@ -4935,6 +5180,19 @@ $(document).ready(function () {
         Storage.set(STORAGE_KEYS.CUSTOMERS, customers);
         customerId = newCust.id;
         populateCustomerDropdown();
+        if (window.AureliaNotifications) {
+          window.AureliaNotifications.push({
+            title: 'New Customer Added',
+            description: `Walk-in guest ${customerName} (${newCust.customerId}) added to Guest Registry.`,
+            category: 'Customers',
+            module: 'Customer Management',
+            recordId: newCust.customerId,
+            actionLabel: 'View Customer',
+            actionUrl: 'customer.html',
+            important: false,
+            dedupeKey: `cust-add-${newCust.id}`
+          });
+        }
       }
     }
 
@@ -4995,7 +5253,34 @@ $(document).ready(function () {
         ord.status = 'Completed';
         ord.billNumber = billNumber;
         Storage.set(STORAGE_KEYS.ORDERS, orders);
+        if (window.AureliaNotifications) {
+          window.AureliaNotifications.push({
+            title: 'Order Completed & Billed',
+            description: `Order ${ord.orderNumber || ord.id} completed and settled under invoice ${billNumber}.`,
+            category: 'Orders',
+            module: 'Order Management',
+            recordId: ord.orderNumber || ord.id,
+            actionLabel: 'View Order',
+            actionUrl: 'order.html',
+            important: false,
+            dedupeKey: `ord-complete-${ord.id}-${billNumber}`
+          });
+        }
       }
+    }
+
+    if (window.AureliaNotifications) {
+      window.AureliaNotifications.push({
+        title: 'Payment Received',
+        description: `Payment of ${formatMoney(totals.grandTotal)} received via ${paymentMethod} for ${billNumber} (${customerName}).`,
+        category: 'Billing & Payments',
+        module: 'Billing & Payments',
+        recordId: billNumber,
+        actionLabel: 'View Bill',
+        actionUrl: `billing-management/billing-details.html?bill=${encodeURIComponent(newBill.id)}`,
+        important: false,
+        dedupeKey: `bill-paid-${newBill.id}`
+      });
     }
 
     if (shouldSendEmail) {
@@ -5222,8 +5507,35 @@ $(document).ready(function () {
     $('#btn-modal-email-bill').off('click').on('click', function () {
       const email = bill.customerEmail;
       if (email && isValidEmail(email)) {
+        if (typeof window.AureliaNotifications !== 'undefined') {
+          window.AureliaNotifications.push({
+            title: 'e-Invoice Dispatched',
+            description: `Tax invoice ${bill.billNumber} sent to ${email}.`,
+            category: 'Billing & Payments',
+            module: 'Billing & Payments',
+            recordId: bill.billNumber || bill.id,
+            actionLabel: 'View Bill',
+            actionUrl: 'billing-management/billing-details.html',
+            important: false,
+            dedupeKey: `bill-email-${bill.billNumber || bill.id}`
+          });
+        }
         showToast(`Tax invoice ${bill.billNumber} successfully dispatched to ${email}!`, 'success');
       } else {
+        if (typeof window.AureliaNotifications !== 'undefined') {
+          window.AureliaNotifications.push({
+            title: 'Invoice Delivery Issue',
+            description: `Unable to email ${bill.billNumber || 'invoice'}: missing or invalid guest email address.`,
+            category: 'Billing & Payments',
+            module: 'Billing & Payments',
+            recordId: bill.billNumber || bill.id,
+            actionLabel: 'View Bill',
+            actionUrl: 'billing-management/billing-details.html',
+            important: true,
+            critical: true,
+            dedupeKey: `bill-email-fail-${bill.billNumber || bill.id}`
+          });
+        }
         showToast('No valid email address recorded for this invoice.', 'error');
       }
     });
@@ -5273,6 +5585,20 @@ $(document).ready(function () {
     openConfirmDeleteModal(`Permanently delete invoice "${bill.billNumber}"?`, function () {
       const updated = bills.filter(b => b.id !== id);
       Storage.set(STORAGE_KEYS.BILLS, updated);
+      if (window.AureliaNotifications) {
+        window.AureliaNotifications.push({
+          title: 'Bill Cancelled / Removed',
+          description: `Invoice ${bill.billNumber} (${formatMoney(bill.grandTotal || 0)}) for ${bill.customerName || 'Guest'} was deleted.`,
+          category: 'Billing & Payments',
+          module: 'Billing & Payments',
+          recordId: bill.billNumber,
+          actionLabel: 'View Billing',
+          actionUrl: 'billing-management/billing-details.html',
+          important: true,
+          critical: true,
+          dedupeKey: `bill-del-${bill.id}`
+        });
+      }
       showToast(`Invoice ${bill.billNumber} removed.`, 'info');
       renderBillingHistory();
       renderDashboard();
@@ -6007,22 +6333,53 @@ $(document).ready(function () {
     if (editId) {
       const item = menu.find(m => m.id === editId);
       if (item) {
+        const wasAvailable = !!item.available;
         item.name = name;
         item.category = category;
         item.price = price;
         item.description = desc;
         item.available = isAvail;
+        if (window.AureliaNotifications) {
+          const availChanged = wasAvailable !== isAvail;
+          window.AureliaNotifications.push({
+            title: availChanged ? 'Menu Availability Changed' : 'Menu Item Updated',
+            description: availChanged
+              ? `"${name}" marked as ${isAvail ? 'Available' : 'Unavailable'}.`
+              : `"${name}" (${category}, ${formatMoney(price)}) updated in menu catalog.`,
+            category: 'Menu',
+            module: 'Menu Management',
+            recordId: item.id,
+            actionLabel: 'View Menu',
+            actionUrl: 'menu.html',
+            important: availChanged && !isAvail,
+            dedupeKey: `menu-edit-${item.id}-${isAvail}-${price}`
+          });
+        }
         showToast(`Item "${name}" updated.`, 'success');
       }
     } else {
-      menu.push({
+      const newMenuItem = {
         id: 'item-' + Date.now(),
         name,
         category,
         price,
         description: desc,
         available: isAvail
-      });
+      };
+      menu.push(newMenuItem);
+      if (window.AureliaNotifications) {
+        window.AureliaNotifications.push({
+          title: 'New Menu Item Added',
+          description: `"${name}" (${category}, ${formatMoney(price)}) added to hotel menu.`,
+          category: 'Menu',
+          module: 'Menu Management',
+          recordId: newMenuItem.id,
+          actionLabel: 'View Menu',
+          actionUrl: 'menu.html',
+          important: false,
+          dedupeKey: `menu-add-${newMenuItem.id}`
+        });
+      }
       showToast(`Item "${name}" added to menu.`, 'success');
     }
 
@@ -6042,6 +6399,19 @@ $(document).ready(function () {
     openConfirmDeleteModal(`Remove "${item.name}" from hotel menu?`, function () {
       const updated = menu.filter(m => m.id !== id);
       Storage.set(STORAGE_KEYS.MENU, updated);
+      if (window.AureliaNotifications) {
+        window.AureliaNotifications.push({
+          title: 'Menu Item Removed',
+          description: `"${item.name}" (${item.category || 'Menu'}) removed from hotel menu.`,
+          category: 'Menu',
+          module: 'Menu Management',
+          recordId: item.id,
+          actionLabel: 'View Menu',
+          actionUrl: 'menu.html',
+          important: false,
+          dedupeKey: `menu-del-${item.id}`
+        });
+      }
       showToast(`Item "${item.name}" deleted.`, 'info');
       renderMenuItemsGrid();
       populateMenuItemPicker();
@@ -6083,6 +6453,19 @@ $(document).ready(function () {
 
     categories.push(newCat);
     Storage.set(STORAGE_KEYS.CATEGORIES, categories);
+    if (typeof window.AureliaNotifications !== 'undefined') {
+      window.AureliaNotifications.push({
+        title: 'Menu Category Created',
+        description: `New menu category "${newCat}" added to restaurant catalog.`,
+        category: 'Menu',
+        module: 'Menu Management',
+        recordId: newCat,
+        actionLabel: 'View Menu',
+        actionUrl: 'menu.html',
+        important: false,
+        dedupeKey: `menu-cat-${newCat.toLowerCase()}`
+      });
+    }
     $('#input-new-category').val('');
     $('#err-category-name').addClass('hidden');
     renderCategoryTags();
@@ -6177,6 +6560,30 @@ $(document).ready(function () {
     if (ord) {
       ord.status = newStatus;
       Storage.set(STORAGE_KEYS.ORDERS, orders);
+      if (window.AureliaNotifications) {
+        const stLower = String(newStatus || '').toLowerCase();
+        const titleMap = {
+          pending: 'Order Pending Confirmation',
+          confirmed: 'Order Confirmed',
+          preparing: 'Order Preparation Started',
+          ready: 'Order Ready',
+          served: 'Order Ready & Served',
+          completed: 'Order Completed',
+          cancelled: 'Order Cancelled'
+        };
+        window.AureliaNotifications.push({
+          title: titleMap[stLower] || 'Order Status Updated',
+          description: `Order ${ord.orderNumber} (${ord.customerName || 'Guest'} • ${ord.tableRoom || 'POS'}) status changed to ${newStatus}.`,
+          category: 'Orders',
+          module: 'Order Management',
+          recordId: ord.orderNumber || ord.id,
+          actionLabel: 'View Order',
+          actionUrl: 'order.html',
+          important: stLower === 'cancelled',
+          critical: stLower === 'cancelled',
+          dedupeKey: `ord-status-${ord.id}-${newStatus}`
+        });
+      }
       renderSidebarBadges();
       renderDashboard();
       showToast(`Order ${ord.orderNumber} status is now ${newStatus}.`, 'info');
@@ -6309,6 +6716,20 @@ $(document).ready(function () {
 
     orders.unshift(newOrder);
     Storage.set(STORAGE_KEYS.ORDERS, orders);
+
+    if (window.AureliaNotifications) {
+      window.AureliaNotifications.push({
+        title: 'New Order Received',
+        description: `Order ${newOrder.orderNumber} for ${customer} (${tableRoom}) queued for kitchen.`,
+        category: 'Orders',
+        module: 'Order Management',
+        recordId: newOrder.orderNumber,
+        actionLabel: 'View Order',
+        actionUrl: 'order.html',
+        important: false,
+        dedupeKey: `ord-new-${newOrder.id}`
+      });
+    }
 
     $('#modal-order').addClass('hidden');
     showToast(`Order ${newOrder.orderNumber} sent to kitchen queue.`, 'success');
@@ -6591,6 +7012,19 @@ $(document).ready(function () {
         customers[idx].email = email;
         customers[idx].address = addr;
         Storage.set(STORAGE_KEYS.CUSTOMERS, customers);
+        if (window.AureliaNotifications) {
+          window.AureliaNotifications.push({
+            title: 'Customer Information Updated',
+            description: `Updated guest profile details for ${name} (${customers[idx].customerId || editId}).`,
+            category: 'Customers',
+            module: 'Customer Management',
+            recordId: customers[idx].customerId || editId,
+            actionLabel: 'View Customer',
+            actionUrl: 'customer.html',
+            important: false,
+            dedupeKey: `cust-edit-${editId}-${phone}-${email}`
+          });
+        }
         showToast(`Guest "${name}" updated successfully.`, 'success');
       }
     } else {
@@ -6606,6 +7040,19 @@ $(document).ready(function () {
       };
       customers.unshift(newCust);
       Storage.set(STORAGE_KEYS.CUSTOMERS, customers);
+      if (window.AureliaNotifications) {
+        window.AureliaNotifications.push({
+          title: 'New Customer Added',
+          description: `${name} (${newCust.customerId}) added to Guest Registry.`,
+          category: 'Customers',
+          module: 'Customer Management',
+          recordId: newCust.customerId,
+          actionLabel: 'View Customer',
+          actionUrl: 'customer.html',
+          important: false,
+          dedupeKey: `cust-add-${newCust.id}`
+        });
+      }
       showToast(`Guest "${name}" added to registry.`, 'success');
     }
 
@@ -6624,6 +7071,19 @@ $(document).ready(function () {
     openConfirmDeleteModal(`Remove "${c.name}" from guest directory?`, function () {
       const updated = customers.filter(x => x.id !== id);
       Storage.set(STORAGE_KEYS.CUSTOMERS, updated);
+      if (window.AureliaNotifications) {
+        window.AureliaNotifications.push({
+          title: 'Customer Record Removed',
+          description: `Guest ${c.name} (${c.customerId || c.id}) removed from Guest Registry.`,
+          category: 'Customers',
+          module: 'Customer Management',
+          recordId: c.customerId || c.id,
+          actionLabel: 'View Customers',
+          actionUrl: 'customer.html',
+          important: true,
+          dedupeKey: `cust-del-${c.id}`
+        });
+      }
       showToast(`Guest record removed.`, 'info');
       renderCustomersSection();
       populateCustomerDropdown();
@@ -6799,9 +7259,12 @@ $(document).ready(function () {
     }
   });
 
-  // Notification button action
-  $('#btn-top-notifications').on('click', function () {
-    showToast('Kitchen Ticket ORD-0082 (Room 304) is preparing. Front desk audit session active.', 'info');
+  // Notification button action -> Redirect to Notification Centre
+  $(document).on('click', '#btn-top-notifications', function (e) {
+    e.preventDefault();
+    if (window.AureliaNotifications) {
+      window.AureliaNotifications.redirectToCenter();
+    }
   });
 
   // Device ID Badge (Default DEV08, click to copy)
@@ -7222,6 +7685,19 @@ $(document).ready(function () {
       }
 
       // 6. Close modal & show SweetAlert Saved!
+      if (window.AureliaNotifications) {
+        window.AureliaNotifications.push({
+          title: 'Profile Information Updated',
+          description: `Profile settings updated for ${updatedUser.name || 'Staff Member'} (${updatedUser.role || 'Staff'}).`,
+          category: 'System',
+          module: 'User Profile',
+          recordId: updatedUser.empId || updatedUser.id || 'PROFILE',
+          actionLabel: 'View Dashboard',
+          actionUrl: 'index.html#dashboard',
+          important: false,
+          dedupeKey: `profile-save-${updatedUser.name}-${updatedUser.email}`
+        });
+      }
       $('#modal-user-profile').addClass('hidden');
       if (typeof Swal !== 'undefined') {
         Swal.fire({
@@ -7776,6 +8252,20 @@ $(document).ready(function () {
 
     staffList.unshift(newStaff);
     Storage.set(STORAGE_KEYS.STAFF, staffList);
+
+    if (window.AureliaNotifications) {
+      window.AureliaNotifications.push({
+        title: 'New Staff Member Onboarded',
+        description: `${name} (${id}) joined ${dept} as ${role}.`,
+        category: 'System',
+        module: 'Human Resources',
+        recordId: id,
+        actionLabel: 'View Staff',
+        actionUrl: 'human-resources/employee-list.html',
+        important: false,
+        dedupeKey: `staff-add-${id}`
+      });
+    }
 
     animateStaffMetrics();
     showToast(`Staff member ${name} onboarded successfully!`, 'success');
@@ -8354,6 +8844,7 @@ $(document).ready(function () {
   const isMenuPage = currentPath.includes('menu.html') || currentPath.endsWith('menu');
   const isCustomerPage = currentPath.includes('customer.html') || currentPath.endsWith('customer');
   const isAnalyticsPage = currentPath.includes('analytics.html') || currentPath.endsWith('analytics');
+  const isNotificationPage = currentPath.includes('notification.html') || currentPath.endsWith('notification');
   const isAllDeptPage = currentPath.includes('all_department');
   const isAddDeptPage = currentPath.includes('add_department');
   const isDeptPage = isAllDeptPage || isAddDeptPage;
@@ -8380,10 +8871,11 @@ $(document).ready(function () {
   else if (isMenuPage) defaultSection = 'menu';
   else if (isCustomerPage) defaultSection = 'customers';
   else if (isAnalyticsPage) defaultSection = 'analytics';
+  else if (isNotificationPage) defaultSection = 'notifications';
   else if (isAllDeptPage) defaultSection = 'all-departments';
   else if (isAddDeptPage) defaultSection = 'add-department';
 
-  const isStandalonePage = isHRPage || isBillingPage || isOrdersPage || isMenuPage || isCustomerPage || isAnalyticsPage || isDeptPage;
+  const isStandalonePage = isHRPage || isBillingPage || isOrdersPage || isMenuPage || isCustomerPage || isAnalyticsPage || isNotificationPage || isDeptPage;
   const hashSec = window.location.hash.replace('#', '');
   let initHash = isStandalonePage ? defaultSection : (hashSec || 'dashboard');
   if (isAddBillPage) {
@@ -8410,6 +8902,12 @@ $(document).ready(function () {
     }
     if (isAllDeptPage) {
       renderDepartmentsGrid();
+    }
+    if (isNotificationPage && typeof window.renderNotificationCentre === 'function') {
+      window.renderNotificationCentre();
+    }
+    if (typeof window.AureliaNotifications !== 'undefined') {
+      window.AureliaNotifications.syncBadges();
     }
     renderSidebarBadges();
     updateTopbarAvatarUI();
@@ -8620,6 +9118,18 @@ $(document).ready(function () {
         const ids = selectedTrs.map(extractRowId).filter(Boolean);
         const menu = Storage.get(STORAGE_KEYS.MENU, []);
         Storage.set(STORAGE_KEYS.MENU, menu.filter(m => !ids.includes(String(m.id))));
+        if (window.AureliaNotifications) {
+          window.AureliaNotifications.push({
+            title: 'Menu Items Removed',
+            description: `Deleted ${count} menu item${count > 1 ? 's' : ''} from catalog.`,
+            category: 'Menu',
+            module: 'Menu Management',
+            recordId: `${count} items`,
+            actionLabel: 'View Menu',
+            actionUrl: 'menu.html',
+            important: false
+          });
+        }
         renderMenuItemsGrid();
         populateMenuItemPicker();
         renderSidebarBadges();
@@ -8632,6 +9142,19 @@ $(document).ready(function () {
         const ids = selectedTrs.map(extractRowId).filter(Boolean);
         const orders = Storage.get(STORAGE_KEYS.ORDERS, []);
         Storage.set(STORAGE_KEYS.ORDERS, orders.filter(o => !ids.includes(String(o.id))));
+        if (window.AureliaNotifications) {
+          window.AureliaNotifications.push({
+            title: 'Orders Cancelled / Removed',
+            description: `Deleted ${count} order${count > 1 ? 's' : ''} from POS queue.`,
+            category: 'Orders',
+            module: 'Order Management',
+            recordId: `${count} orders`,
+            actionLabel: 'View Orders',
+            actionUrl: 'order.html',
+            important: true,
+            critical: true
+          });
+        }
         renderOrdersSection();
         renderSidebarBadges();
         showToast(`Deleted ${count} order${count > 1 ? 's' : ''} successfully.`, 'info');
@@ -8643,6 +9166,18 @@ $(document).ready(function () {
         const ids = selectedTrs.map(extractRowId).filter(Boolean);
         const customers = Storage.get(STORAGE_KEYS.CUSTOMERS, []);
         Storage.set(STORAGE_KEYS.CUSTOMERS, customers.filter(c => !ids.includes(String(c.id))));
+        if (window.AureliaNotifications) {
+          window.AureliaNotifications.push({
+            title: 'Customer Records Removed',
+            description: `Removed ${count} guest record${count > 1 ? 's' : ''} from Customer Registry.`,
+            category: 'Customers',
+            module: 'Customer Management',
+            recordId: `${count} guests`,
+            actionLabel: 'View Customers',
+            actionUrl: 'customer.html',
+            important: true
+          });
+        }
         renderCustomersSection();
         populateCustomerDropdown();
         renderSidebarBadges();
@@ -8655,6 +9190,19 @@ $(document).ready(function () {
         const ids = selectedTrs.map(extractRowId).filter(Boolean);
         const bills = Storage.get(STORAGE_KEYS.BILLS, []);
         Storage.set(STORAGE_KEYS.BILLS, bills.filter(b => !ids.includes(String(b.id))));
+        if (window.AureliaNotifications) {
+          window.AureliaNotifications.push({
+            title: 'Bills Cancelled / Removed',
+            description: `Deleted ${count} billing invoice${count > 1 ? 's' : ''} from ledger.`,
+            category: 'Billing & Payments',
+            module: 'Billing & Payments',
+            recordId: `${count} bills`,
+            actionLabel: 'View Billing',
+            actionUrl: 'billing-management/billing-details.html',
+            important: true,
+            critical: true
+          });
+        }
         if (typeof renderBillingHistory === 'function') renderBillingHistory();
         if (typeof renderDashboard === 'function') renderDashboard();
         if (tbodyId === 'modal-billings-tbody' && typeof renderBillingsModal === 'function') renderBillingsModal();
@@ -9216,6 +9764,19 @@ $(document).ready(function () {
       applyThemeColors(theme.sidebarBg, theme.cardBorder);
       updateThemeUI(theme);
       updateSaveButtonState(true);
+      if (window.AureliaNotifications) {
+        window.AureliaNotifications.push({
+          title: 'Appearance Settings Saved',
+          description: `Updated sidebar (${theme.sidebarBg}) and card border (${theme.cardBorder}) theme colors.`,
+          category: 'System',
+          module: 'Appearance & Theme',
+          recordId: 'THEME',
+          actionLabel: 'View Settings',
+          actionUrl: 'index.html#settings',
+          important: false,
+          dedupeKey: `theme-save-${theme.sidebarBg}-${theme.cardBorder}`
+        });
+      }
       if (typeof showToast === 'function') {
         showToast('Appearance & theme preferences saved successfully!', 'info');
       }
@@ -9229,6 +9790,19 @@ $(document).ready(function () {
       applyThemeColors(theme.sidebarBg, theme.cardBorder);
       updateThemeUI(theme);
       updateSaveButtonState(false);
+      if (typeof window.AureliaNotifications !== 'undefined') {
+        window.AureliaNotifications.push({
+          title: 'Theme Reset to Default',
+          description: 'Sidebar and accent colors restored to Aurelia baseline defaults.',
+          category: 'System',
+          module: 'Appearance Settings',
+          recordId: 'THEME-RESET',
+          actionLabel: 'View Dashboard',
+          actionUrl: 'index.html#dashboard',
+          important: false,
+          dedupeKey: 'theme-reset'
+        });
+      }
       if (typeof showToast === 'function') {
         showToast('Theme preferences reset to baseline defaults.', 'info');
       }
@@ -9844,6 +10418,19 @@ if (typeof window !== 'undefined' && window.MutationObserver) {
     if (typeof window.showToast === 'function') {
       window.showToast('Hotel information and branding saved successfully!', 'success');
     }
+    if (window.AureliaNotifications) {
+      window.AureliaNotifications.push({
+        title: 'Hotel Information Updated',
+        description: `Updated property details: ${newInfo.hotelName} (GSTIN: ${newInfo.gstin}).`,
+        category: 'System',
+        module: 'Hotel Settings',
+        recordId: newInfo.gstin,
+        actionLabel: 'View Settings',
+        actionUrl: 'index.html#settings',
+        important: true,
+        dedupeKey: `hotel-info-${newInfo.hotelName}-${newInfo.gstin}-${newInfo.posCounter}`
+      });
+    }
   }
 
   function getCustomLogoImage() {
@@ -10311,6 +10898,19 @@ if (typeof window !== 'undefined' && window.MutationObserver) {
         window.showToast(`Website name updated to "${cleanName}"`, 'success');
       }
     }
+    if (showFeedback && window.AureliaNotifications) {
+      window.AureliaNotifications.push({
+        title: isDefault ? 'Branding Restored to Default' : 'Website Branding Updated',
+        description: isDefault ? 'Restored website branding to default "AURELIA".' : `Updated website brand name to "${cleanName}".`,
+        category: 'System',
+        module: 'Website Branding',
+        recordId: cleanName,
+        actionLabel: 'View Settings',
+        actionUrl: 'index.html#settings',
+        important: false,
+        dedupeKey: `brand-name-${cleanName}`
+      });
+    }
   }
 
   function saveBrandNameFromCard() {
@@ -10378,6 +10978,19 @@ if (typeof window !== 'undefined' && window.MutationObserver) {
       const fileInput = document.getElementById('input-brand-logo-file');
       if (fileInput) fileInput.value = '';
       renderBrandLogo();
+      if (typeof window.AureliaNotifications !== 'undefined') {
+        window.AureliaNotifications.push({
+          title: 'Custom Brand Logo Removed',
+          description: 'Uploaded brand logo was removed and the dynamic Aurelia emblem was restored.',
+          category: 'System',
+          module: 'System Branding',
+          recordId: 'BRAND-LOGO-REMOVED',
+          actionLabel: 'View Dashboard',
+          actionUrl: 'index.html#dashboard',
+          important: false,
+          dedupeKey: 'brand-logo-removed'
+        });
+      }
       if (typeof window.showToast === 'function') {
         window.showToast('Custom logo image removed. Dynamic emblem restored.', 'info');
       }
@@ -10480,9 +11093,25 @@ if (typeof window !== 'undefined' && window.MutationObserver) {
       const reader = new FileReader();
       reader.onload = function (evt) {
         const rawDataUrl = evt.target.result;
+        const emitLogoUpdated = function () {
+          if (typeof window.AureliaNotifications !== 'undefined') {
+            window.AureliaNotifications.push({
+              title: 'Company Logo Updated',
+              description: `Custom brand logo "${file.name}" applied across sidebar & invoices.`,
+              category: 'System',
+              module: 'System Branding',
+              recordId: 'BRAND-LOGO-UPDATED',
+              actionLabel: 'View Dashboard',
+              actionUrl: 'index.html#dashboard',
+              important: false,
+              dedupeKey: 'brand-logo-updated'
+            });
+          }
+        };
         if (file.type === 'image/svg+xml') {
           saveCustomLogoImage(rawDataUrl);
           renderBrandLogo();
+          emitLogoUpdated();
           if (typeof window.showToast === 'function') {
             window.showToast('Company logo updated successfully!', 'success');
           }
@@ -10517,6 +11146,7 @@ if (typeof window !== 'undefined' && window.MutationObserver) {
             const optimizedDataUrl = canvas.toDataURL(file.type === 'image/jpeg' ? 'image/jpeg' : 'image/png', 0.9);
             saveCustomLogoImage(optimizedDataUrl);
             renderBrandLogo();
+            emitLogoUpdated();
             if (typeof window.showToast === 'function') {
               window.showToast('Company logo updated successfully!', 'success');
             }
@@ -10524,6 +11154,7 @@ if (typeof window !== 'undefined' && window.MutationObserver) {
             console.error('Canvas processing failed, using raw data URL:', err);
             saveCustomLogoImage(rawDataUrl);
             renderBrandLogo();
+            emitLogoUpdated();
             if (typeof window.showToast === 'function') {
               window.showToast('Company logo updated successfully!', 'success');
             }
@@ -10583,6 +11214,437 @@ if (typeof window !== 'undefined' && window.MutationObserver) {
   } else {
     setTimeout(setupBrandingUI, 50);
   }
+})();
+
+// =========================================================================
+// NOTIFICATION CENTRE DASHBOARD CONTROLLER (notification.html)
+// =========================================================================
+(function () {
+  const notifFilterState = {
+    category: 'All',
+    readMode: 'all',      // 'all' | 'unread'
+    importantOnly: false,
+    date: '',
+    sort: 'newest',       // 'newest' | 'oldest'
+    search: ''
+  };
+
+  let isHydratingNotif = true;
+
+  function escapeNotifHtml(str) {
+    return String(str == null ? '' : str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+
+  function getCategoryStyle(category) {
+    const map = {
+      'Orders': {
+        badgeCls: 'bg-sky-100 text-sky-800 dark:bg-sky-900/50 dark:text-sky-300',
+        iconBg: 'bg-sky-500/15 text-sky-600 dark:text-sky-400 border-sky-500/25',
+        svg: '<path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007z" />'
+      },
+      'Leave Requests': {
+        badgeCls: 'bg-purple-100 text-purple-800 dark:bg-purple-900/50 dark:text-purple-300',
+        iconBg: 'bg-purple-500/15 text-purple-600 dark:text-purple-400 border-purple-500/25',
+        svg: '<path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />'
+      },
+      'Billing & Payments': {
+        badgeCls: 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900/50 dark:text-emerald-300',
+        iconBg: 'bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border-emerald-500/25',
+        svg: '<path stroke-linecap="round" stroke-linejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5z" />'
+      },
+      'Customers': {
+        badgeCls: 'bg-amber-100 text-amber-800 dark:bg-amber-900/50 dark:text-amber-300',
+        iconBg: 'bg-amber-500/15 text-amber-600 dark:text-amber-400 border-amber-500/25',
+        svg: '<path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z" />'
+      },
+      'Menu': {
+        badgeCls: 'bg-orange-100 text-orange-800 dark:bg-orange-900/50 dark:text-orange-300',
+        iconBg: 'bg-orange-500/15 text-orange-600 dark:text-orange-400 border-orange-500/25',
+        svg: '<path stroke-linecap="round" stroke-linejoin="round" d="M12 8.25v-1.5m0 1.5c-1.355 0-2.697.056-4.024.166C6.845 8.51 6 9.473 6 10.608v2.513m6-4.87c1.355 0 2.697.055 4.024.165C17.155 8.51 18 9.473 18 10.608v2.513m-3-4.87v-1.5m-6 1.5v-1.5m12 9.75l-1.5.75a3.354 3.354 0 01-3 0 3.354 3.354 0 00-3 0 3.354 3.354 0 01-3 0 3.354 3.354 0 00-3 0 3.354 3.354 0 01-3 0L3 16.5m15-3.38a48.474 48.474 0 00-6-.37c-2.032 0-4.034.125-6 .37m12 0c.39.049.777.102 1.163.16 1.07.16 1.837 1.094 1.837 2.175v5.17c0 .62-.504 1.124-1.125 1.124H4.125A1.125 1.125 0 013 20.625v-5.17c0-1.08.768-2.014 1.837-2.174A47.78 47.78 0 016 13.12M12.265 3.11a.375.375 0 11-.53 0L12 2.845l.265.265zm-3 0a.375.375 0 11-.53 0L9 2.845l.265.265zm6 0a.375.375 0 11-.53 0L15 2.845l.265.265z" />'
+      },
+      'System': {
+        badgeCls: 'bg-slate-200 text-slate-800 dark:bg-slate-700 dark:text-slate-200',
+        iconBg: 'bg-slate-500/15 text-[#14213D] dark:text-slate-300 border-slate-500/25',
+        svg: '<path stroke-linecap="round" stroke-linejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.324.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 011.37.49l1.296 2.247a1.125 1.125 0 01-.26 1.431l-1.003.827c-.293.24-.438.613-.431.992a6.759 6.759 0 010 .255c-.007.378.138.75.43.99l1.005.828c.424.35.534.954.26 1.43l-1.298 2.247a1.125 1.125 0 01-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.57 6.57 0 01-.22.128c-.331.183-.581.495-.644.869l-.213 1.28c-.09.543-.56.941-1.11.941h-2.594c-.55 0-1.02-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 01-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 01-1.369-.49l-1.297-2.247a1.125 1.125 0 01.26-1.431l1.004-.827c.292-.24.437-.613.43-.992a6.932 6.932 0 010-.255c.007-.378-.138-.75-.43-.99l-1.004-.828a1.125 1.125 0 01-.26-1.43l1.297-2.247a1.125 1.125 0 011.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.087.22-.128.332-.183.582-.495.644-.869l.214-1.281z" /><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />'
+      }
+    };
+    return map[category] || map['System'];
+  }
+
+  function formatNotifTime(iso) {
+    const d = new Date(iso);
+    if (isNaN(d.getTime())) return { rel: 'Just now', full: '-' };
+    const diffSec = Math.max(0, Math.floor((Date.now() - d.getTime()) / 1000));
+    let rel = 'Just now';
+    if (diffSec >= 86400) rel = `${Math.floor(diffSec / 86400)}d ago`;
+    else if (diffSec >= 3600) rel = `${Math.floor(diffSec / 3600)}h ago`;
+    else if (diffSec >= 60) rel = `${Math.floor(diffSec / 60)}m ago`;
+    const full = d.toLocaleString('en-IN', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true });
+    return { rel, full };
+  }
+
+  function buildNotifCardHtml(n) {
+    const st = getCategoryStyle(n.category);
+    const t = formatNotifTime(n.timestamp);
+    const isUnread = !n.read;
+    const isImp = !!n.important;
+    const isCrit = !!n.critical;
+
+    const cardHighlight = isImp
+      ? 'border-l-4 border-l-[#FCA311] bg-amber-50/40 dark:bg-amber-950/20 shadow-md'
+      : (isUnread ? 'border-l-4 border-l-[#14213D] dark:border-l-[#FCA311]' : 'opacity-90');
+
+    return `
+      <div class="Aurelia-card p-4 sm:p-5 transition-all duration-200 ${cardHighlight}" data-notif-id="${escapeNotifHtml(n.id)}">
+        <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-3.5">
+          <div class="flex items-start gap-3.5 min-w-0 flex-1">
+            <div class="relative w-10 h-10 sm:w-11 sm:h-11 rounded-2xl border flex items-center justify-center flex-shrink-0 ${st.iconBg}">
+              <svg class="w-5 h-5 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="1.9">${st.svg}</svg>
+              ${isUnread ? `<span class="absolute -top-1 -right-1 w-3 h-3 rounded-full bg-[#FCA311] border-2 border-white dark:border-slate-900 ${isCrit ? 'animate-pulse' : ''}" title="Unread"></span>` : ''}
+            </div>
+
+            <div class="min-w-0 flex-1 space-y-1.5">
+              <div class="flex flex-wrap items-center gap-2">
+                <h4 class="text-sm sm:text-[15px] font-bold text-[#14213D] dark:text-white leading-snug">
+                  ${escapeNotifHtml(n.title)}
+                </h4>
+                ${isUnread
+                  ? '<span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#14213D] text-[#FCA311] uppercase tracking-wide">Unread</span>'
+                  : '<span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold bg-slate-200/70 dark:bg-slate-800 text-slate-600 dark:text-slate-400">Read</span>'}
+                ${isImp
+                  ? `<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#FCA311] text-black shadow-2xs ${isCrit && isUnread ? 'animate-pulse' : ''}">
+                      <svg class="w-3 h-3 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                      Important
+                    </span>`
+                  : ''}
+              </div>
+
+              <p class="text-xs sm:text-[13px] text-slate-600 dark:text-slate-300 leading-relaxed break-words">
+                ${escapeNotifHtml(n.description)}
+              </p>
+
+              <div class="flex flex-wrap items-center gap-2 pt-0.5 text-[11px] text-slate-500 dark:text-slate-400">
+                <span class="px-2 py-0.5 rounded-full font-semibold ${st.badgeCls}">${escapeNotifHtml(n.category)}</span>
+                <span class="font-medium">${escapeNotifHtml(n.module || n.category)}</span>
+                ${n.recordId ? `<span class="font-mono font-bold px-2 py-0.5 rounded bg-white/70 dark:bg-slate-800 border border-slate-200/70 dark:border-slate-700 text-[#14213D] dark:text-slate-200">${escapeNotifHtml(n.recordId)}</span>` : ''}
+                <span title="${escapeNotifHtml(t.full)}">&bull; ${escapeNotifHtml(t.rel)} (${escapeNotifHtml(t.full)})</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex flex-wrap items-center gap-1.5 sm:justify-end flex-shrink-0 pt-1 sm:pt-0">
+            ${n.actionUrl && n.actionUrl !== '#' ? `
+              <button type="button" class="btn-notif-action btn-Aurelia-primary text-[11px] py-1.5 px-3 shadow-2xs" data-id="${escapeNotifHtml(n.id)}" data-url="${escapeNotifHtml(n.actionUrl)}">
+                ${escapeNotifHtml(n.actionLabel || 'View Details')} &rarr;
+              </button>
+            ` : ''}
+            <button type="button" class="btn-notif-toggle-read btn-Aurelia-secondary text-[11px] py-1.5 px-2.5" data-id="${escapeNotifHtml(n.id)}" title="${isUnread ? 'Mark as Read' : 'Mark as Unread'}">
+              ${isUnread ? 'Mark Read' : 'Mark Unread'}
+            </button>
+            <button type="button" class="btn-notif-toggle-imp btn-Aurelia-secondary text-[11px] py-1.5 px-2.5 ${isImp ? 'text-amber-600 border-amber-300' : ''}" data-id="${escapeNotifHtml(n.id)}" title="${isImp ? 'Remove Importance' : 'Mark as Important'}">
+              ${isImp ? 'Unmark Priority' : 'Important'}
+            </button>
+            <button type="button" class="btn-notif-delete p-1.5 rounded-xl text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition-colors cursor-pointer" data-id="${escapeNotifHtml(n.id)}" title="Delete notification" aria-label="Delete notification">
+              <svg class="w-4 h-4 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  function renderNotificationCentre() {
+    const section = document.getElementById('section-notifications');
+    if (!section || !window.AureliaNotifications) return;
+
+    const loadingEl = document.getElementById('notif-loading-state');
+    const errorEl = document.getElementById('notif-error-state');
+    const emptyEl = document.getElementById('notif-empty-state');
+    const searchEmptyEl = document.getElementById('notif-search-empty-state');
+    const impSection = document.getElementById('notif-important-section');
+    const impList = document.getElementById('notif-important-list');
+    const regSection = document.getElementById('notif-regular-section');
+    const regList = document.getElementById('notif-main-list');
+
+    if (isHydratingNotif && loadingEl) {
+      loadingEl.classList.remove('hidden');
+      setTimeout(function () {
+        isHydratingNotif = false;
+        renderNotificationCentre();
+      }, 120);
+      return;
+    }
+    if (loadingEl) loadingEl.classList.add('hidden');
+
+    const { items, error } = window.AureliaNotifications.getAll();
+    if (error) {
+      if (errorEl) {
+        errorEl.classList.remove('hidden');
+        const msgEl = document.getElementById('notif-error-message');
+        if (msgEl) msgEl.textContent = error;
+      }
+      if (emptyEl) emptyEl.classList.add('hidden');
+      if (searchEmptyEl) searchEmptyEl.classList.add('hidden');
+      if (impSection) impSection.classList.add('hidden');
+      if (regSection) regSection.classList.add('hidden');
+      return;
+    }
+    if (errorEl) errorEl.classList.add('hidden');
+
+    // Summary stats across ALL stored notifications
+    const todayStr = new Date().toISOString().slice(0, 10);
+    const totalCount = items.length;
+    const unreadCount = items.filter(n => !n.read).length;
+    const impCount = items.filter(n => n.important).length;
+    const todayCount = items.filter(n => (n.timestamp || '').slice(0, 10) === todayStr).length;
+
+    const setText = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = String(val); };
+    setText('notif-header-total', totalCount);
+    setText('notif-header-unread', unreadCount);
+    setText('notif-header-important', impCount);
+    setText('stat-notif-all', totalCount);
+    setText('stat-notif-unread', unreadCount);
+    setText('stat-notif-important', impCount);
+    setText('stat-notif-today', todayCount);
+
+    // Update category pill counts
+    document.querySelectorAll('.notif-cat-btn').forEach(btn => {
+      const cat = btn.getAttribute('data-category');
+      const count = cat === 'All' ? totalCount : items.filter(n => n.category === cat).length;
+      const badge = btn.querySelector('.notif-cat-count');
+      if (badge) badge.textContent = String(count);
+      const isActive = cat === notifFilterState.category;
+      btn.classList.toggle('bg-[#14213D]', isActive);
+      btn.classList.toggle('text-white', isActive);
+      btn.classList.toggle('shadow-xs', isActive);
+      btn.classList.toggle('bg-white/70', !isActive);
+      btn.classList.toggle('text-slate-600', !isActive);
+    });
+
+    // Apply filters & sorting
+    const q = (notifFilterState.search || '').trim().toLowerCase();
+    let filtered = items.filter(n => {
+      if (notifFilterState.category !== 'All' && n.category !== notifFilterState.category) return false;
+      if (notifFilterState.readMode === 'unread' && n.read) return false;
+      if (notifFilterState.importantOnly && !n.important) return false;
+      if (notifFilterState.date && (n.timestamp || '').slice(0, 10) !== notifFilterState.date) return false;
+      if (q) {
+        const hay = `${n.title} ${n.description} ${n.category} ${n.module} ${n.recordId}`.toLowerCase();
+        if (!hay.includes(q)) return false;
+      }
+      return true;
+    });
+
+    filtered.sort((a, b) => {
+      const ta = new Date(a.timestamp || 0).getTime();
+      const tb = new Date(b.timestamp || 0).getTime();
+      return notifFilterState.sort === 'oldest' ? ta - tb : tb - ta;
+    });
+
+    if (totalCount === 0) {
+      if (emptyEl) emptyEl.classList.remove('hidden');
+      if (searchEmptyEl) searchEmptyEl.classList.add('hidden');
+      if (impSection) impSection.classList.add('hidden');
+      if (regSection) regSection.classList.add('hidden');
+      return;
+    }
+    if (emptyEl) emptyEl.classList.add('hidden');
+
+    if (filtered.length === 0) {
+      if (searchEmptyEl) searchEmptyEl.classList.remove('hidden');
+      if (impSection) impSection.classList.add('hidden');
+      if (regSection) regSection.classList.add('hidden');
+      return;
+    }
+    if (searchEmptyEl) searchEmptyEl.classList.add('hidden');
+
+    const importantItems = filtered.filter(n => n.important);
+    const regularItems = filtered.filter(n => !n.important);
+
+    if (impSection && impList) {
+      if (importantItems.length > 0) {
+        impSection.classList.remove('hidden');
+        setText('notif-important-section-count', importantItems.length);
+        impList.innerHTML = importantItems.map(buildNotifCardHtml).join('');
+      } else {
+        impSection.classList.add('hidden');
+        impList.innerHTML = '';
+      }
+    }
+
+    if (regSection && regList) {
+      if (regularItems.length > 0) {
+        regSection.classList.remove('hidden');
+        setText('notif-regular-section-count', regularItems.length);
+        regList.innerHTML = regularItems.map(buildNotifCardHtml).join('');
+      } else {
+        regSection.classList.add('hidden');
+        regList.innerHTML = '';
+      }
+    }
+  }
+
+  window.renderNotificationCentre = renderNotificationCentre;
+
+  $(document).ready(function () {
+    if ($('#section-notifications').length) {
+      renderNotificationCentre();
+
+      $(document).on('click', '.notif-cat-btn', function () {
+        notifFilterState.category = $(this).attr('data-category') || 'All';
+        renderNotificationCentre();
+      });
+
+      $(document).on('click', '.notif-read-toggle', function () {
+        notifFilterState.readMode = $(this).attr('data-mode') || 'all';
+        $('.notif-read-toggle').removeClass('bg-[#14213D] text-white').addClass('text-slate-600');
+        $(this).addClass('bg-[#14213D] text-white').removeClass('text-slate-600');
+        renderNotificationCentre();
+      });
+
+      $(document).on('click', '#notif-toggle-important', function () {
+        notifFilterState.importantOnly = !notifFilterState.importantOnly;
+        $(this).toggleClass('bg-[#FCA311] text-black font-bold', notifFilterState.importantOnly);
+        renderNotificationCentre();
+      });
+
+      $(document).on('change', '#notif-filter-date', function () {
+        notifFilterState.date = $(this).val() || '';
+        $('#btn-notif-clear-date').toggleClass('hidden', !notifFilterState.date);
+        renderNotificationCentre();
+      });
+
+      $(document).on('click', '#btn-notif-clear-date', function () {
+        notifFilterState.date = '';
+        $('#notif-filter-date').val('');
+        $(this).addClass('hidden');
+        renderNotificationCentre();
+      });
+
+      $(document).on('change', '#notif-sort-order', function () {
+        notifFilterState.sort = $(this).val() || 'newest';
+        renderNotificationCentre();
+      });
+
+      $(document).on('input', '#notif-search-input', function () {
+        notifFilterState.search = $(this).val() || '';
+        renderNotificationCentre();
+      });
+
+      $(document).on('click', '#btn-notif-reset-filters', function () {
+        notifFilterState.category = 'All';
+        notifFilterState.readMode = 'all';
+        notifFilterState.importantOnly = false;
+        notifFilterState.date = '';
+        notifFilterState.sort = 'newest';
+        notifFilterState.search = '';
+        $('#notif-search-input').val('');
+        $('#notif-filter-date').val('');
+        $('#btn-notif-clear-date').addClass('hidden');
+        $('#notif-sort-order').val('newest');
+        $('#notif-toggle-important').removeClass('bg-[#FCA311] text-black font-bold');
+        $('.notif-read-toggle').removeClass('bg-[#14213D] text-white').addClass('text-slate-600');
+        $('.notif-read-toggle[data-mode="all"]').addClass('bg-[#14213D] text-white').removeClass('text-slate-600');
+        renderNotificationCentre();
+      });
+
+      $(document).on('click', '#btn-notif-retry', function () {
+        isHydratingNotif = true;
+        renderNotificationCentre();
+      });
+
+      $(document).on('click', '[data-notif-shortcut]', function () {
+        const mode = $(this).attr('data-notif-shortcut');
+        if (mode === 'all') {
+          $('#btn-notif-reset-filters').trigger('click');
+        } else if (mode === 'unread') {
+          $('.notif-read-toggle[data-mode="unread"]').trigger('click');
+        } else if (mode === 'important') {
+          notifFilterState.importantOnly = true;
+          $('#notif-toggle-important').addClass('bg-[#FCA311] text-black font-bold');
+          renderNotificationCentre();
+        } else if (mode === 'today') {
+          const today = new Date().toISOString().slice(0, 10);
+          notifFilterState.date = today;
+          $('#notif-filter-date').val(today);
+          $('#btn-notif-clear-date').removeClass('hidden');
+          renderNotificationCentre();
+        }
+      });
+
+      $(document).on('click', '.btn-notif-action', function () {
+        const id = $(this).attr('data-id');
+        const url = $(this).attr('data-url');
+        if (id) window.AureliaNotifications.markRead(id, true);
+        if (url && url !== '#') {
+          window.location.href = window.AureliaNotifications.resolveUrl(url);
+        }
+      });
+
+      $(document).on('click', '.btn-notif-toggle-read', function () {
+        const id = $(this).attr('data-id');
+        const { items } = window.AureliaNotifications.getAll();
+        const found = items.find(x => x.id === id);
+        if (found) {
+          window.AureliaNotifications.markRead(id, !found.read);
+          renderNotificationCentre();
+        }
+      });
+
+      $(document).on('click', '.btn-notif-toggle-imp', function () {
+        const id = $(this).attr('data-id');
+        window.AureliaNotifications.toggleImportant(id);
+        renderNotificationCentre();
+      });
+
+      $(document).on('click', '.btn-notif-delete', function () {
+        const id = $(this).attr('data-id');
+        window.AureliaNotifications.remove(id);
+        renderNotificationCentre();
+        if (typeof window.showToast === 'function') window.showToast('Notification deleted.', 'info');
+      });
+
+      $(document).on('click', '#btn-notif-mark-all-read', function () {
+        window.AureliaNotifications.markAllRead();
+        renderNotificationCentre();
+        if (typeof window.showToast === 'function') window.showToast('All notifications marked as read.', 'success');
+      });
+
+      $(document).on('click', '#btn-notif-clear-all', function () {
+        const { items } = window.AureliaNotifications.getAll();
+        if (!items.length) return;
+        const doClear = () => {
+          window.AureliaNotifications.clearAll();
+          renderNotificationCentre();
+          if (typeof window.showToast === 'function') window.showToast('All notifications cleared.', 'info');
+        };
+        if (typeof Swal !== 'undefined') {
+          Swal.fire({
+            title: 'Clear all notifications?',
+            text: 'This will permanently remove all notifications from your Notification Centre.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, clear all',
+            cancelButtonText: 'Cancel'
+          }).then(res => { if (res.isConfirmed) doClear(); });
+        } else if (confirm('Clear all notifications?')) {
+          doClear();
+        }
+      });
+    }
+
+    window.addEventListener('aurelia:notifications-updated', function () {
+      if (window.AureliaNotifications) window.AureliaNotifications.syncBadges();
+      if ($('#section-notifications').length) renderNotificationCentre();
+    });
+  });
 })();
 
 // =========================================================================

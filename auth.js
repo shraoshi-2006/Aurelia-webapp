@@ -968,6 +968,33 @@
     DOM.registerForm?.reset();
 
     // Immediately show dashboard & display new user's name and details on header
+    try {
+      const evtPayload = {
+        title: 'New User Account Created',
+        description: `${authenticatedUser.name} (${authenticatedUser.role}) registered a new staff account.`,
+        category: 'System',
+        module: 'Authentication & Accounts',
+        recordId: authenticatedUser.empId || authenticatedUser.id,
+        actionLabel: 'View Settings',
+        actionUrl: 'index.html#settings',
+        important: true,
+        dedupeKey: `auth-register-${authenticatedUser.email}`
+      };
+      if (window.AureliaNotifications && typeof window.AureliaNotifications.push === 'function') {
+        window.AureliaNotifications.push(evtPayload);
+      } else {
+        const key = 'aurelia_notifications_v1';
+        const list = JSON.parse(localStorage.getItem(key) || '[]');
+        list.unshift({
+          id: 'notif-' + Date.now() + '-reg',
+          ...evtPayload,
+          timestamp: new Date().toISOString(),
+          read: false,
+          critical: false
+        });
+        localStorage.setItem(key, JSON.stringify(list.slice(0, 200)));
+      }
+    } catch (notifErr) { }
     renderAuthenticatedState(authenticatedUser);
     return false;
   }
@@ -1007,6 +1034,22 @@
     }
 
     setButtonLoading('btn-forgot-submit', false, 'Send Reset Instructions');
+    try {
+      if (window.AureliaNotifications && typeof window.AureliaNotifications.push === 'function') {
+        window.AureliaNotifications.push({
+          title: 'Password Recovery Requested',
+          description: `Password reset instructions requested for ${email}.`,
+          category: 'System',
+          module: 'Authentication & Security',
+          recordId: email,
+          actionLabel: 'Review Settings',
+          actionUrl: 'index.html#settings',
+          important: true,
+          critical: true,
+          dedupeKey: `auth-forgot-${email}`
+        });
+      }
+    } catch (notifErr) { }
     showAlert('alert-forgot', 'If an account exists, recovery instructions have been sent.', 'success');
     if (emailInput) emailInput.value = '';
     return false;

@@ -3180,20 +3180,19 @@
               <path stroke-linecap="round" stroke-linejoin="round"
                 d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0" />
             </svg>
-            <span
-              class="absolute -top-0.5 -right-0.5 w-4 h-4 rounded-full bg-rose-500 text-white text-[9px] font-extrabold flex items-center justify-center shadow-xs">
-              1
+            <span id="mobile-notification-badge"
+              class="hidden absolute -top-0.5 -right-0.5 min-w-[1rem] h-4 px-1 rounded-full bg-rose-500 text-white text-[9px] font-extrabold flex items-center justify-center shadow-xs">
+              0
             </span>
           </div>
           <div class="flex flex-col">
             <span class="text-sm font-bold text-white group-hover:text-[#FCA311] transition-colors">Notifications</span>
-            <span class="text-xs text-slate-300">1 unread alert</span>
+            <span id="mobile-notification-subtitle" class="text-xs text-slate-300">No unread alerts</span>
           </div>
         </div>
         <div class="flex items-center space-x-2">
-          <span
-            class="px-2 py-0.5 rounded-full bg-rose-500/20 text-rose-300 border border-rose-500/30 text-[10px] font-bold">1
-            New</span>
+          <span id="mobile-notification-pill"
+            class="hidden px-2 py-0.5 rounded-full bg-rose-500/20 text-rose-300 border border-rose-500/30 text-[10px] font-bold">0 New</span>
           <svg class="w-4 h-4 text-slate-400 group-hover:text-white group-hover:translate-x-0.5 transition-all"
             fill="none" viewBox="0 0 24 24" stroke-width="2">
             <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
@@ -3723,10 +3722,10 @@
                   <path stroke-linecap="round" stroke-linejoin="round"
                     d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0" />
                 </svg>
-                <!-- Red Badge Indicator (1) -->
-                <span
-                  class="absolute top-1 right-1 w-4 h-4 rounded-full bg-rose-500 text-white text-[9px] font-extrabold flex items-center justify-center shadow-xs">
-                  1
+                <!-- Dynamic Unread Badge -->
+                <span id="topbar-notification-badge"
+                  class="hidden absolute top-1 right-1 min-w-[1rem] h-4 px-1 rounded-full bg-rose-500 text-white text-[9px] font-extrabold flex items-center justify-center shadow-xs">
+                  0
                 </span>
               </button>
             </div>
@@ -3955,7 +3954,7 @@
   <!-- Authentication Controller -->
   <script src="../auth.js?v=20261126_01"></script>
   <!-- Main JavaScript Logic -->
-  <script src="../main.js?v=20261128_05"></script>
+  <script src="../main.js?v=20261128_06"></script>
 </body>
 
 </html>
